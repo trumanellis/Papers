@@ -2,6 +2,7 @@
 \input{../preamble.tex}
 \usetheme[secheader]{pecostalk}
 \usepackage{comment}
+% \usepackage{subfig}
 \graphicspath{{figs/}}
 
 \newcommand{\pecosbold}[1]{{\color{pecos2}{#1}}}
@@ -220,21 +221,26 @@ $\mathbf{v}_{\mathbf{u}}=\{v_\mathbf{u},\bftau_\mathbf{u}\}\in\mathbf{V}$ such t
 where $\mathbf{V}$ becomes $\mathbf{V}_{p+\Delta p}$ in order to make this
 computationally tractable.
 
-Chan et al\textsuperscript{\cite{ChanHeuerThanhDemkowicz2012}}
-developed the following robust norm for convection-diffusion.
+We recently developed this modification to the \emph{robust test norm}
+\textsuperscript{\cite{ChanHeuerThanhDemkowicz2012}} which behaves better in
+the presence of singularities.
 \begin{minipage}[t][1.5in]{\textwidth}
 \begin{align*}
 \norm{(v,\bftau)}^2_{\mathbf{V},\Omega_h}&=
-\norm{\nabla\cdot\bftau}^2+\norm{\min\left\{\frac{1}{\sqrt{\epsilon}},\frac{1}{\sqrt{|K|}}\right\}\bftau}^2\\
-&+\epsilon\norm{\nabla v}^2+\norm{\bfbeta\cdot\nabla v}^2
-\makebox[1.5in][l]{$
-\only<1>{\underbrace{\color{red}{
-+\norm{\min\left\{\sqrt{\frac{\epsilon}{|K|}},1\right\}v}^2
-}}_{\text{no longer necessary to make this a norm}}}
-\only<2>{\underbrace{\color{red}{
+\norm{\min\left\{\frac{1}{\sqrt{\epsilon}},\frac{1}{\sqrt{|K|}}\right\}\bftau}^2
++\norm{\nabla\cdot\bftau-\bfbeta\cdot\nabla v}^2\\
+&+\norm{\bfbeta\cdot\nabla v}^2+\epsilon\norm{\nabla v}^2
+\underbrace{\color{red}{
+\begin{minipage}[c][0.3in][c]{0.9in}$
+\only<1>{
+\hspace{1.5ex}
++\norm{v}^2
+}
+\only<2>{
 +\left(\frac{1}{|K|}\int_Kv\right)^2
-}}_{\text{zero mean term}}}
-$}
+}$
+\end{minipage}
+}}_{\only<1>{\text{No longer necessary}}\only<2>{\text{Zero mean term}}}
 \end{align*}
 \end{minipage}
 \end{frame}
@@ -281,14 +287,14 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\textwidth]{Erickson/modifiedError.pdf}
+\includegraphics[width=0.9\textwidth]{Erickson/modifiedError.pdf}
 
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=1.0\textwidth]{Erickson/modifiedFlux.pdf}
+\includegraphics[width=0.9\textwidth]{Erickson/modifiedFlux.pdf}
 
 \end{figure}
 \end{column}
@@ -296,6 +302,358 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n
 \end{frame}
 \begin{comment}
 \end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Skewed Convection-Diffusion Problem}
+\only<1>{
+After 8 refinements, $\epsilon=10^{-4}$, $\bfbeta=(2,1)^T$
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Confusion/modified8c.png}
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Confusion/modified8c_mesh.png}
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Confusion/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Double Glazing Problem}
+\only<1>{
+After 5 refinements, $\epsilon=10^{-2}$, $\bfbeta=\left(
+\begin{array}{c}
+2(2y-1)(1-(2x-1)^2) \\
+-2(2x-1)(1-(2y-1)^2) \\
+\end{array}\right)$
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{DoubleGlazing/modified5nc.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{DoubleGlazing/modified5c.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{DoubleGlazing/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Vortex Problem}
+After 6 refinements, $\epsilon=10^{-4}$, $\bfbeta=(-y,x)^T$
+\only<1>{
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Vortex/modified6nc.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Vortex/modified6c.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Vortex/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Wedge Problem}
+After 16 refinements, $\epsilon=10^{-1}$, $\bfbeta=(1,0)^T$
+\only<1>{
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{Wedge/modified16c.png}
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{Wedge/modified16c_mesh.png}
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Wedge/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Inner Layer Problem}
+After 8 refinements, $\epsilon=10^{-6}$,
+$\bfbeta=(\frac{\sqrt{3}}{2},\frac{1}{2})^T$, $\hat f=
+\begin{cases}
+1, & y <=0.2\\
+0, & y > 0.2
+\end{cases}$
+\only<1>{
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{InnerLayer/modified8nc_mesh.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{InnerLayer/modified8c_mesh.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{InnerLayer/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Discontinuous Source Problem}
+After 8 refinements, $\epsilon=10^{-3}$,
+$\bfbeta=(0.5,1)^T/\sqrt{1.25}$, $\hat g=
+\begin{cases}
+1, & y >=2x\\
+0, & y <2x
+\end{cases}$
+\only<1>{
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Discontinuous/modified8nc.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Discontinuous/modified8c.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Discontinuous/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Hemker Problem}
+After 8 refinements, $\epsilon=10^{-3}$,
+$\bfbeta=(1,0)^T$
+\only<1>{
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Hemker/modified8nc.png}
+
+\includegraphics[width=1.0\textwidth]{Hemker/modified8nc_mesh.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Hemker/modified8c.png}
+
+\includegraphics[width=1.0\textwidth]{Hemker/modified8c_mesh.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Hemker/modifiedFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Inviscid Burgers' Equation}
+\only<1>{
+\vspace{-0.5em}
+\[
+\frac{\partial u}{\partial t}+u\frac{\partial u}{\partial
+x}=0
+\quad\Leftrightarrow\quad
+\nabla_{x,t}\cdot\left(\begin{array}{c}
+\frac{u^2}{2}\\
+u
+\end{array}\right)=0
+\]
+\vspace{-1.5em}
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Burgers/graph8nc.png}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Burgers/graph8c.png}
+
+Conservative
+\end{figure}
+\end{column}
+\end{columns}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\textwidth]{Burgers/graphFlux.pdf}
+\end{figure}
+}
+\end{frame}
+\begin{comment}
+This problem is slightly off-topic in that we are no longer dealing with the
+convection-diffusion equation. Instead we consider the inviscid Burgers
+equation which can be formulated as a nonlinear hyperbolic conservation law,
+letting us relate directly to the Lax-Wendroff theorem. A common argument for
+local conservation is that shock speed can be off if we don't have a
+conservative method, and the Burgers' equation is often given as an example.
+We choose to work with a space-time formulation where x follows the x axis and
+time the y. So without going through the DPG derivation, let's just see how
+our two methods behave. Apart from some slight differences in refinement
+pattern, the two methods appear nearly identical.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Summary}
+What have we done?
+\begin{itemize}
+\item We've turned our minimization problem into a saddlepoint problem.
+\item The change is computationally feasible.
+\item Mathematically, it gets rid of troublesome term.
+\end{itemize}
+
+\vspace{2ex}
+Does it make a difference?
+\begin{itemize}
+\item Enforcement changes refinement strategy.
+\item Standard DPG is nearly conservative in practice.
+\item Usually we get the same results with better conservation.
+\item Some improvement on condition number for local solves.
+\end{itemize}
+\vspace{2ex}
+\visible<2->{\pecosbold{We need to study the effect on real fluid dynamics.}}
+\end{frame}
 
 
 \bibliographystyle{plain}
