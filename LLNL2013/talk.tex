@@ -1,0 +1,104 @@
+\documentclass{beamer}
+\input{../preamble.tex}
+\usetheme[secheader]{pecostalk}
+\usepackage{comment}
+% \usepackage{subfig}
+\graphicspath{{figs/}}
+
+\newcommand{\pecosbold}[1]{{\color{pecos2}{#1}}}
+\newcommand{\pecosreallybold}[1]{{\color{pecos6}{#1}}}
+
+\author[Truman. E. Ellis]{Truman E. Ellis}
+\title[Multi-Resolution Viscosity Limiter]{Multi-Resolution Viscosity Limiter in
+the BLAST High-Order Finite Element Hydrodynamics Code}
+\institute{Institute for Computational and Engineering Sciences\\
+The University of Texas at Austin}
+\date{July 25, 2013}
+
+\begin{document}
+
+\begin{frame}
+% \begin{center}
+% \includegraphics[width=.8\linewidth]{grand_logo}\\
+% \end{center}
+\titlepage
+\end{frame}
+\begin{comment}
+My name is Truman Ellis, and I am also working in Dr. Demkowicz's group on the
+discontinuous Petrov-Galerkin method. My background is in aerospace
+engineering and CFD, and my goal is to help develop DPG into an attractive
+method for realistic problems in computational fluid dynamics. So the goal is
+to work on the Euler equations and then build on Nate and Jesse's work on
+laminar Navier-Stokes with some turbulence modeling.  But before I got into
+that, we thought it would be useful to study a topic that keeps coming up from
+the CFD community. Is DPG locally conservative?
+
+This is a numerical characteristic close to the heart of many CFD
+practitioners, and in order for DPG to gain a certain level of acceptance
+among these circles, we need to address some of these concerns. There are also
+some mathematically attractive reasons to pursue local conservation. The
+Lax-Wendroff theorem guarantees that a convergent numerical solution to a
+system of hyperbolic conservation laws will converge to the correct weak
+solution. Also, we are focusing on local conservation on the
+convection-diffusion equation as a proof of concept. We are working on
+extending this work to more realistic flow simulations.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{A Summary of DPG}
+Overview of Features
+\begin{itemize}
+\item Robust for singularly perturbed problems
+\item Stable in the preasymptotic regime
+\item Designed for adaptive mesh refinement
+\end{itemize}
+\bigskip
+
+DPG is a minimum residual method:
+\[
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
+\]
+\vspace{-1em}
+\[
+\scalebox{1.8}{\ensuremath{\Updownarrow}}
+\]
+\vspace{-1em}
+\[
+b(u_h,R_V^{-1}B\delta u_h)
+=l(R_V^{-1}B\delta u_h)
+\quad\forall\delta u_h\in U_h
+\]
+where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
+\pecosbold{optimal test functions}.
+\end{frame}
+\begin{comment}
+For the sake of avoiding a lot of repetition and making sure we all finish on
+time, I'm going to offer an extremely condensed summary of DPG. Nate and Jesse
+already covered this stuff with more rigor. So what are DPG's main selling
+points? Why are we interested in applying it to complicated fluid problems
+(eventually).
+For one, DPG has proven very robust in the face of singularly
+perturbed problems which holds promise for high Reynolds number flows.
+You do not need a domain expert to craft well designed meshes for each new
+problem. We are mathematically guaranteed to remain stable under very coarse
+meshes while adaptively refining toward a solution.
+
+And mathematically, how can we classify DPG? By derivations, it is a minimum
+residual method. This means that through the choice of specific optimal test
+functions we automatically minimize the residual in the dual norm of a
+Hilbert space V. We also have a well-defined process to generate the optimal
+test functions which is computationally feasible.
+\end{comment}
+
+
+% \bibliographystyle{plain}
+% {\scriptsize
+% \bibliography{../DPG.bib}
+% }
+
+\end{document}
