@@ -1,0 +1,189 @@
+%
+% LLNL template by Tom Brunner
+% Sept 2010
+%
+
+\ProvidesPackage{beamerthemeLLNL}
+
+
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+
+\mode<presentation>
+
+\newlength{\lineh}
+\setlength{\lineh}{0.01\paperheight}
+
+% This is what's in the older lab logo files.  Since slides get projected darker,
+% I'm going to use the brighter of the two.
+\definecolor{llnldarkblue}{RGB}{30,89,174}
+% This is what's in the new PowerPoint template with the picture
+%\definecolor{llnldarkblue}{RGB}{15,79,151}
+\definecolor{llnllightblue}{RGB}{233,240,255}
+\setbeamercolor{structure}{fg=llnldarkblue,bg=}
+
+\setbeamercolor{block title}{use=structure,fg=structure.bg,bg=structure.fg}
+\setbeamercolor{block title alerted}{use=alerted text,fg=alerted text.fg,bg=alerted text.fg!20!bg}
+\setbeamercolor{block title example}{use=example text,fg=black,bg=llnllightblue}
+
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=llnllightblue}
+\setbeamercolor{block body alerted}{parent=normal text,use=block title alerted,bg=block title alerted.bg!50!bg}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,bg=block title example.bg!40!bg}
+
+
+\setbeamercolor{llnlbluebox}{parent=structure,fg=white,bg=llnldarkblue}
+\setbeamercolor{llnlwhitebox}{parent=structure,fg=llnldarkblue,bg=}
+\setbeamercolor{llnlredbox}{parent=structure,fg=black,bg=red}
+\setbeamercolor{llnlblackbox}{parent=structure,fg=black,bg=}
+\setbeamercolor{llnlwhitewhitebox}{parent=structure,fg=black,bg=white}
+\setbeamercolor{llnlyellowbox}{parent=structure,fg=llnldarkblue,bg=yellow}
+\setbeamercolor{frametitle}{parent=structure,fg=llnldarkblue}
+
+\setbeamercolor{section in head/foot}{parent=structure,fg=llnldarkblue}
+\setbeamercolor{title page}{parent=structure,fg=llnldarkblue}
+
+\newlength{\navwidth}
+
+\setbeamertemplate{headline}
+{%
+\setlength{\navwidth}{\paperwidth}%
+\mbox{\insertnavigation{\navwidth}}%
+}
+
+
+\defbeamertemplate{footline}{llnldefault}
+{%
+\begin{beamercolorbox}{section in head/foot}%
+\usebeamerfont{section in head/foot}\hskip9pt\insertdocnumber\par\vskip4pt
+\end{beamercolorbox}%
+}
+\setbeamertemplate{footline}[llnldefault]
+
+% The bottom of this box is the top of the footline.  So if you want the logo down
+% further, you need a negative vskip at the end of it.
+\setbeamertemplate{sidebar right}
+{%
+\vfill%
+\llap{\insertlogo\hskip0.1cm}%
+\vskip1pt%
+\llap{\insertframenumber/\inserttotalframenumber\hskip0.1cm}%
+\ifbeamertemplateempty{docnumber}{\vskip-3pt}{\vskip-5pt}%
+}
+
+\setbeamertemplate{frametitle}[default][left]
+
+\AtBeginDocument{%
+  {
+    \usebeamercolor{section in head/foot}
+  }
+}
+
+
+% \beamertemplatedotitem
+
+\setbeamercovered{transparent}
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true,shadow=true]
+\setbeamerfont{date}{size=\footnotesize}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{authortitle}{size=\normalsize}
+\setbeamerfont{subtitle}{size=\small}
+\setbeamerfont{acknowledgment}{size=\Tiny}
+\setbeamerfont{address}{size=\Tiny}
+\setbeamerfont{docnumber}{size=\Tiny}
+\setbeamerfont{docnumbertitle}{size=\tiny}
+\setbeamerfont{LLNLTitle}{parent=title,shape=\itshape}
+\setbeamercolor{author}{parent=normal text}
+\setbeamercolor{authortitle}{parent=author}
+\setbeamercolor{acknowledgment}{fg=white,bg=}
+\setbeamercolor{address}{parent=author}
+\setbeamercolor{LLNLTitle}{parent=title,fg=llnldarkblue,bg=}
+\setbeamercolor{docnumber}{fg=black,bg=}
+\setbeamercolor{docnumbertitle}{fg=white,bg=}
+
+%\addtobeamertemplate{frametitle}{\vspace{-0.3em}}{\vspace{-0.4em}\begin{beamercolorbox}[wd=\paperwidth,colsep=0.2\lineh]{llnlbluebox}\end{beamercolorbox}}
+\addtobeamertemplate{frametitle}{\vspace{-0.3em}}{}
+
+
+\def\docnumber{\setbeamertemplate{docnumber}}
+\def\insertdocnumber{\usebeamertemplate*{docnumber}}
+\def\acknowledgment{\setbeamertemplate{acknowledgment}}
+\def\insertacknowledgment{\usebeamertemplate*{acknowledgment}}
+\def\address{\setbeamertemplate{address}}
+\def\insertaddress{\usebeamertemplate*{address}}
+\def\authortitle{\setbeamertemplate{authortitle}}
+\def\insertauthortitle{\usebeamertemplate*{authortitle}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamertemplate{title page}{%
+\vskip0pt plus 3filll
+\begin{beamercolorbox}[wd=\paperwidth,center]{llnlblackbox}
+{\usebeamerfont{LLNLTitle}\rule{0mm}{2.25em}}
+\begin{beamercolorbox}[wd=0.9\paperwidth,left]{llnlwhitebox}%
+\usebeamerfont{LLNLTitle}\inserttitle\par
+\end{beamercolorbox}
+\begin{beamercolorbox}[wd=0.875\paperwidth,left]{llnlblackbox}%
+\vskip0.008\paperwidth
+\usebeamerfont{subtitle}\insertsubtitle
+\end{beamercolorbox}
+\begin{beamercolorbox}[wd=0.85\paperwidth,left]{llnlblackbox}%
+\usebeamerfont{date}
+\vskip0.1em
+\insertdate
+\end{beamercolorbox}
+\end{beamercolorbox}
+\vskip0pt plus 2filll
+\begin{beamercolorbox}[wd=\paperwidth,right,rightskip=0.02\paperwidth]{llnlblackbox}
+\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor%
+\ifbeamertemplateempty{authortitle}{}{, \insertauthortitle}%
+\end{beamercolorbox}
+\vskip0.008\paperwidth
+\begin{beamercolorbox}[wd=\paperwidth]{llnlblackbox}
+\begin{beamercolorbox}[ht=0.415\paperwidth,wd=0.374\paperwidth,colsep=2.5\lineh]{llnlbluebox}
+{\pgfuseimage{LLNLWithWordsWhite}\par}
+\vskip0.258\paperwidth
+{\usebeamerfont{docnumbertitle}\usebeamercolor{docnumbertitle}\usebeamertemplate{docnumber}\par\vskip0.5em}
+{\usebeamerfont{acknowledgment}\usebeamercolor{acknowledgment}\insertacknowledgment\par\vskip1pt}%
+\end{beamercolorbox}%
+\hfill
+\pgfuseimage{LabHills}
+\end{beamercolorbox}%
+}
+
+%--------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Set some defaults
+
+
+%\acknowledgment{This work performed under the auspices of the U.S. Department of Energy by\\ Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.}
+\acknowledgment{This work was performed under the auspices of the U.S. Department of Energy by Lawrence Livermore National Laboratory under contract DE-AC52-07NA27344. Lawrence Livermore National Security, LLC}
+\address{Lawrence Livermore National Laboratory, P. O. Box 808, Livermore, CA 94551}
+\docnumber{LLNL-PRES-XXXXXXX}
+\institute[LLNL]{Lawrence Livermore National Laboratory}
+
+\pgfdeclareimage[height=0.25in]{LLNLlogo}{LogoOnlyPointy}
+\pgfdeclareimage[height=0.415\paperwidth]{LabHills}{LabHillsCleaned}
+\pgfdeclareimage[width=0.245\paperwidth]{LLNLWithWordsWhite}{LLNLWithWordsWhite}
+\logo{\raisebox{-8pt}{\pgfuseimage{LLNLlogo}}}
+
+\usepackage[english]{babel}
+
+% This changes the lengths just inside block regions
+% We need to move over further to fit in the block
+\addtobeamertemplate{block begin}{}{%
+\setlength{\leftmargini}{0.05\textwidth}
+}
+
+% This changes the itemize lists most places
+\setlength{\leftmargini}{0.01\textwidth}
+\setlength{\leftmarginii}{0.03\textwidth}
+\setlength{\leftmarginiii}{0.05\textwidth}
+
+\mode
+<all>
