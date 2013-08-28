@@ -41,12 +41,13 @@
    pdfkeywords={High Order Finite Elements, Computational Physics}%
 }
 
-\docnumber{LLNL-PRES-xxxxxx}
+% \docnumber{LLNL-PRES-xxxxxx}
+\docnumber{}
 
 \title[Multi-Resolution Viscosity Limiter]
 {\LARGE Multi-Resolution Viscosity Limiter in the BLAST High-Order Finite Element Hydrodynamics Code}
 \author[Truman E. Ellis]{
-{\Large Truman E. Ellis}}
+{\Large Truman E. Ellis}\\\small{R. Rieben, Tz. Kolev, and V. Dobrev}}
 % \institute[LLNL]{\normalsize Lawrence Livermore National Laboratory}
 \institute{Institute for Computational and Engineering Sciences\\
 The University of Texas at Austin}
@@ -66,7 +67,8 @@ The University of Texas at Austin}
 \titlepage
 \end{frame}
 \begin{comment}
-Start with story about how this idea came about.
+My name is Truman Ellis, and I spent some time this summer working on a
+multi-resolution viscosity limiter for the BLAST hydrocode.
 \end{comment}
 
 
@@ -137,6 +139,12 @@ $\sigma_{a}$ & -- & artificial stress \\
 \end{itemize}
 \end{frame}
 \begin{comment}
+But before I get into what I contributed to BLAST this summer, let's start with
+some background. What is a hydrodynamics code? In brief, a hydrocode let's us
+simulate some fluid flow problem. In our case, we are interested in the Euler
+equations in a Lagrangian frame, shown in the box. We have our mass, momentum,
+and energy conservation equations, as well as an equation of state, and
+equation of motion.
 \end{comment}
 
 
@@ -146,11 +154,11 @@ $\sigma_{a}$ & -- & artificial stress \\
 \begin{frame}\frametitle{ The BLAST High Order Finite Element Hydrodynamics Code}
 
 \begin{itemize}
-  \item Curvilinear finite elements are used to ``more accurately represent deformations''
-  \item Kinematic variables are represented with  continuous fields, thermodynamic variables are represented with discontinuous fields (material interface)
-  \item ``Strong mass Conservation'' is achieved by defining density as a function within a zone
-  \item Uses the MFEM framework which allows arbitrarily high order  basis functions
-  \item Corner forces are FLOP-intensive and can be computed independently for each zone and assembled later
+  \item Curvilinear finite elements are used to more accurately represent deformations.
+  \item Kinematic variables are represented with  continuous fields, thermodynamic variables are represented with discontinuous fields (material interface).
+  \item Strong mass conservation is achieved by defining density as a function within each zone.
+  \item Uses the MFEM framework which allows arbitrarily high order  basis functions.
+  \item Corner forces are FLOP-intensive and can be computed independently for each zone and assembled later.
 
 \end{itemize}
 
@@ -188,6 +196,24 @@ $\sigma_{a}$ & -- & artificial stress \\
 \item \tiny{ Dobrev VA, Kolev TzV, Rieben RN. High order curvilinear finite element methods for Lagrangian hydrodynamics. SIAM J Sci Comput.}
 \end{itemize}
 \end{frame}
+\begin{comment}
+So what is BLAST? BLAST is a high order finite element hydrocode. We support
+curvilinear elements which are able to bend and move with the fluid in a more
+natural way than stock linear elements.
+
+Kinematic variables (position, and velocity) are represented with continuous
+fields, while thermodynamic variables (density, energy, pressure) use
+discontinuous fields.
+
+We achieve exact mass conservation by defining our density as a function of the
+current jacobian of each element relative to it's original jacobian and
+density.
+
+This is all built on the open source mfem library and written in C++.
+
+The algorithm is very FLOP intensive locally, allowing for very efficient
+parallel implementations.
+\end{comment}
 
 
 %===============================================================================
@@ -205,11 +231,11 @@ though there were no shocks at all.'' -- Von Neumann and Richtmyer}\\
 
 Ideally, an artifical viscosity implementation should:
 \begin{itemize}
-  \item Always reduces kinetic energy (dissipates shocks)
-  \item Vanishes in smooth regions and in rarefaction
-  \item Vanishes in uniform contraction and rigid rotation
-  \item Satisfies Rankine-Hugoniot jump conditions away from the shock
-  \item Galilean invariant
+  \item Always reduces kinetic energy (dissipate shocks)
+  \item Vanish in smooth regions and in rarefaction
+  \item Vanish in uniform contraction and rigid rotation
+  \item Satisfy Rankine-Hugoniot jump conditions away from the shock
+  \item Be Galilean invariant
 
 \bigskip
 \begin{block}{Artificial Stress in BLAST}
@@ -221,6 +247,36 @@ Ideally, an artifical viscosity implementation should:
 \item This allows us to robustly handle shocks, but limits our convergence to first order in smooth flow.
 \end{itemize}
 \end{frame}
+\begin{comment}
+The longstanding problem with simulating the Euler equations is that shocks are
+tricky.  They are infinitesimally thin, giving us no hopes of resolving them.
+And these discontinuities can wreak havoc with high order methods, causing all
+kinds of oscillations, typically referred to as Gibb's phenomenon. And since
+the days of Von Neumann and Richtmyer, the accepted practice has been to
+artificially add viscosity at shocks to smear them our and make them more
+tenable to numerical simulation.
+
+Unfortunately, there is not one correct way to implement artificial viscosity.
+But an ideal implementation will have the following properties.
+
+Obviously, it will dissipate our shocks.
+
+It will go away when we don't want it there.
+
+It will satisfy the Rankine-Hugoniot conditions.
+
+And it must be Galilean invariant. We don't want to take one flow, add a
+constant velocity to it, and get a different artificial viscosity.
+
+Our current implementation of artificial viscosity in BLAST looks like this.
+Our artificial stress is the product of an artificial viscosity and the
+symmetric gradient of the velocity. And our artificial viscosity is some
+function of the density, velocity, and sound speed.
+
+In practice, this artificial viscosity has been pretty effective at robustly
+simulating shock problems, but the artificial viscosity does not vanish in
+smooth flow, which limits our convergence to first order.
+\end{comment}
 
 
 %===============================================================================
@@ -229,7 +285,7 @@ Ideally, an artifical viscosity implementation should:
 \begin{frame}\frametitle{Sub-Cell Shock Capturing of Persson and Peraire}
 % Mention idea comes from Persson
 \begin{itemize}
-\item Discontinuities create oscillations in the highest polynomial modes.
+\item Shocks create oscillations in the highest polynomial modes.
 \item Persson and Peraire
 \footnote{P. Persson, J. Peraire, Sub-Cell Shock Capturing for Discontinuous
 Galerkin Methods, 44th AIAA Aerospace Sciences Meeting and Exhibit, Reno,
@@ -247,10 +303,24 @@ where $u$ is some function of the solution (velocity, entropy, etc).
 \[
 s_z=\log_{10}\frac{(u-\tilde u,u-\tilde u)_z}{(u,u)_z}\,.
 \]
-\item They then turn this into an artificial viscosity that vanishes for smooth, resolved flow.
+\item Turn this into an artificial viscosity that vanishes for smooth, resolved flow.
 \item In practice, this allows their high-order DG methods to achieve sub-zonal shock capturing.
 \end{itemize}
 \end{frame}
+\begin{comment}
+This work was very heavily inspired by some results that Per-Olof Persson
+presented at the US National Congress on Computational Mechanics this July in
+Raleigh. The basic ideas a kind of brilliant in their simplicity. We know that
+shocks tend to excite the highest order modes of the solution. So why not use
+that excitation as an indicator about where to put artificial viscosity.
+Per-Olof uses high order discontinuous Galerkin methods to solve fluid
+problems, so he is able to element-by-element do a change of basis to a
+hierarchical orthogonal basis. He then uses the difference between the solution
+and it's truncated expansion as a sort of shock detector, which he then
+rescales to be an artificial viscosity. Note that I haven't defined what u is
+yet, it could be any function of the solution, but some functions give better
+results than others.
+\end{comment}
 
 
 %===============================================================================
@@ -260,19 +330,19 @@ s_z=\log_{10}\frac{(u-\tilde u,u-\tilde u)_z}{(u,u)_z}\,.
 \begin{itemize}
 \item Persson and Peraire use discontinuous spaces, which makes the orthogonal basis expansion straight-forward.
 \item In BLAST, it makes more sense to do an $L^2$ projection using our continuous velocity space.
-\item For $v\in\mathcal{P}^k$, find $\mathbf{\tilde v}\in\mathcal{P}^{k-1}$ such that
+\item For $\mathbf{v}\in Q_k$, find $\mathbf{\tilde v}\in Q_{k-1}$ such that
 \begin{align*}
-\int_\Omega \mathbf{\tilde vw}dx&=\int_\Omega vwdx\quad\forall w\in\mathcal{P}^{p-1}\,.
+\int_\Omega \mathbf{\tilde vw}dx&=\int_\Omega \mathbf{vw}dx\quad\forall \mathbf{w}\in Q_{k-1}\,.
 \end{align*}
 In matrix vector form, this is
 \begin{align*}
-\mathbf{M}_{k-1}\tilde v&=\mathbf{g_v}\,.
+\mathbf{M}_{k-1}\mathbf{\tilde v}&=\mathbf{g_v}\,.
 \end{align*}
 \item Use the difference as a shock detector which we call the smoothness.
 \[
-s_z=\log_{10}||v-\tilde v||_z^2\,.
+s_z=\log_{10}||\mathbf{v-\tilde v}||_z^2\,.
 \]
-\item Define a viscosity limiter.
+\item Define a viscosity limiter,
 \[
 \psi_l=
 \begin{cases}
@@ -288,6 +358,28 @@ where $s_0$ and $\kappa$ are tunable parameters that define the cutoff and trans
 \]
 \end{itemize}
 \end{frame}
+\begin{comment}
+Based on our particular formulation in BLAST, we decided that the velocity
+field might be the best option for shock detection. But since the velocity is
+continuous, the orthogonal expansion is not quite so straight forward, so we
+opted to do an L2 projection onto the lower order space instead.
+
+So in finite element terminology, this looks like: Or in matrix vector format,
+we get a familiar mass matrix times our unknown equals a RHS vector.
+
+As per Per-Olof, we use the difference as a shock detector, but notice that we
+have neglected the denominator term from his formulation. Since we are
+triggering off of the velocity, the denominator would actually result in a
+formulation that is not Galilean invariant. Apply a constant shift in the
+velocity field would change the denominator, but leave the numerator unchanged.
+The question of whether we should have some sort of denominator is still up for
+discussion, however.
+
+We now turn this smoothness value into a limiter. Any values below a certain
+threshold are set to zero, while anything above another threshold are set to
+one, with a transition region in between. It is now just left up to us to
+choose appropriate s0 and kappa values.
+\end{comment}
 
 
 %===============================================================================
@@ -366,8 +458,16 @@ $
 $
 \end{alertblock}\end{minipage}
 \end{center}
-
 \end{frame}
+\begin{comment}
+Here, we can see our entire BLAST algorithm distilled into compact form. Basically,
+we end up with a system of nonlinear ODEs in time that we can integrate with
+high order techniques.
+
+The key change we now have to deal with is that prior to computing the corner forces
+at each stage, we need to do our low order projection, which will be used in the
+computation of the artificial viscosity.
+\end{comment}
 
 
 %===============================================================================
@@ -434,12 +534,49 @@ recover higher order convergence rates.
 \end{column}
 \end{columns}
 \end{frame}
+\begin{comment}
+So let's see how our new viscosity limiter works on a few test problems.  The
+first promise I made was that our viscosity limiter should allow us to recover
+higher order convergence on smooth problems. Here we have the Taylor-Green
+vortex, which is a smooth steady state solution for the Euler equations. So the
+initial condition is the exact solution. We just propogate forward to a certain
+time and measure the amount of error that has polluted our solution.
+
+As you can see on the convergence chart, the standard viscosity is giving less
+than first order convergence, even with second and fourth order methods. You
+can see the smoothness plots for Q2-Q1 and Q4-Q3 elements on the same initial
+mesh. You can see that our indicator is starting to turn off viscosity in the
+smoother parts of the flow for Q4, but it does not yet detect sufficient
+smoothness in the Q2 results to do so.
+
+With one more refinement, the indicator has turned off all viscosity in the Q4
+results, and it is just starting to notice it can turn off some of the Q2
+viscosity.
+
+With another refinement, it is turning off large swaths of viscosity in Q2,
+while Q4 will continue to remain off.
+
+With another refinement, we see that Q2 viscosity is almost completely off, and
+a further refinement will achieve full elimination of viscosity.
+
+Let me quickly point out that these values of s0 and kappa are very
+conservative.  They were chosen earlier on as the strictest values to allow us
+to deal with every problem we had considered at that point. We recently
+discovered that we could get away with looser values on most problems, as the
+following slides will demonstrate.  But these Taylor Green results were the
+most time consuming to generate, so I haven't had time to rerun our results
+with the new values.
+
+As you can see on the convergence chart, after a couple data points where
+sufficient resolution is not detected, we are able to achieve our higher order
+convergence.
+\end{comment}
 
 
 %===============================================================================
 % NEW SLIDE
 %===============================================================================
-\begin{frame}\frametitle{Sod Shock Tube, $s_0=9.5$, $\kappa=0.5$}
+\begin{frame}\frametitle{Sod Shock Tube, $s_0=-9.5$, $\kappa=0.5$}
 \vspace{-1ex}
 Q4-Q3 elements on a 50x1 mesh
 \vspace{-2ex}
@@ -472,13 +609,35 @@ Viscosity without Limiter
 \end{column}
 \begin{column}{0.7\textwidth}
 \begin{center}
-Density\\
+% Density\\
 \includegraphics<1>[width=0.8\textwidth]{figs/Sod/Q4-50-Density.png}
 \includegraphics<2>[width=0.8\textwidth]{figs/Sod/Q4-50-Density-zoom.png}
 \end{center}
 \end{column}
 \end{columns}
 \end{frame}
+\begin{comment}
+Now that we know we are able to get rid of viscosity when we don't need it, we
+need to make sure we can keep it when we do. So here we have the Sod shock
+tube.  Looking at the exact solution from the right to the left, we have a low
+density fluid, then a shock traveling to the right, a material interface with a
+higher density fluid, and then a rarefaction wave moving to the left. We really
+only want our viscosity to trigger on the shock since the material interface
+isn't an actual shock.
+
+You can see the computed smoothness field on the top left. And as I promised
+earlier, it is a fairly reliable indicator of where the shock is. It doesn't
+even pick up on the material interface. Also, our limiter below is very
+exclusive about where it turns on viscosity. On the bottom, you can see what
+our viscosity field looks like without a limiter. We get a lot of viscosity in
+non-shocked regions, which is not what we want.
+
+But if you look at the plot on the right, you can see that it doesn't appear to
+be hurting us too much. If we zoom in, you can see that the viscosity limited
+solution is a little closer in the rarefaction wave, but not significantly. The
+main takeaway of course, is that our standard implementation seems to do
+alright even if it does produce unnecessary viscosity.
+\end{comment}
 
 
 %===============================================================================
@@ -486,7 +645,7 @@ Density\\
 %===============================================================================
 \begin{frame}\frametitle{Sedov Blast Wave, $s_0=-9.5$, $\kappa=0.5$}
 \vspace{1ex}
-Q4-Q3 elements on an 80x80 mesh
+Q2-Q1 elements on an 80x80 mesh
 \vspace{-4ex}
 \begin{columns}
 \begin{column}{0.3\textwidth}
@@ -533,6 +692,21 @@ Q4-Q3 elements on an 80x80 mesh
 \end{column}
 \end{columns}
 \end{frame}
+\begin{comment}
+Here we have the Sedov blast wave. Basically an explosion that propogates
+outward.  You can see that the smoothness seems to trigger pretty strongly at
+the origin and at the shock. The shock is expected, but you kind of have to
+think for a while before you realize why the origin is being triggered. That
+first zone has expanded so much, that the basis functions have to handle a good
+amount of physics within one cell. The projection from Q2 to Q1 is not close to
+sufficient, and the difference is substantial.  So we do end up maintaining a
+good amount of viscosity at the origin. We might expect our limiter to be more
+discerning with a higher order method, but we still need to run a few more
+experiments.
+
+In any case, we do manage to kill some of the post shock viscosity while
+maintaining a pretty solid solution.
+\end{comment}
 
 
 %===============================================================================
@@ -587,6 +761,19 @@ Q2-Q1 elements on an 128x128 mesh
 \end{column}
 \end{columns}
 \end{frame}
+\begin{comment}
+The Noh implosion is just a very hard problem. We have to deal with this weird
+phenomenon known as wall heating which occurs at the origin and really degrades
+the accuracy of simulations. And unfortunately for us, extra viscosity post
+shock can make things a little nicer. That's the problem with getting rid of
+viscosity. Viscosity is nice, and always makes things smoother and nicer
+looking. But smooth, nice looking solutions don't always reflect reality. So we
+have to be careful when judging solutions qualitatively based on how nice they
+look. Sometimes real flows don't look nice. I'm not saying that this weird
+tangled stuff at the origin is good, but we have larger issues going on with
+Noh that degrade the solution. Normally we would want to get rid of post-shock
+viscosity.
+\end{comment}
 
 
 %===============================================================================
@@ -646,22 +833,46 @@ Density without Limiter\\
 \end{columns}
 }
 \end{frame}
+\begin{comment}
+This is the triple point shockwave with Q2Q1 elements. We ran this in ALE mode, with
+remap every 20 timesteps to demonstrate that this technique is not exclusive to a
+Lagrangian framework. In fact, the initial paper by Persson and Peraire was for
+Eulerian simulations.
+
+You can see that our smoothness indicator does a decent job at picking out the main
+features of the flow and isolating the viscosity to those regions.
+\end{comment}
 
 
 %===============================================================================
 % NEW SLIDE
 %===============================================================================
 \begin{frame}\frametitle{Conclusions}
-\begin{block}{Future work}
+\begin{exampleblock}{What have we done?}
 \begin{itemize}
+\item Current implementation of artificial viscosity limits our convergence to first order.
+\item Need a limiter which turns off viscosity for smooth flow.
+\item Project velocity onto a lower order space and measure the difference as a shock detector.
+\item Turn off viscosity any time the detector falls below a certain threshold.
+\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{Does it make a difference?}
+\begin{itemize}
+\item We recover high order convergence for Taylor-Green after we achieve sufficient resolution.
+\item For most shock problems we eliminate excess viscosity.
+\item Our limiter eliminates too much viscosity in the Noh problem.
+\item Field variables appear little changed in other problems.
+\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{What can we do to improve on these results?}
+\begin{itemize}
+\item Consider making $s_0$ and $\kappa$ functions of $h$ and/or $p$.
 \item Try using physical mass matrices in $L^2$ projection.
-\begin{itemize}
-\item Don't need to recompute at each time step.
+\item Experiment with other trigger variables.
+\item Explore the possibility expanding velocity in terms of orthonormal Legendre polynomials.
+\item Try using the detector as a viscosity itself, rather than a limiter.
 \end{itemize}
-\item Try expanding velocity in terms of orthonormal Legendre polynomials as per Persson and Peraire.
-\item Consider making $s_0$ and $kappa$ functions of $h$ and/or $p$.
-\end{itemize}
-\end{block}
+\end{exampleblock}
 \end{frame}
 
 
