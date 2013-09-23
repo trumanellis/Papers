@@ -1,0 +1,325 @@
+\documentclass{article}
+\input{../../preamble.tex}
+\usepackage[margin=0.75in]{geometry}
+
+\author{Truman E. Ellis}
+\title{Derivation of Space-Time DPG for the Euler Equations in Conservation
+Form}
+
+\begin{document}
+\maketitle
+
+The 1D Euler equations in conservation form are
+\[
+\frac{\partial}{\partial t}
+\left[
+\begin{array}{c}
+   \rho\\
+   m\\
+   E
+\end{array}
+\right]
++
+\frac{\partial}{\partial x}
+\left[
+\begin{array}{c}
+   m\\
+   m^2/\rho+p\\
+   (E+p)m/\rho
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+   0\\
+   0\\
+   0
+\end{array}
+\right]\,.
+\]
+If we define
+\[
+\nabla:=
+\left[
+\begin{array}{c}
+   \frac{\partial}{\partial x}\\
+   \frac{\partial}{\partial t}\\
+\end{array}
+\right]
+\]
+then we can rewrite the 1D Euler equations as a system.
+\begin{align*}
+\Div
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+&=0\\
+\Div
+\left[
+\begin{array}{c}
+   m^2/\rho+p\\
+   m\\
+\end{array}
+\right]
+&=0\\
+\Div
+\left[
+\begin{array}{c}
+   (E + p)m/\rho\\
+   E\\
+\end{array}
+\right]
+&=0
+\end{align*}
+Multiplying each equation by $v_m$ (for mass), $v_x$ (for x-momentum), and
+$v_e$ (for energy), and integrating by parts over spacetime $Q$:
+\begin{align*}
+\int_{\partial Q}v_m
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+\cdot\mathbf{n}
+-
+\int_Q
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+\cdot\Grad v_m
+&=0\\
+\int_{\partial Q}v_x
+\left[
+\begin{array}{c}
+   m^2/\rho+p\\
+   m\\
+\end{array}
+\right]
+\cdot\mathbf{n}
+-
+\int_Q
+\left[
+\begin{array}{c}
+   m^2/\rho+p\\
+   m\\
+\end{array}
+\right]
+\cdot\Grad v_x
+&=0\\
+\int_{\partial Q}v_e
+\left[
+\begin{array}{c}
+   (E + p)m/\rho\\
+   E\\
+\end{array}
+\right]
+\cdot\mathbf{n}
+-
+\int_Q
+\left[
+\begin{array}{c}
+   (E + p)m/\rho\\
+   E\\
+\end{array}
+\right]
+\cdot\Grad v_e
+&=0
+\end{align*}
+Now identify the fluxes
+\begin{align*}
+\hat F_m:=
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+\cdot\mathbf{n}\\
+\hat F_x:=
+\left[
+\begin{array}{c}
+   m^2/\rho+p\\
+   m\\
+\end{array}
+\right]
+\cdot\mathbf{n}\\
+\hat F_e:=
+\left[
+\begin{array}{c}
+   (E + p)m/\rho\\
+   E\\
+\end{array}
+\right]
+\cdot\mathbf{n}\\
+\end{align*}
+Assuming an ideal gas equation of state, linearize the volume terms.
+\begin{equation*}
+F_m(\mathbf{U}):=
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+\approx
+\left[
+\begin{array}{ccc}
+   0 & 1 & 0\\
+   1 & 0 & 0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]
+\end{equation*}
+
+\begin{equation*}
+F_x(\mathbf{U}):=
+\left[
+\begin{array}{c}
+   \frac{3-\gamma}{2}\frac{m^2}{\rho}+(\gamma-1)E\\
+   m\\
+\end{array}
+\right]
+\approx
+\left[
+\begin{array}{ccc}
+   \frac{\gamma-3}{2}\frac{m^2}{\rho^2} & (3-\gamma)\frac{m}{\rho} & (\gamma-1)\\
+   0 & 1 & 0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]
+\end{equation*}
+
+\begin{equation*}
+F_e(\mathbf{U}):=
+\left[
+\begin{array}{c}
+   \frac{1-\gamma}{2}\frac{m^3}{\rho^2}+\gamma\frac{m}{\rho}E\\
+   E\\
+\end{array}
+\right]
+\approx
+\left[
+\begin{array}{ccc}
+   (\gamma-1)\frac{m^3}{\rho^3}-\gamma\frac{m}{\rho^2}E &
+   \frac{3(1-\gamma)}{2}\frac{m^2}{\rho^2}+\gamma\frac{E}{\rho}&
+   \gamma\frac{m}{\rho}\\
+   0 & 0 & 1\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]
+\end{equation*}
+Finally, our space-time DPG formulation of the Euler equations is as follows.
+
+Given background flow quantities $\rho$, $u$, $e\in L^2(Q)$, find $\Delta\rho$, $\Delta u$, $\Delta e\in L^2(Q)$, and $\hat F_m$, $\hat
+F_x$, $\hat F_e\in H^{-\frac{1}{2}}$ such that
+\begin{align*}
+% mass
+   \int_{\partial Q}\hat F_m v_m
+   -
+   \int_Q
+\left[
+\begin{array}{ccc}
+   0 & 1 & 0\\
+   1 & 0 & 0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]\cdot\Grad v_m
+&=
+\int_Q
+\left[
+\begin{array}{c}
+   m\\
+   \rho\\
+\end{array}
+\right]
+\cdot\Grad v_m\\
+% x-momentum
+   \int_{\partial Q}\hat F_x v_x
+   -
+   \int_Q
+\left[
+\begin{array}{ccc}
+   \frac{\gamma-3}{2}\frac{m^2}{\rho^2} & (3-\gamma)\frac{m}{\rho} & (\gamma-1)\\
+   0 & 1 & 0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]\cdot\Grad v_x
+&=
+\int_Q
+\left[
+\begin{array}{c}
+   \frac{3-\gamma}{2}\frac{m^2}{\rho}+(\gamma-1)E\\
+   m\\
+\end{array}
+\right]
+\cdot\Grad v_x\\
+% energy
+   \int_{\partial Q}\hat F_e v_e
+   -
+   \int_Q
+\left[
+\begin{array}{ccc}
+   (\gamma-1)\frac{m^3}{\rho^3}-\gamma\frac{m}{\rho^2}E &
+   \frac{3(1-\gamma)}{2}\frac{m^2}{\rho^2}+\gamma\frac{E}{\rho}&
+   \gamma\frac{m}{\rho}\\
+   0 & 0 & 1\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+   \Delta\rho\\
+   \Delta m\\
+   \Delta E\\
+\end{array}
+\right]\cdot\Grad v_e
+&=
+\int_Q
+\left[
+\begin{array}{c}
+   \frac{1-\gamma}{2}\frac{m^3}{\rho^2}+\gamma\frac{m}{\rho}E\\
+   E\\
+\end{array}
+\right]
+\cdot\Grad v_e
+\end{align*}
+for all $v_m$, $v_x$, and $v_e$.
+
+As a first cut, we will use the graph norm.
+\end{document}
