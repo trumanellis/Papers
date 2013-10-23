@@ -1,0 +1,122 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\author{Truman E. Ellis}
+\title{Time Stepping Notes}
+
+\begin{document}
+\maketitle
+
+We wish to solve the system
+\[
+\frac{\partial U}{\partial t}+f(U)=0
+\]
+
+For a 6 stage ESDIRK algorithm, we have the Butcher Tableau:
+\[
+\begin{array}{c|cccccc}
+  0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+  c_1 & a_{10} & a_{11} & 0 & 0 & 0 & 0 \\
+  c_2 & a_{20} & a_{21} & a_{22} & 0 & 0 & 0 \\
+  c_3 & a_{30} & a_{31} & a_{32} & a_{33} & 0 & 0 \\
+  c_4 & a_{40} & a_{41} & a_{42} & a_{43} & a_{44} & 0 \\
+  c_5 & a_{50} & a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+  \hline
+   & b_0 & b_1 & b_2 & b_3 & b_4 & b_5 \\
+\end{array}
+\]
+For ESDIRK schemes, we enforce a ``stiffly accurate'' condition by requiring
+that $a_{sj} = b_j$, where $s$ is the number of stages minus one. We also have
+the condition that the final stage equals the value at the next time step. So
+there is no reason to reassemble from the various stages.
+
+We solve a series of equations for $k=0,\cdots,5$
+\[
+\frac{U^k}{a_{kk}\Delta t}+f(U^k)=\frac{U_n}{a_{kk}\Delta
+t}-\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)
+\]
+From the first equation we see that $U^0=U_n$. And we have that $U_{n+1}=U^s$.
+
+For a nonlinear system, define residual
+\[
+R(U^k) =
+\frac{U^k}{a_{kk}\Delta t}+f(U^k)-\frac{U_n}{a_{kk}\Delta
+t}+\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)
+\]
+Given an approximate solution $\tilde U^k$, we wish to solve for an increment
+$\Delta U$ such that $U^k=\tilde U^k + \Delta U$ is a better approximation of
+the exact solution. Approximating $R(U^k)$ by $R(\tilde U^k)+R'(\tilde
+U^k)\Delta U=0$, we obtain a linearized equation
+\[
+\frac{\Delta U}{a_{kk}\Delta t}+f'(\tilde U^k)\Delta U
+=\frac{U_n}{a_{kk}\Delta t}-\frac{\tilde U^k}{a_{kk}\Delta t}-f(\tilde U^k)
+-\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)
+\]
+
+For implicit Euler, this is just
+\[
+R(U)=\frac{U}{\Delta t}+f(U)-\frac{U_n}{\Delta t}
+\]
+\[
+\frac{\Delta U}{\Delta t}+f'(\tilde U)\Delta U
+=\frac{U_n}{\Delta t}-\frac{\tilde U}{\Delta t}
+-f(\tilde U)
+\]
+
+\section*{Case Studies}
+\subsection*{Convection-Diffusion}
+\begin{align*}
+  \frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+  \frac{\partial u}{\partial t}+\Div(\bfbeta u-\bfsigma)-f&=0
+\end{align*}
+\begin{align*}
+  \LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+  \LRp{\frac{\partial u}{\partial t},v}-\LRp{\bfbeta u-\bfsigma,\Grad v}+\LRa{\hat f,v}-(f,v)&=0
+\end{align*}
+Here
+\[
+f(U)=\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}
+-\LRp{\bfbeta u-\bfsigma,\Grad v}+\LRa{\hat f,v}-(f,v)
+\]
+But we choose not to split the traces and fluxes, so instead we have
+\[
+f(U)=\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}
+-\LRp{\bfbeta u-\bfsigma,\Grad v}-(f,v)
+\]
+while
+\[
+f'(U)=\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}
+-\LRp{\bfbeta u-\bfsigma,\Grad v}+\LRa{\hat f,v}
+\]
+So, given initial solution $u_n$ and approximate solution $\tilde U=\{\tilde
+u,\tilde\bfsigma\}$, we
+arrive at a system
+\begin{align*}
+\frac{\delta u}{\Delta t}
++\LRp{\frac{1}{\epsilon}\delta\bfsigma,\bftau}
++\LRp{\delta u,\Div\bftau}-\LRa{\hat u,\tau_n}
+-\LRp{\bfbeta \delta u-\delta\bfsigma,\Grad v}
++\LRa{\hat f,v}
+\\=
+\frac{u_n}{\Delta t}
++\frac{\tilde u}{\Delta t}
+-\LRp{\frac{1}{\epsilon}\tilde\bfsigma,\bftau}
+-\LRp{\tilde u,\Div\bftau}
++\LRp{\bfbeta \tilde u-\bfsigma,\Grad v}
++(f,v)
+\end{align*}
+If we let $\tilde U=0$, then $U_{n+1}=\tilde U+\delta U=\delta U$ and since
+this is a linear equation, we arrive at
+\begin{align*}
+\frac{u}{\Delta t}
++\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}
++\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}
+-\LRp{\bfbeta u-\bfsigma,\Grad v}
++\LRa{\hat f,v}
+=
+\frac{u_n}{\Delta t}
++(f,v)
+\end{align*}
+which is exactly our linear system.
+
+\end{document}
