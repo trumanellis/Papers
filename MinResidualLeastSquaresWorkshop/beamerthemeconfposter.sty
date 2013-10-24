@@ -33,6 +33,15 @@
 \definecolor{dgreen} {RGB}{78,138,21}
 \definecolor{nblue}  {RGB}{28,130,185}
 \definecolor{jblue}  {RGB}{20,50,100}
+% Define UT specific colors
+\definecolor {utorange}   {RGB} {203,96,21}
+\definecolor {utblack}    {RGB} {99,102,106}
+\definecolor {utbrown}    {RGB} {110,98,89}
+\definecolor {utsecbrown} {RGB} {217,200,158}
+\definecolor {utsecgreen} {RGB} {208,222,187}
+\definecolor {utsecblue}  {RGB} {127,169,174}
+\definecolor {icesblue}   {RGB} {94,156,174}
+\definecolor {icesblue2}  {RGB} {91,198,232}
 
 
 %----------------------------------------------------------------------------
@@ -136,7 +145,8 @@
 \setbeamercolor{structure}{fg=jblue}
 \setbeamercolor{titlelike}         {bg=jblue,fg=white}
 \setbeamercolor{frametitle}        {bg=jblue!10,fg=jblue}
-\setbeamercolor{cboxb}{fg=black,bg=jblue}
+% \setbeamercolor{cboxb}{fg=black,bg=jblue}
+\setbeamercolor{cboxb}{fg=black,bg=icesblue}
 \setbeamercolor{cboxr}{fg=black,bg=red}
 
 % set colors for itemize/enumerate
@@ -188,7 +198,8 @@
    \begin{column}{\linewidth}
     \vskip1cm
     \centering
-    \usebeamercolor{title in headline}{\color{jblue}\Huge{\textbf{\inserttitle}}\\[0.5ex]}
+    % \usebeamercolor{title in headline}{\color{jblue}\Huge{\textbf{\inserttitle}}\\[0.5ex]}
+    \usebeamercolor{title in headline}{\color{icesblue}\Huge{\textbf{\inserttitle}}\\[0.5ex]}
     \usebeamercolor{author in headline}{\color{fg}\Large{\insertauthor}\\[1ex]}
     \usebeamercolor{institute in headline}{\color{fg}\large{\insertinstitute}\\[1ex]}
     \vskip1cm
