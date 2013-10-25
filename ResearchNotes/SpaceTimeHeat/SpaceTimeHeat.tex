@@ -9,75 +9,34 @@
 \begin{document}
 \maketitle
 
+\section*{Introduction}
 For the following discussion, let (master) element $K$ be a tensor product of a spatial
 component, $X$, and a time component, $T$. Let $\Grad$ denote the spatial
 gradient, and $\frac{\partial}{\partial t}$ denote the time derivative.
-
-The heat equation is
-\[
-\frac{\partial u}{\partial t}-\epsilon\Delta u=f
-\]
-As a first order system, this is
-\begin{align*}
-  \frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
-  \frac{\partial u}{\partial t}-\Div\bfsigma&=f
-\end{align*}
-From this formulation, we can deduce that
-\[
-u,\bfsigma,\Grad u,\frac{\partial u}{\partial t}-\Div\bfsigma\in L^2
-\]
-If we view $\{-\bfsigma,u\}:=\mathbf{U}$ as a group variable, then the last
-condition tells us that $\mathbf{U}\in H(\mathrm{div},K)$. In particular, this
-means that across a constant time interface (horizontal lines in Figure 1 and
-horizontal planes in Figure~\ref{fig:trace3D}), the normal component, $u$ should be continuous.
-
-If we take the typical volume-centered, face-centered, edge-centered,
-node-centered approach, then we can see that $u$ should have a volume-centered
-component, all face-centered components, and edge-centered components on
-non-horizontal edges. Of course, when we move to the DPG formulation, $u$
-takes only the volume-centered basis, while the trace $\hat u$ takes
-everything else.
-
 Let $\mathbf{n}=(\mathbf{n_x},n_t)^T$ be the full space-time normal vector
 where $\mathbf{n_x}$ is the spatial component and $n_t$ is the temporal
 component.
 
-Multiplying by test functions $\bftau$ and $v$, and integrating by parts
-\begin{align*}
--\LRp{u,\frac{\partial v}{\partial t}}
-+\LRa{\hat u,v\cdot n_t}
-+\LRp{\bfsigma,\Grad v}
--\LRa{\widehat{\bfsigma\cdot\mathbf{n_x}}, v}\\
-+\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}
-+\LRp{u,\Div\bftau}
--\LRa{\hat u,\bftau\cdot\mathbf{n_x}}
-=\LRp{f,v}
-\end{align*}
-
-Let's examine these terms one at a time. Volume terms 1, 3, 5, and 6 are just
-as they are for pure spatial DPG with the exception that vector quantities are
-of the dimension of the spatial dimension only. Term 2 will degenerate on
-constant space (as a function of time, vertical) boundaries. Terms 4 and 7 will
-degenerate on constant time (as a function of space, horizontal) boundaries.
-
-Now we analyze each variable in turn. It is easy to see that $u$ is a simple
-scalar valued, volume-centered $L^2$ variable on each space-time element.
-$\bfsigma$ is a vector valued, volume-centered $\mathbf{L}^2$ variable with
-dimension equal to the spatial dimension.
-
-Now for the trace and flux variables. $\hat u$ is probably the most
-complicated variable in the system. It will obviously have face-centered
-components on all faces, but it also needs to maintain full connectivity in
-spatial directions, necessitating the need for edge-centered components on
-non-horizontal edges. The face-centered bases have support only on a shared
-face between two elements. The edge-centered bases on the other hand have
-support on all faces connected to that edge. $\hat f$ is much simpler by
-comparison. It only has scalar face-centered components on non-horizontal
-faces.
-
-Finally, we need to discuss the test functions. $v$ will need to be full
-$H^1(K)$, while $\bftau$ will need to live in a tensor product space
-$H(\mathrm{div},X)\times L^2(T)$.
+We make a few assumptions about the space-time mesh. Figures \ref{fig:mesh1}
+and \ref{fig:mesh2} represent two possible temporal refinements of the center
+element. We will see later in the discussion that flux variables $\hat f$ are
+not well defined on constant-time interfaces, while trace variables are
+defined on all element interfaces. Mathematically, the mesh in
+Figure~\ref{fig:mesh2} is perfectly valid, but for practical reasons we think
+it would be best to avoid these kinds of temporal refinements. For one, we
+would have to add logic that adds new flux variables if the new element
+division does not follow a constant-time contour. Also, the new flux variable
+becomes ill-defined as the interface approaches ``horizontal''. Of course,
+this assumption of only making constant-time temporal refinements doesn't
+guarantee that the won't run into this ``near-horizontal'' condition, but if
+``top'' and ``bottom'' faces are guaranteed to be ``horizontal'' then mesh
+quality guidelines should make such situations undesirable for other reasons.
+We can do some
+experiments with the current code to approximate how catastrophic this
+``near-horizontal'' refinement would be. This is analogous to pure convection
+when the convection vector aligns (or nearly aligns) with the mesh. In which
+case, the cross-stream flux degenerates. This is something I'll be looking
+into soon.
 
 \begin{figure}[p]
 \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm]
@@ -121,6 +80,7 @@ $H(\mathrm{div},X)\times L^2(T)$.
 \end{tikzpicture}
 \caption{Allowable refinement pattern illustrating support of trace and flux
 variables}
+\label{fig:mesh1}
 \end{figure}
 
 \begin{figure}[p]
@@ -166,22 +126,126 @@ variables}
 \end{tikzpicture}
 \caption{Questionable refinement pattern - as the division approaches
 horizontal, $\hat f$ degenerates}
+\label{fig:mesh2}
 \end{figure}
 
-\clearpage
+\section*{Function Spaces}
+The heat equation is
+\[
+\frac{\partial u}{\partial t}-\epsilon\Delta u=f
+\]
+As a first order system, this is
+\begin{align}
+  \frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+  \frac{\partial u}{\partial t}-\Div\bfsigma&=f
+  \label{eq:firstOrderSystem}
+\end{align}
+Before we transition to thinking of field, trace, and flux variables, we want
+to examine what kind of spaces $u$ and $\bfsigma$ should live in.
+From the above formulation we can deduce that
+\[
+u,\bfsigma,\Grad u,\frac{\partial u}{\partial t}-\Div\bfsigma\in L^2
+\]
+If we view $\{-\bfsigma,u\}:=\mathbf{U}$ as a group variable, then the last
+condition tells us that $\mathbf{U}\in H(\mathrm{div},K)$. In particular, this
+means that across a constant-time interface, $u\cdot n_t$ should
+be continuous, and across a non-constant-time interface,
+$-\bfsigma\cdot\mathbf{n_x}+u\cdot n_t$ should be continuous.
+
+If we take the typical volume-centered, face-centered, edge-centered,
+node-centered approach, then we can see that $u$ should have a volume-centered
+component, all face-centered components, and edge-centered components on
+non-constant-time edges. On the other hand, $\bfsigma$ should have a
+volume-centered component and face-centered components on all non-constant
+time interfaces.
+
+Now we split $u$ and $\bfsigma$ into field, trace, and flux parts.  It is easy
+to see that our new field variable $u$ is a simple scalar valued,
+volume-centered $L^2$ variable on each space-time element.  And the field
+variable $\bfsigma$ is a vector valued, volume-centered $\mathbf{L}^2$
+variable with dimension equal to the spatial dimension. We illustrate the
+support in Figure~\ref{fig:field3D} as a blue volume centered box on a 3D
+space-time master element.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{field3D.png}
+  \caption{Support for $u$ and $\bfsigma$}
+  \label{fig:field3D}
+\end{figure}
+
+Now for the trace and flux variables. $\hat u$ is probably the most
+complicated trial variable in the system. It will obviously have face-centered
+components on all faces, but it also needs to maintain full continuity in
+spatial directions, necessitating the need for edge-centered components on
+non-horizontal edges. The face-centered bases have support only on a shared
+face between two elements. The edge-centered bases on the other hand have
+support on all faces connected to that edge. We illustrate the support in
+Figure~\ref{fig:trace3D}. $\hat f$ is much simpler by comparison. It only has
+scalar face-centered components on non-horizontal faces. Again, its support is
+shown in Figure~\ref{fig:flux3D}.
 
 \begin{figure}[p]
   \centering
   \includegraphics[width=0.7\textwidth]{trace3D.png}
-  \caption{Support for $u$ and $\hat u$ basis functions}
+  \caption{Support for $\hat u$}
   \label{fig:trace3D}
 \end{figure}
 
 \begin{figure}[p]
   \centering
   \includegraphics[width=0.7\textwidth]{flux3D.png}
-  \caption{Support for $\bfsigma$ and $\hat f$ basis functions}
+  \caption{Support for $\hat f$}
   \label{fig:flux3D}
 \end{figure}
+
+Finally, we need to discuss the test functions. $v$ will basically just be a
+combination of $u$ and $\hat u$ as shown in Figure~\ref{fig:v3D} just as
+$\bftau$ will be the combination of $\bfsigma$ and $\hat f$ shown in
+Figure~\ref{fig:tau3D}.
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.7\textwidth]{v3D.png}
+  \caption{Support for $v$}
+  \label{fig:v3D}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.7\textwidth]{tau3D.png}
+  \caption{Support for $\bftau$}
+  \label{fig:tau3D}
+\end{figure}
+
+\section*{Practical Aspects}
+Now we return to the first order system from Equation~\ref{eq:firstOrderSystem}.
+Multiplying by test functions $\bftau$ and $v$, and integrating by parts we
+get the bilinear form
+\begin{align*}
+-\LRp{u,\frac{\partial v}{\partial t}}
++\LRa{\hat u,v\cdot n_t}
++\LRp{\bfsigma,\Grad v}
+-\LRa{\widehat{\bfsigma\cdot\mathbf{n_x}}, v}\\
++\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}
++\LRp{u,\Div\bftau}
+-\LRa{\hat u,\bftau\cdot\mathbf{n_x}}
+=\LRp{f,v}
+\end{align*}
+where $\widehat{\bfsigma\cdot\mathbf{n_x}}\equiv\hat f$.
+
+Let's examine these terms one at a time. Clearly, volume terms 1, 3, 5, and 6
+are just as they are for pure spatial DPG with the exception that vector
+quantities are of the dimension of the spatial dimension only. Term 2 will
+degenerate on constant space (as a function of time) boundaries, but
+we probably don't need any special logic to handle this, because at times
+non-constant-time interfaces will have nonzero $n_t$ components (though this
+will probably only happen with moving interfaces).
+Terms 4 and 7 will degenerate on constant-time (as a function of
+space) boundaries. We will probably want to treat constant-time interfaces
+uniquely and not even attempt to integrate these terms because they are not
+well defined there.
+
+\clearpage
 
 \end{document}
