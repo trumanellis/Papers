@@ -1,0 +1,184 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\author{Truman E. Ellis}
+\title{Notes on Steady Incompressible Navier-Stokes}
+
+\begin{document}
+\maketitle
+
+\section*{Non-Conservative Form}
+The steady incompressible Navier-Stokes equations are:
+\begin{align*}
+  \Grad \bfu\cdot\bfu-\nu\Delta\bfu+\Grad p&=\mathbf{f}\\
+  \Div\bfu&=0\\
+  \int_\Omega p&=0
+\end{align*}
+In 2D we get a system
+\begin{align*}
+  \vecttwo{u_1}{u_2}\cdot\Grad u_1
+  -\nu\Delta u_1+\frac{\partial p}{\partial x}
+  &=f_1\\
+  \vecttwo{u_1}{u_2}\cdot\Grad u_2
+  -\nu\Delta u_2+\frac{\partial p}{\partial y}
+  &=f_2\\
+  \Div{\vecttwo{u_1}{u_2}}=0\\
+  \int_\Omega p&=0
+\end{align*}
+As a first order system, this is
+\begin{align*}
+  \bfsigma_1-\Grad u_1&=0\\
+  \bfsigma_2-\Grad u_2&=0\\
+  \vecttwo{u_1}{u_2}\cdot\bfsigma_1
+  -\nu\Div\bfsigma_1+\frac{\partial p}{\partial x}
+  &=f_1\\
+  \vecttwo{u_1}{u_2}\cdot\bfsigma_2
+  -\nu\Div\bfsigma_2+\frac{\partial p}{\partial y}
+  &=f_2\\
+  \Div\vecttwo{u_1}{u_2}&=0\\
+  \int_\Omega p&=0
+\end{align*}
+
+Multiplying by $\bftau_1$, $\bftau_2$, $v_1$, $v_2$, $v_d$, and integrating by
+parts:
+\begin{align*}
+  \LRp{\bfsigma_1,\bftau_1}
+  +\LRp{u_1,\Div\bftau_1}
+  -\LRa{\hat u_1,\tau_{1n}}&=0\\
+  \LRp{\bfsigma_2,\bftau_2}
+  +\LRp{u_2,\Div\bftau_2}
+  -\LRa{\hat u_2,\tau_{2n}}&=0\\
+  \LRp{\vecttwo{u_1}{u_2}\cdot\bfsigma_1,v_1}
+  +\LRp{\nu\bfsigma_1,\Grad v_1}
+  -\LRp{p,\frac{\partial v_1}{\partial x}}
+  +\LRa{\hat t,v_1}&=\LRp{f_1,v_1}\\
+  \LRp{\vecttwo{u_1}{u_2}\cdot\bfsigma_2,v_2}
+  +\LRp{\nu\bfsigma_2,\Grad v_2}
+  -\LRp{p,\frac{\partial v_2}{\partial y}}
+  +\LRa{\hat t,v_2}&=\LRp{f_2,v_2}\\
+  -\LRp{\vecttwo{u_1}{u_2},\Grad v_d}
+  +\LRa{\vecttwo{\hat u_1}{\hat u_2},v_d\cdot\mathbf{n}}&=0\\
+  \int_\Omega p&=0
+\end{align*}
+where $\hat t:=\widehat{(-\bfsigma+p\mathbf{I})\mathbf{n}}$.
+
+Note that if $\bfv:=\vecttwo{v_1}{v_2}$, then
+\[
+-\LRp{p,\frac{\partial v_1}{\partial x}}
++\LRa{p,v_1\cdot n_x}
+-\LRp{p,\frac{\partial v_2}{\partial y}}
++\LRa{p,v_2\cdot n_y}
+=-\LRp{p,\Div\bfv}+\LRa{p,v_n}
+\]
+Linearizing:
+\begin{align*}
+  \LRp{\Delta\bfsigma_1,\bftau_1}
+  +\LRp{\Delta u_1,\Div\bftau_1}
+  -\LRa{\hat u_1,\tau_{1n}}&=
+  -\LRp{\bfsigma_1,\bftau_1}
+  -\LRp{u_1,\Div\bftau_1}
+  \\
+  \LRp{\Delta\bfsigma_2,\bftau_2}
+  +\LRp{u_2,\Div\bftau_2}
+  -\LRa{\hat u_2,\tau_{2n}}&=
+  -\LRp{\bfsigma_2,\bftau_2}
+  -\LRp{u_2,\Div\bftau_2}
+  \\
+  \LRp{\vecttwo{\Delta u_1}{\Delta u_2}\cdot\bfsigma_1,v_1}
+  +\LRp{\vecttwo{u_1}{u_2}\cdot\Delta\bfsigma_1,v_1}&
+  +\LRp{\nu\Delta\bfsigma_1,\Grad v_1}
+  -\LRp{p,\frac{\partial v_1}{\partial x}}
+  +\LRa{\hat t,v_1}
+  \\&=\LRp{f_1,v_1}
+  -\LRp{\vecttwo{u_1}{u_2}\cdot\bfsigma_1,v_1}
+  -\LRp{\nu\bfsigma_1,\Grad v_1}
+  \\
+  \LRp{\vecttwo{\Delta u_1}{\Delta u_2}\cdot\bfsigma_2,v_2}
+  +\LRp{\vecttwo{u_1}{u_2}\cdot\Delta\bfsigma_2,v_2}&
+  +\LRp{\nu\Delta\bfsigma_2,\Grad v_2}
+  -\LRp{p,\frac{\partial v_2}{\partial y}}
+  +\LRa{\hat t,v_2}
+  \\&=\LRp{f_2,v_2}
+  -\LRp{\vecttwo{u_1}{u_2}\cdot\bfsigma_2,v_2}
+  -\LRp{\nu\bfsigma_2,\Grad v_2}
+  \\
+  -\LRp{\vecttwo{\Delta u_1}{\Delta u_2},\Grad v_d}
+  +\LRa{\vecttwo{\hat u_1}{\hat u_2},v_d\cdot\mathbf{n}}&=
+  \LRp{\vecttwo{u_1}{u_2},\Grad v_d}
+  \\
+  \int_\Omega p&=0
+\end{align*}
+
+\section*{Conservative Form}
+\begin{align*}
+  \Div\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}&=\vecttwo{f_1}{f_2}\\
+  \Div\bfu&=0\\
+  \int_\Omega p&=0
+\end{align*}
+As a first order system, this is
+\begin{align*}
+  \bfsigma_1-\Grad u_1&=0\\
+  \bfsigma_2-\Grad u_2&=0\\
+  \Div\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}&=\vecttwo{f_1}{f_2}\\
+  \Div\bfu&=0\\
+  \int_\Omega p&=0
+\end{align*}
+Multiplying by $\bftau_1$, $\bftau_2$, $\bfu$, and $q$, and integrating by
+parts
+\begin{align*}
+  \LRp{\bfsigma_1,\bftau_1}
+  +\LRp{u_1,\Div\bftau_1}
+  -\LRa{\hat u_1,\tau_{1n}}&=0\\
+  \LRp{\bfsigma_2,\bftau_2}
+  +\LRp{u_2,\Div\bftau_2}
+  -\LRa{\hat u_2,\tau_{2n}}&=0\\
+  -\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
+  +\LRa{\hat\bff,\bfv}
+  &=\vecttwo{f_1}{f_2}\\
+  -\LRp{\bfu,\Grad q}
+  +\LRa{\widehat{\bfu\cdot\bfn},q}&=0\\
+  \int_\Omega p&=0
+\end{align*}
+where
+\[
+\hat\bff=\trace\LRp{\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}\cdot\bfn}
+\]
+Linearizing:
+\begin{align*}
+  \LRp{\bfsigma_1,\bftau_1}
+  +\LRp{\Delta u_1,\Div\bftau_1}
+  -\LRa{\hat u_1,\tau_{1n}}
+  &=-\LRp{u_1,\Div\bftau_1}
+  \\
+  \LRp{\bfsigma_2,\bftau_2}
+  +\LRp{\Delta u_2,\Div\bftau_2}
+  -\LRa{\hat u_2,\tau_{2n}}
+  &=-\LRp{u_2,\Div\bftau_2}
+  \\
+  -\LRp{\frac{1}{2}\Delta\bfu\otimes\bfu+\frac{1}{2}\bfu\otimes\Delta\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
+  +\LRa{\hat\bff,\bfv}
+  &=\frac{1}{2}\LRp{\bfu\otimes\bfu,\Grad\bfv}
+  \\
+  -\LRp{\Delta\bfu,\Grad q}
+  +\LRa{\widehat{\bfu\cdot\bfn},q}
+  &=\LRp{\bfu,\Grad q}
+  \\
+  \int_\Omega p&=0
+\end{align*}
+
+Grouping things together, we get
+\begin{align*}
+  \LRp{\bfsigma_1,\bftau_1+\nu\Grad v_1}\\
+  \LRp{\bfsigma_2,\bftau_2+\nu\Grad v_2}\\
+  \LRp{\Delta u_1,\Div\bftau_1
+  -\frac{1}{2}\LRp{\bfu\cdot\Grad v_1
+  +\bfu\cdot\frac{\partial\bfv}{\partial x}}
+  -\frac{\partial q}{\partial x}}\\
+  \LRp{\Delta u_2,\Div\bftau_2
+  -\frac{1}{2}\LRp{\bfu\cdot\Grad v_2
+  +\bfu\cdot\frac{\partial\bfv}{\partial y}}
+  -\frac{\partial q}{\partial y}}\\
+  \LRp{p,-\Div\bfv}
+\end{align*}
+
+\end{document}

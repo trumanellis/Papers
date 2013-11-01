@@ -15,12 +15,16 @@
 \newcommand{\LRa}[1]{\left\langle #1 \right\rangle}
 \newcommand{\Grad}{\ensuremath{\nabla}}
 \newcommand{\Div}{\ensuremath{\nabla\cdot}}
-\newcommand{\bfn}{\mbox{\boldmath $n$}}
 \newcommand{\bfH}{\mbox{\boldmath $H$}}
 \newcommand{\bfsigma}{\boldsymbol\sigma}
 \newcommand{\bftau}{\boldsymbol\tau}
 \newcommand{\bfbeta}{\boldsymbol\beta}
 \newcommand{\bflambda}{\boldsymbol\lambda}
+\newcommand{\bfu}{\boldsymbol u}
+\newcommand{\bfv}{\boldsymbol v}
+\newcommand{\bfn}{\boldsymbol n}
+\newcommand{\bff}{\boldsymbol f}
+\newcommand{\bfI}{\boldsymbol I}
 \newcommand{\HdivK}{\bfH(\text{div},K)}
 \newcommand{\HOneK}{H^{1}(K)}
 \newcommand{\HOneQ}{H^{1}(Q)}
@@ -34,6 +38,7 @@
 \newcommand{\der}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\trace}{tr}
 
 \def\arr#1#2#3#4{\left[
 \begin{array}{cc}
@@ -41,12 +46,12 @@
 #3 & #4\\
 \end{array}
 \right]}
-\def\vecttwo#1#2{\left[
+\def\vecttwo#1#2{\left(
 \begin{array}{c}
 #1\\
 #2\\
 \end{array}
-\right]}
+\right)}
 \def\vectthree#1#2#3{\left[
 \begin{array}{c}
 #1\\
