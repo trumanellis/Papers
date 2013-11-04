@@ -150,7 +150,7 @@ First order optimality requires
 the G\^ateaux derivative to be zero in all directions $\delta u \in
 U_h$, i.e.,
 \[
-\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U.
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U_h.
 \]
 By definition of the Riesz operator, this is equivalent to
 \begin{equation*}
@@ -195,7 +195,8 @@ u-\bfsigma)\cdot\mathbf{n},v)_{\partial K}&=(g,v)_K\\
 \frac{1}{\epsilon}(\bfsigma,\bftau)_K+(u,\nabla\cdot\bftau)_K
 -(u,\tau_n)_{\partial K}&=0
 \end{align*}
-Use the ultraweak (DPG) formulation to obtain bilinear form $b(u,v)=l(v)$.
+Declare traces and fluxes to be independent unknowns and incorporate boundary
+conditions to obtain the final variational formulation.
 \begin{align*}
 -(\bfbeta u-\bfsigma,\nabla v)_K&+(\hat f,v)_{\partial K}
 + \frac{1}{\epsilon}(\bfsigma,\bftau)_K\\
@@ -331,14 +332,15 @@ equation is fairly trivial.
 
 \begin{column}{\onecolwid} % The fourth column
 
-\begin{block}{Stokes Equation Results}
+\begin{block}{Stokes Flow Results}
 
-\vspace{-1ex}
+Least squares finite elements lose 80\% mass flux in Stokes flow
+around a cylinder. Locally conservative DPG maintains round-off order flux
+imbalance.
+\vspace{1ex}
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{figs/Erickson/modifiedError.pdf}
-% \includegraphics[width=0.48\linewidth]{figs/Erickson/modifiedFlux.pdf}
-% \caption*{The locally conservative DPG formulation maintains nearly identical
-% error convergence behavior as standard DPG for the Erickson-Johnson problem.}
+\includegraphics[width=0.95\linewidth]{figs/Stokes/graph6c_umag.png}
+\caption*{Velocity magnitude}
 \end{figure}
 
 \end{block}
@@ -346,6 +348,7 @@ equation is fairly trivial.
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
+\vspace{-4ex}
 
 \begin{block}{Conclusions}
 
@@ -355,9 +358,8 @@ equation is fairly trivial.
   % \item Local conservation allows us to eliminate the $||v||_{L^2}$ term in
   %   the inner product.
   \item Enforcement occasionally changes the refinement strategy.
-  \item Enforcement occasionally changes the refinement strategy.
   \item Standard DPG is nearly conservative in practice.
-  \item Usually we get nearly identical results with better conservation.
+  \item Nearly identical results with better conservation.
   % \item Saw some improvement on the condition number for local solves.
 \end{itemize}
 
