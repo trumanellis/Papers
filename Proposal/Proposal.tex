@@ -1,0 +1,191 @@
+\documentclass[12pt]{report}
+\usepackage{./utproposal}
+\input{../preamble.tex}
+
+\author{Truman E. Ellis}
+\address{712 Upson St.\\ Austin, Texas 78703}  % Required
+
+\title{A Space-Time DPG Method for Fluid Dynamics}
+
+\supervisor
+	[Leszek Demkowicz]
+	{Robert Moser}
+
+\committeemembers
+	[Todd Arbogast]
+	[Thomas Hughes]
+	{Clinton Dawson}
+
+\previousdegrees{M.S.}
+
+\oneandonehalfspacequote
+
+\topmargin 0.125in
+
+\makeindex
+
+%%%%%%%%%%%%%%% Start of thesis %%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%\copyrightpage          % Produces the copyright page.
+%\commcertpage           % Produces the Committee Certification
+\titlepage
+
+\tableofcontents   % Table of Contents will be automatically
+                   % generated and placed here.
+
+%\listoftables      % List of Tables and List of Figures will be placed
+%\listoffigures     % here, if applicable.
+
+
+\chapter{Introduction}
+
+
+
+\section{Motivation}
+
+
+\subsection{Classes of problems}
+The Navier-Stokes equations govern many systems of engineering interest.
+transient compressible and incompressible laminar Navier-Stokes, extreme Re,
+transonic/supersonic
+\paragraph{Value of CFD}
+\paragraph{Higher-order methods}
+gives higher convergence rates, but seen as more sensitive (Gibbs)
+\paragraph{Automatic adaptivity}
+CFD inherently requires meshes with magnitudes of variation in scale
+resolution.
+limitations exist, requires a field expert to design meshes and run
+simulations
+\paragraph{Time step limited by smallest mesh element}
+
+\subsection{Investigating a new methodology}
+Aside from the practical incentives of pursuing \ldots
+Generalizing to space-time, investigating conservation
+
+
+\section{Literature review}
+
+\subsection{Computational fluid dynamics}
+FD, FV, FE (SUPG, Stabilized, DG) 3 pages
+
+\subsubsection{Finite difference and finite volume methods}
+
+\subsubsection{Stabilized finite element methods}
+\paragraph{SUPG}
+\paragraph{VMS}
+\paragraph{DG}
+\paragraph{HDG}
+
+\subsection{Space-time finite elements}
+Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
+
+\subsection{DPG}
+General ideas 1-2 pages
+
+
+\section{Goal}
+
+
+
+\chapter{Conservation in steady-state}
+insert paper, 1-15 pages
+
+
+\section{DPG is a minimum residual method}
+
+
+\section{Element conservative convection-diffusion}
+
+\subsection{Derivation}
+
+\subsection{Stability analysis}
+\subsubsection{Robustness analysis}
+
+\subsection{Robust test norms}
+\subsubsection{A model problem}
+\subsubsection{A modification of the robust test norm}
+\subsubsection{Adaptation for a locally conservative formulation}
+\subsubsection{Proof of robust stability estimate}
+
+
+\section{Application to other fluid model problems}
+
+\subsection{Inviscid Burgers' equation}
+
+\subsection{Stokes flow}
+
+
+\section{Numerical Experiments}
+
+\subsection{Erickson-Johnson model problem}
+
+\subsection{Vortex problem}
+
+\subsection{Discontinuous source problem}
+
+\subsection{Inviscid Burgers' problem}
+
+\subsection{Stokes flow around a cylinder}
+
+\subsection{Stokes flow over a backward facing step}
+
+
+
+\chapter{Space-time DPG}
+
+
+
+\section{Heat equation}
+
+\subsection{Derivation}
+
+\subsection{Problems considered}
+
+
+\section{Convection-diffusion}
+
+\subsection{Derivation}
+
+\subsection{Problems considered}
+
+
+\section{Burgers'}
+
+\subsection{Derivation}
+
+\subsection{Problems considered}
+
+
+\section{Time-slabs vs full-time}
+
+
+
+\chapter{Proposed work}
+
+
+
+\section{Space-time DPG for 2D Incompressible Navier-Stokes}
+
+\subsection{Derivation}
+
+\subsection{Problems to consider}
+
+
+\section{Space-time DPG for 2D Compressible Navier-Stokes}
+
+\subsection{Derivation}
+
+\subsection{Problems to consider}
+
+
+\section{Area requirements}
+
+\subsection{Area A: Applicable mathematics}
+
+\subsection{Area B: Numerical analysis and scientific computation}
+
+\subsection{Area C: Mathematical modeling and applications}
+
+
+\end{document}
