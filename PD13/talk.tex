@@ -178,7 +178,7 @@ the Lagrange multipliers enforcing local conservation.
 \begin{frame}
 \frametitle{Local Conservation}
 Finding the critical points of $L(u,\bflambda)$, we get the following
-equations.
+equations\textsuperscript{\cite{EllisDemkowiczChan2013}}.
 \begin{align*}
 \frac{\partial L(u_h,\bflambda)}{\partial u_h}&=b(u_h,R_V^{-1}B\delta u_h)
 -l(R_V^{-1}B\delta u_h)\\
@@ -285,7 +285,7 @@ c(q,\bfu) & = g(q) & \forall q \in Q
 where $a,c,l,g$ denote the appropriate
 bilinear and linear forms. Note that $a(\bfu,\bfw)=b(\bfu,T\bfw)=(T\bfu,T\bfw)_V$.
 
-Let $\bfpsi$ denote the $H(\text{div},\Omega)$ extension of flux $\hat{f}$
+Let $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{f}$
 that realizes the minimum in the definition of the quotient (minimum energy
 extension) norm.
 
@@ -297,6 +297,10 @@ bound for form $c(p,\bfw)$:
 \]
 \end{frame}
 \begin{comment}
+In the following analysis, we neglect the error due to the approximation of optimal test functions.
+
+We skip some of the math needed to show this, but it is pretty trivial. The
+full details will be in the ICES report.
 \end{comment}
 
 
@@ -304,8 +308,9 @@ bound for form $c(p,\bfw)$:
 % NEW SLIDE
 %===============================================================================
 \begin{frame}
-\frametitle{Inf Sup Condition relating spaces $\bfU$ and $Q$}
+\frametitle{Inf Sup Condition}
 \only<1>{
+The inf-sup condition relating spaces $\bfU$ and $Q$ is
 \[
 \sup_{\bfw \in \bfU} \frac{| c(p,\bfw) |}{|| \bfw ||_{\bfU}} \geq \beta ||
 p ||_Q
@@ -321,7 +326,7 @@ Costabel and McIntosh\textsuperscript{\cite{CostabelMcIntosh}}.
 Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
 function
 \begin{equation*}
-\bfpsi = R (\sum_K \lambda_K 1_K) \: .
+\bfpsi = R (\sum_K \lambda_K 1_K)
 \end{equation*}
 Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
 }
@@ -346,6 +351,18 @@ Let $\hat{f}$ be the trace of $\bfpsi_h$, then
 }
 \end{frame}
 \begin{comment}
+We proceed now with the discussion of the discrete inf-sup stability
+constants. We skip index h in the notation.
+
+Note that C is a generic, mesh independent constant incorporating the constant
+from the interpolation error estimate and the continuity constant of R.
+
+Notice that we have considered traces of lowest order Raviart-Thomas elements
+for the discretization of the flux.
+
+The inf-sup condition for the lowest order RT spaces implies automatically the
+analogous condition for elements of arbitrary order; increasing space U only
+makes the discrete inf-sup constant bigger.
 \end{comment}
 
 
@@ -376,10 +393,147 @@ where $\gamma$ is the stability constant for the standard continuous DPG formula
 The FE error is bounded by the best approximation error. Note that the exact
 Lagrange multipliers are zero, so the best approximation error involves only
 the solution $(u,\bfsigma,\hat{u},\hat{t})$.
-
-
 \end{frame}
 \begin{comment}
+This is satisfied automatically due to the use of optimal test functions.
+
+In other words, the kernel space contains only the equilibrated fluxes.
+
+The first inequality follows as we plug in the definition for a and pick w=u.
+The second equality is trivial, while the next one follows by definition of
+the optimal test functions given through the trial-to-test operator T .
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Robustness Analysis}
+\begin{itemize}
+  \item We prove robustness of the restricted DPG method by switching to the
+    energy norm in Brezzi's stability analysis.
+  \item The inf-sup in kernel condition is simple. Upon replacing the original
+    norm of solution $\bfu$ with the energy norm, $\gamma$ and the continuity
+    constant become one.
+  \item In order to investigate the robustness of inf-sup constant $\beta$, we
+    need to understand what the energy norm of flux variable $\hat f$ is.
+  \item For an element, $K$, we solve for the optimal test functions,
+    $v_K\in H^1(K)$, and $\bftau_K\in\bfH(\text{div},K)$
+    corresponding to flux $\hat f$:
+    \[
+    ( (v_K,\bftau_K),(\delta v,\delta\bftau) )_V=\LRa{\hat f,\delta v}
+    \quad\forall\delta v\in H^1(K),\,\delta\bftau\in\bfH(\text{div},K)
+    \]
+  \item The energy norm for $\hat f$ is then
+    \[
+    ||\hat f||_E^2=\sum_K||(v_K,\bftau_K)||_V^2
+    \]
+\end{itemize}
+\end{frame}
+\begin{comment}
+  With robust test norms, standard DPG delivers a robust error bound because
+  it minimizes the residual in the energy norm. Restricted DPG no longer
+  minimizes the residual, so can we claim robustness for this version as well?
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Robustness Analysis}
+\begin{itemize}
+    \item Need to establish conditions under which the inf-sup constant is
+      independent of viscosity.
+      \begin{equation*}
+        \sup_{\hat{f}} \frac{| \sum_K \lambda_K \langle \hat{f},1_K \rangle |}{|| \hat{f} ||_E}
+        \geq  \beta \LRp{\sum_K \mu(K) \lambda_K^2}^{1/2}
+      \end{equation*}
+    \item Select $\hat f$ as the trace of the Raviart-Thomas interpolant
+      $\bfpsi_h$ of $\bfpsi=R(\sum_K\lambda_K1_K)$.
+    \item Proceed as in the previous analysis, but evaluation of the norm of
+      $\hat f$ requires a local solve.
+      \begin{align*}
+        ( (v,\bftau),&(\delta v,\delta\bftau) )_V
+        =\LRa{\hat f,\delta v}_{\partial K}
+        =\int_K\text{div}\bfpsi_h\delta v
+        =\int_K\text{div}\bfpsi\delta v\\
+        &=\int_K\lambda_K\delta v=\lambda_K(1_K,\delta v)_K
+        \quad\forall\delta v\in
+        H^1(K)\,\forall\delta\bftau\in\bfH(\text{div},K)
+      \end{align*}
+\end{itemize}
+\end{frame}
+\begin{comment}
+We need to establish sufficient conditions under which the inf-sup and continuity constants for the bilinear
+form representing the constraint are independent of viscosity
+
+R is the right inverse of the divergence operator constructed by Costabel and
+McIntosh.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Robustness Analysis}
+\begin{itemize}
+    \item We need an upper bound for the energy norm of $(v_h,\bftau_h)$:
+      \[
+      \LRp{\sum_K||(v,\bftau)||^2_V}^{1/2}
+      \]
+    \item Substituting $(v,\bftau)$ for $(\delta v,\delta\bftau)$ in the
+      previous slide:
+      \[
+      ||(v,\bftau)||^2_V=\lambda_K(1_K,v_k)
+      \]
+    \item With a robust stability estimate
+      $
+      (1_K,v_K)\leq C\mu(K)^{1/2}||(v,\bftau)||_K\,,
+      $
+      \[
+      ||(v,\bftau)||_V\leq C\mu(K)^{1/2}|\lambda_K|
+      \]
+      \[
+      \sum_K||(v,\bftau)||_V^2\leq C^2\sum_K\mu(K)\lambda_K^2
+      \]
+      which leads to the robust estimate of inf-sup constant $\beta$.
+\end{itemize}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Robustness Analysis}
+\begin{itemize}
+    \item Finally, we need a continuity estimate on
+      \[
+      \sum_K\lambda_K\langle\hat f,1_K\rangle
+      \]
+    \item Testing with $(1_K,\boldsymbol0)$ in the local problem, we obtain
+      \[
+      ( (v,\bftau),(1_K,\boldsymbol0) )_V=\langle\hat f,1_K\rangle_{\partial K}
+      \]
+    \item With a robust estimate $|( (v,\bftau),(1_K,\boldsymbol0) )_V|\leq
+      C\mu(K)^{1/2}||(v,\bftau)||_V$,
+      \begin{align*}
+        |\sum_K\lambda_K\langle\hat f,1_K\rangle|
+        &\leq C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}\LRp{\sum_K||(v,\bftau)||_V^2}^{1/2}\\
+        &=C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}||\hat f||_E
+      \end{align*}
+\end{itemize}
+\end{frame}
+\begin{comment}
+With the robust stability and continuity constants for the mixed problem, the
+energy error of solution and Lagrange multipliers is bounded robustly by the
+best approximation error measured in the energy norm. We arrive thus at the
+same situation as in standard DPG.
 \end{comment}
 
 
@@ -419,39 +573,6 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n
 \end{frame}
 \begin{comment}
 \end{comment}
-
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-% \begin{frame}
-% \frametitle{Skewed Convection-Diffusion Problem}
-% \only<1>{
-% After 8 refinements, $\epsilon=10^{-4}$, $\bfbeta=(2,1)^T$
-% \begin{columns}
-% \begin{column}{0.49\textwidth}
-% \begin{figure}
-% \centering
-% \includegraphics[width=1.0\textwidth]{Confusion/modified8c.png}
-% \end{figure}
-% \end{column}
-% \begin{column}{0.49\textwidth}
-% \begin{figure}
-% \centering
-% \includegraphics[width=1.0\textwidth]{Confusion/modified8c_mesh.png}
-% \end{figure}
-% \end{column}
-% \end{columns}
-% }
-% \only<2>{
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=0.7\textwidth]{Confusion/modifiedFlux.pdf}
-% \end{figure}
-% }
-% \end{frame}
-% \begin{comment}
-% \end{comment}
 
 
 %===============================================================================
@@ -726,12 +847,14 @@ What have we done?
 Does it make a difference?
 \begin{itemize}
 \item Enforcement changes refinement strategy.
-\item Standard DPG is nearly conservative in practice.
-\item Usually we get the same results with better conservation.
 \item Some improvement on condition number for local solves.
+\item Standard DPG is nearly conservative for many of the problems considered,
+  but seems to suffer from mass loss similar to other LSFEM methods.
+\item For some problems, local conservation allows us to converge to a
+  reasonable solution on a much coarser mesh.
 \end{itemize}
-\vspace{2ex}
-\visible<2->{\pecosbold{We need to study the effect on real fluid dynamics.}}
+% \vspace{2ex}
+% \visible<2->{\pecosbold{We need to study the effect on real fluid dynamics.}}
 \end{frame}
 
 
