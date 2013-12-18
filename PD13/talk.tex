@@ -8,12 +8,12 @@
 \newcommand{\pecosbold}[1]{{\color{pecos2}{#1}}}
 \newcommand{\pecosreallybold}[1]{{\color{pecos6}{#1}}}
 
-\author[Truman. E. Ellis]{Truman E. Ellis}
+\author[Truman. E. Ellis]{Truman E. Ellis, Leszek Demkowicz, Jesse Chan}
 \title[Locally Conservative DPG]{Locally Conservative Discontinuous
 Petrov-Galerkin for Fluid Problems}
 \institute{Institute for Computational and Engineering Sciences\\
 The University of Texas at Austin}
-\date{July 25, 2013}
+\date{December 8, 2013}
 
 \begin{document}
 
@@ -283,7 +283,8 @@ c(q,\bfu) & = g(q) & \forall q \in Q
 \right.
 \end{equation*}
 where $a,c,l,g$ denote the appropriate
-bilinear and linear forms. Note that $a(\bfu,\bfw)=b(\bfu,T\bfw)=(T\bfu,T\bfw)_V$.
+bilinear and linear forms. Note that
+$a(\bfu,\bfw)=b(\bfu,R_V^{-1}B\bfw)=(R_V^{-1}B\bfu,R_V^{-1}B\bfw)_V$.
 
 Let $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{f}$
 that realizes the minimum in the definition of the quotient (minimum energy
@@ -331,7 +332,7 @@ function
 Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
 }
 \only<2>{
-Classical $h$-interpolation interpolation error estimate for the lowest error
+Classical $h$-interpolation error estimate for the lowest error
 Raviart-Thomas elements and continuity of operator $R$ imply the stability estimate:
 \begin{equation*}
 \begin{array}{lll}
@@ -388,7 +389,7 @@ With $\bfu \in \bfU_0$, we have then:
    \frac{||T\bfu||}{||\bfu||}
    \geq \gamma^2 || (u,\bfsigma,\hat{u},\hat{t}) ||
 \end{align*}
-where $\gamma$ is the stability constant for the standard continuous DPG formulation.
+where $\gamma$ is the stability constant for the standard DPG formulation.
 
 The FE error is bounded by the best approximation error. Note that the exact
 Lagrange multipliers are zero, so the best approximation error involves only
