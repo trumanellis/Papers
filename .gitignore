@@ -6,3 +6,9 @@
 *.out
 *.snm
 *.toc
+*.fls
+*.idx
+*.ilg
+*.ind
+*.gz
+*.fdb_latexmk
