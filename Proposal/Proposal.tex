@@ -43,26 +43,60 @@
 
 
 
-\section{Motivation}
+\section{Motivation} 
 
+% \subsection{Classes of problems}
+Computational science has revolutionized the engineering design process -- enabling design analysis
+and optimization to be done virtually before expensive physical prototypes need to be built.
+However, some fields of engineering analysis lend themselves to a computational approach much easier
+than others. 
+Fluid dynamics has long been one of the most challenging engineering disciplines to simulate via numerical techniques.
+Aside from the inherent modeling challenges presented by fluid turbulence, many fluid flows can be characterized as singularly perturbed problems 
+-- problems in which the viscosity length scale is many orders of maginitude smaller than the large scale features of the flow.
+This has necessitated the need for meshes with large gradations in resolution to enable resolution of boundary layers while being computationally efficient in the free stream.
+Traditionally, these meshes would be custom designed by a domain expert who could predict which parts of the domain would need more resolution than others. 
+On top of this, many numerical techniques would fail to converge unless the presented initial mesh was in the ``asymptotic regime'', 
+i.e. the physics could by somewhat sufficiently represented.
+These requirements made mesh generation a laborious and far from automated procedure.
 
-\subsection{Classes of problems}
-The Navier-Stokes equations govern many systems of engineering interest.
-transient compressible and incompressible laminar Navier-Stokes, extreme Re,
-transonic/supersonic
-\paragraph{Value of CFD}
-\paragraph{Higher-order methods}
-gives higher convergence rates, but seen as more sensitive (Gibbs)
-\paragraph{Automatic adaptivity}
-CFD inherently requires meshes with magnitudes of variation in scale
-resolution.
-limitations exist, requires a field expert to design meshes and run
-simulations
-\paragraph{Time step limited by smallest mesh element} \cite{Lew2003}
+The failure of many numerical methods in the ``pre-asymptotic regime'' can be characterized mathematically as a loss of stability on coarse meshes.
+The stability characteristics of a broad class of finite element methods can be analyzed according to the Lady\v{z}enskaja-Babu\v{s}ka-Brezzi condition.
+Leszek Demkowicz and Jay Gopalakrishnan first proposed the discontinuous Petrov-Galerkin method in 2009\cite{DPG1} in order to address stability issues for a 
+very broad class of problems. The DPG method automatically satisfies stability criteria by construction which enables DPG simulations to remain stable and 
+convergent even in the pre-asymptotic regime. 
+By nature, the DPG method also comes with a built-in error representation function, effectively eliminating the need for other a posteriori error estimators.
+Practically, this means that a simulation could start with just the coarsest mesh necessary to represent the geometry of the solution and adaptively refine toward a resolved solution in a very automatic way.
+Carried to its logical conclusion, this capability could significantly cut down on the time intensive manual mesh generation (and tweaking) that dominates a good amount of simulation and analysis time.
+Where a current numerical method might falter on a poorly designed mesh, necessitating an engineer to manually enter the problem and fix the offending mesh nodes, a DPG simulation would converge on the poor mesh, mark the offending cells, refine, and continue toward a solution.
+
+Another benefit to the enhanced stability properties of DPG is the ability to consider high order and $hp$-adaptive methods. 
+Many popular numerical methods for CFD (such as the discontinuous Galerkin method) are stable for low polynomial orders, but require additional stabilizing terms for higher orders. 
+Additionally, one of the longstanding issues with $hp$-adaptive techniques was that they suffered stability problems when the polynomial order rose to high. 
+Polynomial order presents no issue at all to DPG methods -- allowing us to recover the high order convergence rates of high uniform $p$ methods or even the exponential convergence rates of $hp$ methods.
+
+The biggest limitation to past explorations of the DPG method is that they were all limited to steady state problems.
+
+% The Navier-Stokes equations govern many systems of engineering interest.
+% transient compressible and incompressible laminar Navier-Stokes, extreme Re,
+% transonic/supersonic
+% This work is ultimately concerned with solving the transient incompressible and compressible Navier-Stokes equations, but we consider several model problems in the process.
+% \paragraph{Higher-order methods}
+% gives higher convergence rates, but seen as more sensitive (Gibbs)
+% \paragraph{Automatic adaptivity}
+% CFD inherently requires meshes with magnitudes of variation in scale
+% resolution.
+% limitations exist, requires a field expert to design meshes and run
+% simulations
+% \paragraph{Time step limited by smallest mesh element} \cite{Lew2003}
 
 \subsection{Investigating a new methodology}
-Aside from the practical incentives of pursuing \ldots
-Generalizing to space-time, investigating conservation
+Much of science is driven by curiosity, and this especially holds for computational science. 
+There is inherent value in exploring new methodologies because they may hold the keys to solving new problems or old problems in a better way.
+A new method may also help us to better understand existing methods. 
+The variational multiscale approach to finite element analysis helped to illucidate on some of the success of the much older streamwise upwind Petrov-Galerkin method while generalizing and improving it.
+The DPG method itself can be viewed as a generalization of least-squares finite elements or even of mixed methods. 
+% Aside from the practical incentives of pursuing \ldots
+% Generalizing to space-time, investigating conservation
 
 
 \section{Literature review}
