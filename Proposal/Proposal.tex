@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass{report}
 \usepackage{./utproposal}
 \usepackage{}
 \input{../preamble.tex}
@@ -111,7 +111,7 @@ Based on our past experience with steady DPG, we anticipate space-time DPG to be
 Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
 \cite{Klaij2006}
 \cite{Rhebergen2013}
-\cite{Haber2006}
+% \cite{Haber2006}
 
 \subsection{DPG}
 General ideas 1-2 pages
@@ -127,16 +127,431 @@ General ideas 1-2 pages
 
 \chapter{Conservation in steady-state}
 We summarize some of our completed work on a locally conservative DPG formulation that was invented to address mass loss concerns for standard DPG.
+Locally conservative methods hold a special place for numerical analysts in
+the field of fluid dynamics.
+Perot\cite{Perot2011} argues
+\begin{quote}
+Accuracy, stability, and consistency are the mathematical concepts that are
+typically used to analyze numerical methods for partial differential equations
+(PDEs). These important tools quantify how well the mathematics of a PDE is
+represented, but they fail to say anything about how well the physics of the
+system is represented by a particular numerical method. In practice, physical
+fidelity of a numerical solution can be just as important (perhaps even more
+important to a physicist) as these more traditional mathematical concepts. A
+numerical solution that violates the underlying physics (destroying mass or
+entropy, for example) is in many respects just as flawed as an unstable
+solution.
+\end{quote}
+There are also some mathematically attractive reasons to pursue local
+conservation. The Lax-Wendroff theorem guarantees that a convergent numerical
+solution to a system of hyperbolic conservation laws will converge to the
+correct weak solution.
+
+The discontinuous Petrov-Galerkin finite element method has been described as
+least squares finite elements with a twist. The key difference is that least
+squares methods seek to minimize the residual of the solution in the $L^2$
+norm, while DPG seeks the minimization in a dual norm realized through the
+inverse Riesz map. Exact mass conservation has been an issue that has long plagued
+least squares finite elements. Several approaches have been
+used to try to adress this. Bochev \etal\cite{Bochev2010} accomplish local
+conservation by using a pointwise divergence free velocity space in the Stokes
+formulation.  Chang and Nelson\cite{ChangNelson1997} developed the
+\emph{restricted LSFEM}\cite{ChangNelson1997} by augmenting the least squares
+equations with Lagrange multipliers explicitly enforcing mass conservation
+element-wise. Our conservative formulation of DPG takes a similar approach and
+both methods share similar negative of transforming a minimization method to a
+saddle point problem. In the interest of crediting Chang and Nelson's
+restricted LSFEM, we call the following locally conservative DPG method the
+restricted DPG method (RDPG).
 
 
 \section{DPG is a minimum residual method}
+Roberts \etal presents a brief history and derivation of DPG with optimal test functions in
+\cite{DPGStokes}. We follow his derivation of the standard DPG method as a
+minimum residual method. Let $U$ be the trial Hilbert space and $V$ the test
+Hilbert space for a well-posed variational problem $b(u,v)=l(v)$. In operator
+form this is $Bu=l$, where $B:U\rightarrow V'$ and $\LRa{Bu,v}=b(u,v)$. We seek to minimize the
+residual for the discrete space $U_h\subset U$:
+\begin{equation}
+u_h=\argmin_{u_h\in U_h}\frac{1}{2}\norm{Bu_h-l}^2_{V'}\,.
+\label{minresidual}
+\end{equation}
+Recalling that the Riesz operator $R_V:V\rightarrow V'$ is an isometry defined
+by
+\[
+\LRa{R_Vv,\delta v}=\LRp{v,\delta v}_V,\quad\forall\delta v\in V,
+\]
+we can use the Riesz inverse to minimize in the $V$-norm rather than its dual:
+\begin{equation}
+\frac{1}{2}\norm{Bu_h-l}^2_{V'}=\frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}^2_V
+=\frac{1}{2}\LRp{R_V^{-1}(Bu_h-l),R_V^{-1}(Bu_h-l)}_V\,.
+\label{eq:rieszapplied}
+\end{equation}
+The first order optimality condition for \eqnref{rieszapplied} requires
+the G\^ateaux derivative to be zero in all directions $\delta u \in
+U_h$, i.e.,
+\[
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U.
+\]
+By definition of the Riesz operator, this is equivalent to
+\begin{equation}
+\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
+\label{eq:DPGbilinearform}
+\end{equation}
+Now, we can identify $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ as the
+optimal test function for trial function $\delta u_h$. Define $T:=R_V^{-1}B:U_h\rightarrow V$ as the trial-to-test operator. Now we can rewrite
+\eqnref{DPGbilinearform} as
+\begin{equation}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}).
+\label{eq:DPGmethod}
+\end{equation}
+The DPG method then is to solve \eqnref{DPGmethod} with optimal test functions
+$v_{\delta u_h}\in V$ that solve the auxiliary problem
+\begin{equation}
+\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+\label{eq:optimaltestproblem}
+\end{equation}
+Using a continuous test basis would result in a global solve for every optimal
+test function. Therefore DPG uses a discontinuous test basis which makes each
+solve element-local and much more computationally tractable. Of course,
+\eqnref{optimaltestproblem} still requires the inversion of the
+infinite-dimensional Riesz map, but approximating $V$ by a finite
+dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
+``enriched space'') works well in practice.
+
+No assumptions have been made so far on the definition of the inner product on
+$V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
+between a solid DPG method and one that suffers from robustness issues.
 
 
 \section{Element conservative convection-diffusion}
+We now proceed to develop a locally conservative formulation of DPG for
+convection-diffusion type problems, but there are a few terms that we need to
+define first. If $\Omega$ is our problem domain, then we can partition it into
+finite elements $K$ such that
+\[
+\overline{\Omega} = \bigcup_K  \bar{K},\: \quad K \text { open},
+\]
+with corresponding {\em skeleton} $\Gamma_h$ and {\em interior
+  skeleton} $\Gamma_h^0$,
+\[
+\Gamma_h := \bigcup_K \partial K\qquad \Gamma_h^0 := \Gamma_h - \Gamma.
+\]
+We define broken Sobolev spaces element-wise:
+\[
+\begin{array}{rl}
+H^1(\Omega_h) & := \prod_K H^1(K), \\[8pt]
+\bfH(\text{div},\Omega_h) & := \prod_K \bfH(\text{div},K).
+\end{array}
+\]
+We also need the trace spaces:
+\[
+\begin{array}{rl}
+H^\frac{1}{2}(\Gamma_h) & := \left\{ \hat{v} = \{\hat{v}_K \} \in \prod_K H^{1/2}(\partial K) \: :
+\: \exists v \in H^1(\Omega) : v|_{\partial K} = \hat{v}_K \right\}, \\[8pt]
+H^{-\frac{1}{2}}(\Gamma_h) & := \left\{ {\hat{\sigma}}_n = \{ {\hat{\sigma}}_{Kn} \}\in \prod_K H^{-1/2}(\partial K) \: : \: \exists \bfsigma \in \bfH(\text{div},\Omega)
+: {\hat{\sigma}}_{Kn} = (\bfsigma \cdot \bfn)|_{\partial K} \right\},
+\end{array}
+\]
+which are developed more precisely in \cite{DPGStokes}.
 
 \subsection{Derivation}
+Now that we have briefly outlined the abstract DPG method, let us apply it to
+the convection-diffusion equation. The strong form of the steady
+convection-diffusion problem with homogeneous Dirichlet boundary conditions reads
+\[
+\left\{
+\begin{array}[c]{rrl}
+\div(\bfbeta u)-\epsilon\Delta u & =f & \text{in }\Omega\\
+u & =0 & \text{on }\Gamma\,,
+\end{array}
+\right.
+\]
+where $u$ is the property of interest, $\bs\beta$ is the convection vector,
+and $f$ is the source term. Nonhomogeneous Dirichlet and Neumann boundary
+conditions are straightforward but would add technicality to the following
+discussion. Let us write this as an equivalent system of first
+order equations:
+\begin{align*}
+\div(\bfbeta u-\bfsigma)&=f\\
+\frac{1}{\epsilon}\bfsigma-\Grad u&=\bs0\,.
+\end{align*}
+If we then multiply the first equation by some scalar test function $v$ and the
+bottom equation by some vector-valued test function $\bftau$, we can integrate by
+parts over each element $K$:
+\begin{equation}
+\label{eq:preultraweak}
+\begin{aligned}
+-(\bfbeta u-\bfsigma,\nabla v)_K+((\bfbeta
+u-\bfsigma)\cdot\mathbf{n},v)_{\partial K}&=(f,v)_K\\
+\frac{1}{\epsilon}(\bfsigma,\bftau)_K+(u,\nabla\cdot\bftau)_K
+-(u,\tau_n)_{\partial K}&=0\,.
+\end{aligned}
+\end{equation}
+The discontinuous Petrov-Galerkin method refers to the fact that we are using
+discontinuous optimal test functions that come from a space differing from the
+trial space. It does not specify our choice of trial space. Nevertheless, many
+versions of DPG in the literature (convection-diffusion \cite{DPG6},
+linear elasticity \cite{BramwellDemkowiczGopalakrishnanQiu11}, linear
+acoustics \cite{DemkowiczGopalakrishnanMugaZitelli12}, Stokes
+\cite{DPGStokes}) associate DPG with the so-called ``ultra-weak formulation.''
+We will follow the same derivation for the convection-diffusion equation, but
+we emphasize that other formulations are available (in particular, the
+Primal DPG\cite{PrimalDPG} method presents an alternative with
+continuous trial functions). Thus, we seek field variables $u\in L^2(K)$ and
+$\bfsigma\in\mathbf{L^2}(K)$. Mathematically, this leaves their traces on element
+boundaries undefined, and in a manner similar to the hybridized discontinuous
+Galerkin method, we define new unknowns for trace $\hat u$ and flux $\hat t$.
+Applying these definitions to \eqnref{preultraweak} and adding the two
+equations together, we arrive at our desired variational problem.
+
+Find
+$\bs u:=(u,\bfsigma,\hat u,\hat t)
+\in\bs U:=L^2(\Omega_h)\times \bs L^2(\Omega_h)\times H^{1/2}(\Gamma_h)\times H^{-1/2}(\Gamma_h)$
+such that
+\begin{align}
+\label{eq:variationalFormulation}
+\underbrace{-(\bfbeta u-\bfsigma,\nabla v)_K+(\hat t,v)_{\partial K}
++ \frac{1}{\epsilon}(\bfsigma,\bftau)_K
++(u,\nabla\cdot\bftau)_K
+-(\hat u,\tau_n)_{\partial K}}_{b(\mathbf{u}, \mathbf{v})}
+&=\underbrace{\:(f,v)_K\genfrac{}{}{0pt}{}{}{}}_{l(\mathbf{v})} &\text{in }\Omega \\
+\hat u&=0 &\text{on }\Gamma
+\end{align}
+for all $\bs v:=(v,\bftau)\in
+\bs V:=H^1(\Omega_h)\times\bfH(\text{div},\Omega_h)$.
+
+% jesse robustness section
+
+We note that, for convection-diffusion problems, we are particularly
+interested in designing a \textit{robust} DPG method.  Specifically, we are
+interested in designing methods whose behavior does not change as the
+diffusion parameter $\epsilon$ becomes very small.  Naive Galerkin methods for
+convection-diffusion tend to suffer from a lack of robustness; specifically,
+the finite element error is bounded by a constant factor of the best
+approximation error, but the constant is often proportional to
+$\epsilon^{-1}$.  Our aim is to design a DPG method with this in mind.  We
+follow the methodology introduced by Heuer and Demkowicz in
+\cite{DemkowiczHeuer}: the ultra-weak variational formulation for
+convection-diffusion can be refactored as
+\[
+b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{\bftau,v}} =
+\sum_{K\in \Oh}\LRs{\LRa{\hat t,v}_{\delta K}
++\LRa{\uh,\tau_n}_{\delta K} + \LRp{u,\div \bftau
+-\bfbeta\cdot\Grad v}_{L^2(K)}
++\LRp{\bfsigma,\frac{1}{\epsilon} \bftau + \Grad v}_{L^2(K)}},
+\]
+modulo application of boundary data.  If we choose specific
+\textit{conforming} test functions satisfying the adjoint equations
+\begin{align*}
+\div \bftau - \bfbeta \cdot \Grad v &= u,\\
+\frac{1}{\epsilon} \bftau + \Grad v &= \bfsigma,
+\end{align*}
+then evaluating $b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}$ at these
+specific test functions returns back $\norm{u}^2 + \norm{\bfsigma}^2$, the $L^2$
+norm of our field variables.  Multiplying and dividing through by the test
+norm $\norm{v}_V$, we have
+\[
+\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2 =
+b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}} =
+\frac{b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}}{\norm{v}_V}\norm{v}_V
+\leq \norm{u,\bfsigma,\uh,\fnh}_E\norm{v}_V,
+\]
+where
+\[
+\norm{u,\bfsigma,\uh,\fnh}_E = \sup_{v\in
+V\setminus\LRc{0}}\frac{b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}}{\norm{v}_V}
+\]
+is the DPG energy norm.  If we can robustly bound the test norm $\norm{v}_V
+\lesssim \LRp{\norm{u}_{\L}^2+\norm{\bfsigma}^2_{\L}}^{1/2}$ (i.e. derive a
+bound from above with a constant independent of $\epsilon$), then we can
+divide through to get
+\begin{equation}
+\LRp{\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2}^{\frac{1}{2}} \lesssim
+\norm{u,\bfsigma,\uh,\fnh}_E.
+\label{eq:robustBound}
+\end{equation}
+In other words, the energy norm in which DPG is optimal bounds independently
+of $\epsilon$ the $L^2$ norm; as we drive our energy error down to zero, we
+can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
+
+We note that the construction of the test norm $\norm{v}_V$ for a robust DPG
+method depends on two things: the test norm, as well as the adjoint equation.
+In \cite{DemkowiczHeuer}, the standard problem with Dirichlet conditions
+enforced over the entire boundary was considered; in
+\cite{ChanHeuerThanhDemkowicz2012}, boundary conditions were chosen for the
+forward problem such that the induced adjoint problem was regularized and
+contained no strong boundary layers, allowing for the construction of a
+stronger test norm on $V$.  We adopt a slight modification of the test norm
+introduced in \cite{ChanHeuerThanhDemkowicz2012} for numerical experiments
+here, which is motivated and explained in more detail in
+% Section~\secref{sec:confusionPlate}.
+
+
+Having reviewed and laid the foundation for DPG methods, we can now formulate our conservative DPG scheme.  % added by Jesse
+Let $\bs U_h:=U_h\times\bs S_h\times\hat U_h\times\hat F_h\subset L^2(\Omega_h)\times\bs
+L^2(\Omega_h)\times H^{\frac{1}{2}}(\Gamma_h)\times H^{-\frac{1}{2}}(\Gamma_h)$
+be a finite-dimensional subspace, and let $\bs u_h:=(u_h.\bfsigma_h,\hat
+u_h\hat t_h)\in\bs U_h$ be the group variable. The element conservative DPG scheme is
+derived from the Lagrangian:
+\begin{equation}
+L(\bs u_h,\lambda_k)=\frac{1}{2}\norm{R_V^{-1}(b(\bs
+u_h,\cdot)-(f,\cdot))}^2_{\bs V}-\sum_K\lambda_K(b(\bs u_h,(1_K,\bs0))-l((1_K,\bs0)))\,,
+\label{eq:lagrangian}
+\end{equation}
+where $(1_K,\bs0)$ is the test function in which $v=1$ on element $K$ and 0 elsewhere and $\bftau=\bs0$ everywhere.
+
+Taking the G\^ateaux derivatives as before, we arrive at the following system
+of equations:
+\begin{equation}
+\left\{
+\begin{array}[c]{rll}
+b(\bs u_h,T(\delta\bs u_h))-\sum_K\lambda_K b(\bs u_h,(1_K,\bs0))
+&=l(T(\delta\bs u_h)) & \forall\delta\bs u_h\in\bs U_h\\
+b(\bs u_h,(1_K,\bs0)) &=l((1_K,\bs0)) & \forall K\,,
+\end{array}
+\right.
+\label{eq:conservativeSystem}
+\end{equation}
+where $T:=R_V^{-1}B:\bs U_h\rightarrow\bs V$ is the same trial-to-test operator as in the original formulation.
+
+Denote $T(\delta\bfu_h)=\LRp{\vdeltau,\taudeltau}\in H^1(\Omega_h)\times\bfH(div,\Omega_h)$.
+Then, putting \eqref{eq:conservativeSystem} into more concrete terms for
+convection-diffusion, we get:
+\begin{equation}
+\left\{
+\begin{array}[c]{rll}
+-(\bfbeta u-\bfsigma,\nabla \vdeltau)+\langle\hat t,\vdeltau\rangle
++ \frac{1}{\epsilon}(\bfsigma,\taudeltau)
++(u,\nabla\cdot\taudeltau)
+-\langle\hat u,\taudeltau\cdot\bs n\rangle\\
+-\sum_K\lambda_K (\delta\hat t,(1_K,\bs0))
+&=(f,\vdeltau) & \forall\delta\bs u_h\in\bs U_h\\
+\langle\hat t,(1_K,\bs0)\rangle &=(f,1_K) & \forall K\,.
+\end{array}
+\right.
+\label{eq:conservativeConfusionSystem}
+\end{equation}
 
 \subsection{Stability analysis}
+In the following analysis, we neglect the error due to the approximation of optimal test functions.
+We follow the classical Brezzi's theory \cite{Brezzi1974,DBB05} for an abstract
+mixed problem:
+\begin{equation}
+\left\{
+\begin{array}{lll}
+\bfu \in \bfU, p \in Q\\
+a(\bfu,\bfw) + c(p,\bfw) & = l(\bfw) & \forall \bfw \in \bfU \\
+c(q,\bfu) & = g(q) & \forall q \in Q
+\end{array}
+\right.
+\end{equation}
+where $\bfU,Q$ are Hilbert spaces, and $a,c,l,g$ denote the appropriate
+bilinear and linear forms. Note that $a(\bfu,\bfw)=b(\bfu,T\bfw)=(T\bfu,T\bfw)_V$ in
+the notation from the previous section.
+
+Let function $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{t}$
+that realizes the minimum in the definition of the quotient (minimum energy
+extension) norm.
+The choice of norm for the Lagrange multipliers $\lambda_K$ is implied
+by the quotient norm used for $H^{-1/2}(\Gamma_h)$ and continuity
+bound for form $c(p,\bfw)$ representing the constraint:
+\begin{equation}
+\begin{array}{lll}
+| c(\sum_K \lambda_K (1_K,{\bf 0}),(u,\bfsigma,\hat{u},\hat{t})) |
+& = | \sum_K \lambda_K \langle \hat{t}, 1_K \rangle_{\partial K} | \\[8pt]
+& = | \sum_K \lambda_K \langle v_n , 1_K \rangle_{\partial K} | \\[8pt]
+& = | \sum_K \lambda_K \int_K \text{div} \bfpsi \: 1_K  | \\[8pt]
+& \leq \sum_K  \lambda_K || \text{div} \bfpsi ||_{L^2(K)} \mu(K)^{1/2} \\[8pt]
+& \leq (\sum_K \mu(K) \lambda_K^2)^{1/2} \: (\sum_K || \text{div} \bfpsi ||_{L^2(K)}^2 )^{1/2} \\[8pt]
+& \leq \underbrace{\left(\sum_K \mu(K) \lambda_K^2\right)^{1/2}}_{=: || \bflambda ||} ||
+\hat{t} ||_{H^{-1/2}(\Gamma_h)}\,,
+\end{array}
+\end{equation}
+where $\mu(K)$ stands for the area (measure) of element $K$.
+We proceed now with the discussion of the discrete inf-sup stability constants. We skip
+index $h$ in the notation.
+
+\paragraph{Inf Sup Condition} relating spaces $\bfU$ and $Q$ reads as follows:
+\begin{equation}
+   \sup_{\bfw \in \bfU} \frac{| c(p,\bfw) |}{|| \bfw ||_{\bfU}} \geq \beta ||
+   p ||_Q\,.
+\end{equation}
+Let
+\begin{equation}
+R\, : \, L^2(\Omega) \ni q \to \bfpsi \in \bfH(\text{div},\Omega) \cap \bfH^1(\Omega)
+=\bfH^1(\Omega)
+\end{equation}
+be
+the continuous right inverse of the divergence operator constructed by
+Costabel and McIntosh in \cite{CostabelMcIntosh}.
+Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
+function
+\begin{equation}
+\bfpsi = R (\sum_K \lambda_K 1_K) \: .
+\end{equation}
+Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
+
+Classical $h$-interpolation interpolation error estimates for the lowest error
+Raviart-Thomas elements and continuity of operator $R$ imply the stability estimate:
+\begin{equation}
+\begin{array}{lll}
+|| \bfpsi_h || & \leq || \bfpsi_h - \bfpsi || + || \bfpsi ||\\[8pt]
+&\leq C h || \bfpsi ||_{H^1} +  || \bfpsi || \\[8pt]
+& \leq C || \text{div} \bfpsi || = C (\sum_K \mu(K) \lambda_K^2)^{1/2}\,.
+\end{array}
+\label{eq:stab}
+\end{equation}
+Above, $C$ is a generic, mesh independent constant incorporating constant from
+the interpolation error estimate and continuity constant of $R$.
+Let $\hat{t}$ be the trace of $\bfpsi_h$. We have then,
+\begin{equation}
+\sup_{\hat{t} \in H^{-1/2}(\Gamma_h)} \frac{|  \sum_K \lambda_K \langle
+\hat{t},1_K \rangle_{\partial K} |}{|| \hat{t} ||_{H^{-1/2}(\Gamma_h)}}
+\geq \frac{| \sum_K \lambda_K \int_K \text{div} \bfpsi_h \: 1_K  |}
+{|| \bfpsi_h ||_{H(\text{div},\Omega)}}
+\geq \frac{1}{C} (\sum_K \mu(K) \lambda_K^2)^{1/2}\,,
+\end{equation}
+where $C$ is the constant from stability estimate~\eqref{eq:stab}.
+
+Notice that we have considered traces of lowest order Raviart-Thomas elements
+for the discretization of flux $\hat{t}$. The inf-sup condition for the lowest
+order RT spaces implies automatically the analogous condition for elements of
+arbitrary order; increasing the dimension of space $U$ only makes the discrete
+inf-sup constant bigger.
+
+\paragraph{Inf Sup in Kernel Condition} is satisfied automatically due to the use of optimal
+test functions. First of all, we characterize the ``kernel'' space:
+\begin{equation}
+\begin{array}{rl}
+\bfU_0  := & \{ \bfw \in \bfU \, : \, c(q,\bfw) = 0 \quad \forall q \in Q\} \\[8pt]
+ = &\{ (u,\bfsigma,\hat{u},\hat{t}) \, : \, \langle \hat{t},1_K \rangle = 0
+ \quad \forall K \}\,.
+\end{array}
+\end{equation}
+
+In other words, the kernel space contains only the equilibrated fluxes.
+With $\bfu \in \bfU_0$, we have then:
+\begin{equation}
+   \sup_{\bfw \in \bfU_0} \frac{| a(\bfu,\bfw) |}{|| \bfw ||_{\bfU} }
+   \geq \frac{| b(\bfu,T \bfu) |}{|| \bfu ||}
+   = \frac{| b(\bfu,T \bfu) |}{|| T\bfu ||}\frac{||T\bfu||}{||\bfu||}
+   = \sup_{(v,\bftau)}\frac{| b((u,\bfsigma,\hat{u},\hat{t}), (v,\bftau)) |}{|| (v,\bftau) ||}
+   \frac{||T\bfu||}{||\bfu||}
+   \geq \gamma^2 || (u,\bfsigma,\hat{u},\hat{t}) ||\,,
+\end{equation}
+where $\gamma$ is the stability constant for the standard continuous DPG formulation.
+The first inequality follows as we plug in the definition for $a$ and pick
+$\bfw=\bfu$. The second equality is trivial, while the next one follows by definition of the optimal test
+functions given through the trial-to-test operator $T$. The finally inequality
+springs from the fact that
+$\sup_{\bfv}\frac{|b(\bfu,\bfv)|}{||\bfv||}\geq\gamma||\bfu||$ and
+$||T\bfu||_V=||R_V^{-1}B\bfu||_V=||B\bfu||_{V'}\geq\gamma||u||$.
+
+With both discrete inf-sup constants in place, we have the standard result: the FE error
+is bounded by the best approximation error. Notice that the exact Lagrange multipliers
+are zero, so the best approximation error involves only solution $(u,\bfsigma,\hat{u},\hat{t})$.
 \subsubsection{Robustness analysis}
 
 \subsection{Robust test norms}
