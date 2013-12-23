@@ -727,13 +727,30 @@ reasoning.
 % t$), third order traces ($\hat u$), and fifth order test functions ($v$ and
 % $\bftau$).
 
-We measure flux imbalance by looping over each element in the mesh and
+We now demonstrate the effectiveness of the restricted DPG method with some numerical experiments.
+Flux imbalance is measured by looping over each element in the mesh and
 integrating the flux over each side and summing them together. We then
 integrate the source term over the volume of the element. The two should match
 each other, and the remainder is the flux imbalance. We get the net global
 flux imbalance by summing these quantities and taking the absolute value. The
 max local flux imbalance is the maximum absolute value of these flux
-imbalances.
+imbalances. 
+
+We measure mass loss much more directly in the Stokes problem. Because
+fluid enters and leaves the domain only through the inlet and outlet
+boundaries, we should be able to integrate the mass flux over any
+cross-section of the mesh and get the same value. Unfortunately, it is not
+mathematically well-defined to take line integrals of our field variables which only
+live in $L^2$. We can, however, integrate the trace and flux variables over element boundaries.
+This carries the unfortunate limitation that we can only measure mass loss
+where there is a clear vertical mesh line. We therefore pick integration lines
+from the initial coarse mesh and measure the mass flux after each adaptive refinement
+step. The percent mass loss is thus
+\[
+\%m_{loss}=\frac{\int_{\Gamma_{in}}\bfu\cdot\bfn_{in}d\ell-\int_S\bfu\cdot\bfn_Sd\ell}
+{\int_{\Gamma_{in}}\bfu\cdot\bfn_{in}d\ell}\times100,
+\]
+where $S$ is some vertical mesh line.
 
 % \subsection{Description of Problems}\label{sec:problemDescriptions}
 % Unless otherwise noted, the problem domain is $\Omega=[0,1]^2$ and $f=0$. Also
@@ -816,13 +833,13 @@ imbalances.
 % \label{fig:vortex_flux}
 % \end{figure}
 
-\subsubsection{Discontinuous Source Problem}
+\subsection{Convection-Diffusion}
+Extensive results for convection-diffusion can be found in \cite{Ellis2013Report}, but we select one representative example for brevity.
 Here, $\bfbeta=(0.5,1)^T/\sqrt{1.25}$, and we have a discontinuous source term
 such that $f=1$ when $y\ge2x$ and $f=-1$ when $y<2x$. We apply boundary
-conditions of $\hat t=0$ on the inflow and $\hat u=0$ on the outflow. Contrary
-to the other problems discussed, the solution for this problem does not range
-from 0 to one. Rather, the colorbar in Figure \ref{fig:discontinuous} is
-scaled to  $[-1.110,0.889]$.
+conditions of $\hat t=0$ on the inflow and $\hat u=0$ on the outflow. 
+The colorbar in Figure \ref{fig:discontinuous} is
+scaled to  $[-1.110,0.889]$ where red indicates the maximum value and blue the minimum.
 
 \begin{figure}[p]
 \centering
@@ -849,6 +866,10 @@ scaled to  $[-1.110,0.889]$.
 \label{fig:discontinuous_flux}
 \end{figure}
 
+We can see that the converged solutions look nearly identical whether or not we enforce local conservation.
+From the flux imbalance plots, we can see that standard DPG starts with somewhat noticeable flux imbalance, but it converges to a conservative solution with refinement.
+Restricted DPG flux loss bounces around near machine precision as expected. It appears to grow slightly with number of degrees of freedom, but that is just accumulation of numerical error.
+
 %   /$$$$$$$                                                             
 %  | $$__  $$                                                            
 %  | $$  \ $$ /$$   /$$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$
@@ -861,9 +882,11 @@ scaled to  $[-1.110,0.889]$.
 %                                |  $$$$$$/                              
 %  
 \subsection{Inviscid Burgers' Equation}
+Extending local conservation to other fluid model problems is very straight-forward. 
+We only need to identify what terms need to be conserved and constrain them via Lagrange multipliers.
 We include the inviscid Burgers' equation in our suite of tests because, being
 a nonlinear hyperbolic conservation law, it
-falls under the scope of the Lax-Wendroff theorem. %replaced purvue with purview, but I think scope might be more easily understood -JC
+falls under the scope of the Lax-Wendroff theorem.
 The inviscid Burger's equation is
 \[
 \frac{\partial u}{\partial t}+u\frac{\partial u}{\partial x}=f\,.
@@ -888,12 +911,16 @@ until the solution converges. The linearized equation is
 -\LRp{\vecttwo{u}{1}\Delta u,\Grad_{xt}v}+\LRa{\hat t,v}=\LRp{f,v}
 +\LRp{\vecttwo{u^2/2}{u},\Grad_{xt}v} \,,
 \]
-where $u$ is the previous solution iteration and $\Delta u$ is the update.
+where $u$ is the previous solution iteration and $\Delta u$ is the update. 
+For the locally conservative version, we need $\int_{\partial K}\hat t=\int_K f$ for all elements $K$ in the mesh.
 
-This is a standard test problem for Burgers' equation. The domain is a unit
+As a numerical test, we try a standard Burgers' shock problem.
+The domain is a unit
 square. We assign boundary conditions $\hat t=-(1-2x)$ on the bottom, $\hat
 t=-1/2$ on the left, while $\hat t=1/2$ on the right. Since this is a
 hyperbolic equation, there is no need to set a boundary condition on the top.
+
+Examining the results, we see the exact same kind of results that we saw for convection-diffusion, indicating that hyperbolic nonlinear conservation laws present no problem to the method.
 
 \begin{figure}[p]
 \centering
@@ -920,6 +947,17 @@ hyperbolic equation, there is no need to set a boundary condition on the top.
 \label{fig:burgers_flux}
 \end{figure}
 
+%    /$$$$$$    /$$               /$$                          
+%   /$$__  $$  | $$              | $$                          
+%  | $$  \__/ /$$$$$$    /$$$$$$ | $$   /$$  /$$$$$$   /$$$$$$$
+%  |  $$$$$$ |_  $$_/   /$$__  $$| $$  /$$/ /$$__  $$ /$$_____/
+%   \____  $$  | $$    | $$  \ $$| $$$$$$/ | $$$$$$$$|  $$$$$$ 
+%   /$$  \ $$  | $$ /$$| $$  | $$| $$_  $$ | $$_____/ \____  $$
+%  |  $$$$$$/  |  $$$$/|  $$$$$$/| $$ \  $$|  $$$$$$$ /$$$$$$$/
+%   \______/    \___/   \______/ |__/  \__/ \_______/|_______/ 
+%                                                              
+%                                                              
+%             
 \subsection{Stokes Flow}
 We start with the VGP (velocity, gradient pressure) Stokes formulation:
 \begin{align*}
@@ -949,18 +987,8 @@ Local conservation for Stokes flow means that over each element,
 $\int_K\hat\bfu\cdot\mathbf{n}=0$. 
 
 
-%    /$$$$$$    /$$               /$$                          
-%   /$$__  $$  | $$              | $$                          
-%  | $$  \__/ /$$$$$$    /$$$$$$ | $$   /$$  /$$$$$$   /$$$$$$$
-%  |  $$$$$$ |_  $$_/   /$$__  $$| $$  /$$/ /$$__  $$ /$$_____/
-%   \____  $$  | $$    | $$  \ $$| $$$$$$/ | $$$$$$$$|  $$$$$$ 
-%   /$$  \ $$  | $$ /$$| $$  | $$| $$_  $$ | $$_____/ \____  $$
-%  |  $$$$$$/  |  $$$$/|  $$$$$$/| $$ \  $$|  $$$$$$$ /$$$$$$$/
-%   \______/    \___/   \______/ |__/  \__/ \_______/|_______/ 
-%                                                              
-%                                                              
-%             
-\subsubsection{Stokes Flow Around a Cylinder}\label{sec:stokesCylinder}
+% \subsubsection{Stokes Flow Around a Cylinder}\label{sec:stokesCylinder}
+We present a numerical experiment of Stokes flow around a cylinder, but \cite{Ellis2013Report} also includes results for Stokes flow over a backward facing step.
 This is a common problem used to stress-test local conservation properties of
 least squares finite element methods. Since DPG can be viewed as a generalized
 least squares methods\cite{DPGOverview}, we might expect it to struggle with
@@ -978,22 +1006,6 @@ starting from the very coarse meshes shown in Figure~\ref{fig:stokesMesh}
 while adaptively refining toward a resolved solution. The extreme pressure
 gradient in the $r=0.9$ case obviously makes local conservation more
 challenging.
-
-We measure mass loss much more directly in these two Stokes problems. Because
-fluid enters and leaves the domain only through the inlet and outlet
-boundaries, we should be able to integrate the mass flux over any
-cross-section of the mesh and get the same value. Unfortunately, it is not
-mathematically well-defined to take line integrals of our field variables which only
-live in $L^2$. We can, however, integrate the trace and flux variables over element boundaries.
-This carries the unfortunate limitation that we can only measure mass loss
-where there is a clear vertical mesh line. We therefore pick integration lines
-from the initial coarse mesh and measure the mass flux after each adaptive refinement
-step. The percent mass loss is thus
-\[
-\%m_{loss}=\frac{\int_{\Gamma_{in}}\bfu\cdot\bfn_{in}d\ell-\int_S\bfu\cdot\bfn_Sd\ell}
-{\int_{\Gamma_{in}}\bfu\cdot\bfn_{in}d\ell}\times100,
-\]
-where $S$ is some vertical mesh line.
 
 \begin{figure}[p]
 \centering
@@ -1260,31 +1272,23 @@ where $S$ is some vertical mesh line.
 % solutions to hyperbolic conservation laws. We see the same behavior with the
 % flux imbalance plots that was so common with convection-diffusion.
 
-% \subsubsection{Stokes Results}
-% The two Stokes problems are the first ones we encounter that stress the local
-% conservation property of standard DPG. With a cylinder radius of $0.6$,
-% standard DPG loses nearly 30\% of the mass post-cylinder, but quickly recovers
-% most of that with further refinement. As we increase the cylinder radius to
-% $0.9$, the problem only exacerbates. Nearly 100\% of the mass is lost in the
-% constricted region on coarse meshes. It takes a much higher level of
-% resolution to recover the mass loss. The stress singularity at the reentrant
-% corner of the backward facing step causes issues for standard DPG on coarse
-% meshes. It seems that the error in approximating the singularity outweighs the
-% error of missed mass conservation. If we focus refinements at the singularity,
-% the error eventually drops far enough for the method to become nearly
-% conservative.
-% The small amount of mass loss for the restricted method is clearly due to
-% accumulation of floating point error.
+The Stokes problem is the first one we encounter that stresses the local
+conservation property of standard DPG. With a cylinder radius of $0.6$,
+standard DPG loses nearly 30\% of the mass post-cylinder, but quickly recovers
+most of that with further refinement. As we increase the cylinder radius to
+$0.9$, the problem only exacerbates. Nearly 100\% of the mass is lost in the
+constricted region on coarse meshes. It takes a much higher level of
+resolution to recover the mass loss. 
+The small amount of mass loss for the restricted method is clearly due to
+accumulation of floating point error.
 
-The most significant benefit of enforcing local conservation for these
-problems is that it allows us to recover the essential flow features with much
+The most significant benefit of enforcing local conservation for this
+problem is that it allows us to recover the essential flow features with much
 coarser meshes. On the $r=0.6$ cylinder problem, the peak velocity magnitude
 of the conservative solution is fairly close on the coarsest mesh, while the
 nonconservative solution severely underpredicts the peak. With the $r=0.9$
 cylinder, this problem is only exacerbated. After just one adaptive
 refinement, the conservative solution nails the peak velocity. The
-nonconservative solution is completely useless at this point. We see the same
-thing with the backward facing step problem. The conservative solution preserves
-qualitative features even on the coarsest mesh, while standard DPG requires far higher resolution
-to achieve a similar solution. 
+nonconservative solution is completely useless at this point.
+
 \end{document}
