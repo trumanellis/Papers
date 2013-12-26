@@ -39,161 +39,17 @@
 %\listoffigures     % here, if applicable.
 
 
-\chapter{Introduction}
 
 
+\subfile{Introduction.tex}
 
-\section{Motivation} 
-
-% \subsection{Classes of problems}
-Computational science has revolutionized the engineering design process -- enabling design analysis
-and optimization to be done virtually before expensive physical prototypes need to be built.
-However, some fields of engineering analysis lend themselves to a computational approach much easier
-than others. 
-Fluid dynamics has long been one of the most challenging engineering disciplines to simulate via numerical techniques.
-Aside from the inherent modeling challenges presented by fluid turbulence, many fluid flows can be characterized as singularly perturbed problems 
--- problems in which the viscosity length scale is many orders of maginitude smaller than the large scale features of the flow.
-This has necessitated the need for meshes with large gradations in resolution to enable resolution of boundary layers while being computationally efficient in the free stream.
-Traditionally, these meshes would be custom designed by a domain expert who could predict which parts of the domain would need more resolution than others. 
-On top of this, many numerical techniques would fail to converge unless the presented initial mesh was in the ``asymptotic regime'', 
-i.e. the physics could by somewhat sufficiently represented.
-These requirements made mesh generation a laborious and far from automated procedure.
-
-The failure of many numerical methods in the ``pre-asymptotic regime'' can be characterized mathematically as a loss of stability on coarse meshes.
-The stability characteristics of a broad class of finite element methods can be analyzed according to the Lady\v{z}enskaja-Babu\v{s}ka-Brezzi condition.
-Leszek Demkowicz and Jay Gopalakrishnan first proposed the discontinuous Petrov-Galerkin method in 2009\cite{DPG1} in order to address stability issues for a 
-very broad class of problems. The DPG method automatically satisfies stability criteria by construction which enables DPG simulations to remain stable and 
-convergent even in the pre-asymptotic regime. 
-By nature, the DPG method also comes with a built-in error representation function, effectively eliminating the need for other a posteriori error estimators.
-Practically, this means that a simulation could start with just the coarsest mesh necessary to represent the geometry of the solution and adaptively refine toward a resolved solution in a very automatic way.
-Carried to its logical conclusion, this capability could significantly cut down on the time intensive manual mesh generation (and tweaking) that dominates a good amount of simulation and analysis time.
-Where a current numerical method might falter on a poorly designed mesh, necessitating an engineer to manually enter the problem and fix the offending mesh nodes, a DPG simulation would converge on the poor mesh, mark the offending cells, refine, and continue toward a solution.
-
-Another benefit to the enhanced stability properties of DPG is the ability to consider high order and $hp$-adaptive methods. 
-Many popular numerical methods for CFD (such as the discontinuous Galerkin method) are stable for low polynomial orders, but require additional stabilizing terms for higher orders. 
-Additionally, one of the longstanding issues with $hp$-adaptive techniques was that they suffered stability problems when the polynomial order rose to high. 
-Polynomial order presents no issue at all to DPG methods -- allowing us to recover the high order convergence rates of high uniform $p$ methods or even the exponential convergence rates of $hp$ methods.
-
-The biggest limitation to past explorations of the DPG method is that they were all limited to steady state problems.
-Obviously, this seriously limits the variety of interesting problems we could consider. 
-The easiest extension of steady DPG to transient problems would be to do an implicit time stepping technique in time and use DPG for only the spatial solve at each time step.
-We did indeed explore this approach, but it didn't seem to be a natural fit with the adaptive features of DPG.
-Clearly the CFL condition was not binding since we were interested in implicit time integration schemes, but the CFL condition can be a guiding principle for temporal accuracy in this case.
-So if we are interested in temporally accurate solutions, we are limited by the fact that our smallest mesh elements (which may be order of magnitude smaller than the largest elements) are constrained to proceed at a much smaller time step than the mesh as a whole. 
-We can either restrict the whole mesh to the smallest time step, or we can attempt some sort of local time stepping.
-A space-time DPG formulation presents an attractive choice as we will be able to preserve our natural adaptivity from the steady problems while extending it in time.
-Thus we achieve an adaptive solution technique for transient problems in a unified framework.
-The obvious downside to such an approach is that for 2D spatial problems, we now have to compute on a three dimensional mesh while a spatially 3D problem becomes four dimensional.
-
-\subsection{Investigating a new methodology}
-Much of science is driven by curiosity, and this especially holds for computational science. 
-There is inherent value in exploring new methodologies because they may hold the keys to solving new problems or old problems in a better way.
-A new method may also help us to better understand existing methods. 
-The variational multiscale approach to finite element analysis helped to illucidate on some of the success of the much older streamwise upwind Petrov-Galerkin method while generalizing and improving it.
-The DPG method itself can be viewed as a generalization of least-squares finite elements or even of mixed methods. 
-
-Curiousity similarly motivates the desire to explore a space-time DPG formulation for computational fluid dynamics. 
-Based on our past experience with steady DPG, we anticipate space-time DPG to be a very interesting technique that could extend the automaticity of DPG in very novel ways.
-
-\section{Literature review}
-
-\subsection{Computational fluid dynamics}
-
-\subsubsection{Finite difference and finite volume methods}
-
-\subsubsection{Stabilized finite element methods}
-\paragraph{SUPG}
-\paragraph{VMS}
-\paragraph{DG}
-\paragraph{HDG}
-
-\subsection{Space-time finite elements}
-Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
-\cite{Klaij2006}
-\cite{Rhebergen2013}
-% \cite{Haber2006}
-
-\subsection{DPG}
-General ideas 1-2 pages
-
-
-\section{Goal}
-
-
-
-\chapter{Abstract DPG}
-
-
-
-\chapter{Conservation in steady-state}
 \subfile{LocalConservation.tex}
 
+\subfile{SpaceTimeDPG.tex}
 
+\subfile{ProposedWork.tex}
 
-\chapter{Space-time DPG}
-
-
-
-\section{Heat equation}
-
-\subsection{Derivation}
-
-\subsection{Problems considered}
-
-
-\section{Convection-diffusion}
-
-\subsection{Derivation}
-
-\subsection{Problems considered}
-
-
-\section{Burgers'}
-
-\subsection{Derivation}
-
-\subsection{Problems considered}
-
-
-\section{Time-slabs vs full-time}
-
-
-
-\chapter{Proposed work}
-
-
-
-\section{Space-time DPG for 2D Incompressible Navier-Stokes}
-
-\subsection{Derivation}
-
-\subsection{Problems to consider}
-
-
-\section{Space-time DPG for 2D Compressible Navier-Stokes}
-
-\subsection{Derivation}
-
-\subsection{Problems to consider}
-
-
-\section{Area requirements}
-
-\subsection{Area A: Applicable mathematics}
-\subsubsection*{Completed:}
-\subsubsection*{Proposed:}
-
-\subsection{Area B: Numerical analysis and scientific computation}
-\subsubsection*{Completed: Collaborative work with Nathan Robers on high order parallel adaptive DPG code Camellia}
-Previous work focused on enabling locally conservative computations with Camellia. My work to this point has primarily been on the application side -- implementing new test problems and exploring how DPG (and Camellia) perform. I have also been instrumental in adding new features to facilitate these tests. I implemented mesh readers to read the GMSH and Triangle mesh formats to enable computations on nontrivial domains. I also wrote output code to interface Camellia with the VTK library, allowing us to visualize our results.
- \subsubsection*{Proposed: Continued development of Camellia with emphasis on enabling space-time DPG}
-Since the proposed work is largely exploratory, the emphasis is not so much on high performance computing, algorithms, and optimization, but more on discovering whether the space-time DPG technology holds promise for the future. We focus on extending the adaptive nature of previous DPG work with local space-time adaptivity.
-
-We are also interested in adding many auxiliary featurs to Camellia in the process. Solution output is currently done completely in serial, but parallel output is a desired feature as we move forward. We are also interested in removing our VTK dependency and switching to a new IO format using HDF5 and XDMF.
-
-\subsection{Area C: Mathematical modeling and applications}
-\subsubsection*{Completed:}
-\subsubsection*{Proposed:}
+\subfile{AreaRequirements.tex}
 
 \bibliographystyle{plain}
 \bibliography{../DPG}

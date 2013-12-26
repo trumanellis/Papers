@@ -1,0 +1,23 @@
+% -*- root: Proposal.tex -*-
+\documentclass[Proposal.tex]{subfiles} 
+\graphicspath{{../LocalConservation/}}
+\begin{document}
+\section{Area requirements}
+
+\subsection{Area A: Applicable mathematics}
+\subsubsection*{Completed:}
+\subsubsection*{Proposed:}
+
+\subsection{Area B: Numerical analysis and scientific computation}
+\subsubsection*{Completed: Collaborative work with Nathan Robers on high order parallel adaptive DPG code Camellia}
+Previous work focused on enabling locally conservative computations with Camellia. My work to this point has primarily been on the application side -- implementing new test problems and exploring how DPG (and Camellia) perform. I have also been instrumental in adding new features to facilitate these tests. I implemented mesh readers to read the GMSH and Triangle mesh formats to enable computations on nontrivial domains. I also wrote output code to interface Camellia with the VTK library, allowing us to visualize our results.
+ \subsubsection*{Proposed: Continued development of Camellia with emphasis on enabling space-time DPG}
+Since the proposed work is largely exploratory, the emphasis is not so much on high performance computing, algorithms, and optimization, but more on discovering whether the space-time DPG technology holds promise for the future. We focus on extending the adaptive nature of previous DPG work with local space-time adaptivity.
+
+We are also interested in adding many auxiliary featurs to Camellia in the process. Solution output is currently done completely in serial, but parallel output is a desired feature as we move forward. We are also interested in removing our VTK dependency and switching to a new IO format using HDF5 and XDMF.
+
+\subsection{Area C: Mathematical modeling and applications}
+\subsubsection*{Completed:}
+\subsubsection*{Proposed:}
+
+\end{document}
