@@ -1,14 +1,59 @@
 % -*- root: Proposal.tex -*-
 \documentclass[Proposal.tex]{subfiles} 
-\graphicspath{{../LocalConservation/}}
 \begin{document}
 \chapter{Space-time DPG}
+We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can fake it for 1D spatial problems by pretending the $y$-direction is time.
+Complications arise when the PDE under consideration is of a different type temporally then it is spatially. 
+For example, the heat equation is elliptic in space, but hyperbolic in time. 
+Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
+Practically, this means that we have had to hack the Camellia code in order to support these ``spatial traces''.
+We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
+but the plans are to do this in according to better software practices in the proposed work, since the current implementation is not very maintainable.
 
+\section{Pure Convection}
+The pure convection equation is 
+\begin{equation}
+\frac{\partial u}{\partial t}+\Div(\bfbeta u)=f\,,
+\end{equation}
+where $u$ is the unknown being convected, $\bfbeta$ is the convection vector, and $f$ is the source term.
+The convenient thing about pure convection is that the equation is the time dimension is basically indistinguishable from the spatial dimensions. 
+In fact, we can rewrite this in terms of a space-time divergence operator $\Divxt(u):=\Div(u)+\frac{\partial u}{\partial t}$:
+\[
+\Divxt\LRp{\vecttwo{\bfbeta}{1}u}=f\,.
+\]
+This means that spatially 1D space-time convection with convection vector $\alpha$ is identical to 2D steady convection with convection vector $\vecttwo{\alpha}{1}$.
 
+We derive an ultra-weak DPG formulation for pure convection with $\bfbeta=\vecttwo{\alpha}{1}$. 
+Multiplying by test function $v$ and integrating by parts over each element $K$, we get
+\begin{equation}
+-\LRp{\vecttwo{\alpha}{1}u,\Gradxt v}+\LRa{\hat t, v}=\LRp{f,v}\,,
+\end{equation}
+where $\hat t=\trace\LRp{\vecttwo{\alpha}{1}\cdot\bfn\,u}$.
 
 \section{Heat equation}
+The simplest space-time problem we can consider where the the spatial and temporal dimensions are treated differently is the heat equation.
+We start with a general $n$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
 
 \subsection{Derivation}
+Let $\Omega(t)\subset\mathbb{R}^d$ be the spatial domain with boundary $\partial\Omega$.
+The heat equation is
+\begin{equation}
+	\frac{\partial u}{\partial t}-\epsilon\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
+\end{equation}
+where $u$ is unknown heat, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
+Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then tessellated into space-time elements $K$.
+
+Let us proceed as usual and form a system of first order equations:
+\begin{equation}
+\begin{aligned}
+\bfsigma-\epsilon\Grad u&=0\\
+\frac{\partial u}{\partial t}-\Div\bfsigma&=f\,.
+\end{aligned}
+\end{equation}
+Let us say that $f\in\LQ$, then we seek $u$, and $\bfsigma$ such that $u,\,\bfsigma,\,\Grad u,\,\frac{\partial u}{\partial t}-\Div\bfsigma\in\LQ$.
+Notice that this is a weaker condition than saying $\frac{\partial u}{\partial t}\in\LQ$ and $\Div\bfsigma\in\LQ$.
+It helps to view $\bfU:=(-\bfsigma, u)$ as a group variable in space-time. 
+Then the last condition is telling us that $\Divxt\bfU\in\LQ$, or that $\bfU\in\HdivQ$.
 
 \subsection{Problems considered}
 
@@ -28,5 +73,4 @@
 
 
 \section{Time-slabs vs full-time}
-
 \end{document}
