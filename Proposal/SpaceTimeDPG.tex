@@ -78,6 +78,51 @@ The second equation could alternatively be written in terms of the group variabl
 \end{equation}
 This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma\cdot\bfn_x+u\cdot n_t}$.
 From \eqref{eq:heatBF} and \eqref{heatBFAlt} it is clear that $\bftau\in\HdivK$ where the divergence is taken only over spatial directions, and $v\in\HOneK$.
+Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial traces. Notice that the fluxes live on all element boundaries, while the spatial traces only live on ``non-horizontal'' edges.
+
+\begin{figure}[h!]
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm]
+\clip(-0.7,-1.01) rectangle (5.27,2.29);
+\draw (0,2)-- (0,0);
+\draw (0,0)-- (1,0);
+\draw (1,0)-- (4,0);
+\draw (4,0)-- (5,0);
+\draw (5,0)-- (5,2);
+\draw (5,2)-- (3,2);
+\draw (3,2)-- (2,2);
+\draw (2,2)-- (0,2);
+\draw (1,0)-- (1.5,1);
+\draw (1.5,1)-- (2,2);
+\draw (1.5,1)-- (3.5,1);
+\draw (3,2)-- (3.5,1);
+\draw (3.5,1)-- (4,0);
+\draw (-0.21,0.9) node[anchor=south west] {$\hat u$};
+\draw (4.82,0.9) node[anchor=south west] {$\hat u$};
+\draw (3.5,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.0,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.5,1.4) node[anchor=south west] {$\hat u$};
+\draw (3.0,1.4) node[anchor=south west] {$\hat u$};
+\draw (0.05,0.9) node[anchor=south west] {$\hat t$};
+\draw (1.40,0.45) node[anchor=south west] {$\hat t$};
+\draw (3.79,0.45) node[anchor=south west] {$\hat t$};
+\draw (2.47,1.0) node[anchor=south west] {$\hat t$};
+\draw (3.33,1.4) node[anchor=south west] {$\hat t$};
+\draw (1.89,1.4) node[anchor=south west] {$\hat t$};
+\draw (5.07,0.9) node[anchor=south west] {$\hat t$};
+\draw (4.44,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.46,0.0) node[anchor=south west] {$\hat t$};
+\draw (0.45,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.44,1.7) node[anchor=south west] {$\hat t$};
+\draw (0.76,1.7) node[anchor=south west] {$\hat t$};
+\draw (4.21,1.7) node[anchor=south west] {$\hat t$};
+\draw [->] (-0.5,-0.5) -- (-0.5,0);
+\draw [->] (-0.5,-0.5) -- (0,-0.5);
+\draw (-0.54,0.29) node[anchor=north west] {$t$};
+\draw (0.07,-0.35) node[anchor=north west] {$x$};
+\end{tikzpicture}
+\caption{Support of flux and spatial trace variables}
+\label{fig:heatMesh}
+\end{figure}
 
 \subsection{Problems considered}
 
