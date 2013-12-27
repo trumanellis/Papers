@@ -21,14 +21,14 @@ In fact, we can rewrite this in terms of a space-time divergence operator $\Divx
 \[
 \Divxt\LRp{\vecttwo{\bfbeta}{1}u}=f\,.
 \]
-This means that spatially 1D space-time convection with convection vector $\alpha$ is identical to 2D steady convection with convection vector $\vecttwo{\alpha}{1}$.
+This means that spatially 1D space-time convection with convection vector $\alpha$ is identical to 2D steady convection with convection vector $\LRp{\alpha,1}^T$.
 
-We derive an ultra-weak DPG formulation for pure convection with $\bfbeta=\vecttwo{\alpha}{1}$. 
+We derive an ultra-weak DPG formulation for pure convection with $\bfbeta=\LRp{\alpha,1}^T$. 
 Multiplying by test function $v$ and integrating by parts over each element $K$, we get
 \begin{equation}
 -\LRp{\vecttwo{\alpha}{1}u,\Gradxt v}+\LRa{\hat t, v}=\LRp{f,v}\,,
 \end{equation}
-where $\hat t=\trace\LRp{\vecttwo{\alpha}{1}\cdot\bfn\,u}$.
+where $\hat t=\trace\LRp{\LRp{\alpha,1}^T\cdot\bfn\,u}$.
 
 \section{Heat equation}
 The simplest space-time problem we can consider where the the spatial and temporal dimensions are treated differently is the heat equation.
@@ -45,6 +45,7 @@ Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then t
 
 Let us proceed as usual and form a system of first order equations:
 \begin{equation}
+\label{eq:heatFirstOrder}
 \begin{aligned}
 \bfsigma-\epsilon\Grad u&=0\\
 \frac{\partial u}{\partial t}-\Div\bfsigma&=f\,.
@@ -54,6 +55,29 @@ Let us say that $f\in\LQ$, then we seek $u$, and $\bfsigma$ such that $u,\,\bfsi
 Notice that this is a weaker condition than saying $\frac{\partial u}{\partial t}\in\LQ$ and $\Div\bfsigma\in\LQ$.
 It helps to view $\bfU:=(-\bfsigma, u)$ as a group variable in space-time. 
 Then the last condition is telling us that $\Divxt\bfU\in\LQ$, or that $\bfU\in\HdivQ$.
+That is to say the normal component $-\bfsigma\cdot\bfn_x+u\cdot n_t$ (which we call the flux) is continuous across element faces, 
+where $\bfn=(\bfn_x,n_t)^T$ is the full space-time normal vector for element $K$.
+Now consider the condition that $\Grad u\in\LQ$.
+This implies that $u$ lives in a tensor product space of $H^1$ spatially and $L^2$ temporally and that
+$u\cdot n_t$ is continuous on element faces where $n_t$ is nonzero; we call this the spatial trace.
+
+Now that we understand which Sobolev spaces $u$ and $\bfsigma$ live in, we can proceed with a derivation of the space-time DPG formulation for this problem.
+We multiply the first equation in \eqref{eq:heatFirstOrder} by test function $\bftau$ and the second by $v$. Then we integrate by parts over each element:
+\begin{equation}
+\label{eq:heatBF}
+	\begin{aligned}
+		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+		-\LRp{u,\frac{\partial v}{\partial t}}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
+	\end{aligned}
+\end{equation}
+where $\hat u$ is the spatial trace and $\hat t$ is the flux.
+The second equation could alternatively be written in terms of the group variable $\bfU$:
+\begin{equation}
+\label{heatBFAlt}
+-\LRp{\bfU,\Gradxt v}-\LRa{\hat t,v}=\LRp{f,v}\,.
+\end{equation}
+This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma\cdot\bfn_x+u\cdot n_t}$.
+From \eqref{eq:heatBF} and \eqref{heatBFAlt} it is clear that $\bftau\in\HdivK$ where the divergence is taken only over spatial directions, and $v\in\HOneK$.
 
 \subsection{Problems considered}
 
