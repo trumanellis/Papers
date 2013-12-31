@@ -10,6 +10,9 @@ Practically, this means that we have had to hack the Camellia code in order to s
 We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
 but the plans are to do this in according to better software practices in the proposed work, since the current implementation is not very maintainable.
 
+All of the following problems are run with the graph norm. 
+This norm is simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
+
 \section{Pure Convection}
 The pure convection equation is 
 \begin{equation}
@@ -125,14 +128,120 @@ Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial tra
 \end{figure}
 
 \subsection{Problems considered}
+If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
+the exact solution is
+\begin{equation*}
+	u=\cos(2\pi x)e^{-4*\pi^2\epsilon t}\,.
+\end{equation*}
+We ran this with $\epsilon=10^{-2}$ on a sequence of uniform meshes and $p=2$ for the field representation of $u$. 
+We were able to achieve the expected third order convergence as demonstrated in Figure \ref{fig:spaceTimeHeatConvergence}.
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
+	\caption{$L^2$ convergence of $u$ for the space-time heat equation}
+	\label{fig:spaceTimeHeatConvergence}
+\end{figure}
+
+In order to demonstrate local space-time adaptivity we consider one more problem for the heat equation. 
+On the same domain, and with the same boundary conditions as the previous example, we let the initial heat distribution be zero.
+Then between $t=0.25$ and $t=0.5$ we turn on a pulse source term of one on $0.375\leq x\leq 0.625$. 
+Starting from an initial mesh of $4x4$, we adaptively refine four times and obtain the results in Figure \ref{fig:spaceTimeHeatPulse}.
+Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
+Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/u.png}
+\caption{$u$}
+\label{fig:spaceTimeHeatu}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
+\caption{$\sigma$}
+\label{fig:spaceTimeHeatsigma}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
+\caption{$\hat u$}
+\label{fig:spaceTimeHeatuhat}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
+\caption{$\hat t$}
+\label{fig:spaceTimeHeatfhat}
+\end{subfigure}
+\caption{Pulsed space-time heat problem after 4 refinements}
+\label{fig:spaceTimeHeatPulse}
+\end{figure}
 
 \section{Convection-diffusion}
+Transient convection-diffusion is identical to the heat equation with the addition of a convective term:
+\begin{equation*}
+\frac{\partial u}{\partial t}+\Div(\bfbeta u)-\epsilon\Delta u=f\,.
+\end{equation*}
+The $d$-dimensional transient convection-diffusion equations could be viewed as a $d+1$ steady convection-diffusion problem with zero diffusion in the time direction.
 
 \subsection{Derivation}
+As a first order system, this is
+\begin{equation}
+\label{eq:confusionFirstOrder}
+\begin{aligned}
+\bfsigma-\epsilon\Grad u&=0\\
+\frac{\partial u}{\partial t}+\Div\LRp{\bfbeta u-\bfsigma}&=f\,.
+\end{aligned}
+\end{equation}
+We can view the second equation as a full space-time divergence on group variable $\bfU:=\LRc{\bfbeta u-\bfsigma,u}$ as before:
+\begin{equation}
+	\Divxt\LRp{\bfU}=f\,.
+\end{equation}
+Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by parts over each element, we obtain the following bilinear form:
+\begin{equation}
+\label{eq:confusionBF}
+	\begin{aligned}
+		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+		-\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
+	\end{aligned}
+\end{equation}
+where now $\hat t=\trace\LRp{(\bfbeta u-\bfsigma)\cdot\bfn_x+u\cdot n_t}$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
 
 \subsection{Problems considered}
 
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeConfusion/u.png}
+\caption{$u$}
+\label{fig:spaceTimeConfusionu}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeConfusion/sigma.png}
+\caption{$\sigma$}
+\label{fig:spaceTimeConfusionsigma}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeConfusion/uhat.png}
+\caption{$\hat u$}
+\label{fig:spaceTimeConfusionuhat}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeConfusion/fhat.png}
+\caption{$\hat t$}
+\label{fig:spaceTimeConfusionfhat}
+\end{subfigure}
+\caption{Space-time convection-diffusion problem after 4 refinements}
+\label{fig:spaceTimeConfusion}
+\end{figure}
 
 \section{Burgers'}
 
