@@ -150,7 +150,7 @@ Starting from an initial mesh of $4x4$, we adaptively refine four times and obta
 Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
 Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -211,9 +211,16 @@ Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by
 where now $\hat t=\trace\LRp{(\bfbeta u-\bfsigma)\cdot\bfn_x+u\cdot n_t}$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
 
 \subsection{Problems considered}
+Since space-time convection-diffusion is identical the heat equation with the addition of a convective term, we only pursue one numerical experiment to demonstrate that everything works as expected. 
+This problem is inspired by the previous heat problem with the spatial domain extended to prevent the convected heat from impinging on the right wall.
+It might be interesting to impose a zero boundary condition on $\hat u$ and watch a boundary layer build up on the right wall, 
+but instead we enforce a zero flux condition and content ourselves with the inner layer that forms around the source pulse.
+This is an arbitrary requirement necessitated by the ``hackish'' nature of this code.
+We haven't taken the time to allow enforcement of Dirichlet boundary conditions on spatial fluxes, and since the code in this state was intended to be short-lived, it doesn't make sense to invest too heavily in adding features. 
+Thus we enforce zero flux conditions on both walls as before. 
+For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse occurring at $[0.25,0.5]\times[0.25,0.5]$.
 
-
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
