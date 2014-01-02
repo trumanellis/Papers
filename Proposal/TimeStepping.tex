@@ -3,7 +3,92 @@
 \begin{document}
 \chapter{Implicit Time Stepping with DPG}
 The proposed research into space-time DPG does not imply that DPG is incompatible with other time integration techniques. 
-We did spend some time exploring popular alternatives such as some singly diagonal implicit Runge-Kutta methods 
+We did spend some time exploring popular alternatives such as some ESDIRK (explicit first step singly diagonal implicit Runge-Kutta) methods 
 before we ultimately concluded that a space-time formulation might more naturally fit with our adaptive techniques.
 In this chapter, we briefly outline some of our exploratory work on implicit time integrators with DPG.
+
+
+We wish to solve the system
+\[
+\frac{\partial U}{\partial t}+f(U)=0\,.
+\]
+It is not immediately clear how one could perform explicit time-stepping with DPG since an explicit system has 
+$f(U)$ on the right hand side, but the DPG traces and fluxes are included in the $f(U)$ term and thus need to be solved for.
+So moving forward, we focus on implicit techniques which also have superior stability properties.
+
+\section{Backward Euler}
+The simplest implicit time stepping method would be backward Euler, for which we get the following system to solve at each time step $n$:
+\begin{equation}
+	\frac{U^{n}}{\Delta t}+f(U^{n})=\frac{U^{n-1}}{\Delta t}\,,
+\end{equation}
+where $U^{n-1}$ is known data from the previous time step, and $\Delta t$ is the time step. 
+In general, $f(U^n)$ could be nonlinear, in which case we define a residual
+\begin{equation}
+	R(U^n)=\frac{U^n}{\Delta t}+f(U^n)-\frac{U^{n-1}}{\Delta t}\,.
+\end{equation}
+Given an approximate solution $\tilde U^n$, we wish to solve for an increment $\Delta U$ such that $U^n=\tilde U^n+\Delta U$ is a better approximation of the true solution.
+Approximating $R(U^n)=0$ by $R(\tilde U^n)+R'(\tilde U^n)\Delta U=0$, where $R'(\tilde U^n)$ is the Jacobian of $R$ at $\tilde U^n$, we obtain a linear equation
+\begin{equation}
+\frac{\Delta U}{\Delta t}+f'(\tilde U)\Delta U
+=\frac{U_n}{\Delta t}-\frac{\tilde U}{\Delta t}
+-f(\tilde U)\,.
+\end{equation}
+
+\section{ESDIRK}
+After a literature search, ESDIRK time stepping schemes were identified as a potentially attractive high order time integration technique to couple with DPG.
+From an implementation point of view, ESDIRK schemes are much simpler to implement than full implicit Runge-Kutta schemes since each stage may be computed in sequence rather than as a fully coupled system. 
+This cuts down on the number of unknowns to keep track of, reducing memory requirements.
+The ``explicit first stage'' is completely trivial, requiring no work at all. 
+This reduces a formally $s$-stage scheme to $s-1$ stages of actual computational work.
+Finally, the final stage coincides with the desired value at the $n$th time step, eliminating the need to have a final reconstruction step.
+A 6 stage ESDIRK algorithm has the following Butcher tableau:
+\[
+\begin{array}{c|cccccc}
+  0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+  c_1 & a_{10} & a_{11} & 0 & 0 & 0 & 0 \\
+  c_2 & a_{20} & a_{21} & a_{22} & 0 & 0 & 0 \\
+  c_3 & a_{30} & a_{31} & a_{32} & a_{33} & 0 & 0 \\
+  c_4 & a_{40} & a_{41} & a_{42} & a_{43} & a_{44} & 0 \\
+  c_5 & a_{50} & a_{51} & a_{52} & a_{53} & a_{54} & a_{55} \\
+  \hline
+   & b_0 & b_1 & b_2 & b_3 & b_4 & b_5 \\
+\end{array}
+\begin{array}{c}
+  \vphantom{} \\
+  \vphantom{} \\
+  \vphantom{} \\
+  \vphantom{} \\
+  \vphantom{} \\
+  \vphantom{} \\
+  . \\
+\end{array}
+\]
+
+From a stability point of view, ESDIRK schemes provide both A-stability and L-stability. 
+The more classical backwards differentiation formula are not A-stable above second order.
+ESDIRK schemes enforce a ``stiffly accurate'' assumption that $a_{sj}=b_j$ which makes the solution at the next time step $U^n$ independent of any explicit process within the integration step.
+There is also precedence for using ESDIRK schemes with fluid dynamics simulations (see \cite{Bijl2002}, where ESDIRK schemes were found to be more efficient than BDF schemes for laminar flow over a cylinder).
+
+\subsection{ESDIRK with DPG}
+For an $s$ stage ESDIRK scheme, we solve a series of equations for $k=0,\cdots,s-1$
+\begin{equation*}
+\frac{U^k}{a_{kk}\Delta t}+f(U^k)=\frac{U_n}{a_{kk}\Delta
+t}-\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)\,.
+\end{equation*}
+From the first equation we see that $U^0=U_n$. And we have that $U_{n+1}=U^s$.
+For a nonlinear system, define residual
+\[
+R(U^k) =
+\frac{U^k}{a_{kk}\Delta t}+f(U^k)-\frac{U_n}{a_{kk}\Delta
+t}+\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)
+\]
+Utilizing the same linearization as above, we arrive at our linearized system
+\[
+\frac{\Delta U}{a_{kk}\Delta t}+f'(\tilde U^k)\Delta U
+=\frac{U_n}{a_{kk}\Delta t}-\frac{\tilde U^k}{a_{kk}\Delta t}-f(\tilde U^k)
+-\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)\,,
+\]
+which is to be solved iteratively at each stage until $R(\tilde U^k)$ is smaller than some tolerance.
+
+\subsection{Case Study: 2D Burgers' Equation}
 \end{document}
