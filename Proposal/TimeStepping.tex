@@ -104,6 +104,9 @@ Utilizing the same linearization as above, we arrive at our linearized system
 which is to be solved iteratively at each stage until $R(\tilde U^k)$ is smaller than some tolerance.
 Note that contrary to the $f(\tilde U)$ term which comes from the linearization and excludes flux and trace terms,
 $f(U^j)$ will need to keep the flux and trace terms from the DPG bilinear form.
+It is worth noting that terms necessary to construct $f(U^0)$ might not available from the initial condition because they include traces and fluxes.
+It is certainly possible to initialize the fluxes and traces for the initial condition, but it is not quite as convenient as setting the field variables.
+Thus in the following numerical experiment, we kick start the simulation with a backward Euler solve on a time step one thousandth the size of requested time step before switching fully to the ESDIRK scheme.
 
 %   /$$$$$$$                                                             
 %  | $$__  $$                                                            
@@ -126,6 +129,8 @@ The 2D Burgers' equations are:
 	\end{aligned}
 \end{equation}
 where $R$ is the effective Reynolds number.
+
+\subsubsection{DPG Formulation}
 As a first order system, this is
 \begin{equation}
 	\begin{aligned}
@@ -151,7 +156,7 @@ We can identify $f(U^j)$ as the sum of the left hand terms in \eqref{eq:Burgers2
 and $f(\tilde U)$ is the same thing except for the boundary terms in angle brackets evaluated at the previous nonlinear iteration.
 Finally, $f'(\tilde U)\Delta U$ is simply the linearization around $\tilde U$:
 \begin{equation}
-\label{eq:Burgers2DBF}
+\label{eq:Burgers2DJacobian}
 	\begin{aligned}
 		&\LRp{R\Delta\bfsigma_1,\bftau_1}+\LRp{\Delta u_1,\Div\bftau_1}-\LRa{\hat u_1,\tau_{1n}}+\\
 		&\LRp{R\Delta\bfsigma_2,\bftau_2}+\LRp{\Delta u_2,\Div\bftau_2}-\LRa{\hat u_2,\tau_{2n}}+\\
@@ -161,4 +166,22 @@ Finally, $f'(\tilde U)\Delta U$ is simply the linearization around $\tilde U$:
 \end{equation}
 where the fluxes and traces are simply solved for at each nonlinear iteration rather than updated like the field variables.
 Now that we have identified the various pieces, we can just plug this system into \eqref{eq:ESDIRKScheme} and time step toward a transient solution.
+
+\subsubsection{Numerical Example}
+An exact solution to the 2D Burgers' equations is
+\begin{equation}
+\label{eq:Burgers2DExact}
+	\begin{aligned}
+	u_1(x,y,t)&=\frac{3}{4}-\frac{1}{4(1+e^{R(-t-4x+4y)/32})}\\
+	u_2(x,y,t)&=\frac{3}{4}+\frac{1}{4(1+e^{R(-t-4x+4y)/32})}\,.
+	\end{aligned}
+\end{equation}
+We solve on a unit square domain from $t=0$ to 0.5 with initial condition given by \eqref{eq:Burgers2DExact} at $t=0$ and boundary conditions that evolve with the exact solution. We use a 6 stage ESDIRK scheme (which should be 4th order accurate) with the time step equal to the mesh size. We also use a 4th order accurate DPG scheme for the spatial solve at each Runge-Kutta stage. If our temporal and spatial schemes are implemented correctly, we should expect overall 4th order convergence. 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
+	\caption{$L^2$ convergence of $u_1$ and $u_2$ for the 2D Burgers' equation}
+	\label{fig:Burgers2DConvergence}
+\end{figure}
 \end{document}
