@@ -33,7 +33,19 @@ Approximating $R(U^n)=0$ by $R(\tilde U^n)+R'(\tilde U^n)\Delta U=0$, where $R'(
 =\frac{U_n}{\Delta t}-\frac{\tilde U}{\Delta t}
 -f(\tilde U)\,.
 \end{equation}
+Note that $f(\tilde U)$ only contains terms that had to be linearized. In general, we do not need to linearize our flux and trace terms in DPG, and hence those terms are excluded from $f(\tilde U)$.
 
+%   /$$$$$$$$  /$$$$$$  /$$$$$$$  /$$$$$$ /$$$$$$$  /$$   /$$
+%  | $$_____/ /$$__  $$| $$__  $$|_  $$_/| $$__  $$| $$  /$$/
+%  | $$      | $$  \__/| $$  \ $$  | $$  | $$  \ $$| $$ /$$/ 
+%  | $$$$$   |  $$$$$$ | $$  | $$  | $$  | $$$$$$$/| $$$$$/  
+%  | $$__/    \____  $$| $$  | $$  | $$  | $$__  $$| $$  $$  
+%  | $$       /$$  \ $$| $$  | $$  | $$  | $$  \ $$| $$\  $$ 
+%  | $$$$$$$$|  $$$$$$/| $$$$$$$/ /$$$$$$| $$  | $$| $$ \  $$
+%  |________/ \______/ |_______/ |______/|__/  |__/|__/  \__/
+%                                                            
+%                                                            
+%                        
 \section{ESDIRK}
 After a literature search, ESDIRK time stepping schemes were identified as a potentially attractive high order time integration technique to couple with DPG.
 From an implementation point of view, ESDIRK schemes are much simpler to implement than full implicit Runge-Kutta schemes since each stage may be computed in sequence rather than as a fully coupled system. 
@@ -83,13 +95,70 @@ R(U^k) =
 t}+\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)
 \]
 Utilizing the same linearization as above, we arrive at our linearized system
-\[
-\frac{\Delta U}{a_{kk}\Delta t}+f'(\tilde U^k)\Delta U
-=\frac{U_n}{a_{kk}\Delta t}-\frac{\tilde U^k}{a_{kk}\Delta t}-f(\tilde U^k)
--\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)\,,
-\]
+\begin{equation}
+	\label{eq:ESDIRKScheme}
+	\frac{\Delta U}{a_{kk}\Delta t}+f'(\tilde U^k)\Delta U
+	=\frac{U_n}{a_{kk}\Delta t}-\frac{\tilde U^k}{a_{kk}\Delta t}-f(\tilde U^k)
+	-\sum_{j=0}^{k-1}\frac{a_{kj}}{a_{kk}}f(U^j)\,,
+	\end{equation}
 which is to be solved iteratively at each stage until $R(\tilde U^k)$ is smaller than some tolerance.
+Note that contrary to the $f(\tilde U)$ term which comes from the linearization and excludes flux and trace terms,
+$f(U^j)$ will need to keep the flux and trace terms from the DPG bilinear form.
 
+%   /$$$$$$$                                                             
+%  | $$__  $$                                                            
+%  | $$  \ $$ /$$   /$$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$
+%  | $$$$$$$ | $$  | $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/
+%  | $$__  $$| $$  | $$| $$  \__/| $$  \ $$| $$$$$$$$| $$  \__/|  $$$$$$ 
+%  | $$  \ $$| $$  | $$| $$      | $$  | $$| $$_____/| $$       \____  $$
+%  | $$$$$$$/|  $$$$$$/| $$      |  $$$$$$$|  $$$$$$$| $$       /$$$$$$$/
+%  |_______/  \______/ |__/       \____  $$ \_______/|__/      |_______/ 
+%                                 /$$  \ $$                              
+%                                |  $$$$$$/                              
+%                                 \______/       
 \subsection{Case Study: 2D Burgers' Equation}
 We consider the 2D Burger's equations and accompanying problem outlined in \cite{Burgers2D}.
+The 2D Burgers' equations are:
+\begin{equation}
+	\begin{aligned}
+		\frac{\partial u_1}{\partial t}+u_1\frac{\partial u_1}{\partial x}+u_2\frac{\partial u_1}{\partial y}-\frac{1}{R}\Delta u_1&=0\\
+		\frac{\partial u_2}{\partial t}+u_1\frac{\partial u_2}{\partial x}+u_2\frac{\partial u_2}{\partial y}-\frac{1}{R}\Delta u_2&=0\,,
+	\end{aligned}
+\end{equation}
+where $R$ is the effective Reynolds number.
+As a first order system, this is
+\begin{equation}
+	\begin{aligned}
+		R\bfsigma_1-\Grad u_1&=0\\
+		R\bfsigma_2-\Grad u_2&=0\\
+		\frac{\partial u_1}{\partial t}+R\vecttwo{u_1}{u_2}\cdot\bfsigma_1-\Div\bfsigma_1&=0\\
+		\frac{\partial u_2}{\partial t}+R\vecttwo{u_1}{u_2}\cdot\bfsigma_2-\Div\bfsigma_2&=0\,.
+	\end{aligned}
+\end{equation}
+Multiplying by test functions $\bftau_1$, $\bftau_2$, $v_1$, $v_2$, and integrating by parts:
+\begin{equation}
+\label{eq:Burgers2DBF}
+	\begin{aligned}
+		\LRp{R\bfsigma_1,\bftau_1}+\LRp{u_1,\Div\bftau_1}-\LRa{\hat u_1,\tau_{1n}}&=0\\
+		\LRp{R\bfsigma_2,\bftau_2}+\LRp{u_2,\Div\bftau_2}-\LRa{\hat u_2,\tau_{2n}}&=0\\
+		\LRp{\frac{\partial u_1}{\partial t},v_1}+\LRp{R\vecttwo{u_1}{u_2}\cdot\bfsigma_1,v_1}+\LRp{\bfsigma_1,\Grad v_1}-\LRa{\hat t_1,v_1}&=0\\
+		\LRp{\frac{\partial u_2}{\partial t},v_2}+\LRp{R\vecttwo{u_1}{u_2}\cdot\bfsigma_2,v_2}+\LRp{\bfsigma_2,\Grad v_2}-\LRa{\hat t_2,v_2}&=0\,,
+	\end{aligned}
+\end{equation}
+where it is clear that $v_1,v_2\in\HOneK$, and $\bftau_1,\bftau_2\in\HdivK$. 
+In order to plug this into \eqref{eq:ESDIRKScheme}, we need to identify $f(U^j)$, $f(\tilde U)$, and $f'(\tilde U)\Delta U$.
+We can identify $f(U^j)$ as the sum of the left hand terms in \eqref{eq:Burgers2DBF} at Runge-Kutta stage $j$, 
+and $f(\tilde U)$ is the same thing except for the boundary terms in angle brackets evaluated at the previous nonlinear iteration.
+Finally, $f'(\tilde U)\Delta U$ is simply the linearization around $\tilde U$:
+\begin{equation}
+\label{eq:Burgers2DBF}
+	\begin{aligned}
+		&\LRp{R\Delta\bfsigma_1,\bftau_1}+\LRp{\Delta u_1,\Div\bftau_1}-\LRa{\hat u_1,\tau_{1n}}+\\
+		&\LRp{R\Delta\bfsigma_2,\bftau_2}+\LRp{\Delta u_2,\Div\bftau_2}-\LRa{\hat u_2,\tau_{2n}}+\\
+		&\LRp{R\vecttwo{\tilde u_1}{\tilde u_2}\cdot\Delta\bfsigma_1,v_1}+\LRp{R\vecttwo{\Delta u_1}{\Delta u_2}\cdot\tilde\bfsigma_1,v_1}+\LRp{\Delta\bfsigma_1,\Grad v_1}-\LRa{\hat t_1,v_1}+\\
+		&\LRp{R\vecttwo{\tilde u_1}{\tilde u_2}\cdot\Delta\bfsigma_2,v_2}+\LRp{R\vecttwo{\Delta u_1}{\Delta u_2}\cdot\tilde\bfsigma_2,v_2}+\LRp{\Delta\bfsigma_2,\Grad v_2}-\LRa{\hat t_2,v_2}\,,
+	\end{aligned}
+\end{equation}
+where the fluxes and traces are simply solved for at each nonlinear iteration rather than updated like the field variables.
+Now that we have identified the various pieces, we can just plug this system into \eqref{eq:ESDIRKScheme} and time step toward a transient solution.
 \end{document}
