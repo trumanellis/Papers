@@ -2,12 +2,25 @@
 \documentclass[Proposal.tex]{subfiles} 
 \begin{document}
 \chapter{Proposed work}
-
+In this chapter we outline the proposed work of solving the Navier-Stokes equations with space-time DPG. 
+Our emphasis will be on incompressible Navier-Stokes, but time permitting, we would like to investigate the compressible equations as well.
 
 
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
+The incompressible Navier-Stokes equations for a Newtonian fluid in conservation form are
+\begin{align*}
+  \frac{\partial\bfu}{\partial t}+\Div\LRp{\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}&=\bff\\
+  \Div\bfu&=0\,,
+  % \int_\Omega p&=0
+\end{align*}
+where $\bfu$ is the fluid velocity, $p$ is the pressure, and $\bff$ is the forcing. 
+This is to be solved on a space-time domain $\Omega\times[t_0,T]$.
+Note that the pressure component of a solution will only be unique up to a constant. 
+As a result, we impose a zero mean condition on the pressure: $\int_\Omega p=0$.
 
-\subsection{Derivation}
+\subsection{Derivation of Space-Time DPG formulation}
+The subsequent derivation is for spatially 2D flow, but 1D and 3D are very similar.
+Following standard procedure, we write
 
 \subsection{Problems to consider}
 

@@ -176,11 +176,15 @@ An exact solution to the 2D Burgers' equations is
 	u_2(x,y,t)&=\frac{3}{4}+\frac{1}{4(1+e^{R(-t-4x+4y)/32})}\,.
 	\end{aligned}
 \end{equation}
-We solve on a unit square domain from $t=0$ to 0.5 with initial condition given by \eqref{eq:Burgers2DExact} at $t=0$ and boundary conditions that evolve with the exact solution. We use a 6 stage ESDIRK scheme (which should be 4th order accurate) with the time step equal to the mesh size. We also use a 4th order accurate DPG scheme for the spatial solve at each Runge-Kutta stage. If our temporal and spatial schemes are implemented correctly, we should expect overall 4th order convergence. 
+We solve on a unit square domain from $t=0$ to 0.5 with initial condition given by \eqref{eq:Burgers2DExact} at $t=0$ and boundary conditions that evolve with the exact solution. 
+We use a 6 stage ESDIRK scheme (which should be 4th order accurate) with the time step equal to the mesh size. 
+We also use a 4th order accurate DPG scheme for the spatial solve at each Runge-Kutta stage. 
+If our temporal and spatial schemes are implemented correctly, we should expect overall 4th order convergence.
+And, in fact, we do achieve the desired convergence rate according to Figure~\ref{fig:Burgers2DConvergence}.
 
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
+	\includegraphics[width=0.7\textwidth]{TimeStepBurgers/convergence}
 	\caption{$L^2$ convergence of $u_1$ and $u_2$ for the 2D Burgers' equation}
 	\label{fig:Burgers2DConvergence}
 \end{figure}
