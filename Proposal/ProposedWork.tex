@@ -6,29 +6,98 @@ In this chapter we outline the proposed work of solving the Navier-Stokes equati
 Our emphasis will be on incompressible Navier-Stokes, but time permitting, we would like to investigate the compressible equations as well.
 
 
+\section{Space-time DPG for Compressible Navier-Stokes}
+For the sake of narrative, we start with the full compressible Navier-Stokes equations and then simplify to the incompressible case.
+The compressible Navier-Stokes equations are
+\begin{align}
+\frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
++\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{T}}
+%TODO: Possible error above. cfd-online seems to have T^T
+=\svectthree{f_c}{\bff_m}{f_e}\,,
+\end{align}
+where $\rho$ is the density, $\bfu$ is the velocity, $p$ is the pressure, $\bfI$ is the identity matrix,
+$\mathbb{T}$ is the deviatoric stress tensor or viscous stress, $e_0$ is the total energy, $\bfq$ is the heat flux, 
+and $f_c$, $\bff_m$, and $f_e$ are the source terms for the continuity, momentum, and energy equations, respectively.
+Assuming Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, 
+\begin{equation*}
+	\mathbb{T}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
+\end{equation*}
+where $\bfS^*$ is the trace-less viscous strain rate tensor.
+The heat flux is given by Fourier's law:
+\begin{equation*}
+	\bfq=-C_p\frac{\mu}{Pr}\Grad T\,,
+\end{equation*}
+where $C_p$ is the specific heat at constant pressure and $Pr$ is the laminar Prandtl number: $Pr:=\frac{C_p\mu}{\lambda}$.
+We need to close these equations with an equation of state. An ideal gas assumption gives
+\begin{equation*}
+	\gamma:=\frac{C_p}{C_v}\,,\quad p=\rho RT\,,\quad e=C_v T\,,\quad C_p-C_v=R\,,
+\end{equation*}
+where $\gamma$ is the ratio of specific heats, $C_v$ is the specific heat at constant volume, $R$ is the gas constant, $e$ is the internal energy,
+and $\gamma$, $C_p$, $C_v$, and $R$ are constant properties of the fluid.
+The total energy is defined by
+\begin{equation*}
+	e_0=e+\frac{1}{2}\bfu\cdot\bfu\,.
+\end{equation*}
+
+We can write our first order system of equations in space-time as follows:
+\begin{subequations}
+\label{eq:compressibleNSFirstOrder}
+\begin{align}
+	\mathbb{T}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
+	\bfq+\gamma\frac{\mu}{Pr}\Grad e&=0\\
+	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
+	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+\end{align}
+\end{subequations}
+where our solution variables are $\rho$, $\bfu$, $e$, $\mathbb{T}$, and $\bfq$.
+
+\subsection{Derivation of Space-Time DPG Formulation}
+We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
+then integrate by parts over each space-time element $K$:
+\begin{subequations}
+\label{eq:compressibleNSBF}
+\begin{align}
+	\LRp{\mathbb{T},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}+\LRa{}&=0\\
+	\LRp{\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}e,\Div\bftau}+\LRa{}&=0\\
+	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
+	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
+\end{align}
+\end{subequations}
+Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
+
+\subsection{Problems to consider}
+
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
 The incompressible Navier-Stokes equations for a Newtonian fluid in conservation form are
 \begin{align*}
-  \frac{\partial\bfu}{\partial t}+\Div\LRp{\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}&=\bff\\
+  \rho\frac{\partial\bfu}{\partial t}+\Div\LRp{\rho\bfu\otimes\bfu-\mu\Grad\bfu+p\bfI}&=\bff\\
   \Div\bfu&=0\,,
   % \int_\Omega p&=0
 \end{align*}
-where $\bfu$ is the fluid velocity, $p$ is the pressure, and $\bff$ is the forcing. 
+where $\bfu$ is the fluid velocity, $p$ is the pressure, $\rho$ is the density, $\mu$ is the first coefficient of viscosity (usually called ``viscosity''), 
+and $\bff$ is the forcing. 
 This is to be solved on a space-time domain $\Omega\times[t_0,T]$.
+We can rewrite the momentum equation in terms of a full space-time divergence:
+\begin{equation}
+\Divxt\vecttwo{\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}{u}=\bff\,.
+\end{equation}
 Note that the pressure component of a solution will only be unique up to a constant. 
 As a result, we impose a zero mean condition on the pressure: $\int_\Omega p=0$.
+The deviatoric stress tensor is identified as
+\begin{equation}
+	\mathbb{T}_{ij}=\mu\LRp{\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}
+	+\delta_{ij}\frac{\lambda}{\mu}\frac{\partial u_k}{\partial x_k}}\,,
+\end{equation}
+where $\lambda$ is the second coefficient of viscosity.
+For an incompressible fluid, the last term is zero.
 
-\subsection{Derivation of Space-Time DPG formulation}
+\subsection{Derivation of Space-Time DPG Formulation}
 The subsequent derivation is for spatially 2D flow, but 1D and 3D are very similar.
 Following standard procedure, we write
 
 \subsection{Problems to consider}
 
-
-\section{Space-time DPG for 2D Compressible Navier-Stokes}
-
-\subsection{Derivation}
-
-\subsection{Problems to consider}
 
 \end{document}

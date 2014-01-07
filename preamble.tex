@@ -1,7 +1,5 @@
 \usepackage{amsmath, amssymb, amsthm, mathtools}
-% \usepackage{subfigure}
 \usepackage{graphicx}
-% \usepackage{caption}
 \usepackage{cancel}
 \usepackage{color}
 \usepackage{subcaption}
@@ -30,7 +28,9 @@
 \newcommand{\bfu}{\boldsymbol u}
 \newcommand{\bfv}{\boldsymbol v}
 \newcommand{\bfw}{\boldsymbol w}
+\newcommand{\bfq}{\boldsymbol q}
 \newcommand{\bfU}{\boldsymbol U}
+\newcommand{\bfS}{\boldsymbol S}
 \newcommand{\bfn}{\boldsymbol n}
 \newcommand{\bff}{\boldsymbol f}
 \newcommand{\bft}{\boldsymbol t}
@@ -71,6 +71,13 @@
 #2\\
 \end{array}
 \right)}
+\def\svectthree#1#2#3{\left[
+\begin{array}{c}
+#1\\
+#2\\
+#3\\
+\end{array}
+\right]}
 \def\vectthree#1#2#3{\left[
 \begin{array}{c}
 #1\\
