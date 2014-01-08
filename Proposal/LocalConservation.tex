@@ -821,7 +821,7 @@ Multiplying by a test function $v$, and integrating by parts:
 \[
 -\LRp{\vecttwo{u^2/2}{u},\Grad_{xt}v}+\LRa{\hat t,v}=\LRp{f,v}\,,
 \]
-where $\hat t$ is the trace of $\vecttwo{u^2/2}{u}\cdot\mathbf{n}_{xt}$ on
+where $\hat t:=\trace\LRp{\vecttwo{u^2/2}{u}}\cdot\mathbf{n}_{xt}$ on
 element boundaries, and $\mathbf{n}_{xt}$ is the space-time normal vector.
 As in convection-diffusion, local conservation implies that
 $\int_{\partial K}\hat t=\int_Kf$ for all elements, $K$.
@@ -901,8 +901,7 @@ valued), and $q$ (scalar valued), and integrating by parts:
    -\LRp{\bfsigma,\Grad\bfv}-\LRp{p,\Div\bfv}+\LRa{\hat \bft,\bfv}&=\LRp{\bff,\bfv}\\
    -\LRp{\bfu,\Grad q}+\LRa{\hat\bfu\cdot\mathbf{n},q}&=0\,,
 \end{align*}
-where $\hat\bfu$ is the trace of $\bfu$, and $\hat\bft$ is the trace of
-$\LRp{\bfsigma+p\mathbf{I}}\cdot\mathbf{n}$. The solve for $p$ is only unique
+where $\hat\bfu:=\trace(\bfu)$, and $\hat\bft:=\trace\LRp{\bfsigma+p\mathbf{I}}\cdot\bfn$. The solve for $p$ is only unique
 up to a constant, so we also impose a zero mean condition, $\int_\Omega p=0$.
 Local conservation for Stokes flow means that over each element,
 $\int_K\hat\bfu\cdot\mathbf{n}=0$. 

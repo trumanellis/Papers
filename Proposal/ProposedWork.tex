@@ -58,13 +58,26 @@ then integrate by parts over each space-time element $K$:
 \begin{subequations}
 \label{eq:compressibleNSBF}
 \begin{align}
-	\LRp{\mathbb{T},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}+\LRa{}&=0\\
-	\LRp{\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}e,\Div\bftau}+\LRa{}&=0\\
-	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
-	\Divxt\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
-	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
+	\LRp{\mathbb{T},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}
+	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}e,\Div\bftau}+\LRa{\hat e,\tau_n}&=0\\
+	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
 \end{align}
 \end{subequations}
+where 
+\begin{equation*}
+\begin{aligned}
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
++\trace\LRp{rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
+\end{equation*}
 Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
 
 \subsection{Problems to consider}

@@ -31,7 +31,7 @@ Multiplying by test function $v$ and integrating by parts over each element $K$,
 \begin{equation}
 -\LRp{\vecttwo{\alpha}{1}u,\Gradxt v}+\LRa{\hat t, v}=\LRp{f,v}\,,
 \end{equation}
-where $\hat t=\trace\LRp{\LRp{\alpha,1}^T\cdot\bfn\,u}$.
+where $\hat t=\trace\LRp{\LRp{\alpha,1}^T}\cdot\bfn\,u$.
 
 %   /$$   /$$                       /$$    
 %  | $$  | $$                      | $$    
@@ -90,7 +90,7 @@ The second equation could alternatively be written in terms of the group variabl
 \label{heatBFAlt}
 -\LRp{\bfU,\Gradxt v}-\LRa{\hat t,v}=\LRp{f,v}\,.
 \end{equation}
-This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma\cdot\bfn_x+u\cdot n_t}$.
+This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma}\cdot\bfn_x+\trace{(u)}\cdot n_t$.
 From \eqref{eq:heatBF} and \eqref{heatBFAlt} it is clear that $\bftau\in\HdivK$ where the divergence is taken only over spatial directions, and $v\in\HOneK$.
 Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial traces. Notice that the fluxes live on all element boundaries, while the spatial traces only live on ``non-horizontal'' edges.
 
@@ -230,7 +230,7 @@ Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by
 		-\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
 	\end{aligned}
 \end{equation}
-where now $\hat t=\trace\LRp{(\bfbeta u-\bfsigma)\cdot\bfn_x+u\cdot n_t}$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
+where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
 
 \subsection{Problems considered}
 Since space-time convection-diffusion is identical the heat equation with the addition of a convective term, we only pursue one numerical experiment to demonstrate that everything works as expected. 
