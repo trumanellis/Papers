@@ -46,8 +46,8 @@ We can write our first order system of equations in space-time as follows:
 	\mathbb{T}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
 	\bfq+\gamma\frac{\mu}{Pr}\Grad e&=0\\
 	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
-	\Divxt\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
-	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
+	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
 \end{align}
 \end{subequations}
 where our solution variables are $\rho$, $\bfu$, $e$, $\mathbb{T}$, and $\bfq$.
@@ -62,27 +62,82 @@ then integrate by parts over each space-time element $K$:
 	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}e,\Div\bftau}+\LRa{\hat e,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
-	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
-	-\LRp{\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
 	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
 \end{align}
 \end{subequations}
 where 
 \begin{equation*}
 \begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat e&=\trace(e)\\
 \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
 +\trace\LRp{\rho}n_t\\
-\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}\cdot\bfn_x
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}\cdot\bfn_x
 +\trace\LRp{\rho\bfu} n_t\\
-\hat t_e&=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu p+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
-+\trace\LRp{rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
++\trace\LRp{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
 \end{aligned}
 \end{equation*}
 Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
+This is a much more complicated system of equations than we had for the space-time heat equation, but the situation has many similarities.
+Test function $\bftau\in\HdivK$ where the divergence is taken only over spatial dimensions, $v_c,v_e\in\HOneK$, and $\bfv_m\in\HOneVecK$.
+These are all familiar spaces from our work with the heat equation.
+Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ components must be at least in $L^2(K)$, $\Div\mathbb{S}\in\LVecK$, and
+$\Grad\mathbb{S}_{ii}\in\LVecK$.
+In practice, we will probably just seek each component in $\HOneK$.
+
+\subsubsection{Linearization}
+We follow the same linearization process as we have for previous problems.
+Let $U=\LRc{\rho,\bfu,e,\mathbb{T},\bfq,\hat u,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$, 
+then define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
+Let $\tilde U$ be an approximate solution for the minimization of the residual. 
+We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
+Approximating $R(U)=0$ by $R(\tilde)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
+\begin{equation}
+	R'(\tilde U)\Delta U=-R(\tilde U)\,.
+\end{equation}
+We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
+Note that we can exclude our traces and fluxes from the residual since these unknowns are only involved in linear terms.
+As such, we don't update these variables each iteration based on the previous iteration.
+Instead, for example, we consider $\tilde{\hat u}=0$, and let $\hat u=\Delta\hat u$ after each iteration.
+To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
+The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
+% \begin{adjustwidth}{-0.75in}{-0.25in}
+\begin{equation}
+\label{eq:compressibleJacobian}
+\begin{aligned}
+	&\LRp{\Delta\mathbb{T},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\mathbb{S}_{ii}}
+	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}\\
+	%
+	&+\LRp{\Delta\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}\Delta e,\Div\bftau}+\LRa{\hat e,\tau_n}\\
+	%
+	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
+	{\Delta\rho},\Gradxt v_c}
+	+\LRa{\hat t_c,v_c}\\
+	%
+	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
+	+\LRp{\Delta\rho\frac{R}{C_v}\tilde e+\tilde\rho\frac{R}{C_v}\Delta e}\bfI-\Delta\mathbb{T}}
+	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
+	+\LRa{\hat\bft_m,\bfv_m}\\
+	%
+	&-\LRp{\vectthree{[\Delta\rho\tilde e\tilde\bfu+\tilde\rho\Delta e\tilde\bfu+\tilde\rho\tilde e\Delta\bfu
+	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
+	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
+	{+\frac{R}{C_v}\LRp{\Delta\rho\tilde e\tilde\bfu+\tilde\rho\Delta e\tilde\bfu+\tilde\rho\tilde e\Delta\bfu}
+	+\Delta\bfq-\Delta\bfu\cdot\tilde{\mathbb{T}}-\tilde\bfu\cdot\Delta\mathbb{T}]}
+	{\Delta\rho\tilde e+\tilde\rho\Delta e
+	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
+	&+\LRa{\hat t_e,v_e}\,,
+\end{aligned}
+\end{equation}
+% \end{adjustwidth}
 
 \subsection{Problems to consider}
 
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
+The incompressible assumption simplifies the Navier-Stokes equations significantly.
 The incompressible Navier-Stokes equations for a Newtonian fluid in conservation form are
 \begin{align*}
   \rho\frac{\partial\bfu}{\partial t}+\Div\LRp{\rho\bfu\otimes\bfu-\mu\Grad\bfu+p\bfI}&=\bff\\
