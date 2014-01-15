@@ -104,7 +104,6 @@ As such, we don't update these variables each iteration based on the previous it
 Instead, for example, we consider $\tilde{\hat u}=0$, and let $\hat u=\Delta\hat u$ after each iteration.
 To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
 The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
-% \begin{adjustwidth}{-0.75in}{-0.25in}
 \begin{equation}
 \label{eq:compressibleJacobian}
 \begin{aligned}
@@ -129,12 +128,61 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 	+\Delta\bfq-\Delta\bfu\cdot\tilde{\mathbb{T}}-\tilde\bfu\cdot\Delta\mathbb{T}]}
 	{\Delta\rho\tilde e+\tilde\rho\Delta e
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
-	&+\LRa{\hat t_e,v_e}\,,
+	&+\LRa{\hat t_e,v_e}\,.
 \end{aligned}
 \end{equation}
-% \end{adjustwidth}
+The residual, $R(\tilde U)$, is then
+\begin{equation}
+\begin{aligned}
+	&\LRp{\tilde{\mathbb{T}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\mathbb{S}_{ii}}\\
+	&+\LRp{\tilde\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}\tilde e,\Div\bftau}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\frac{R}{C_v}\tilde e\bfI-\tilde{\mathbb{T}}}{\tilde\rho\tilde\bfu},
+	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{\tilde e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho\frac{R}{C_v}\tilde e+\tilde\bfq-\tilde\bfu\cdot\tilde{\mathbb{T}}}{\tilde\rho\LRp{\tilde e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
+	\Gradxt v_e}-\LRp{f_e,v_e}\,.
+\end{aligned}
+\end{equation}
+
+\subsubsection{Test Norm}
 
 \subsection{Problems to consider}
+The original inspiration to pursue a space-time DPG formulation stemmed from the inability to solve one particular steady-state compressible flow problem.
+Chan\cite{JesseDissertation} was unable to achieve convergence on the supersonic Carter plate problem\cite{Carter1973} with Reynolds numbers over 10,000.
+This convergence failure was also reported in \cite{KirkDissertation}.
+
+The Carter flat plate problem simulates laminar supersonic flow over an infinitesimally thin infinite flat plate.
+An oblique shock forms at the leading edge of the plate. 
+A laminar boundary layer forms at the same location along the length of the plate.
+The problem domain is $\Omega=[0,2]\times[0,1]$.
+Chan assigned the following boundary conditions.
+\begin{description}
+	\item[Symmetry boundary conditions:] Upstream of the plate and on the upper surface, $u_n=q_n=\frac{\partial u_s}{\partial n}=0$.
+	This implies that $u_2=q_2=\mathbb{T}_{12}=0$. 
+	We can enforce these conditions with boundary conditions on the fluxes and traces. $u_2=0$ can clearly be enforced via $\hat u_2=0$.
+	Enforcing $q_n=0$ is just as easy, though less obvious - it requires setting $\hat t_e=0$.
+	Recall that 
+	\begin{equation*}
+	\hat t_e=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
+	+\trace\LRp{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+	\end{equation*}
+	On the symmetry boundaries, $n_t=0$, and $\bfn_x=(0,\pm1)$ depending whether we are on the top or bottom surface. 
+	Furthermore, $u_2=0$. Taken together, every term in $\hat t_e$ drops out except for the $\trace(\bfq)\cdot\bfn_x=\pm\trace(q_2)$ term.
+	Thus, on the symmetry boundaries, setting a boundary condition on $\hat t_e$ is equivalent to setting a boundary condition on the trace of $q_2$.
+	A similar situation occurs when attempting to set boundary conditions on $\mathbb{T}_{12}$. Recall that
+	\begin{equation*}
+	\hat\bft_m=\trace\LRp{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}\cdot\bfn_x
+	+\trace\LRp{\rho\bfu} n_t\,.
+	\end{equation*}
+	On the symmetry boundaries, most of the terms drop out of the second component except for the $\mathbb{T}$ term.
+	Thus, setting $\hat t_{m2}=0$ is equivalent to setting $\trace(\mathbb{T}_{12})=0$ on these boundaries.
+	\item[Flat plate boundary conditions:]
+
+\end{description}
+
+The reported problem with the convergence was that the solution appeared to oscillate slightly upstream of the plate edge.
+Our theory is that this oscillation is a product of an unresolved mesh, but on a fully resolved space-time mesh these oscillations will dissipate, 
+and we can recover the steady state solution.
 
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
 The incompressible assumption simplifies the Navier-Stokes equations significantly.
