@@ -1,0 +1,48 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\begin{document}
+\section*{Gradient of a Vector}
+Takes a rank 1 object and expands it to rank 2 where the second dimension comes from the gradient.
+\begin{equation*}
+	\Grad\bfu=\arr{\frac{\partial u}{\partial x}}{\frac{\partial u}{\partial y}}{\frac{\partial v}{\partial x}}{\frac{\partial v}{\partial y}}
+\end{equation*}
+\section*{Dot Product of a Vector and Tensor}
+Takes a rank 2 object and collapses the second dimension via dot product.
+\begin{align*}
+\bfu\cdot\mathbb{T}&=\arr{\bfu\cdot(\mathbb{T}_{11}}{\mathbb{T}_{12})}{\bfu\cdot(\mathbb{T}_{21}}{\mathbb{T}_{22})}\\
+&=\svecttwo{u\mathbb{T}_{11}+v\mathbb{T}_{12}}{u\mathbb{T}_{21}+v\mathbb{T}_{22}}
+\end{align*}
+\section*{Divergence of a Tensor}
+Takes a rank 2 object and collapses the second dimension via divergence.
+\begin{align*}
+	\Div\mathbb{T}&=\arr{\Div(\mathbb{T}_{11}}{\mathbb{T}_{12})}{\Div(\mathbb{T}_{21}}{\mathbb{T}_{22})}\\
+	&=\svecttwo{\frac{\partial\mathbb{T}_{11}}{\partial x}+\frac{\partial\mathbb{T}_{12}}{\partial y}}
+	{\frac{\partial\mathbb{T}_{21}}{\partial x}+\frac{\partial\mathbb{T}_{22}}{\partial y}}
+\end{align*}
+\section*{Laplacian of a Vector}
+\begin{align*}
+\Div\Grad\bfu&=\Div
+\arr{\frac{\partial u}{\partial x}}{\frac{\partial u}{\partial y}}{\frac{\partial v}{\partial x}}{\frac{\partial v}{\partial y}}\\
+&=\left[
+\begin{array}{cc}
+\Div(\frac{\partial u}{\partial x}\; & \frac{\partial u}{\partial y}) \\
+\Div(\frac{\partial v}{\partial x}\; & \frac{\partial v}{\partial y}) \\
+\end{array}
+\right]\\
+&=\svecttwo{\frac{\partial^2 u}{\partial x^2}+\frac{\partial^2 u}{\partial y^2}}{\frac{\partial^2 v}{\partial x^2}+\frac{\partial^2 v}{\partial y^2}}
+\end{align*}
+\section*{Divergence of a Symmetric Gradient}
+Let $\bfsigma=\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}$, then
+\begin{align*}
+\Div\bfsigma&=\Div\arr{\sigma_{11}}{\sigma_{12}}{\sigma_{21}}{\sigma_{22}}\\
+&=\Div\arr{2\frac{\partial u}{\partial x}}{\frac{\partial u}{\partial y}+\frac{\partial v}{\partial x}}
+{\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}}{2\frac{\partial v}{\partial y}}\\
+&=\svecttwo{2\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}+\frac{\partial^2v}{\partial y\partial x}}
+{\frac{\partial^2v}{\partial x^2}+\frac{\partial^2u}{\partial x\partial y}+2\frac{\partial^2v}{\partial y^2}}\\
+&=\svecttwo{\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}
++\frac{\partial}{\partial x}\LRp{\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y}}}
+{\frac{\partial^2v}{\partial x^2}+\frac{\partial^2v}{\partial y^2}
++\frac{\partial}{\partial y}\LRp{\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y}}}
+\end{align*}
+\end{document}

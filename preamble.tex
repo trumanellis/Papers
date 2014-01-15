@@ -3,7 +3,6 @@
 \usepackage{cancel}
 \usepackage{color}
 \usepackage{subcaption}
-\usepackage{changepage}
 \usepackage{pgf,tikz}
 \usetikzlibrary{arrows}
 
@@ -65,8 +64,8 @@
 
 \def\arr#1#2#3#4{\left[
 \begin{array}{cc}
-#1 & #2\\
-#3 & #4\\
+#1\; & #2\\
+#3\; & #4\\
 \end{array}
 \right]}
 \def\vecttwo#1#2{\left(
@@ -75,6 +74,12 @@
 #2\\
 \end{array}
 \right)}
+\def\svecttwo#1#2{\left[
+\begin{array}{c}
+#1\\
+#2\\
+\end{array}
+\right]}
 \def\vectthree#1#2#3{\left(
 \begin{array}{c}
 #1\\
