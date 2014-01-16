@@ -11,16 +11,16 @@ For the sake of narrative, we start with the full compressible Navier-Stokes equ
 The compressible Navier-Stokes equations are
 \begin{align}
 \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
-+\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{T}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{T}}
++\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{D}}
 %TODO: Possible error above. cfd-online seems to have T^T
 =\svectthree{f_c}{\bff_m}{f_e}\,,
 \end{align}
 where $\rho$ is the density, $\bfu$ is the velocity, $p$ is the pressure, $\bfI$ is the identity matrix,
-$\mathbb{T}$ is the deviatoric stress tensor or viscous stress, $e_0$ is the total energy, $\bfq$ is the heat flux, 
+$\mathbb{D}$ is the deviatoric stress tensor or viscous stress, $e_0$ is the total energy, $\bfq$ is the heat flux, 
 and $f_c$, $\bff_m$, and $f_e$ are the source terms for the continuity, momentum, and energy equations, respectively.
 Assuming Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, 
 \begin{equation*}
-	\mathbb{T}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
+	\mathbb{D}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
 \end{equation*}
 where $\bfS^*$ is the trace-less viscous strain rate tensor.
 The heat flux is given by Fourier's law:
@@ -32,7 +32,8 @@ We need to close these equations with an equation of state. An ideal gas assumpt
 \begin{equation*}
 	\gamma:=\frac{C_p}{C_v}\,,\quad p=\rho RT\,,\quad e=C_v T\,,\quad C_p-C_v=R\,,
 \end{equation*}
-where $\gamma$ is the ratio of specific heats, $C_v$ is the specific heat at constant volume, $R$ is the gas constant, $e$ is the internal energy,
+where $\gamma$ is the ratio of specific heats, $C_v$ is the specific heat at constant volume, $R$ is the gas constant,
+$e$ is the internal energy, $T$ is the temperature,
 and $\gamma$, $C_p$, $C_v$, and $R$ are constant properties of the fluid.
 The total energy is defined by
 \begin{equation*}
@@ -43,14 +44,14 @@ We can write our first order system of equations in space-time as follows:
 \begin{subequations}
 \label{eq:compressibleNSFirstOrder}
 \begin{align}
-	\mathbb{T}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
-	\bfq+\gamma\frac{\mu}{Pr}\Grad e&=0\\
+	\mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
+	\bfq+C_p\frac{\mu}{Pr}\Grad T&=0\\
 	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
-	\Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}{\rho\bfu}&=\bff_m\\
-	\Divxt\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+	\Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
 \end{align}
 \end{subequations}
-where our solution variables are $\rho$, $\bfu$, $e$, $\mathbb{T}$, and $\bfq$.
+where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 
 \subsection{Derivation of Space-Time DPG Formulation}
 We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
@@ -58,12 +59,12 @@ then integrate by parts over each space-time element $K$:
 \begin{subequations}
 \label{eq:compressibleNSBF}
 \begin{align}
-	\LRp{\mathbb{T},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}
+	\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}
 	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}&=0\\
-	\LRp{\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}e,\Div\bftau}+\LRa{\hat e,\tau_n}&=0\\
+	\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
-	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
-	-\LRp{\vecttwo{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
 	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
 \end{align}
 \end{subequations}
@@ -71,13 +72,13 @@ where
 \begin{equation*}
 \begin{aligned}
 \hat\bfu&=\trace(\bfu)\\
-\hat e&=\trace(e)\\
+\hat T&=\trace(T)\\
 \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
 +\trace\LRp{\rho}n_t\\
-\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}\cdot\bfn_x
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
 +\trace\LRp{\rho\bfu} n_t\\
-\hat t_e&=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
-+\trace\LRp{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
 \end{aligned}
 \end{equation*}
 Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
@@ -90,11 +91,11 @@ In practice, we will probably just seek each component in $\HOneK$.
 
 \subsubsection{Linearization}
 We follow the same linearization process as we have for previous problems.
-Let $U=\LRc{\rho,\bfu,e,\mathbb{T},\bfq,\hat u,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$, 
+Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat u,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$, 
 then define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
 Let $\tilde U$ be an approximate solution for the minimization of the residual. 
 We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
-Approximating $R(U)=0$ by $R(\tilde)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
+Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
 \begin{equation}
 	R'(\tilde U)\Delta U=-R(\tilde U)\,.
 \end{equation}
@@ -107,26 +108,26 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 \begin{equation}
 \label{eq:compressibleJacobian}
 \begin{aligned}
-	&\LRp{\Delta\mathbb{T},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\mathbb{S}_{ii}}
+	&\LRp{\Delta\mathbb{D},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\mathbb{S}_{ii}}
 	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}\\
 	%
-	&+\LRp{\Delta\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}\Delta e,\Div\bftau}+\LRa{\hat e,\tau_n}\\
+	&+\LRp{\Delta\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
 	%
 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
 	{\Delta\rho},\Gradxt v_c}
 	+\LRa{\hat t_c,v_c}\\
 	%
 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-	+\LRp{\Delta\rho\frac{R}{C_v}\tilde e+\tilde\rho\frac{R}{C_v}\Delta e}\bfI-\Delta\mathbb{T}}
+	+\LRp{\Delta\rho\frac{R}{C_v}\tilde e+\tilde\rho RT}\bfI-\Delta\mathbb{D}}
 	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
 	+\LRa{\hat\bft_m,\bfv_m}\\
 	%
-	&-\LRp{\vectthree{[\Delta\rho\tilde e\tilde\bfu+\tilde\rho\Delta e\tilde\bfu+\tilde\rho\tilde e\Delta\bfu
+	&-\LRp{\vectthree{[C_v\Delta\rho\tilde T\tilde\bfu+C_v\tilde\rho\Delta T\tilde\bfu+C_v\tilde\rho\tilde T\Delta\bfu
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
 	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
-	{+\frac{R}{C_v}\LRp{\Delta\rho\tilde e\tilde\bfu+\tilde\rho\Delta e\tilde\bfu+\tilde\rho\tilde e\Delta\bfu}
-	+\Delta\bfq-\Delta\bfu\cdot\tilde{\mathbb{T}}-\tilde\bfu\cdot\Delta\mathbb{T}]}
-	{\Delta\rho\tilde e+\tilde\rho\Delta e
+	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
+	+\Delta\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
+	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
 	&+\LRa{\hat t_e,v_e}\,.
 \end{aligned}
@@ -134,12 +135,13 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 The residual, $R(\tilde U)$, is then
 \begin{equation}
 \begin{aligned}
-	&\LRp{\tilde{\mathbb{T}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\mathbb{S}_{ii}}\\
-	&+\LRp{\tilde\bfq,\bftau}-\LRp{\gamma\frac{\mu}{Pr}\tilde e,\Div\bftau}\\
+	&\LRp{\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\mathbb{S}_{ii}}\\
+	&+\LRp{\tilde\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\tilde T,\Div\bftau}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
-	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\frac{R}{C_v}\tilde e\bfI-\tilde{\mathbb{T}}}{\tilde\rho\tilde\bfu},
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
 	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
-	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{\tilde e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho\frac{R}{C_v}\tilde e+\tilde\bfq-\tilde\bfu\cdot\tilde{\mathbb{T}}}{\tilde\rho\LRp{\tilde e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
+	+\tilde\bfq-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
 	\Gradxt v_e}-\LRp{f_e,v_e}\,.
 \end{aligned}
 \end{equation}
@@ -158,24 +160,24 @@ The problem domain is $\Omega=[0,2]\times[0,1]$.
 Chan assigned the following boundary conditions.
 \begin{description}
 	\item[Symmetry boundary conditions:] Upstream of the plate and on the upper surface, $u_n=q_n=\frac{\partial u_s}{\partial n}=0$.
-	This implies that $u_2=q_2=\mathbb{T}_{12}=0$. 
+	This implies that $u_2=q_2=\mathbb{D}_{12}=0$. 
 	We can enforce these conditions with boundary conditions on the fluxes and traces. $u_2=0$ can clearly be enforced via $\hat u_2=0$.
 	Enforcing $q_n=0$ is just as easy, though less obvious - it requires setting $\hat t_e=0$.
 	Recall that 
 	\begin{equation*}
-	\hat t_e=\trace\LRp{\rho\bfu\LRp{e+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho\frac{R}{C_v}e+\bfq-\bfu\cdot\mathbb{T}}\cdot\bfn_x
-	+\trace\LRp{\rho\LRp{e+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+	\hat t_e=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
+	+\trace\LRp{\rho\LRp{C_v R+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
 	\end{equation*}
 	On the symmetry boundaries, $n_t=0$, and $\bfn_x=(0,\pm1)$ depending whether we are on the top or bottom surface. 
 	Furthermore, $u_2=0$. Taken together, every term in $\hat t_e$ drops out except for the $\trace(\bfq)\cdot\bfn_x=\pm\trace(q_2)$ term.
 	Thus, on the symmetry boundaries, setting a boundary condition on $\hat t_e$ is equivalent to setting a boundary condition on the trace of $q_2$.
-	A similar situation occurs when attempting to set boundary conditions on $\mathbb{T}_{12}$. Recall that
+	A similar situation occurs when attempting to set boundary conditions on $\mathbb{D}_{12}$. Recall that
 	\begin{equation*}
-	\hat\bft_m=\trace\LRp{\rho\bfu\otimes\bfu+\rho\frac{R}{C_v}e\bfI-\mathbb{T}}\cdot\bfn_x
+	\hat\bft_m=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
 	+\trace\LRp{\rho\bfu} n_t\,.
 	\end{equation*}
-	On the symmetry boundaries, most of the terms drop out of the second component except for the $\mathbb{T}$ term.
-	Thus, setting $\hat t_{m2}=0$ is equivalent to setting $\trace(\mathbb{T}_{12})=0$ on these boundaries.
+	On the symmetry boundaries, most of the terms drop out of the second component except for the $\mathbb{D}$ term.
+	Thus, setting $\hat t_{m2}=0$ is equivalent to setting $\trace(\mathbb{D}_{12})=0$ on these boundaries.
 	\item[Flat plate boundary conditions:]
 
 \end{description}
@@ -203,7 +205,7 @@ Note that the pressure component of a solution will only be unique up to a const
 As a result, we impose a zero mean condition on the pressure: $\int_\Omega p=0$.
 The deviatoric stress tensor is identified as
 \begin{equation}
-	\mathbb{T}_{ij}=\mu\LRp{\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}
+	\mathbb{D}_{ij}=\mu\LRp{\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}
 	+\delta_{ij}\frac{\lambda}{\mu}\frac{\partial u_k}{\partial x_k}}\,,
 \end{equation}
 where $\lambda$ is the second coefficient of viscosity.
