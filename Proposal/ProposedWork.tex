@@ -148,7 +148,8 @@ The residual, $R(\tilde U)$, is then
 
 \subsubsection{Test Norm}
 
-\subsection{Problems to consider}
+\subsection{Problems to Consider}
+\subsubsection{Steady Carter Plate Problem}
 The original inspiration to pursue a space-time DPG formulation stemmed from the inability to solve one particular steady-state compressible flow problem.
 Chan\cite{JesseDissertation} was unable to achieve convergence on the supersonic Carter plate problem\cite{Carter1973} with Reynolds numbers over 10,000.
 This convergence failure was also reported in \cite{KirkDissertation}.
@@ -156,10 +157,11 @@ This convergence failure was also reported in \cite{KirkDissertation}.
 The Carter flat plate problem simulates laminar supersonic flow over an infinitesimally thin infinite flat plate.
 An oblique shock forms at the leading edge of the plate. 
 A laminar boundary layer forms at the same location along the length of the plate.
-The problem domain is $\Omega=[0,2]\times[0,1]$.
+The problem domain is $\Omega=[0,2]\times[0,1]$
+with free stream conditions are $\rho=1$, $\bfu=(1,0)^T$, and $T=1$.
 Chan assigned the following boundary conditions.
 \begin{description}
-	\item[Symmetry boundary conditions:] Upstream of the plate and on the upper surface, $u_n=q_n=\frac{\partial u_s}{\partial n}=0$.
+	\item[Symmetry boundary conditions:] upstream of the plate and on the upper surface, $u_n=q_n=\frac{\partial u_s}{\partial n}=0$.
 	This implies that $u_2=q_2=\mathbb{D}_{12}=0$. 
 	We can enforce these conditions with boundary conditions on the fluxes and traces. $u_2=0$ can clearly be enforced via $\hat u_2=0$.
 	Enforcing $q_n=0$ is just as easy, though less obvious - it requires setting $\hat t_e=0$.
@@ -178,13 +180,23 @@ Chan assigned the following boundary conditions.
 	\end{equation*}
 	On the symmetry boundaries, most of the terms drop out of the second component except for the $\mathbb{D}$ term.
 	Thus, setting $\hat t_{m2}=0$ is equivalent to setting $\trace(\mathbb{D}_{12})=0$ on these boundaries.
-	\item[Flat plate boundary conditions:]
-
+	\item[Flat plate boundary conditions:] $u_1=u_2=0$ and $T=T_w=[1+(\gamma-1)M_\infty^2/2]T_\infty=2.8T_\infty$ (for Mach 3 flow).
+	These are imposed via $\hat\bfu$ and $\hat T$.
+	\item[Inflow boundary conditions:] free stream conditions are enforced on all fluxes: $\hat t_e$, $\hat\bft_m$, $\hat t_e$. 
+	Note that $n_t$ is zero on spatial boundaries.
+	\item[Outflow boundary conditions:] there is not universal agreement about the correct boundary conditions to apply here.
+	Most commonly it seems, practitioners enforce zero normal gradient conditions on $\bfu$ and $T$. 
+	Others choose to enforce boundary conditions only on subsonic portions of the outflow\cite{DemkowiczCNS1990}.
+	Papanastasiou first proposed a \emph{free boundary condition} or ``do nothing'' condition on the outflow.
+	This proposal was further investigated by Renardy\cite{Renardy1997} and Griffiths\cite{Griffiths1997}.
+	On the PDE level, this leaves an underdetermined system, but it was found that for a discretized system, this was a well-defined boundary condition.
+	From previous experience with DPG, this outflow boundary condition appears to work very well.
 \end{description}
 
 The reported problem with the convergence was that the solution appeared to oscillate slightly upstream of the plate edge.
 Our theory is that this oscillation is a product of an unresolved mesh, but on a fully resolved space-time mesh these oscillations will dissipate, 
 and we can recover the steady state solution.
+Our goal is to repeat this problem with an adaptive space-time scheme and obtain results for much higher Reynolds numbers.
 
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
 The incompressible assumption simplifies the Navier-Stokes equations significantly.
