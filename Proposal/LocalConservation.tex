@@ -180,10 +180,10 @@ parts over each element $K$:
 \begin{equation}
 \label{eq:preultraweak}
 \begin{aligned}
--(\bfbeta u-\bfsigma,\nabla v)_K+((\bfbeta
-u-\bfsigma)\cdot\mathbf{n},v)_{\partial K}&=(f,v)_K\\
+-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{(\bfbeta
+u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(f,v)_K\\
 \frac{1}{\epsilon}(\bfsigma,\bftau)_K+(u,\nabla\cdot\bftau)_K
--(u,\tau_n)_{\partial K}&=0\,.
+-\LRa{u,\tau_n}_{\partial K}&=0\,.
 \end{aligned}
 \end{equation}
 The discontinuous Petrov-Galerkin method refers to the fact that we are using
@@ -209,10 +209,10 @@ $\bs u:=(u,\bfsigma,\hat u,\hat t)
 such that
 \begin{align}
 \label{eq:variationalFormulation}
-\underbrace{-(\bfbeta u-\bfsigma,\nabla v)_K+(\hat t,v)_{\partial K}
+\underbrace{-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{\hat t,v}_{\partial K}
 + \frac{1}{\epsilon}(\bfsigma,\bftau)_K
 +(u,\nabla\cdot\bftau)_K
--(\hat u,\tau_n)_{\partial K}}_{b(\mathbf{u}, \mathbf{v})}
+-\LRa{\hat u,\tau_n}_{\partial K}}_{b(\mathbf{u}, \mathbf{v})}
 &=\underbrace{\:(f,v)_K\genfrac{}{}{0pt}{}{}{}}_{l(\mathbf{v})} &\text{in }\Omega \\
 \hat u&=0 &\text{on }\Gamma
 \end{align}

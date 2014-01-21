@@ -5,7 +5,17 @@
 In this chapter we outline the proposed work of solving the Navier-Stokes equations with space-time DPG. 
 Our emphasis will be on incompressible Navier-Stokes, but time permitting, we would like to investigate the compressible equations as well.
 
-
+%    /$$$$$$                                                                            /$$ /$$       /$$          
+%   /$$__  $$                                                                          |__/| $$      | $$          
+%  | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$ /$$| $$$$$$$ | $$  /$$$$$$ 
+%  | $$       /$$__  $$| $$_  $$_  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/ /$$_____/| $$| $$__  $$| $$ /$$__  $$
+%  | $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$  \__/| $$$$$$$$|  $$$$$$ |  $$$$$$ | $$| $$  \ $$| $$| $$$$$$$$
+%  | $$    $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$_____/ \____  $$ \____  $$| $$| $$  | $$| $$| $$_____/
+%  |  $$$$$$/|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$      |  $$$$$$$ /$$$$$$$/ /$$$$$$$/| $$| $$$$$$$/| $$|  $$$$$$$
+%   \______/  \______/ |__/ |__/ |__/| $$____/ |__/       \_______/|_______/ |_______/ |__/|_______/ |__/ \_______/
+%                                    | $$                                                                          
+%                                    | $$                                                                          
+%                                    |__/  
 \section{Space-time DPG for Compressible Navier-Stokes}
 For the sake of narrative, we start with the full compressible Navier-Stokes equations and then simplify to the incompressible case.
 The compressible Navier-Stokes equations are
@@ -53,6 +63,17 @@ We can write our first order system of equations in space-time as follows:
 \end{subequations}
 where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 
+%   /$$$$$$$                      /$$                        /$$     /$$                    
+%  | $$__  $$                    |__/                       | $$    |__/                    
+%  | $$  \ $$  /$$$$$$   /$$$$$$  /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$  | $$ /$$__  $$ /$$__  $$| $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  | $$| $$$$$$$$| $$  \__/| $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$  | $$| $$_____/| $$      | $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$/|  $$$$$$$| $$      | $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |_______/  \_______/|__/      |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                           
+%                                                                                           
+%              
 \subsection{Derivation of Space-Time DPG Formulation}
 We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
 then integrate by parts over each space-time element $K$:
@@ -60,7 +81,7 @@ then integrate by parts over each space-time element $K$:
 \label{eq:compressibleNSBF}
 \begin{align}
 	\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}
-	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}&=0\\
+	+\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
@@ -89,29 +110,46 @@ Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ compon
 $\Grad\mathbb{S}_{ii}\in\LVecK$.
 In practice, we will probably just seek each component in $\HOneK$.
 
+%   /$$       /$$                                         /$$                       /$$     /$$                    
+%  | $$      |__/                                        |__/                      | $$    |__/                    
+%  | $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$ /$$$$$$$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$| $$|____ /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$      | $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$  \__/| $$   /$$$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$      | $$  /$$__/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$      | $$ /$$$$$$$$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |________/|__/|__/  |__/ \_______/ \_______/|__/      |__/|________/ \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                                                  
+%                                                                                                                  
+%   
 \subsubsection{Linearization}
 We follow the same linearization process as we have for previous problems.
-Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat u,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$, 
-then define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
-Let $\tilde U$ be an approximate solution for the minimization of the residual. 
-We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
+Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ be a group solution variable which we can decompose into two parts:
+$U:=\tilde U+\Delta U$, where
+$\tilde U = \LRc{\tilde\rho,\tilde\bfu,\tilde T,\tilde{\mathbb{D}},\bs0,\bs0,0,0,\bs0,0}$ is the previous iteration approximation, 
+and $\Delta U=\LRc{\Delta\rho,\Delta\bfu,\Delta T,\Delta\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ is the update.
+Note that $\tilde U$ only contains terms which participate in nonlinearities in \eqref{eq:compressibleNSBF} 
+while $\Delta U$ contains the full linear terms and the updates to the nonlinear terms.
+Also, we drop the $\Delta$ and $\tilde\cdot$ notation for linear terms.
+Define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
+% Let $\tilde U$ be an approximate solution for the minimization of the residual. 
+% We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
 Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
 \begin{equation}
 	R'(\tilde U)\Delta U=-R(\tilde U)\,.
 \end{equation}
 We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
-Note that we can exclude our traces and fluxes from the residual since these unknowns are only involved in linear terms.
-As such, we don't update these variables each iteration based on the previous iteration.
-Instead, for example, we consider $\tilde{\hat u}=0$, and let $\hat u=\Delta\hat u$ after each iteration.
-To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
+% Note that we can exclude our traces and fluxes from the residual since these unknowns are only involved in linear terms.
+% As such, we don't update these variables each iteration based on the previous iteration.
+% Instead, for example, we consider $\tilde{\hat\bfu}=0$, and let $\hat\bfu=\Delta\hat\bfu$ after each iteration.
+% To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
 The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 \begin{equation}
 \label{eq:compressibleJacobian}
 \begin{aligned}
 	&\LRp{\Delta\mathbb{D},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\mathbb{S}_{ii}}
-	+\LRa{2\mu\hat u,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat u,\mathbb{S}\bfn_x}\\
+	+\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
 	%
-	&+\LRp{\Delta\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
+	&+\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
 	%
 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
 	{\Delta\rho},\Gradxt v_c}
@@ -126,7 +164,7 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
 	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
 	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
-	+\Delta\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
+	+\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
 	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
 	&+\LRa{\hat t_e,v_e}\,.
@@ -136,18 +174,40 @@ The residual, $R(\tilde U)$, is then
 \begin{equation}
 \begin{aligned}
 	&\LRp{\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\mathbb{S}_{ii}}\\
-	&+\LRp{\tilde\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\tilde T,\Div\bftau}\\
+	&-\LRp{C_p\frac{\mu}{Pr}\tilde T,\Div\bftau}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
 	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
-	+\tilde\bfq-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
+	-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
 	\Gradxt v_e}-\LRp{f_e,v_e}\,.
 \end{aligned}
 \end{equation}
 
+%   /$$$$$$$$                       /$$           /$$   /$$                                  
+%  |__  $$__/                      | $$          | $$$ | $$                                  
+%     | $$     /$$$$$$   /$$$$$$$ /$$$$$$        | $$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$ 
+%     | $$    /$$__  $$ /$$_____/|_  $$_/        | $$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$
+%     | $$   | $$$$$$$$|  $$$$$$   | $$          | $$  $$$$| $$  \ $$| $$  \__/| $$ \ $$ \ $$
+%     | $$   | $$_____/ \____  $$  | $$ /$$      | $$\  $$$| $$  | $$| $$      | $$ | $$ | $$
+%     | $$   |  $$$$$$$ /$$$$$$$/  |  $$$$/      | $$ \  $$|  $$$$$$/| $$      | $$ | $$ | $$
+%     |__/    \_______/|_______/    \___/        |__/  \__/ \______/ |__/      |__/ |__/ |__/
+%                                                                                            
+%                                                                                            
+%      
 \subsubsection{Test Norm}
 
+%   /$$$$$$$                      /$$       /$$                                  
+%  | $$__  $$                    | $$      | $$                                  
+%  | $$  \ $$  /$$$$$$   /$$$$$$ | $$$$$$$ | $$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$$
+%  | $$$$$$$/ /$$__  $$ /$$__  $$| $$__  $$| $$ /$$__  $$| $$_  $$_  $$ /$$_____/
+%  | $$____/ | $$  \__/| $$  \ $$| $$  \ $$| $$| $$$$$$$$| $$ \ $$ \ $$|  $$$$$$ 
+%  | $$      | $$      | $$  | $$| $$  | $$| $$| $$_____/| $$ | $$ | $$ \____  $$
+%  | $$      | $$      |  $$$$$$/| $$$$$$$/| $$|  $$$$$$$| $$ | $$ | $$ /$$$$$$$/
+%  |__/      |__/       \______/ |_______/ |__/ \_______/|__/ |__/ |__/|_______/ 
+%                                                                                
+%                                                                                
+% 
 \subsection{Problems to Consider}
 \subsubsection{Steady Carter Plate Problem}
 The original inspiration to pursue a space-time DPG formulation stemmed from the inability to solve one particular steady-state compressible flow problem.
@@ -163,7 +223,7 @@ Chan assigned the following boundary conditions.
 \begin{description}
 	\item[Symmetry boundary conditions:] upstream of the plate and on the upper surface, $u_n=q_n=\frac{\partial u_s}{\partial n}=0$.
 	This implies that $u_2=q_2=\mathbb{D}_{12}=0$. 
-	We can enforce these conditions with boundary conditions on the fluxes and traces. $u_2=0$ can clearly be enforced via $\hat u_2=0$.
+	We can enforce these conditions with boundary conditions on the fluxes and traces. $u_2=0$ can clearly be enforced via $\hat\bfu_2=0$.
 	Enforcing $q_n=0$ is just as easy, though less obvious - it requires setting $\hat t_e=0$.
 	Recall that 
 	\begin{equation*}
@@ -198,34 +258,114 @@ Our theory is that this oscillation is a product of an unresolved mesh, but on a
 and we can recover the steady state solution.
 Our goal is to repeat this problem with an adaptive space-time scheme and obtain results for much higher Reynolds numbers.
 
+%   /$$$$$$                                                                                               /$$ /$$       /$$          
+%  |_  $$_/                                                                                              |__/| $$      | $$          
+%    | $$   /$$$$$$$   /$$$$$$$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$ /$$| $$$$$$$ | $$  /$$$$$$ 
+%    | $$  | $$__  $$ /$$_____/ /$$__  $$| $$_  $$_  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/ /$$_____/| $$| $$__  $$| $$ /$$__  $$
+%    | $$  | $$  \ $$| $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$  \__/| $$$$$$$$|  $$$$$$ |  $$$$$$ | $$| $$  \ $$| $$| $$$$$$$$
+%    | $$  | $$  | $$| $$      | $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$_____/ \____  $$ \____  $$| $$| $$  | $$| $$| $$_____/
+%   /$$$$$$| $$  | $$|  $$$$$$$|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$      |  $$$$$$$ /$$$$$$$/ /$$$$$$$/| $$| $$$$$$$/| $$|  $$$$$$$
+%  |______/|__/  |__/ \_______/ \______/ |__/ |__/ |__/| $$____/ |__/       \_______/|_______/ |_______/ |__/|_______/ |__/ \_______/
+%                                                      | $$                                                                          
+%                                                      | $$                                                                          
+%                                                      |__/
 \section{Space-time DPG for 2D Incompressible Navier-Stokes}
 The incompressible assumption simplifies the Navier-Stokes equations significantly.
-The incompressible Navier-Stokes equations for a Newtonian fluid in conservation form are
+First of all, the continuity equation simplifies to $\Div\bfu=0$.
+This in turn leads to a simplified expression for the deviatoric stress tensor:
+\begin{equation*}
+	\mathbb{D}=\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}\,.
+\end{equation*}
+Incompressibility also renders the energy equation superfluous.
+Our first order system of equations for the incompressible Navier-Stokes equations are then
 \begin{align*}
-  \rho\frac{\partial\bfu}{\partial t}+\Div\LRp{\rho\bfu\otimes\bfu-\mu\Grad\bfu+p\bfI}&=\bff\\
-  \Div\bfu&=0\,,
-  % \int_\Omega p&=0
+	\mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}&=0\\
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+\tilde p\bfI-\mathbb{D}}{\rho\bfu}&=\tilde\bff_m\\
+	\Div\bfu&=0\,,
 \end{align*}
-where $\bfu$ is the fluid velocity, $p$ is the pressure, $\rho$ is the density, $\mu$ is the first coefficient of viscosity (usually called ``viscosity''), 
-and $\bff$ is the forcing. 
-This is to be solved on a space-time domain $\Omega\times[t_0,T]$.
-We can rewrite the momentum equation in terms of a full space-time divergence:
-\begin{equation}
-\Divxt\vecttwo{\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}{u}=\bff\,.
-\end{equation}
-Note that the pressure component of a solution will only be unique up to a constant. 
-As a result, we impose a zero mean condition on the pressure: $\int_\Omega p=0$.
-The deviatoric stress tensor is identified as
-\begin{equation}
-	\mathbb{D}_{ij}=\mu\LRp{\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}
-	+\delta_{ij}\frac{\lambda}{\mu}\frac{\partial u_k}{\partial x_k}}\,,
-\end{equation}
-where $\lambda$ is the second coefficient of viscosity.
-For an incompressible fluid, the last term is zero.
+where $\tilde p$ and $\tilde\bff_m$ are used to differentiate these terms from their density rescaled values.
+For the problems we are interested, a constant density assumption is appropriate.
+In which case, we redefine $\mathbb{D}$ in terms of the kinematic viscosity $\nu=\mu/\rho$ and solve for a rescaled pressure $p:=\tilde p/\rho$.
+Our new system of equations is then
+\begin{subequations}
+\label{eq:incompressibleNSFirstOrder}
+\begin{align}
+	\mathbb{D}-\nu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}&=0\\
+	\Divxt\vecttwo{\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\bfu}&=\bff_m\\
+	\Div\bfu&=0\,.
+\end{align}
+\end{subequations}
 
+%   /$$$$$$$                      /$$                        /$$     /$$                    
+%  | $$__  $$                    |__/                       | $$    |__/                    
+%  | $$  \ $$  /$$$$$$   /$$$$$$  /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$  | $$ /$$__  $$ /$$__  $$| $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  | $$| $$$$$$$$| $$  \__/| $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$  | $$| $$_____/| $$      | $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$/|  $$$$$$$| $$      | $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |_______/  \_______/|__/      |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                           
+%                                                                                           
+%
 \subsection{Derivation of Space-Time DPG Formulation}
-The subsequent derivation is for spatially 2D flow, but 1D and 3D are very similar.
-Following standard procedure, we write
+We start with \eqref{eq:incompressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bfv_m$, $q$, 
+then integrate by parts over each space-time element $K$:
+\begin{subequations}
+\label{eq:incompressibleNSBF}
+\begin{align}
+	\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\nu\bfu,\Div\mathbb{S}}-\LRa{2\nu\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	-\LRp{\vecttwo{\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\bfu,\Grad q}+\LRa{\hat\bfu,q\bfn_x}&=0\,,
+\end{align}
+\end{subequations}
+where 
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat\bft_m&=\trace\LRp{\bfu\otimes\bfu+p\bfI-\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\bfu} n_t\,.
+\end{aligned}
+\end{equation*}
+
+%   /$$       /$$                                         /$$                       /$$     /$$                    
+%  | $$      |__/                                        |__/                      | $$    |__/                    
+%  | $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$ /$$$$$$$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$| $$|____ /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$      | $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$  \__/| $$   /$$$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$      | $$  /$$__/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$      | $$ /$$$$$$$$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |________/|__/|__/  |__/ \_______/ \_______/|__/      |__/|________/ \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                                                  
+%                                                                                                                  
+%   
+\subsubsection{Linearization}
+We follow the same linearization process as for the compressible system with $\tilde U=\LRc{\tilde\bfu,0,\bs0,\bs0,0}$ and 
+$\Delta U=\LRc{\Delta\bfu,p,\mathbb{D},\hat\bfu,\hat\bft_m}$.
+Notice that $\bfu$ is the only variable participating in nonlinear terms; nothing else needs to be linearized.
+The Jacobian of our incompressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
+\begin{align}
+	&\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\nu\Delta\bfu,\Div\mathbb{S}}-\LRa{2\nu\hat\bfu,\mathbb{S}\bfn_x}\\
+	&-\LRp{\vecttwo{\Delta\bfu\otimes\tilde\bfu+\tilde\bfu\otimes\Delta\bfu
+	+ p\bfI-\mathbb{D}}{\Delta\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}\\
+	&-\LRp{\Delta\bfu,\Grad q}+\LRa{\hat\bfu,q\bfn_x}\,.
+\end{align}
+The residual is then simply
+\begin{equation}
+	-\LRp{\vecttwo{\tilde\bfu\otimes\tilde\bfu}{\tilde\bfu},\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\,.
+\end{equation}
+
+%   /$$$$$$$$                       /$$           /$$   /$$                                  
+%  |__  $$__/                      | $$          | $$$ | $$                                  
+%     | $$     /$$$$$$   /$$$$$$$ /$$$$$$        | $$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$ 
+%     | $$    /$$__  $$ /$$_____/|_  $$_/        | $$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$
+%     | $$   | $$$$$$$$|  $$$$$$   | $$          | $$  $$$$| $$  \ $$| $$  \__/| $$ \ $$ \ $$
+%     | $$   | $$_____/ \____  $$  | $$ /$$      | $$\  $$$| $$  | $$| $$      | $$ | $$ | $$
+%     | $$   |  $$$$$$$ /$$$$$$$/  |  $$$$/      | $$ \  $$|  $$$$$$/| $$      | $$ | $$ | $$
+%     |__/    \_______/|_______/    \___/        |__/  \__/ \______/ |__/      |__/ |__/ |__/
+%                                                                                            
+%                                                                                            
+%      
+\subsubsection{Test Norm}
 
 \subsection{Problems to consider}
 
