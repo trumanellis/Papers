@@ -111,7 +111,7 @@ Linearizing:
 
 \section*{Conservative Form}
 \begin{align*}
-  \Div\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}&=\vecttwo{f_1}{f_2}\\
+  \Div\LRp{\bfu\otimes\bfu-\nu\Grad\bfu+p\bfI}&=\vecttwo{f_1}{f_2}\\
   \Div\bfu&=0\\
   \int_\Omega p&=0
 \end{align*}
@@ -119,7 +119,7 @@ As a first order system, this is
 \begin{align*}
   \bfsigma_1-\Grad u_1&=0\\
   \bfsigma_2-\Grad u_2&=0\\
-  \Div\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}&=\vecttwo{f_1}{f_2}\\
+  \Div\LRp{\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}&=\vecttwo{f_1}{f_2}\\
   \Div\bfu&=0\\
   \int_\Omega p&=0
 \end{align*}
@@ -132,7 +132,7 @@ parts
   \LRp{\bfsigma_2,\bftau_2}
   +\LRp{u_2,\Div\bftau_2}
   -\LRa{\hat u_2,\tau_{2n}}&=0\\
-  -\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
+  -\LRp{\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
   +\LRa{\hat\bff,\bfv}
   &=\vecttwo{f_1}{f_2}\\
   -\LRp{\bfu,\Grad q}
@@ -141,7 +141,7 @@ parts
 \end{align*}
 where
 \[
-\hat\bff=\trace\LRp{\LRp{\frac{1}{2}\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}\cdot\bfn}
+\hat\bff=\trace\LRp{\LRp{\bfu\otimes\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}\cdot\bfn}
 \]
 Linearizing:
 \begin{align*}
@@ -155,9 +155,9 @@ Linearizing:
   -\LRa{\hat u_2,\tau_{2n}}
   &=-\LRp{u_2,\Div\bftau_2}
   \\
-  -\LRp{\frac{1}{2}\Delta\bfu\otimes\bfu+\frac{1}{2}\bfu\otimes\Delta\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
+  -\LRp{\Delta\bfu\otimes\bfu+\bfu\otimes\Delta\bfu-\nu\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI,\Grad\bfv}
   +\LRa{\hat\bff,\bfv}
-  &=\frac{1}{2}\LRp{\bfu\otimes\bfu,\Grad\bfv}
+  &=\LRp{\bfu\otimes\bfu,\Grad\bfv}
   \\
   -\LRp{\Delta\bfu,\Grad q}
   +\LRa{\widehat{\bfu\cdot\bfn},q}
@@ -171,11 +171,11 @@ Grouping things together, we get
   \LRp{\bfsigma_1,\bftau_1+\nu\Grad v_1}\\
   \LRp{\bfsigma_2,\bftau_2+\nu\Grad v_2}\\
   \LRp{\Delta u_1,\Div\bftau_1
-  -\frac{1}{2}\LRp{\bfu\cdot\Grad v_1
+  -\LRp{\bfu\cdot\Grad v_1
   +\bfu\cdot\frac{\partial\bfv}{\partial x}}
   -\frac{\partial q}{\partial x}}\\
   \LRp{\Delta u_2,\Div\bftau_2
-  -\frac{1}{2}\LRp{\bfu\cdot\Grad v_2
+  -\LRp{\bfu\cdot\Grad v_2
   +\bfu\cdot\frac{\partial\bfv}{\partial y}}
   -\frac{\partial q}{\partial y}}\\
   \LRp{p,-\Div\bfv}
