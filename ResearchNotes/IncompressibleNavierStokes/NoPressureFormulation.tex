@@ -1,0 +1,39 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\author{Truman E. Ellis}
+\title{Pressureless Navier-Stokes Formulation}
+
+\begin{document}
+\maketitle
+
+\section*{Compressible}
+We can derive the compressible Navier-Stokes equations in terms of the Cauchy stress tensor.
+First note that
+\begin{equation*}
+  \sigma_{ij}=2\mu\varepsilon_{ij}+\lambda\varepsilon_{kk}\delta_{ij}\,,
+\end{equation*}
+and
+\begin{align*}
+  \sigma_{ii}&=2\mu\varepsilon_{ii}+N\lambda\varepsilon_{ii}\\
+  &=(2\mu+N\lambda)\varepsilon_{ii}\,,
+\end{align*}
+where $N$ is the dimension.
+Then
+\begin{align*}
+  \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{\lambda}{2\mu}\varepsilon_{kk}\delta_{ij}\\
+  &=\frac{1}{2\mu}\sigma_{ij}-\frac{\lambda}{2\mu(2\mu+N\lambda)}\sigma_{kk}\delta_{ij}\\
+  &=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(\frac{2\mu}{\lambda}+N)}\sigma_{kk}\delta_{ij}\,.
+\end{align*}
+If we let $\lambda\rightarrow\infty$, then
+\begin{align*}
+  \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2N\mu}\sigma_{kk}\delta_{ij}\\
+  &=\frac{1}{2\mu}\LRs{\sigma_{ij}-\frac{1}{N}\sigma_{kk}\delta_{ij}}\,.
+\end{align*}
+Which corresponds to the incompressible case.
+Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
+\begin{align*}
+  \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(N-3)}\sigma_{kk}\delta_{ij}\,.
+\end{align*}
+
+\end{document}
