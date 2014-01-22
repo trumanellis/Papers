@@ -70,11 +70,31 @@ with residual
 \end{align*}
 
 \subsection*{Test Norm}
+Note that $\bfsigma^d=\bfsigma-\frac{1}{N}\trace(\bfsigma)\bfI$, and $\bfsigma^d\bftau=\bfsigma\bftau^d$.
+Also note that 
+\[
+(\Delta\bfu\otimes\tilde\bfu+\tilde\bfu\otimes\Delta\bfu)\Grad\bfv=\tilde\bfu\cdot\LRp{\Grad\bfv+\LRp{\Grad\bfv}^T}\bfu\,,
+\]
+since
+\begin{align*}
+  \LRp{\tilde u_i u_j+u_i\tilde u_j}v_{i,j}&=\tilde u_i u_j v_{i,j}+u_i \tilde u_j v_{i,j}\\
+  &=\tilde u_j u_i v_{j,i}+u_i \tilde u_j v_{i,j}\\
+  &=u_i(\tilde u_j(v_{i,j}+v_{j,i}))\,.
+\end{align*}
 Grouping terms:
 \begin{align*}
-\LRp{\bfsigma,\bftau}\\
-+\LRp{\bfu}
+\LRp{\bfsigma,\bftau^d+\Grad\bfv}\\
+\LRp{\bfu,2\mu\Div\bftau+\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)}\,.
 \end{align*}
+Alternatively, if we divided the first equation by $2\mu$, we would have gotten:
+\begin{align*}
+\LRp{\bfsigma,\frac{1}{2\mu}\bftau^d+\Grad\bfv}\\
+\LRp{\bfu,\Div\bftau+\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)}\,.
+\end{align*}
+So our graph norm based on the first version is
+\begin{equation*}
+\norm{}
+\end{equation*}
 
 \section*{Compressible}
 Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
