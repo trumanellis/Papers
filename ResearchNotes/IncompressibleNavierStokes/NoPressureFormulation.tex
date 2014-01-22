@@ -7,9 +7,8 @@
 \begin{document}
 \maketitle
 
-\section*{Compressible}
 We can derive the compressible Navier-Stokes equations in terms of the Cauchy stress tensor.
-First note that
+Note that
 \begin{equation*}
   \sigma_{ij}=2\mu\varepsilon_{ij}+\lambda\varepsilon_{kk}\delta_{ij}\,,
 \end{equation*}
@@ -25,12 +24,59 @@ Then
   &=\frac{1}{2\mu}\sigma_{ij}-\frac{\lambda}{2\mu(2\mu+N\lambda)}\sigma_{kk}\delta_{ij}\\
   &=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(\frac{2\mu}{\lambda}+N)}\sigma_{kk}\delta_{ij}\,.
 \end{align*}
-If we let $\lambda\rightarrow\infty$, then
+
+\section*{Incompressible}
+If we assume an incompressible medium, then $\lambda\rightarrow\infty$ and
 \begin{align*}
   \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2N\mu}\sigma_{kk}\delta_{ij}\\
   &=\frac{1}{2\mu}\LRs{\sigma_{ij}-\frac{1}{N}\sigma_{kk}\delta_{ij}}\,.
 \end{align*}
-Which corresponds to the incompressible case.
+This embeds the zero divergence condition. If we take the trace of both sides, we get
+\begin{align*}
+  \Div\bfu=\varepsilon_{ii}=\frac{1}{2\mu}\LRs{\sigma_{ii}-\sigma_{ii}}=0\,.
+\end{align*}
+The space-time form of the Cauchy momentum equation is
+\begin{equation*}
+\Divxt\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu}=\bff\,.
+\end{equation*}
+Our incompressible Navier-Stokes sytem is then
+\begin{align*}
+\bfsigma-\frac{1}{N}\trace(\bfsigma)\bfI-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}&=0\\
+\Divxt\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu}&=\bff\,.
+\end{align*}
+We multiply by test functions $\bftau$ (symmetric tensor) and $\bfv$ and integrate by parts over a space-time element $K$.
+\begin{align*}
+\LRp{\bfsigma,\bftau}-\LRp{\frac{1}{N}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\mu\bfu,\Div\bftau}-\LRa{2\mu\hat\bfu,\bftau\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu},\Gradxt\bfv}+\LRa{\hat\bft,\bfv}&=\LRp{\bff,\bfv}\,,
+\end{align*}
+where 
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu-\bfsigma}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\,.
+\end{aligned}
+\end{equation*}
+
+\subsection*{Linearization}
+The Jacobian is
+\begin{align*}
+&\LRp{\bfsigma,\bftau}-\LRp{\frac{1}{N}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\mu\bfu,\Div\bftau}-\LRa{2\mu\hat\bfu,\bftau\cdot\bfn_x}\\
+&-\LRp{\vecttwo{\rho\Delta\bfu\otimes\tilde\bfu+\rho\tilde\bfu\otimes\Delta\bfu-\bfsigma}{\rho\Delta\bfu},\Gradxt\bfv}+\LRa{\hat\bft,\bfv}\,,
+\end{align*}
+with residual
+\begin{align*}
+-\LRp{\rho\tilde\bfu\otimes\tilde\bfu,\Grad\bfv}-\LRp{\bff,\bfv}\,.
+\end{align*}
+
+\subsection*{Test Norm}
+Grouping terms:
+\begin{align*}
+\LRp{\bfsigma,\bftau}\\
++\LRp{\bfu}
+\end{align*}
+
+\section*{Compressible}
 Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
 \begin{align*}
   \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(N-3)}\sigma_{kk}\delta_{ij}\,.
