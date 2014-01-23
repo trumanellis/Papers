@@ -70,6 +70,7 @@ with residual
 \end{align*}
 
 \subsection*{Test Norm}
+For the following discussion, we drop $\rho$ (or assume $\rho=1$).
 Note that $\bfsigma^d=\bfsigma-\frac{1}{N}\trace(\bfsigma)\bfI$, and $\bfsigma^d\bftau=\bfsigma\bftau^d$.
 Also note that 
 \[
@@ -84,19 +85,22 @@ since
 Grouping terms:
 \begin{align*}
 \LRp{\bfsigma,\bftau^d+\Grad\bfv}\\
-\LRp{\bfu,2\mu\Div\bftau+\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)}\,.
+\LRp{\bfu,2\mu\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial v}{\partial t}}\,.
 \end{align*}
 Alternatively, if we divided the first equation by $2\mu$, we would have gotten:
 \begin{align*}
 \LRp{\bfsigma,\frac{1}{2\mu}\bftau^d+\Grad\bfv}\\
-\LRp{\bfu,\Div\bftau+\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)}\,.
+\LRp{\bfu,\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial v}{\partial t}}\,.
 \end{align*}
-So our graph norm based on the first version is
+So our graph norm based on the first version is defined by
 \begin{equation*}
-\norm{}
+\norm{\LRc{\bfv,\bftau}}^2=\norm{\bftau-\frac{1}{N}\trace(\bftau)\bfI+\Grad\bfv}^2
++\norm{2\mu\Div\bftau-\tilde\bfu\cdot\LRp{\Grad\bfv+(\bfv)^T}-\frac{\partial v}{\partial t}}^2
++\norm{v}^2\,.
 \end{equation*}
 
 \section*{Compressible}
+These ideas probably won't work for compressible flow, but this is retained for reference.
 Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
 \begin{align*}
   \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(N-3)}\sigma_{kk}\delta_{ij}\,.
