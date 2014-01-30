@@ -173,9 +173,9 @@ positive-definite DPG system into a saddle point problem.
 The discontinuous Petrov-Galerkin (DPG) method with optimal test functions has
 been under active development for convection-diffusion type systems
 \cite{DPG1, DPG2, DPG3, DPG5, DemkowiczHeuer, ChanHeuerThanhDemkowicz2012,
-MoroNguyenPeraire11}. In this paper, we develop a theory for the locally
+MoroNguyenPeraire11}. In this paper, we develop a theory for a locally
 conservative formulation of DPG for convection-diffusion type equations
-(including Burgers' Equation and Stokes flow) and supplement this with
+(including Burgers' equation and Stokes flow) and supplement this with
 extensive numerical results.
 
 \subsection{Importance of Local Conservation}
@@ -200,9 +200,9 @@ solution to a system of hyperbolic conservation laws will converge to the
 correct weak solution.
 
 The discontinuous Petrov-Galerkin finite element method has been described as
-least squares finite elements with a twist. The key difference is that least
+least squares finite elements with a twist. The key difference is that while least
 squares methods seek to minimize the residual of the solution in the $L^2$
-norm, while DPG seeks the minimization in a dual norm realized through the
+norm, DPG seeks the minimization in a dual norm realized through the
 inverse Riesz map. Exact mass conservation has been an issue that has long plagued
 least squares finite elements. Several approaches have been
 used to try to adress this. Bochev \etal\cite{Bochev2010} accomplish local
@@ -211,7 +211,7 @@ formulation.  Chang and Nelson\cite{ChangNelson1997} developed the
 \emph{restricted LSFEM}\cite{ChangNelson1997} by augmenting the least squares
 equations with Lagrange multipliers explicitly enforcing mass conservation
 element-wise. Our conservative formulation of DPG takes a similar approach and
-both methods share similar negative of transforming a minimization method to a
+both methods share a similar negative of transforming a minimization method to a
 saddle point problem. In the interest of crediting Chang and Nelson's
 restricted LSFEM, we call the following locally conservative DPG method the
 restricted DPG method (RDPG).
@@ -348,7 +348,7 @@ acoustics \cite{DemkowiczGopalakrishnanMugaZitelli12}, Stokes
 \cite{DPGStokes}) associate DPG with the so-called ``ultra-weak formulation.''
 We will follow the same derivation for the convection-diffusion equation, but
 we emphasize that other formulations are available (in particular, the
-Primal DPG\cite{PrimalDPG} method presents an alternative with
+primal DPG\cite{PrimalDPG} method presents an alternative with
 continuous trial functions). Thus, we seek field variables $u\in L^2(K)$ and
 $\bfsigma\in\mb{L^2}(K)$. Mathematically, this leaves their traces on element
 boundaries undefined, and in a manner similar to the hybridized discontinuous
@@ -374,7 +374,7 @@ for all $\bs v:=(v,\btau)\in
 
 % jesse robustness section
 
-We note that, for convection-diffusion problems, we are particularly
+We note that for convection-diffusion problems we are particularly
 interested in designing a \textit{robust} DPG method.  Specifically, we are
 interested in designing methods whose behavior does not change as the
 diffusion parameter $\epsilon$ becomes very small.  Naive Galerkin methods for
@@ -488,7 +488,7 @@ convection-diffusion, we get:
 %%%%%%%%%%% Begin Demkowicz Section %%%%%%%%%%%%
 \subsection{Stability Analysis}
 
-In the following analysis, we neglect the error due to the approximation of optimal test functions.
+In the following analysis we neglect the error due to the approximation of optimal test functions.
 We follow the classical Brezzi's theory \cite{Brezzi1974,DBB05} for an abstract
 mixed problem:
 \begin{equation}
@@ -745,7 +745,7 @@ The graph norm \cite{DPGOverview} is one of the most natural norms to consider
 as it is derived directly from the adjoint of the problem supplemented with
 (possibly scaled) $L^2$ field terms to upgrade it from a semi-norm.
 Chan \etal\cite{ChanHeuerThanhDemkowicz2012} derived a more robust alternative
-norm for convection diffusion (dubbed the robust norm). Werecently
+norm for convection diffusion (dubbed the robust norm). We recently
 developed a modification of the robust norm that produces better
 results in the presence of singularities; 
 for more details and motivation, see \cite{JesseDissertation}.
@@ -774,7 +774,7 @@ v,\nabla\cdot\delta\btau-\bbeta\cdot\nabla v)_K
 \quad\quad\forall\delta v\in\HOneK,\,\delta\btau\in\HdivK\,,
 \label{eq:localSolve}
 \end{align}
-where, typically, $\alpha=1$.
+where typically $\alpha=1$.
 
 With a locally conservative formulation, we can pass in local problem
 \eqref{eq:localSolve} with $\alpha\rightarrow0$. The fact that the test
@@ -798,7 +798,7 @@ where the $\frac{1}{\mu(K)}$ coefficient is an arbitrary scaling condition
 that doesn't make a difference mathematically, but can affect the condition
 number of the actual solve. In practice, we use $\frac{1}{\mu(K)^2}$
 since $\int_K\vdeltau$ and $\int_K\delta v$ both scale like
-$\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient more the analysis in the
+$\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient for the analysis in the
 next section.
 It is convenient to be able to take $\alpha\rightarrow0$ as we will see in
 some later numerical experiments.
@@ -832,7 +832,7 @@ where $\norm{(v,\btau)}_K$ is the norm derived from the inner product.
 Condition~\eqref{eq:robust_est2} comes out the same since
 $$|(
 (v,\btau),(1_K,{\bf0}))| =
-\sum_K|(1_K,v_K)|\leq\sum_K\mu(K)^{1/2}\norm{v,\btau}_K
+\sum_K|(1_K,v_K)|\leq\sum_K\mu(K)^{1/2}\norm{(v,\btau)}_K
 $$
 element-wise.
 
@@ -1015,7 +1015,7 @@ Here, $\bbeta=(0.5,1)^T/\sqrt{1.25}$, and we have a discontinuous source term
 such that $f=1$ when $y\ge2x$ and $f=-1$ when $y<2x$. We apply boundary
 conditions of $\hat t=0$ on the inflow and $\hat u=0$ on the outflow. Contrary
 to the other problems discussed, the solution for this problem does not range
-from 0 to one. Rather, the colorbar in Figure \ref{fig:discontinuous} is
+from zero to one. Rather, the colorbar in Figure \ref{fig:discontinuous} is
 scaled to  $[-1.110,0.889]$.
 
 \begin{figure}[p]
@@ -1093,12 +1093,12 @@ while adaptively refining toward a resolved solution. The extreme pressure
 gradient in the $r=0.9$ case obviously makes local conservation more
 challenging.
 
-We measure mass loss much more directly in these two Stokes problems. Because
+We measure mass loss more directly in these two Stokes problems. Because
 fluid enters and leaves the domain only through the inlet and outlet
 boundaries, we should be able to integrate the mass flux over any
 cross-section of the mesh and get the same value. Unfortunately, it is not
 mathematically well-defined to take line integrals of our field variables which only
-live in $L^2$. We can, however, integrate the trace and flux variables over element boundaries.
+live in $L^2$. We can however integrate the trace and flux variables over element boundaries.
 This carries the unfortunate limitation that we can only measure mass loss
 where there is a clear vertical mesh line. We therefore pick integration lines
 from the initial coarse mesh and measure the mass flux after each adaptive refinement
@@ -1327,16 +1327,16 @@ of the standard and restricted formulations is nearly identical once
 sufficiently resolved.
 
 % Overshoots/undershoots
-Another measure of solution quality is to look at the magnitude of overshoots
-and undershoots in the solution. In most of the convection-diffusion problems considered (barring
-the discontinuous source problem) the exact solution would range exactly
-between 0 and 1. In the resolved solutions, the divergence from these values
-would be negligible, but for the inner layer, in which $\epsilon=10^{-6}$, we
-get overshoots and undershoots along the separation line. For the
-standard formulation, the solution range for $u$ was $[-0.392,1.342]$,
-while the restricted solution range was $[-0.389,1.378]$. This difference is
-easily accounted for by the differences in refinement patterns between the two
-methods.
+% Another measure of solution quality is to look at the magnitude of overshoots
+% and undershoots in the solution. In most of the convection-diffusion problems considered (barring
+% the discontinuous source problem) the exact solution would range exactly
+% between 0 and 1. In the resolved solutions, the divergence from these values
+% would be negligible, but for the inner layer, in which $\epsilon=10^{-6}$, we
+% get overshoots and undershoots along the separation line. For the
+% standard formulation, the solution range for $u$ was $[-0.392,1.342]$,
+% while the restricted solution range was $[-0.389,1.378]$. This difference is
+% easily accounted for by the differences in refinement patterns between the two
+% methods.
 
 % Mesh refinements
 It is clear when comparing the refinement patterns that the two methods appear
@@ -1395,7 +1395,7 @@ problems is that it allows us to recover the essential flow features with much
 coarser meshes. On the $r=0.6$ cylinder problem, the peak velocity magnitude
 of the conservative solution is fairly close on the coarsest mesh, while the
 nonconservative solution severely underpredicts the peak. With the $r=0.9$
-cylinder, this problem is only exacerbated. After just one adaptive
+cylinder, this problem is only worse. After just one adaptive
 refinement, the conservative solution nails the peak velocity. The
 nonconservative solution is completely useless at this point. We see the same
 thing with the backward facing step problem. The conservative solution preserves
@@ -1429,6 +1429,6 @@ to preserve those.
 % worth it for DPG will come when we start doing more realistic problems.
 
 \bibliographystyle{plain}
-\bibliography{../DPG}
+\bibliography{../LCPaper}
 \end{document}
 
