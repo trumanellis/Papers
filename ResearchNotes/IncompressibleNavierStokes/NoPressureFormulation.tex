@@ -41,12 +41,12 @@ The space-time form of the Cauchy momentum equation is
 \end{equation*}
 Our incompressible Navier-Stokes sytem is then
 \begin{align*}
-\bfsigma-\frac{1}{N}\trace(\bfsigma)\bfI-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}&=0\\
+\frac{1}{\mu}\bfsigma-\frac{1}{N\mu}\trace(\bfsigma)\bfI-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}&=0\\
 \Divxt\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu}&=\bff\,.
 \end{align*}
 We multiply by test functions $\bftau$ (symmetric tensor) and $\bfv$ and integrate by parts over a space-time element $K$.
 \begin{align*}
-\LRp{\bfsigma,\bftau}-\LRp{\frac{1}{N}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\mu\bfu,\Div\bftau}-\LRa{2\mu\hat\bfu,\bftau\cdot\bfn_x}&=0\\
+\LRp{\frac{1}{\mu}\bfsigma,\bftau}-\LRp{\frac{1}{N\mu}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\bfu,\Div\bftau}-\LRa{2\hat\bfu,\bftau\cdot\bfn_x}&=0\\
 -\LRp{\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu},\Gradxt\bfv}+\LRa{\hat\bft,\bfv}&=\LRp{\bff,\bfv}\,,
 \end{align*}
 where 
@@ -61,11 +61,12 @@ where
 \subsection*{Linearization}
 The Jacobian is
 \begin{align*}
-&\LRp{\bfsigma,\bftau}-\LRp{\frac{1}{N}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\mu\bfu,\Div\bftau}-\LRa{2\mu\hat\bfu,\bftau\cdot\bfn_x}\\
+&\LRp{\frac{1}{\mu}\bfsigma,\bftau}-\LRp{\frac{1}{N\mu}\trace(\bfsigma)\bfI,\bftau}+\LRp{2\bfu,\Div\bftau}-\LRa{2\hat\bfu,\bftau\cdot\bfn_x}\\
 &-\LRp{\vecttwo{\rho\Delta\bfu\otimes\tilde\bfu+\rho\tilde\bfu\otimes\Delta\bfu-\bfsigma}{\rho\Delta\bfu},\Gradxt\bfv}+\LRa{\hat\bft,\bfv}\,,
 \end{align*}
 with residual
 \begin{align*}
+\LRp{2\tilde\bfu,\Div\bftau}
 -\LRp{\rho\tilde\bfu\otimes\tilde\bfu,\Grad\bfv}-\LRp{\bff,\bfv}\,.
 \end{align*}
 
@@ -84,19 +85,20 @@ since
 \end{align*}
 Grouping terms:
 \begin{align*}
-\LRp{\bfsigma,\bftau^d+\Grad\bfv}\\
-\LRp{\bfu,2\mu\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial v}{\partial t}}\,.
+\LRp{\bfsigma,\frac{1}{\nu}\bftau^d+\Grad\bfv}\\
+\LRp{\bfu,2\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial\bfv}{\partial t}}\,.
 \end{align*}
-Alternatively, if we divided the first equation by $2\mu$, we would have gotten:
-\begin{align*}
-\LRp{\bfsigma,\frac{1}{2\mu}\bftau^d+\Grad\bfv}\\
-\LRp{\bfu,\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial v}{\partial t}}\,.
-\end{align*}
-So our graph norm based on the first version is defined by
+% Alternatively, if we divided the first equation by $2\mu$, we would have gotten:
+% \begin{align*}
+% \LRp{\bfsigma,\frac{1}{2\mu}\bftau^d+\Grad\bfv}\\
+% \LRp{\bfu,\Div\bftau-\tilde\bfu\cdot(\Grad\bfv+(\Grad\bfv)^T)-\frac{\partial v}{\partial t}}\,.
+% \end{align*}
+% So our graph norm based on the first version is defined by
 \begin{equation*}
-\norm{\LRc{\bfv,\bftau}}^2=\norm{\bftau-\frac{1}{N}\trace(\bftau)\bfI+\Grad\bfv}^2
-+\norm{2\mu\Div\bftau-\tilde\bfu\cdot\LRp{\Grad\bfv+(\bfv)^T}-\frac{\partial v}{\partial t}}^2
-+\norm{v}^2\,.
+\norm{\LRc{\bfv,\bftau}}^2=\norm{\frac{1}{\nu}\bftau-\frac{1}{N\nu}\trace(\bftau)\bfI+\Grad\bfv}^2
++\norm{2\Div\bftau-\tilde\bfu\cdot\LRp{\Grad\bfv+(\Grad\bfv)^T}-\frac{\partial\bfv}{\partial t}}^2
++\norm{\bfv}^2
++\norm{\bftau}^2\,.
 \end{equation*}
 
 \section*{Compressible}
