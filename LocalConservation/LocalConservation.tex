@@ -173,7 +173,7 @@ positive-definite DPG system into a saddle point problem.
 The discontinuous Petrov-Galerkin (DPG) method with optimal test functions has
 been under active development for convection-diffusion type systems
 \cite{DPG1, DPG2, DPG3, DPG5, DemkowiczHeuer, ChanHeuerThanhDemkowicz2012,
-MoroNguyenPeraire11}. In this paper, we develop a theory for a locally
+MoroNguyenPeraire11, Chan2013DPG, NateDissertation}. In this paper, we develop a theory for a locally
 conservative formulation of DPG for convection-diffusion type equations
 (including Burgers' equation and Stokes flow) and supplement this with
 extensive numerical results.
@@ -195,9 +195,9 @@ entropy, for example) is in many respects just as flawed as an unstable
 solution.
 \end{quote}
 There are also some mathematically attractive reasons to pursue local
-conservation. The Lax-Wendroff theorem guarantees that a convergent numerical
-solution to a system of hyperbolic conservation laws will converge to the
-correct weak solution.
+conservation. The Lax-Wendroff theorem guarantees that a conservative numerical
+solution to a system of hyperbolic conservation laws will converge to a
+weak solution.
 
 The discontinuous Petrov-Galerkin finite element method has been described as
 least squares finite elements with a twist. The key difference is that while least
@@ -273,7 +273,8 @@ dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hen
 
 No assumptions have been made so far on the definition of the inner product on
 $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
-between a solid DPG method and one that suffers from robustness issues.
+between a solid DPG method and one that suffers from robustness issues 
+(a robust technique remain stable as the singularly perturbed parameter approaches ``extreme'' values).
 
 \section{Element Conservative Convection-Diffusion}
 We now proceed to develop a locally conservative formulation of DPG for
@@ -489,6 +490,7 @@ convection-diffusion, we get:
 \subsection{Stability Analysis}
 
 In the following analysis we neglect the error due to the approximation of optimal test functions.
+See \cite{GopalakrishnanQiu11} for a defense of this assumption.
 We follow the classical Brezzi's theory \cite{Brezzi1974,DBB05} for an abstract
 mixed problem:
 \begin{equation}
@@ -606,7 +608,7 @@ $\sup_{\bfv}\frac{|b(\bfu,\bfv)|}{||\bfv||}\geq\gamma||\bfu||$ and
 $||T\bfu||_V=||R_V^{-1}B\bfu||_V=||B\bfu||_{V'}\geq\gamma||u||$.
 
 With both discrete inf-sup constants in place, we have the standard result: the FE error
-is bounded by the best approximation error. Notice that the exact Lagrange multipliers
+is bounded by the best approximation error in the constrained space. Notice that the exact Lagrange multipliers
 are zero, so the best approximation error involves only solution $(u,\bfsig,\hat{u},\hat{t})$.
 
 
@@ -1252,7 +1254,7 @@ and zero velocity on all other boundaries. In this problem, we solve with
 fourth order field and flux variables, fifth order traces, and sixth order
 test functions.
 
-\begin{figure}[p]
+\begin{figure}[raham!h]
 \centering
 \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.3cm,y=1.3cm]
 \clip(-0.5,-0.3) rectangle (10.67,5);
