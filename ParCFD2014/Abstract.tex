@@ -1,0 +1,54 @@
+\documentclass[letterpaper]{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{authblk}
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{morefloats}
+
+\title{Space-Time DPG: Designing a Method for Massively Parallel CFD}
+\author[1]{Truman E. Ellis}
+\author[1]{Leszek F. Demkowicz}
+\author[2]{Nathan V. Roberts}
+\author[3]{Jesse L. Chan}
+\affil[1]{Institute for Computational Engineering and Sciences, University of Texas at Austin}
+
+\affil[2]{Argonne Leadership Computing Facility, Argonne National Laboratory}
+
+\affil[3]{Computational and Applied Math, Rice University}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
+DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
+\emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
+that indicates error in the energy norm.
+
+Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
+Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
+numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
+An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory requirements.
+These are all observed properties of the discontinuous Petrov-Galerkin finite element method.
+Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
+Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Furthermore, static condensation allows the global solve to concern only the \emph{trace} degrees of freedom; 
+trace variables are defined on the mesh skeleton.  
+This allows significant reduction of the cost of the global solve.  
+The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
+
+We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
+in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
+and a rewrite of Camellia for higher dimensions is currently in progress.
+\end{abstract}
+
+\bibliographystyle{plain}
+\bibliography{../LCPaper}
+\end{document}
+
