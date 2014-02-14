@@ -80,9 +80,9 @@ then integrate by parts over each space-time element $K$:
 \begin{subequations}
 \label{eq:compressibleNSBF}
 \begin{align}
-	\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\mathbb{S}_{ii}}
-	+\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
-	\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	\LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{C_p\frac{\mu}{Pr}\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
 	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
@@ -107,7 +107,7 @@ This is a much more complicated system of equations than we had for the space-ti
 Test function $\bftau\in\HdivK$ where the divergence is taken only over spatial dimensions, $v_c,v_e\in\HOneK$, and $\bfv_m\in\HOneVecK$.
 These are all familiar spaces from our work with the heat equation.
 Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ components must be at least in $L^2(K)$, $\Div\mathbb{S}\in\LVecK$, and
-$\Grad\mathbb{S}_{ii}\in\LVecK$.
+$\Grad\trace{\mathbb{S}}\in\LVecK$.
 In practice, we will probably just seek each component in $\HOneK$.
 
 %   /$$       /$$                                         /$$                       /$$     /$$                    
@@ -146,17 +146,17 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 \begin{equation}
 \label{eq:compressibleJacobian}
 \begin{aligned}
-	&\LRp{\Delta\mathbb{D},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\mathbb{S}_{ii}}
-	+\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
+	&\LRp{\Delta\mathbb{D},\mathbb{S}}+\LRp{2\mu\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
 	%
-	&+\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
+	&+\LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}\Delta T,\Div\bftau}+\LRa{C_p\frac{\mu}{Pr}\hat T,\tau_n}\\
 	%
 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
 	{\Delta\rho},\Gradxt v_c}
 	+\LRa{\hat t_c,v_c}\\
 	%
 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-	+\LRp{\Delta\rho\frac{R}{C_v}\tilde e+\tilde\rho RT}\bfI-\Delta\mathbb{D}}
+	+\LRp{\Delta\rho R\tilde T+\tilde\rho R\Delta T}\bfI-\Delta\mathbb{D}}
 	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
 	+\LRa{\hat\bft_m,\bfv_m}\\
 	%
@@ -173,7 +173,7 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 The residual, $R(\tilde U)$, is then
 \begin{equation}
 \begin{aligned}
-	&\LRp{\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\mathbb{S}_{ii}}\\
+	&\LRp{\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\mu\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
 	&-\LRp{C_p\frac{\mu}{Pr}\tilde T,\Div\bftau}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
@@ -196,6 +196,118 @@ The residual, $R(\tilde U)$, is then
 %                                                                                            
 %      
 \subsubsection{Test Norm}
+% We start by multiplying the mass, momentum and energy equations in \eqref{eq:compressibleJacobian} by -1. 
+We group terms in \eqref{eq:compressibleJacobian} by trial variable to get
+\begin{equation}
+\begin{aligned}
+&\LRp{\Delta\mathbb{D},\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}\\
++&\LRp{\bfq,\bftau-\Grad v_e}\\
++&\left(\Delta\rho,-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}
+-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right)\\
++&\left(\Delta\bfu,2\mu\Div\mathbb{S}-\frac{2\mu}{3}\Grad\trace{\mathbb{S}}
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T_\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right)\\
++&\left(\Delta T,-C_p\frac{\mu}{Pr}\Div\bftau
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right)\\
++&\LRp{\hat\bfu,-2\mu\mathbb{S}\bfn_x+\frac{2\mu}{3}\mathbb{S}\bfn_x}\\
++&\LRp{\hat T,C_p\frac{\mu}{Pr}\tau_n}\\
++&\LRp{\hat t_c,v_c}\\
++&\LRp{\hat\bft_m,\bfv_m}\\
++&\LRp{\hat t_e,v_e}\,.
+\end{aligned}	
+\end{equation}
+
+Then the graph norm would be defined by
+\begin{equation}
+\begin{aligned}
+&\norm{\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
++&\norm{\bftau-\Grad v_e}^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|2\mu\Div\mathbb{S}-\frac{2\mu}{3}\Grad\trace{\mathbb{S}}
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|-C_p\frac{\mu}{Pr}\Div\bftau
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|\,.
+\end{aligned}
+\end{equation}
+
+An alternative norm to consider would be the graph norm defined on the convective terms plus the (scaled) mathematician's norm on the viscous terms:
+\begin{equation}
+\begin{aligned}
+% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
+% +&\norm{\Grad v_e}^2\\
+% +&\left\|
+% \tilde\bfu\cdot\Grad v_c+\frac{\partial v_c}{\partial t}+\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% +R\tilde T\Div\bfv_m+\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.+C_v\tilde T\tilde\bfu\cdot\Grad v_e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% +R\tilde T\tilde\bfu\Grad v_e
+% +C_v\tilde T\frac{\partial v_e}{\partial t}+\frac{1}{2}\tilde\bfu\cdot\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% +\tilde\rho\Grad v_c
+% +\tilde\rho\tilde\bfu\cdot\Grad\bfv_m+\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% +\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% +C_v\tilde\rho\tilde T\Grad v_e\right.\\
+% &\left.
+% +\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% +\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% +\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% +R\tilde\rho\tilde T_\Grad v_e
+% -\tilde{\mathbb{D}}:\Grad v_e
+% +\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% +\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% +R\tilde\rho\Div\bfv_m
+% +C_v\tilde\rho\tilde\bfu\Grad v_e
+% +R\tilde\rho\tilde\bfu\Grad v_e
+% +C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\norm{\mathbb{S}}^2+\norm{\Grad\trace{\mathbb{S}}}^2+\norm{\Div\mathbb{S}}^2\\
+% +&\norm{\bftau}^2+\norm{\Div\bftau}^2\,.
+\end{aligned}
+\end{equation}
 
 %   /$$$$$$$                      /$$       /$$                                  
 %  | $$__  $$                    | $$      | $$                                  
