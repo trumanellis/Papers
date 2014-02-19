@@ -6,6 +6,7 @@
 \usepackage{textpos}
 \usepackage{pgf,tikz}
 \usepackage{graphicx}
+\usepackage{forloop}
 
 \definecolor{utorange}{RGB}{203,96,21}
 \definecolor{utblack}{RGB}{99,102,106}
@@ -125,8 +126,34 @@ Leszek Demkowicz, Nathan Roberts, Jesse Chan, Robert Moser
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Motivation}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\framesubtitle{DPG Summary}  %% needed for proper positioning of the logo ...
+Overview of Features
+\begin{itemize}
+\item Robust for singularly perturbed problems
+\item Stable in the preasymptotic regime
+\item Designed for adaptive mesh refinement
+\end{itemize}
+\bigskip
 
+DPG is a minimum residual method:
+\[
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
+\]
+\vspace{-1em}
+\[
+\scalebox{1.8}{\ensuremath{\Updownarrow}}
+\]
+\vspace{-1em}
+\[
+b(u_h,R_V^{-1}B\delta u_h)
+=l(R_V^{-1}B\delta u_h)
+\quad\forall\delta u_h\in U_h
+\]
+\vspace{0ex}
+
+where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
+\textcolor{utblack}{\textbf{optimal test functions}}.
 
 \end{frame}
 
@@ -146,7 +173,7 @@ Leszek Demkowicz, Nathan Roberts, Jesse Chan, Robert Moser
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Heat Equation}
-\framesubtitle{The simplest nontrivial space-time problem}  %% needed for proper positioning of the logo ...
+\framesubtitle{Simplest Nontrivial Space-Time Problem}  %% needed for proper positioning of the logo ...
 
 Equation is elliptic in space, but hyperbolic in time.
 \begin{equation*}
@@ -174,7 +201,7 @@ We can rewrite this in terms of a space-time divergence.
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Heat Equation}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
 \vspace{-2ex}
 Multiply by test function and integrate by parts over space-time element K.
 \begin{equation*}
@@ -247,8 +274,8 @@ where
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Pulsed Source Problem}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\frametitle{Heat equation}
+\framesubtitle{Pulsed Source Problem}  %% needed for proper positioning of the logo ...
 \vspace{-3ex}
 \begin{columns}[t] % contents are top vertically aligned
 \begin{column}[T]{0.3\textwidth} % each column can also be its own environment
@@ -298,7 +325,7 @@ where
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\framesubtitle{Strong Form}  %% needed for proper positioning of the logo ...
 The compressible Navier-Stokes equations are
 \begin{align*}
 \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
@@ -322,7 +349,7 @@ p=\rho R T\,.
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\framesubtitle{First Order Space-Time Form}  %% needed for proper positioning of the logo ...
 Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$:
 \begin{align*}
   \mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
@@ -337,7 +364,7 @@ Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
 Multiplying by test functions and integrating by parts:
 % \scalebox{0.9}{
 {
@@ -354,6 +381,71 @@ Multiplying by test functions and integrating by parts:
 }
 % }
 where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Flux and Trace Variables}  %% needed for proper positioning of the logo ...
+Spatial traces and fluxes are defined as follows:
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat T&=\trace(T)\\
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
+&\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
+\end{equation*}
+\begin{block}{Linearization}
+Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to linearize in $\rho$, $\bfu$, $T$, and $\mathbb{D}$ 
+(Jacobian and residual not shown here).
+\end{block}
+\end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Linearization: Jacobian}  %% needed for proper positioning of the logo ...
+% \end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube}  %% needed for proper positioning of the logo ...
+% \foreach \n in {1,...,15}
+% {
+% \only<\n>
+% {
+% \vspace{-2ex}
+% \begin{figure}[ht]
+% \centering
+
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod1e-5/den\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod1e-5/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod1e-5/pres\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=1\textwidth]{Sod1e-5/mesh\n.png}
+% \end{subfigure}
+% \end{figure}
+% }
+% }
 \end{frame}
 
 \end{document}
