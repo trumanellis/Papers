@@ -120,8 +120,39 @@ Leszek Demkowicz, Nathan Roberts, Jesse Chan, Robert Moser
     \end{textblock*}
   }
 
-
+%   /$$      /$$             /$$     /$$                        /$$     /$$                    
+%  | $$$    /$$$            | $$    |__/                       | $$    |__/                    
+%  | $$$$  /$$$$  /$$$$$$  /$$$$$$   /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$ $$/$$ $$ /$$__  $$|_  $$_/  | $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  $$$| $$| $$  \ $$  | $$    | $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$\  $ | $$| $$  | $$  | $$ /$$| $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$ \/  | $$|  $$$$$$/  |  $$$$/| $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                              
+%                                                                                              
+%  
 \section{Introduction}
+
+% ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Motivation}
+% \framesubtitle{DPG for Massively Parallel CFD}  %% needed for proper positioning of the logo ...
+% Pre-asymptotic stability and automatic adaptivity make a powerful synthesis.
+% \begin{itemize}
+%   \item Initial mesh design is a time consuming and expensive part of CFD.
+%   \item Pre-asymptotic stability allows a DPG simulation to begin on the coarsest possible mesh.
+%   \item Many methods become unstable in the pre-asymptotic regime.
+%   \item Human intervention to correct a failed massively parallel simulation can be very costly.
+%   \item Error indicator function indicates targets most important areas for refinement.
+%   \item Provably robust for singularly perturbed problems.
+% \end{itemize}
+
+% \vspace{2ex}
+% Space-time DPG extends these benefits to transient problems.
+% \begin{itemize}
+%   \item Localizes temporal adaptivity similar to spatial adaptivity.
+% \end{itemize}
+% \end{frame}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -132,6 +163,7 @@ Overview of Features
 \item Robust for singularly perturbed problems
 \item Stable in the preasymptotic regime
 \item Designed for adaptive mesh refinement
+% \item Ideal for high-performance computing
 \end{itemize}
 \bigskip
 
@@ -150,11 +182,17 @@ b(u_h,R_V^{-1}B\delta u_h)
 =l(R_V^{-1}B\delta u_h)
 \quad\forall\delta u_h\in U_h
 \]
-\vspace{0ex}
+\vspace{-2ex}
 
 where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
 \textcolor{utblack}{\textbf{optimal test functions}}.
 
+% \vspace{4ex}
+% For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
+% \[
+% \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
+% \]
+% where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
 \end{frame}
 
 %   /$$   /$$                       /$$    
@@ -276,11 +314,18 @@ where
 \begin{frame}[t]
 \frametitle{Heat equation}
 \framesubtitle{Pulsed Source Problem}  %% needed for proper positioning of the logo ...
-\vspace{-3ex}
+\vspace{-1ex}
 \begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.3\textwidth} % each column can also be its own environment
+\begin{column}[c]{0.3\textwidth} % each column can also be its own environment
+% \vspace{3ex}
+\begin{itemize}
+  \item Initial condition $u=0$.
+  \item Apply unit source $(x,t)\in[0.25,0.75]^2$.
+  \item Should see no temporal diffusion.
+  \item Space-time adaptivity picks up areas of rapid change.
+\end{itemize}
 \end{column}
-\begin{column}[T]{0.7\textwidth} % each column can also be its own environment
+\begin{column}[c]{0.7\textwidth} % each column can also be its own environment
 \begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
@@ -419,33 +464,54 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
 \framesubtitle{Sod Shock Tube}  %% needed for proper positioning of the logo ...
-% \foreach \n in {1,...,15}
-% {
-% \only<\n>
-% {
-% \vspace{-2ex}
-% \begin{figure}[ht]
-% \centering
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
 
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{Sod1e-5/den\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{Sod1e-5/vel\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{Sod1e-5/pres\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[width=1\textwidth]{Sod1e-5/mesh\n.png}
-% \end{subfigure}
-% \end{figure}
-% }
-% }
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod1e-5/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod1e-5/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod1e-5/pres\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{Sod1e-5/mesh\n.png}
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Conclusions and Future Work}
+\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+Conclusions
+\begin{itemize}
+  \item A problem in conservation form can be transformed to a space-time divergence.
+  \item Fluxes change character from spatial to temporal boundaries.
+  \item Traces are only defined on spatial boundaries.
+\end{itemize}
+Future Work
+\begin{itemize}
+  \item Proof of robustness for convection-diffusion.
+  \item Analysis of robust test norms.
+  \item Time slabs will reduce the simulation cost.
+  \item Two and three dimensions for more realistic problems.
+  \item Iterative solvers for parallel scalability.
+\end{itemize}
 \end{frame}
 
 \end{document}
