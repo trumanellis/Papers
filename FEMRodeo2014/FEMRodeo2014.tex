@@ -7,6 +7,7 @@
 \usepackage{pgf,tikz}
 \usepackage{graphicx}
 \usepackage{forloop}
+\usepackage{comment}
 
 \definecolor{utorange}{RGB}{203,96,21}
 \definecolor{utblack}{RGB}{99,102,106}
@@ -154,6 +155,16 @@ Leszek Demkowicz, Nathan Roberts, Jesse Chan, Robert Moser
 % \end{itemize}
 % \end{frame}
 
+\begin{comment}
+Good afternoon. Looks like I'm the only thing between you and your evening, so I'm going to try to keep this brief.
+My name is Truman Ellis, and I've been working with Dr. Demkowicz on DPG for fluid problems.
+At past FEM rodeos I talked about some of our work on a locally conservative formulation of DPG. 
+This talk is going to be about some of our preliminary results on space-time DPG for transient CFD problems.
+The ultimate application of course is that we think this space-time DPG formulation will be ideal for
+high-performance computing on future architectures.
+I'm not going to explicitly address the parallel programming side in this talk, but it will be implicit in the motivations
+behind the design of the method.
+\end{comment}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Motivation}
@@ -194,6 +205,21 @@ where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
 % \]
 % where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
 \end{frame}
+\begin{comment}
+Before I begin, we'll start with an ultra-brief summary of DPG and why we might 
+want to apply it to problems in CFD.
+For one, DPG has proven very robust in the face of singularly
+perturbed problems (think high Reynolds number flows).
+You do not need a domain expert to craft well designed meshes for each new
+problem. We are mathematically guaranteed to remain stable under very coarse
+meshes while adaptively refining toward a solution.
+
+Mathematically, DPG can be characterized as a minimum
+residual method. This means that through the choice of specific optimal test
+functions we automatically minimize the residual in the dual norm of a
+Hilbert space V. We also have a well-defined process to generate the optimal
+test functions which is computationally feasible.
+\end{comment}
 
 %   /$$   /$$                       /$$    
 %  | $$  | $$                      | $$    
@@ -233,8 +259,13 @@ We can rewrite this in terms of a space-time divergence.
 \Divxt\vecttwo{-\bfsigma}{u}&=f
 \end{aligned}
 \end{equation*}
-
 \end{frame}
+\begin{comment}
+Without further ado, we'll jump into the simplest representative spatial-temporal problem: the heat equation.
+The interesting thing about this equation is that it is elliptic in space, but hyperbolic in time.
+We can split this into two first order equations: conservation of energy and Fourier's law.
+Notice that we can rewrite this as a constitutive equation and a space-time divergence.
+\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -306,9 +337,16 @@ where
 \end{block}
 \end{column}
 \end{columns}
-
-
 \end{frame}
+\begin{comment}
+We then follow standard DPG procedure and multiply by test functions tau and v 
+where tau is vector valued with dimension equal to the spatial dimension.
+Then we integrate each equation by parts.
+But the first equation is only integrated over spatial dimensions, so the resulting trace term is limited
+to boundaries with a nonzero spatial normal component.
+The integration by parts in space-time yields a flux that is defined on all boundaries, but with different
+character across spatial and temporal boundaries.
+\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -320,7 +358,7 @@ where
 % \vspace{3ex}
 \begin{itemize}
   \item Initial condition $u=0$.
-  \item Apply unit source $(x,t)\in[0.25,0.75]^2$.
+  \item Apply unit source $x\in[3/8,5/8]$,\\$t\in[1/4,1/2]$.
   \item Should see no temporal diffusion.
   \item Space-time adaptivity picks up areas of rapid change.
 \end{itemize}
@@ -353,6 +391,15 @@ where
 \end{column}
 \end{columns}
 \end{frame}
+\begin{comment}
+Here we have a very contrived example problem. 
+We start with a completely zero initial condition and then turn on a unit source from t = 1/4 to t=1/2,
+then watch the inputted heat diffuse over the rest of the time interval.
+The key thing to watch for is making sure we don't get any heat bleeding backwards in time. 
+Indeed we get  very clean start at t=1/4.
+Notice also how u hat exists only on vertical boundaries, while the flux lives on the entire mesh skeleton.
+We also see how the method naturally picks on on areas of rapid temporal or spatial changes and adapts to resolve them.
+\end{comment}
 
 %    /$$$$$$                                                                            /$$ /$$       /$$          
 %   /$$__  $$                                                                          |__/| $$      | $$          
@@ -390,6 +437,10 @@ and (assuming an ideal gas EOS)
 p=\rho R T\,.
 \]
 \end{frame}
+\begin{comment}
+Now we make a huge jump to the compressible Navier-Stokes equations, but all of the same ideas carry over.
+We write our conservation equations in strong form with constitutive laws for the deviatoric stress tensor, heat flux, and pressure.
+\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -404,6 +455,10 @@ Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\
   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
 \end{align*}
 \end{frame}
+\begin{comment}
+We follow the same course as we did for the heat equation and write this as a first order system of equations
+with the conservation laws in space-time divergence form.
+\end{comment}
 
 
 % ------------------------------------------------------------
@@ -427,6 +482,11 @@ Multiplying by test functions and integrating by parts:
 % }
 where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
 \end{frame}
+\begin{comment}
+Again we multiply by test functions and integrate by parts. In this case S is a symmetric tensor valued test function,
+tau is a vector valued test function of spatial dimension, v_c and v_e are scalar valued, and v_m is vector valued matching the spatial dimension.
+We've also introduced spatial traces u hat and T had and fluxes for each conservation law.
+\end{comment}
 
 
 % ------------------------------------------------------------
@@ -451,19 +511,72 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 (Jacobian and residual not shown here).
 \end{block}
 \end{frame}
+\begin{comment}
+The above integration by parts gives the following definitions for the spatial traces and fluxes.
+Notice the analog to the heat equation where the fluxes change nature depending on whether they are on temporal or spatial boundaries.
 
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Linearization: Jacobian}  %% needed for proper positioning of the logo ...
-% \end{frame}
+In the above bilinear form, the fluxes, traces, and heat flux are linear.
+All of the other variables are involved in nonlinearities and will need to be linearized and solved via a Gauss-Newton iteration.
+\end{comment}
 
 
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
-\framesubtitle{Sod Shock Tube}  %% needed for proper positioning of the logo ...
+\framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
+The test norm is
+{
+\small
+\begin{align*}
+&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\|\frac{1}{\mu}\mathbb{S}\|^2
++\|\frac{Pr}{C_p\mu}\bftau\|^2
++\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
+\,.
+\end{align*}
+}
+\end{frame}
+\begin{comment}
+Choice of test norm can be one of the most influential factors in the success of a particular DPG method.
+For steady Navier-Stokes we developed a robust test norm by analogy to steady convection-diffusion.
+We need to perform a similar analysis for space-time convection-diffusion, but we've found that the following norm
+for Navier-Stokes seems to work better than the standard graph norm.
+Essentially, we've taken the standard graph norm based off the adjoint equation and decoupled the Eulerian and viscous terms.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
 \foreach \n in {1,...,15}
 {
 \only<\n>
@@ -492,6 +605,19 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 }
 }
 \end{frame}
+\begin{comment}
+We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
+space-time elements. 
+Traditionally the Sod shock tube is defined for the Euler equations, 
+but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
+We instead just solve the problem with a small physical viscosity of order 10^-5.
+You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
+Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
+resolve the flow features.
+We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
+You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
+With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+\end{comment}
 
 
 % ------------------------------------------------------------
@@ -504,14 +630,33 @@ Conclusions
   \item Fluxes change character from spatial to temporal boundaries.
   \item Traces are only defined on spatial boundaries.
 \end{itemize}
+\bigskip
+
 Future Work
 \begin{itemize}
   \item Proof of robustness for convection-diffusion.
   \item Analysis of robust test norms.
   \item Time slabs will reduce the simulation cost.
   \item Two and three dimensions for more realistic problems.
+  \item Incompressible Navier-Stokes.
   \item Iterative solvers for parallel scalability.
 \end{itemize}
 \end{frame}
+\begin{comment}
+It is extremely helpful to be able to write the governing equations in terms of a space-time divergence
+since that frames things in a way that we are familiar with from steady DPG.
+The oddity is that this leaves traces on temporal edges undefined, so our code needs to know not to put degrees
+of freedom there. 
+
+These are all very preliminary results, but they give an indication of what we can expect in the future.
+We still need to analyze the space-time convection-diffusion equation and develop robust norms in this context
+before we can extend the ideas to Navier-Stokes.
+We also have some rough work done on time-slabs which should improve the computational efficiency.
+Obviously, we are going to need to move to two and three dimensional problems in order to simulate anything of interest.
+My primary target is actually incompressible Navier-Stokes, which should be easier since we don't have to deal with shocks.
+But in 1D incompressible gives absolutely trivial solutions, so we didn't pursue it here.
+I don't know if we will get to this during my dissertation, but if we really want a scalable method, we need to address the 
+lack of preconditioners for DPG and develop a decent iterative solver.
+\end{comment}
 
 \end{document}
