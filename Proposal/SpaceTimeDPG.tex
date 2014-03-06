@@ -314,30 +314,30 @@ For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse oc
 %                                 /$$  \ $$                              
 %                                |  $$$$$$/                              
 %                                 \______/   
-\section{Viscous Burgers' Equation}
-We consider the viscous Burgers' equation as a simple nonlinear parabolic problem:
-\begin{equation*}
-	\pt{u}+u\pd{u}{x}-\epsilon\ppd{u}{x}=0\,,
-\end{equation*}
-where $u$ is the quantity of interest and $\epsilon$ is the diffusion length scale.
-Again, this can be put as a first order system in space-time:
-\begin{equation*}
-\begin{aligned}
-	\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
-	\Divxt\vecttwo{u^2/2-\bfsigma}{u}&=0\,.
-\end{aligned}
-\end{equation*}
+% \section{Viscous Burgers' Equation}
+% We consider the viscous Burgers' equation as a simple nonlinear parabolic problem:
+% \begin{equation*}
+% 	\pt{u}+u\pd{u}{x}-\epsilon\ppd{u}{x}=0\,,
+% \end{equation*}
+% where $u$ is the quantity of interest and $\epsilon$ is the diffusion length scale.
+% Again, this can be put as a first order system in space-time:
+% \begin{equation*}
+% \begin{aligned}
+% 	\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+% 	\Divxt\vecttwo{u^2/2-\bfsigma}{u}&=0\,.
+% \end{aligned}
+% \end{equation*}
 
-\subsection{Derivation}
-The process is starting to get repetitive, but we again multiply by test functions and integrate by parts to get the following nonlinear system:
-\begin{equation*}
-\begin{aligned}
-	\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
-	-\LRp{\vecttwo{u^2/2-\bfsigma}{u},\Gradxt v}+\LRa{\hat t, v}&=0\,.
-\end{aligned}
-\end{equation*}
+% \subsection{Derivation}
+% The process is starting to get repetitive, but we again multiply by test functions and integrate by parts to get the following nonlinear system:
+% \begin{equation*}
+% \begin{aligned}
+% 	\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+% 	-\LRp{\vecttwo{u^2/2-\bfsigma}{u},\Gradxt v}+\LRa{\hat t, v}&=0\,.
+% \end{aligned}
+% \end{equation*}
 
-\subsection{Problems considered}
+% \subsection{Problems considered}
 
 %    /$$$$$$                                                                            /$$ /$$       /$$          
 %   /$$__  $$                                                                          |__/| $$      | $$          
@@ -351,6 +351,8 @@ The process is starting to get repetitive, but we again multiply by test functio
 %                                    | $$                                                                          
 %                                    |__/    
 \section{Transient Compressible Navier-Stokes}
+We make a large jump from convection-diffusion to the compressible Navier-Stokes equations.
+The following discussion holds in any dimension, but the provided results are only for spatially 1D flows.
 The compressible Navier-Stokes equations are
 \begin{align}
 \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
@@ -470,11 +472,8 @@ Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde
 \begin{equation}
 	R'(\tilde U)\Delta U=-R(\tilde U)\,.
 \end{equation}
+This is an instance of a Gauss-Newton nonlinear solve.
 We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
-% Note that we can exclude our traces and fluxes from the residual since these unknowns are only involved in linear terms.
-% As such, we don't update these variables each iteration based on the previous iteration.
-% Instead, for example, we consider $\tilde{\hat\bfu}=0$, and let $\hat\bfu=\Delta\hat\bfu$ after each iteration.
-% To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
 The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 \begin{equation}
 \label{eq:compressibleJacobian}
@@ -606,8 +605,165 @@ Then the graph norm would be defined by
 +&\alpha_c\norm{v_c}^2
 +\alpha_m\norm{\bfv_m}^2
 +\alpha_e\norm{v_e}^2
++\alpha_s\norm{\mathbb{S}}
++\alpha_f\norm{\bftau}
 \,,
 \end{aligned}
 \end{equation}
-where $\alpha_c$, $\alpha_m$, and $\alpha_e$ are scaling constants.
+where $\alpha_c$, $\alpha_m$, $\alpha_e$, $\alpha_s$, and $\alpha_f$ are scaling constants, usually one.
+
+Unfortunately, the graph norm is known to not be robust for steady convection-diffusion or Navier-Stokes,
+and we saw that non-robustness manifest when we tried to use this norm for transient simulations as well.
+For steady state DPG, we developed a robust test norm for convection-diffusion and drew analogies to create 
+a robust norm for Navier-Stokes.
+A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
+so we are on shakier footing developing a robust norm for transient Navier-Stokes.
+Nevertheless, we can make some guesses about how to modify the test norm in order to obtain some preliminary results.
+The graph norm has proven to be sufficient for simulations of pure convection. 
+So an obvious first guess might be to take the graph norm on the convective quantities and decouple the viscous terms.
+Indeed, this selection proved to be more robust for the test problems considered in the next section.
+This modified graph norm is then:
+\begin{equation}
+\begin{aligned}
+&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
++&\norm{-\Grad v_e}^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|\\
++&\frac{1}{\mu}\norm{\mathbb{S}}
++2\norm{\Div\mathbb{S}-\frac{1}{3}\Grad\trace{\mathbb{S}}}
++\frac{Pr}{c_p\mu}\bftau\norm{\bftau}
++\norm{\Div\bftau}\\
++&\norm{v_c}^2
++\norm{\bfv_m}^2
++\norm{v_e}^2
+\,.
+\end{aligned}
+\end{equation}
+From a number of numerical tests, it appears that this norm is not completely robust, but it does seem to perform somewhat better
+than the standard graph norm.
+
+%   /$$   /$$                                             /$$                     /$$
+%  | $$$ | $$                                            |__/                    | $$
+%  | $$$$| $$ /$$   /$$ /$$$$$$/$$$$   /$$$$$$   /$$$$$$  /$$  /$$$$$$$  /$$$$$$ | $$
+%  | $$ $$ $$| $$  | $$| $$_  $$_  $$ /$$__  $$ /$$__  $$| $$ /$$_____/ |____  $$| $$
+%  | $$  $$$$| $$  | $$| $$ \ $$ \ $$| $$$$$$$$| $$  \__/| $$| $$        /$$$$$$$| $$
+%  | $$\  $$$| $$  | $$| $$ | $$ | $$| $$_____/| $$      | $$| $$       /$$__  $$| $$
+%  | $$ \  $$|  $$$$$$/| $$ | $$ | $$|  $$$$$$$| $$      | $$|  $$$$$$$|  $$$$$$$| $$
+%  |__/  \__/ \______/ |__/ |__/ |__/ \_______/|__/      |__/ \_______/ \_______/|__/
+%                                                                                    
+%                                                                                    
+% 
+\subsection{Numerical Results}
+
+% \newgeometry{textheight=10in}
+\begin{figure}[p]
+\centering
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den1.pdf}
+\caption{Density on initial mesh}
+\label{fig:spaceTimeCNS_den0}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den8.pdf}
+\caption{Density after 7 refinements}
+\label{fig:spaceTimeCNS_den7}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den15.pdf}
+\caption{Density after 14 refinements}
+\label{fig:spaceTimeCNS_den7}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel1.pdf}
+\caption{Velocity on initial mesh}
+\label{fig:spaceTimeCNS_vel0}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel8.pdf}
+\caption{Velocity after 7 refinements}
+\label{fig:spaceTimeCNS_vel7}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel15.pdf}
+\caption{Velocity after 14 refinements}
+\label{fig:spaceTimeCNS_vel14}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres1.pdf}
+\caption{Pressure on initial mesh}
+\label{fig:spaceTimeCNS_pres0}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres8.pdf}
+\caption{Pressure after 7 refinements}
+\label{fig:spaceTimeCNS_pres7}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres15.pdf}
+\caption{Pressure after 14 refinements}
+\label{fig:spaceTimeCNS_pres14}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh1.png}
+\caption{Density with initial mesh}
+\label{fig:spaceTimeCNS_mesh0}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh8.png}
+\caption{Density with mesh after 7 refinements}
+\label{fig:spaceTimeCNS_mesh7}
+\end{subfigure}
+\begin{subfigure}[c]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh15.png}
+\caption{Density with mesh after 14 refinements}
+\label{fig:spaceTimeCNS_mesh14}
+\end{subfigure}
+% \caption{Sod problem density with mesh overlay on initial mesh}
+% \label{fig:spaceTimeCNS0}
+% \end{figure}
+
+% \begin{figure}[p]
+% \centering
+\caption{Sod problem at $t=0.2$}
+\label{fig:spaceTimeCNS7}
+\end{figure}
+
+% \restoregeometry
 \end{document}
