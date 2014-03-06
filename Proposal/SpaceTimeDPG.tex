@@ -256,12 +256,12 @@ Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by
 \begin{equation}
 \label{eq:confusionBF}
 	\begin{aligned}
-		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+		\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
 		-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\,,
 		% -\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
 	\end{aligned}
 \end{equation}
-where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
+where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $v$ live in the same spaces as for the heat equation.
 
 \subsection{Problems considered}
 Since space-time convection-diffusion is identical the heat equation with the addition of a convective term, we only pursue one numerical experiment to demonstrate that everything works as expected. 
@@ -314,10 +314,28 @@ For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse oc
 %                                 /$$  \ $$                              
 %                                |  $$$$$$/                              
 %                                 \______/   
-\section{Burgers'}
-The viscous Burgers' equation is
+\section{Viscous Burgers' Equation}
+We consider the viscous Burgers' equation as a simple nonlinear parabolic problem:
+\begin{equation*}
+	\pt{u}+u\pd{u}{x}-\epsilon\ppd{u}{x}=0\,,
+\end{equation*}
+where $u$ is the quantity of interest and $\epsilon$ is the diffusion length scale.
+Again, this can be put as a first order system in space-time:
+\begin{equation*}
+\begin{aligned}
+	\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+	\Divxt\vecttwo{u^2/2-\bfsigma}{u}&=0\,.
+\end{aligned}
+\end{equation*}
 
 \subsection{Derivation}
+The process is starting to get repetitive, but we again multiply by test functions and integrate by parts to get the following nonlinear system:
+\begin{equation*}
+\begin{aligned}
+	\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+	-\LRp{\vecttwo{u^2/2-\bfsigma}{u},\Gradxt v}+\LRa{\hat t, v}&=0\,.
+\end{aligned}
+\end{equation*}
 
 \subsection{Problems considered}
 
