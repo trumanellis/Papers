@@ -3,35 +3,34 @@
 \begin{document}
 \chapter{Space-time DPG}
 We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can fake it for 1D spatial problems by pretending the $y$-direction is time.
-Complications arise when the PDE under consideration is of a different type temporally then it is spatially. 
-For example, the heat equation is elliptic in space, but hyperbolic in time. 
+Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
 Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
-Practically, this means that we have had to hack the Camellia code in order to support these ``spatial traces''.
+Practically, this means that I had to hack the Camellia code in order to support these ``spatial traces''.
 We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
-but the plans are to do this in according to better software practices in the proposed work, since the current implementation is not very maintainable.
+but plan is to do this according to better software practices in the proposed work, since the current implementation is not very maintainable.
 
-All of the following problems are run with the graph norm. 
-This norm is simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
+All of the following problems (unless otherwise noted) are run with the graph norm which is
+simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
 
-\section{Pure Convection}
-The pure convection equation is 
-\begin{equation}
-\frac{\partial u}{\partial t}+\Div(\bfbeta u)=f\,,
-\end{equation}
-where $u$ is the unknown being convected, $\bfbeta$ is the convection vector, and $f$ is the source term.
-The convenient thing about pure convection is that the equation is the time dimension is basically indistinguishable from the spatial dimensions. 
-In fact, we can rewrite this in terms of a space-time divergence operator $\Divxt(u):=\Div(u)+\frac{\partial u}{\partial t}$:
-\[
-\Divxt\LRp{\vecttwo{\bfbeta}{1}u}=f\,.
-\]
-This means that spatially 1D space-time convection with convection vector $\alpha$ is identical to 2D steady convection with convection vector $\LRp{\alpha,1}^T$.
-
-We derive an ultra-weak DPG formulation for pure convection with $\bfbeta=\LRp{\alpha,1}^T$. 
-Multiplying by test function $v$ and integrating by parts over each element $K$, we get
-\begin{equation}
--\LRp{\vecttwo{\alpha}{1}u,\Gradxt v}+\LRa{\hat t, v}=\LRp{f,v}\,,
-\end{equation}
-where $\hat t=\trace\LRp{\LRp{\alpha,1}^T}\cdot\bfn\,u$.
+% \section{Pure Convection}
+% The pure convection equation is 
+% \begin{equation}
+% \frac{\partial u}{\partial t}+\Div(\bfbeta u)=f\,,
+% \end{equation}
+% where $u$ is the unknown being convected, $\bfbeta$ is the convection vector, and $f$ is the source term.
+% The convenient thing about pure convection is that the equation is the time dimension is basically indistinguishable from the spatial dimensions. 
+% In fact, we can rewrite this in terms of a space-time divergence operator $\Divxt(u):=\Div(u)+\frac{\partial u}{\partial t}$:
+% \[
+% \Divxt\LRp{\vecttwo{\bfbeta}{1}u}=f\,.
+% \]
+% This means that spatially 1D space-time convection with convection vector $\alpha$ is identical to 2D steady convection with convection vector $\LRp{\alpha,1}^T$.
+% We derive an ultra-weak DPG formulation for pure convection with $\bfbeta=\LRp{\alpha,1}^T$. 
+% Multiplying by test function $v$ and integrating by parts over each element $K$, we get
+% \begin{equation}
+% -\LRp{\vecttwo{\alpha}{1}u,\Gradxt v}+\LRa{\hat t, v}=\LRp{f,v}\,,
+% \end{equation}
+% where $\hat t=\trace\LRp{\vecttwo{\alpha}{1}u}\cdot\bfn$.
+% We omit numerical results in this case since pure convection was studied thoroughly in \cite{?}.
 
 %   /$$   /$$                       /$$    
 %  | $$  | $$                      | $$    
@@ -52,47 +51,49 @@ We start with a general $n$-dimensional spatial derivation and later simplify to
 Let $\Omega(t)\subset\mathbb{R}^d$ be the spatial domain with boundary $\partial\Omega$.
 The heat equation is
 \begin{equation}
-	\frac{\partial u}{\partial t}-\epsilon\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
+	\frac{\partial u}{\partial t}-\mu\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
 \end{equation}
 where $u$ is unknown heat, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
 Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then tessellated into space-time elements $K$.
 
-Let us proceed as usual and form a system of first order equations:
+The second order formulation of the heat equation is really just a composition of Fourier's law and conservation of energy:
 \begin{equation}
 \label{eq:heatFirstOrder}
 \begin{aligned}
 \bfsigma-\epsilon\Grad u&=0\\
-\frac{\partial u}{\partial t}-\Div\bfsigma&=f\,.
+\frac{\partial u}{\partial t}-\Div\bfsigma&=f\,,
 \end{aligned}
 \end{equation}
-Let us say that $f\in\LQ$, then we seek $u$, and $\bfsigma$ such that $u,\,\bfsigma,\,\Grad u,\,\frac{\partial u}{\partial t}-\Div\bfsigma\in\LQ$.
-Notice that this is a weaker condition than saying $\frac{\partial u}{\partial t}\in\LQ$ and $\Div\bfsigma\in\LQ$.
-It helps to view $\bfU:=(-\bfsigma, u)$ as a group variable in space-time. 
-Then the last condition is telling us that $\Divxt\bfU\in\LQ$, or that $\bfU\in\HdivQ$.
-That is to say the normal component $-\bfsigma\cdot\bfn_x+u\cdot n_t$ (which we call the flux) is continuous across element faces, 
-where $\bfn=(\bfn_x,n_t)^T$ is the full space-time normal vector for element $K$.
-Now consider the condition that $\Grad u\in\LQ$.
-This implies that $u$ lives in a tensor product space of $H^1$ spatially and $L^2$ temporally and that
-$u\cdot n_t$ is continuous on element faces where $n_t$ is nonzero; we call this the spatial trace.
-
-Now that we understand which Sobolev spaces $u$ and $\bfsigma$ live in, we can proceed with a derivation of the space-time DPG formulation for this problem.
-We multiply the first equation in \eqref{eq:heatFirstOrder} by test function $\bftau$ and the second by $v$. Then we integrate by parts over each element:
+where $\bfsigma$ is the heat flux.
+The key insight that we will use over and over in the following problems is that we can rewrite our conservation equation
+in terms of a space-time divergence operator: $\Divxt():=\Div()+\pt{()}$.
+Our new system is then
+\begin{equation}
+\label{eq:heatFirstOrderSpaceTime}
+\begin{aligned}
+\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+\Divxt\vecttwo{-\bfsigma}{u}&=f\,.
+\end{aligned}
+\end{equation}
+We now proceed with the standard DPG practice and multiply by test functions $\bftau$ and $v$ 
+and integrate by parts over each space-time element $K$:
 \begin{equation}
 \label{eq:heatBF}
-	\begin{aligned}
-		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
-		-\LRp{u,\frac{\partial v}{\partial t}}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
-	\end{aligned}
+\begin{aligned}
+\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\,,
+\end{aligned}
 \end{equation}
-where $\hat u$ is the spatial trace and $\hat t$ is the flux.
-The second equation could alternatively be written in terms of the group variable $\bfU$:
-\begin{equation}
-\label{heatBFAlt}
--\LRp{\bfU,\Gradxt v}-\LRa{\hat t,v}=\LRp{f,v}\,.
-\end{equation}
-This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma}\cdot\bfn_x+\trace{(u)}\cdot n_t$.
-From \eqref{eq:heatBF} and \eqref{heatBFAlt} it is clear that $\bftau\in\HdivK$ where the divergence is taken only over spatial directions, and $v\in\HOneK$.
-Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial traces. Notice that the fluxes live on all element boundaries, while the spatial traces only live on ``non-horizontal'' edges.
+where
+\begin{align*}
+\hat u&:=\trace(u)\\
+\hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
+\end{align*}
+are new unknowns that live on the mesh skeleton introduced by the integration by parts.
+Note that the constitutive law was only integrated by parts over spatial dimensions, which means 
+that ``spatial trace'' $\hat u$ only exists on mesh boundaries with a nonzero spatial normal component.
+On the other hand, flux $\hat t$ exists on all mesh boundaries, but changes nature between pure spatial and temporal edges while taking on 
+a mixed nature on slanted boundaries. We illustrate the support of these skeleton variables in Figure~\ref{fig:heatMesh}.
 
 \begin{figure}[h!]
 \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm]
@@ -137,6 +138,35 @@ Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial tra
 \caption{Support of flux and spatial trace variables}
 \label{fig:heatMesh}
 \end{figure}
+
+% Let us say that $f\in\LQ$, then we seek $u$, and $\bfsigma$ such that $u,\,\bfsigma,\,\Grad u,\,\frac{\partial u}{\partial t}-\Div\bfsigma\in\LQ$.
+% Notice that this is a weaker condition than saying $\frac{\partial u}{\partial t}\in\LQ$ and $\Div\bfsigma\in\LQ$.
+% It helps to view $\bfU:=(-\bfsigma, u)$ as a group variable in space-time. 
+% Then the last condition is telling us that $\Divxt\bfU\in\LQ$, or that $\bfU\in\HdivQ$.
+% That is to say the normal component $-\bfsigma\cdot\bfn_x+u\cdot n_t$ (which we call the flux) is continuous across element faces, 
+% where $\bfn=(\bfn_x,n_t)^T$ is the full space-time normal vector for element $K$.
+% Now consider the condition that $\Grad u\in\LQ$.
+% This implies that $u$ lives in a tensor product space of $H^1$ spatially and $L^2$ temporally and that
+% $u\cdot n_t$ is continuous on element faces where $n_t$ is nonzero; we call this the spatial trace.
+
+% Now that we understand which Sobolev spaces $u$ and $\bfsigma$ live in, we can proceed with a derivation of the space-time DPG formulation for this problem.
+% We multiply the first equation in \eqref{eq:heatFirstOrder} by test function $\bftau$ and the second by $v$. Then we integrate by parts over each element:
+% \begin{equation}
+% \label{eq:heatBF}
+% 	\begin{aligned}
+% 		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+% 		-\LRp{u,\frac{\partial v}{\partial t}}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
+% 	\end{aligned}
+% \end{equation}
+% where $\hat u$ is the spatial trace and $\hat t$ is the flux.
+% The second equation could alternatively be written in terms of the group variable $\bfU$:
+% \begin{equation}
+% \label{heatBFAlt}
+% -\LRp{\bfU,\Gradxt v}-\LRa{\hat t,v}=\LRp{f,v}\,.
+% \end{equation}
+% This alternate version emphasizes the definition of the flux: $\hat t=\trace\LRp{-\bfsigma}\cdot\bfn_x+\trace{(u)}\cdot n_t$.
+% From \eqref{eq:heatBF} and \eqref{heatBFAlt} it is clear that $\bftau\in\HdivK$ where the divergence is taken only over spatial directions, and $v\in\HOneK$.
+% Figure \ref{fig:heatMesh} illustrates the support for the fluxes and spatial traces. Notice that the fluxes live on all element boundaries, while the spatial traces only live on ``non-horizontal'' edges.
 
 \subsection{Problems considered}
 If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
@@ -202,7 +232,7 @@ Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} autom
 %                                                                                      
 %                                                                                      
 %        
-\section{Convection-diffusion}
+\section{Convection-Diffusion}
 Transient convection-diffusion is identical to the heat equation with the addition of a convective term:
 \begin{equation*}
 \frac{\partial u}{\partial t}+\Div(\bfbeta u)-\epsilon\Delta u=f\,.
@@ -210,24 +240,25 @@ Transient convection-diffusion is identical to the heat equation with the additi
 The $d$-dimensional transient convection-diffusion equations could be viewed as a $d+1$ steady convection-diffusion problem with zero diffusion in the time direction.
 
 \subsection{Derivation}
-As a first order system, this is
+As a first order system in space-time, this is
 \begin{equation}
 \label{eq:confusionFirstOrder}
 \begin{aligned}
-\bfsigma-\epsilon\Grad u&=0\\
-\frac{\partial u}{\partial t}+\Div\LRp{\bfbeta u-\bfsigma}&=f\,.
+\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+\Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\,.
 \end{aligned}
 \end{equation}
-We can view the second equation as a full space-time divergence on group variable $\bfU:=\LRc{\bfbeta u-\bfsigma,u}$ as before:
-\begin{equation}
-	\Divxt\LRp{\bfU}=f\,.
-\end{equation}
+% We can view the second equation as a full space-time divergence on group variable $\bfU:=\LRc{\bfbeta u-\bfsigma,u}$ as before:
+% \begin{equation}
+% 	\Divxt\LRp{\bfU}=f\,.
+% \end{equation}
 Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by parts over each element, we obtain the following bilinear form:
 \begin{equation}
 \label{eq:confusionBF}
 	\begin{aligned}
 		\LRp{\bfsigma,\bftau}+\epsilon\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
-		-\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
+		-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\,,
+		% -\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
 	\end{aligned}
 \end{equation}
 where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $n$ live in the same spaces as for the heat equation.
@@ -284,6 +315,7 @@ For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse oc
 %                                |  $$$$$$/                              
 %                                 \______/   
 \section{Burgers'}
+The viscous Burgers' equation is
 
 \subsection{Derivation}
 
@@ -300,11 +332,264 @@ For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse oc
 %                                    | $$                                                                          
 %                                    | $$                                                                          
 %                                    |__/    
-\section{Compressible Navier-Stokes}
+\section{Transient Compressible Navier-Stokes}
+The compressible Navier-Stokes equations are
+\begin{align}
+\frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
++\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{D}}
+%TODO: Possible error above. cfd-online seems to have T^T
+=\svectthree{f_c}{\bff_m}{f_e}\,,
+\end{align}
+where $\rho$ is the density, $\bfu$ is the velocity, $p$ is the pressure, $\bfI$ is the identity matrix,
+$\mathbb{D}$ is the deviatoric stress tensor or viscous stress, $e_0$ is the total energy, $\bfq$ is the heat flux, 
+and $f_c$, $\bff_m$, and $f_e$ are the source terms for the continuity, momentum, and energy equations, respectively.
+Assuming Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, 
+\begin{equation*}
+	\mathbb{D}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
+\end{equation*}
+where $\bfS^*$ is the trace-less viscous strain rate tensor.
+The heat flux is given by Fourier's law:
+\begin{equation*}
+	\bfq=-C_p\frac{\mu}{Pr}\Grad T\,,
+\end{equation*}
+where $C_p$ is the specific heat at constant pressure and $Pr$ is the laminar Prandtl number: $Pr:=\frac{C_p\mu}{\lambda}$.
+We need to close these equations with an equation of state. An ideal gas assumption gives
+\begin{equation*}
+	\gamma:=\frac{C_p}{C_v}\,,\quad p=\rho RT\,,\quad e=C_v T\,,\quad C_p-C_v=R\,,
+\end{equation*}
+where $\gamma$ is the ratio of specific heats, $C_v$ is the specific heat at constant volume, $R$ is the gas constant,
+$e$ is the internal energy, $T$ is the temperature,
+and $\gamma$, $C_p$, $C_v$, and $R$ are constant properties of the fluid.
+The total energy is defined by
+\begin{equation*}
+	e_0=e+\frac{1}{2}\bfu\cdot\bfu\,.
+\end{equation*}
 
-\subsection{Derivation}
+We can write our first order system of equations in space-time as follows:
+\begin{subequations}
+\label{eq:compressibleNSFirstOrder}
+\begin{align}
+	\frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bfI&=0\\
+	\frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
+	\Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+	\Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+	\Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+\end{align}
+\end{subequations}
+where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 
-\subsection{Problems considered}
+%   /$$$$$$$                      /$$                        /$$     /$$                    
+%  | $$__  $$                    |__/                       | $$    |__/                    
+%  | $$  \ $$  /$$$$$$   /$$$$$$  /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$  | $$ /$$__  $$ /$$__  $$| $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  | $$| $$$$$$$$| $$  \__/| $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$  | $$| $$_____/| $$      | $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$/|  $$$$$$$| $$      | $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |_______/  \_______/|__/      |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                           
+%                                                                                           
+%              
+\subsection{Derivation of Space-Time DPG Formulation}
+We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
+then integrate by parts over each space-time element $K$:
+\begin{subequations}
+\label{eq:compressibleNSBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+where 
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat T&=\trace(T)\\
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
+\end{equation*}
+Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
+This is a much more complicated system of equations than we had for the space-time heat equation, but the situation has many similarities.
+Test function $\bftau\in\HdivK$ where the divergence is taken only over spatial dimensions, $v_c,v_e\in\HOneK$, and $\bfv_m\in\HOneVecK$.
+These are all familiar spaces from our work with the heat equation.
+Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ components must be at least in $L^2(K)$, $\Div\mathbb{S}\in\LVecK$, and
+$\Grad\trace{\mathbb{S}}\in\LVecK$.
+In practice, we will probably just seek each component in $\HOneK$.
 
-\section{Time-slabs vs full-time}
+%   /$$       /$$                                         /$$                       /$$     /$$                    
+%  | $$      |__/                                        |__/                      | $$    |__/                    
+%  | $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$ /$$$$$$$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$| $$|____ /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$      | $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$  \__/| $$   /$$$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$      | $$  /$$__/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$      | $$ /$$$$$$$$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |________/|__/|__/  |__/ \_______/ \_______/|__/      |__/|________/ \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                                                  
+%                                                                                                                  
+%   
+\subsubsection{Linearization}
+We follow a standard residual-Jacobian linearization procedure coupled with a Gauss-Newton solve.
+Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ be a group solution variable which we can decompose into two parts:
+$U:=\tilde U+\Delta U$, where
+$\tilde U = \LRc{\tilde\rho,\tilde\bfu,\tilde T,\tilde{\mathbb{D}},\bs0,\bs0,0,0,\bs0,0}$ is the previous iteration approximation, 
+and $\Delta U=\LRc{\Delta\rho,\Delta\bfu,\Delta T,\Delta\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ is the update.
+Note that $\tilde U$ only contains terms which participate in nonlinearities in \eqref{eq:compressibleNSBF} 
+while $\Delta U$ contains the full linear terms and the updates to the nonlinear terms.
+Also, we drop the $\Delta$ and $\tilde\cdot$ notation for linear terms.
+Define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
+% Let $\tilde U$ be an approximate solution for the minimization of the residual. 
+% We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
+Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
+\begin{equation}
+	R'(\tilde U)\Delta U=-R(\tilde U)\,.
+\end{equation}
+We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
+% Note that we can exclude our traces and fluxes from the residual since these unknowns are only involved in linear terms.
+% As such, we don't update these variables each iteration based on the previous iteration.
+% Instead, for example, we consider $\tilde{\hat\bfu}=0$, and let $\hat\bfu=\Delta\hat\bfu$ after each iteration.
+% To indicate this different treatment, we drop the delta and tilde notation on these variables in the following discussion.
+The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
+\begin{equation}
+\label{eq:compressibleJacobian}
+\begin{aligned}
+	&\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
+	%
+	&+\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
+	%
+	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
+	{\Delta\rho},\Gradxt v_c}
+	+\LRa{\hat t_c,v_c}\\
+	%
+	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
+	+\LRp{\Delta\rho R\tilde T+\tilde\rho R\Delta T}\bfI-\Delta\mathbb{D}}
+	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
+	+\LRa{\hat\bft_m,\bfv_m}\\
+	%
+	&-\LRp{\vectthree{[C_v\Delta\rho\tilde T\tilde\bfu+C_v\tilde\rho\Delta T\tilde\bfu+C_v\tilde\rho\tilde T\Delta\bfu
+	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
+	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
+	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
+	+\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
+	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
+	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
+	&+\LRa{\hat t_e,v_e}\,.
+\end{aligned}
+\end{equation}
+The residual, $R(\tilde U)$, is then
+\begin{equation}
+\begin{aligned}
+	&\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
+	&-\LRp{\tilde T,\Div\bftau}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
+	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
+	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
+	-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
+	\Gradxt v_e}-\LRp{f_e,v_e}\,.
+\end{aligned}
+\end{equation}
+
+%   /$$$$$$$$                       /$$           /$$   /$$                                  
+%  |__  $$__/                      | $$          | $$$ | $$                                  
+%     | $$     /$$$$$$   /$$$$$$$ /$$$$$$        | $$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$ 
+%     | $$    /$$__  $$ /$$_____/|_  $$_/        | $$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$
+%     | $$   | $$$$$$$$|  $$$$$$   | $$          | $$  $$$$| $$  \ $$| $$  \__/| $$ \ $$ \ $$
+%     | $$   | $$_____/ \____  $$  | $$ /$$      | $$\  $$$| $$  | $$| $$      | $$ | $$ | $$
+%     | $$   |  $$$$$$$ /$$$$$$$/  |  $$$$/      | $$ \  $$|  $$$$$$/| $$      | $$ | $$ | $$
+%     |__/    \_______/|_______/    \___/        |__/  \__/ \______/ |__/      |__/ |__/ |__/
+%                                                                                            
+%                                                                                            
+%      
+\subsubsection{Test Norm}
+The most obvious first choice for test norm in the local solve is the graph norm, which comes from the 
+problem adjoint.
+We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable to get
+\begin{equation}
+\begin{aligned}
+&\LRp{\Delta\mathbb{D},\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}\\
++&\LRp{\bfq,\frac{Pr}{C_p\mu}\bftau-\Grad v_e}\\
++&\left(\Delta\rho,-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}
+-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right)\\
++&\left(\Delta\bfu,2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T_\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right)\\
++&\left(\Delta T,-\Div\bftau
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right)\\
++&\LRp{\hat\bfu,-\frac{4}{3}\mathbb{S}\bfn_x}\\
++&\LRp{\hat T,\tau_n}\\
++&\LRp{\hat t_c,v_c}\\
++&\LRp{\hat\bft_m,\bfv_m}\\
++&\LRp{\hat t_e,v_e}\,.
+\end{aligned}	
+\end{equation}
+
+Then the graph norm would be defined by
+\begin{equation}
+\begin{aligned}
+&\norm{\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
++&\norm{\frac{Pr}{C_p\mu}\bftau-\Grad v_e}^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|-\Div\bftau
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|\\
++&\alpha_c\norm{v_c}^2
++\alpha_m\norm{\bfv_m}^2
++\alpha_e\norm{v_e}^2
+\,,
+\end{aligned}
+\end{equation}
+where $\alpha_c$, $\alpha_m$, and $\alpha_e$ are scaling constants.
 \end{document}

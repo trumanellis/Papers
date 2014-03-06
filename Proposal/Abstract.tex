@@ -11,13 +11,14 @@
 
 \title{Space-Time DPG: Designing a Method for Massively Parallel CFD}
 \author{Truman Ellis\\
-Committee: Leszek~Demkowicz (co-advisor), Robert~Moser (co-advisor), Thomas~Hughes, Todd~Arbogast, Clint~Dawson}
+Committee: Leszek~Demkowicz (co-advisor), Robert~Moser (co-advisor), Thomas~Hughes, Clint~Dawson, Jayathi~Murthy}
 \date{}
 
 \begin{document}
 \maketitle
 
 % \textbf{Motivation} 
+\paragraph{DPG - a robust adaptive method for CFD}
 The discontinuous Petrov-Galerkin method\cite{DPGOverview} is a novel finite element framework with exceptional stability and adaptivity properties.
 Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
 mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
@@ -37,38 +38,40 @@ trace variables are defined on the mesh skeleton.
 This allows significant reduction of the cost of the global solve.  
 The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
 
+\paragraph{Importance of local conservation}
 Local conservation was an early concern about applying DPG to fluid problems. 
 This property is tied to whether or not constants are represented in a method's test space.
 Many of the top numerical methods for CFD are automatically conservative by construction, 
 but DPG carried no such guarantee since the test space is constructed on the fly.
 I ran a number of test problems and found that indeed, standard DPG is not exactly conservative but converges to near exact local conservation 
 as it resolves the flow features under consideration.
-Leveraging Lagrange multipliers, I developed a new locally conservative DPG formulation\cite{Ellis2014} 
+Leveraging Lagrange multipliers, I developed a new locally conservative DPG formulation\cite{Ellis2013Report} 
 that maintains exact conservation even on coarse meshes.
 This was found to dramatically improve the coarse mesh quality on several Stokes flow test problems.
 We also proved stability and robustness estimates for this variant formulation.
 
+\paragraph{Extending DPG to transient problems}
 Most transient CFD simulation tools are usually a combination of some spatial solver coupled with a time stepping algorithm.
 Often every spatial element is advanced in lock-step -- requiring the time step to conform to the strictest element in the whole domain.
 This approach can be very ineffective for an adaptive simulation where element sizes can vary by several orders of magnitude.
-Technologies exist to address these inefficiencies (such as Asynchronous Variational Integrators\cite{Lew2003}), but bolting on another technology
+Technologies exist to address these inefficiencies (such as asynchronous variational integrators\cite{Lew2003}), but bolting on another technology
 causes us to lose a lot of the desirable DPG properties such as automatic adaptivity and stability.
 
-% \textbf{Goal}
 The goal of this dissertation is to extend the current technology of adaptive steady state DPG to transient problems in space-time.
 The emphasis will be on transient incompressible and compressible Navier-Stokes.
 We have already pursued some preliminary research in this direction with a space-time DPG solver for spatially 1D flows.
-We've applied this solver to a number of test problems for the heat equation, convection-diffusion, and compressible Navier-Stokes shock tube problems.
+We've applied this solver to a number of test problems for the heat equation, convection-diffusion, Burgers' equation, 
+and compressible Navier-Stokes shock tube problems.
 On problems with analytical solutions, we have observed optimal rates of convergence.
 The application of DPG to massively parallel CFD is the ultimate goal of this research, but this dissertation will be largely developmental.
 % A method with the ability to locally adapt in both space and time while performing most of the spatial-temporal work in parallel will
 % have profound benefits when it comes to parallel computing.
 
 % \textbf{Contributions}
-My contributions can be divided into the following area categories.
+% My contributions can be divided into the following area categories.
 
 
-\textbf{Area A: Applicable mathematics}
+\paragraph{Area A: Applicable mathematics}
 DPG is a method built on rigorous mathematical theory.
 While rooted in the standard theory of finite elements, DPG is novel enough that many of the old analysis tools do not directly apply.
 As a consequence, much of the early DPG literature has been laden with mathematical proofs of stability, convergence, and robustness.
@@ -76,7 +79,7 @@ While developing the theory for a locally conservative DPG formulation we perfor
 Another robustness analysis will be necessary as we explore space-time convection-diffusion since the equation is elliptic spatially but hyperbolic in time.
 Time permitting, I will start to look at iterative methods and preconditioners for the global solve.
 
-\textbf{Area B: Numerical analysis and scientific computation}
+\paragraph{Area B: Numerical analysis and scientific computation}
 I will support development of the DPG software framework \emph{Camellia}\cite{Roberts2011} including running verification on several test problems.
 This will include the development and verification of spatially 2D space-time simulations.
 I will also develop a means to perform time stepping via space-time slabs which should reduce the 
@@ -104,7 +107,7 @@ Time permitting, I would like to investigate the implementation of an effective 
 
 % We are also interested in adding many auxiliary features to Camellia in the process. Solution output is currently done completely in serial, but parallel output is a desired feature as we move forward. We are also interested in removing our VTK dependency and switching to a new IO format using HDF5 and XDMF.
 
-\textbf{Area C: Mathematical modeling and applications}
+\paragraph{Area C: Mathematical modeling and applications}
 As we are exploring a method that is still very much in development, I will be running a number of standard test problems.
 I've already explored the conservation properties of DPG through a couple of simulations of Stokes flow around a cylinder and over
 a backward facing step.

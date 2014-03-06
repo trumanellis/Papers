@@ -174,9 +174,9 @@ Overview of Features
 \item Robust for singularly perturbed problems
 \item Stable in the preasymptotic regime
 \item Designed for adaptive mesh refinement
-% \item Ideal for high-performance computing
+\item Ideal for high-performance computing
 \end{itemize}
-\bigskip
+\medskip
 
 DPG is a minimum residual method:
 \[
@@ -239,7 +239,7 @@ test functions which is computationally feasible.
 \frametitle{Heat Equation}
 \framesubtitle{Simplest Nontrivial Space-Time Problem}  %% needed for proper positioning of the logo ...
 
-Equation is elliptic in space, but hyperbolic in time.
+Equation is elliptic in space, but hyperbolic in time (parabolic in space-time).
 \begin{equation*}
   \frac{\partial u}{\partial t}-\epsilon\Delta u=f
 \end{equation*}
@@ -617,6 +617,43 @@ resolve the flow features.
 We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
 You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
 With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+Infinitely strong shock propagation.
+\foreach \n in {1,...,9}
+{
+\only<\n>
+{
+\vspace{4ex}
+% \begin{figure}[ht]
+% \centering
+
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=1.0\textwidth]{Noh1e-3/den\n.pdf}
+\end{column}
+% \end{subfigure}
+\hspace{8ex}
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.4\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.9\textwidth]{Noh1e-3/mesh\n.png}
+\end{column}
+\end{columns}
+% \end{subfigure}
+% \end{figure}
+}
+}
+\end{frame}
+\begin{comment}
 \end{comment}
 
 
