@@ -191,7 +191,7 @@ Starting from an initial mesh of $4x4$, we adaptively refine four times and obta
 Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
 Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -273,7 +273,7 @@ We haven't taken the time to allow enforcement of Dirichlet boundary conditions 
 Thus we enforce zero flux conditions on both walls as before. 
 For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse occurring at $[0.25,0.5]\times[0.25,0.5]$.
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -679,91 +679,156 @@ than the standard graph norm.
 %                                                                                    
 % 
 \subsection{Numerical Results}
+We consider two 1D test problems as verification.
+The Sod shock tube and Noh implosion both have analytical solutions derived based on an inviscid flow assumption (Euler's equations).
+However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
+artificial viscosity in order to select a unique solution.
+Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks\cite{?}.
+We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical
+viscosity: $\mu=10^{-5}$ for Sod and $\mu=10^{-3}$ for Noh.
+Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler.
+We mentioned previously that the test norm we are using is not entirely robust, and in fact these viscosity values were on the lower end of what we
+could simulate with this preliminary norm.
+Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
 
-% \newgeometry{textheight=10in}
+\subsubsection{Sod Shock Tube}
+The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 
+of compressible Navier-Stokes and Euler solvers.
+It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
+all in one domain.
+The domain of interest is a shock tube of length 1 with a material interface in the middle. The material on the left has initial conditions of 
+$(\rho_L,p_L,u_L)=(1,1,0)$ while the material on the right has $(\rho_R,p_R,u_R)=(0.125,0.1,0)$. The $t=0$ the interface between the materials is broken, 
+and shock wave propagates into the right material, while a rarefaction wave moves left. The analytical solution is self-similar, but it is common to take
+$t=0.2$ as a final time.
+At this time the shock wave and rarefaction waves have not hit the boundaries, 
+so it is sufficient to set boundary conditions corresponding to the initial conditions.
+In our case, we set $\hat t_c=\hat t_m=\hat t_e=0$ on the left and right boundaries, while the fluxes are set equal to the discontinuous
+initial conditions on the $t=0$ boundary. 
+No boundary condition is required on the $t=0.2$ boundary since the equations are hyperbolic in time.
+We solve this with one continuous time slab starting with only 4 space-time elements.
+
 \begin{figure}[p]
 \centering
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den1.pdf}
 \caption{Density on initial mesh}
-\label{fig:spaceTimeCNS_den0}
+\label{fig:sod_den0}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den8.pdf}
 \caption{Density after 7 refinements}
-\label{fig:spaceTimeCNS_den7}
+\label{fig:sod_den7}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/den15.pdf}
 \caption{Density after 14 refinements}
-\label{fig:spaceTimeCNS_den7}
+\label{fig:sod_den14}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel1.pdf}
 \caption{Velocity on initial mesh}
-\label{fig:spaceTimeCNS_vel0}
+\label{fig:sod_vel0}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel8.pdf}
 \caption{Velocity after 7 refinements}
-\label{fig:spaceTimeCNS_vel7}
+\label{fig:sod_vel7}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/vel15.pdf}
 \caption{Velocity after 14 refinements}
-\label{fig:spaceTimeCNS_vel14}
+\label{fig:sod_vel14}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres1.pdf}
 \caption{Pressure on initial mesh}
-\label{fig:spaceTimeCNS_pres0}
+\label{fig:sod_pres0}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres8.pdf}
 \caption{Pressure after 7 refinements}
-\label{fig:spaceTimeCNS_pres7}
+\label{fig:sod_pres7}
 \end{subfigure}
 \begin{subfigure}[c]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/pres15.pdf}
 \caption{Pressure after 14 refinements}
-\label{fig:spaceTimeCNS_pres14}
+\label{fig:sod_pres14}
 \end{subfigure}
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh1.png}
 \caption{Density with initial mesh}
-\label{fig:spaceTimeCNS_mesh0}
+\label{fig:sod_mesh0}
 \end{subfigure}
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh8.png}
 \caption{Density with mesh after 7 refinements}
-\label{fig:spaceTimeCNS_mesh7}
+\label{fig:sod_mesh7}
 \end{subfigure}
 \begin{subfigure}[c]{0.9\textwidth}
 \centering
 \includegraphics[width=\textwidth]{SpaceTimeCNS/Sod1e-5/mesh15.png}
 \caption{Density with mesh after 14 refinements}
-\label{fig:spaceTimeCNS_mesh14}
+\label{fig:sod_mesh14}
 \end{subfigure}
-% \caption{Sod problem density with mesh overlay on initial mesh}
-% \label{fig:spaceTimeCNS0}
-% \end{figure}
-
-% \begin{figure}[p]
-% \centering
-\caption{Sod problem at $t=0.2$}
-\label{fig:spaceTimeCNS7}
+\caption{Sod problem with final time $t=0.2$}
+\label{fig:sod}
 \end{figure}
 
-% \restoregeometry
+\subsubsection{Noh Implosion}
+Noh\cite{Noh1987}
+The longer time nature of this problem recommended the use of multiple time slabs rather than a single solve like the previous problem.
+
+\begin{figure}[p]
+\centering
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den1.pdf}
+\caption{Density on initial mesh}
+\label{fig:noh_den0}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den5.pdf}
+\caption{Density after 4 refinements}
+\label{fig:noh_den4}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den9.pdf}
+\caption{Density after 8 refinements}
+\label{fig:noh_den8}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh1.png}
+\caption{Density with initial mesh}
+\label{fig:noh_mesh0}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh5.png}
+\caption{Density with mesh after 4 refinements}
+\label{fig:noh_mesh4}
+\end{subfigure}
+\begin{subfigure}[c]{0.9\textwidth}
+\centering
+\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh9.png}
+\caption{Density with mesh after 8 refinements}
+\label{fig:noh_mesh8}
+\end{subfigure}
+\caption{Noh problem with final time $t=1.0$}
+\label{fig:noh7}
+\end{figure}
+
 \end{document}

@@ -722,11 +722,7 @@ reasoning.
 
 
 \section{Numerical Experiments}
-% In \ref{sec:problemDescriptions} we define each numerical experiment, and in
-% \ref{sec:problemAnalysis} we discuss the solution properties in general. We
-% solve with second order field variables and flux ($u$, $\bfsigma$, and $\hat
-% t$), third order traces ($\hat u$), and fifth order test functions ($v$ and
-% $\bftau$).
+\label{sec:lcNumerics}
 
 We now demonstrate the effectiveness of the restricted DPG method with some numerical experiments.
 Flux imbalance is measured by looping over each element in the mesh and
@@ -753,6 +749,9 @@ step. The percent mass loss is thus
 \]
 where $S$ is some vertical mesh line.
 
+We solve with second order field variables and flux ($u$, $\bfsigma$, and $\hat
+t$), third order traces ($\hat u$), and fifth order test functions ($v$ and
+$\bftau$).
 
 \subsection{Convection-Diffusion}
 Extensive results for convection-diffusion can be found in \cite{Ellis2013Report}, but we select one representative example for brevity.
