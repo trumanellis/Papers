@@ -697,7 +697,8 @@ of compressible Navier-Stokes and Euler solvers.
 It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
 all in one domain.
 The domain of interest is a shock tube of length 1 with a material interface in the middle. The material on the left has initial conditions of 
-$(\rho_L,p_L,u_L)=(1,1,0)$ while the material on the right has $(\rho_R,p_R,u_R)=(0.125,0.1,0)$. The $t=0$ the interface between the materials is broken, 
+$(\rho_L,p_L,u_L)=(1,1,0)$ while the material on the right has $(\rho_R,p_R,u_R)=(0.125,0.1,0)$; both materials have $\gamma=1.4$. 
+The $t=0$ the interface between the materials is broken, 
 and shock wave propagates into the right material, while a rarefaction wave moves left. The analytical solution is self-similar, but it is common to take
 $t=0.2$ as a final time.
 At this time the shock wave and rarefaction waves have not hit the boundaries, 
@@ -706,6 +707,10 @@ In our case, we set $\hat t_c=\hat t_m=\hat t_e=0$ on the left and right boundar
 initial conditions on the $t=0$ boundary. 
 No boundary condition is required on the $t=0.2$ boundary since the equations are hyperbolic in time.
 We solve this with one continuous time slab starting with only 4 space-time elements.
+
+The results are plotted in Figure~\ref{fig:sod} for three different refinement levels: the initial coarse mesh, 7 adaptive refinements, and 14 refinements.
+The coarsest mesh is obviously not sufficient to resolve the features of the flow, but it is at least somewhat representative of the exact solution.
+We see significant overshoots and undershoots as we start to pick up on the shock, but these die away as we resolve to the viscous length scale.
 
 \begin{figure}[p]
 \centering
@@ -786,8 +791,20 @@ We solve this with one continuous time slab starting with only 4 space-time elem
 \end{figure}
 
 \subsubsection{Noh Implosion}
-Noh\cite{Noh1987}
+The Noh implosion problem\cite{Noh1987} is another standard test for Euler solvers.
+The initial conditions are of an ideal gas with $\gamma=5/3$, zero pressure, uniform initial density of 1, 
+and uniform velocity toward the center of the domain.
+An infinitely strong shock propagates outward at a speed of 1/3.
+For 1D flow, the post shock density jumps to 4.
+We run this problem to a final time of $t=1.0$.
 The longer time nature of this problem recommended the use of multiple time slabs rather than a single solve like the previous problem.
+We run with four time slabs of thickness 0.25 each with 4 initial space-time elements.
+We run the first slab to 8 adaptive refinements and set the initial conditions on the next slab to the refined solution on the previous slab.
+
+Each of the slabs are put together into one long time solution in Figure~\ref{fig:noh}. 
+Again we plot the solution on the initial mesh, a halfway resolved mesh, and a final mesh after 8 refinement steps.
+We get some very odd behavior around the shock on the middle mesh, but this goes away by the final mesh.
+We see the same behavior with overshoots and undershoots that we saw with the Sod problem. 
 
 \begin{figure}[p]
 \centering
@@ -828,7 +845,7 @@ The longer time nature of this problem recommended the use of multiple time slab
 \label{fig:noh_mesh8}
 \end{subfigure}
 \caption{Noh problem with final time $t=1.0$}
-\label{fig:noh7}
+\label{fig:noh}
 \end{figure}
 
 \end{document}
