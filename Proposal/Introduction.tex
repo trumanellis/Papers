@@ -66,13 +66,41 @@ If the other method is finite element based, this could possibly be done as simp
 -- perhaps the mesh is fine enough that we can do without the optimal test functions.
 We only mention this as a possible use of DPG; we are not going to look into such coupling in this research.
 
-\section{Literature review}
+\section{Literature Review}
+We start this literature review by looking at various numerical methods that have been popular in the simulation of fluid mechanical problems.
+We then branch out to discuss the development of space-time finite elements in for various application domains.
+Finally we explore some of the recent developments in the discontinuous Petrov-Galerkin finite element method.
 
-\subsection{Computational fluid dynamics}
+\subsection{Methods for Computational Fluid Dynamics}
+Computational fluid dynamics has been one of the driving forces behind numerical analysis since computers first became available for
+scientific research and has followed the progression as simple methods give rise to more sophisticated ones with the maturation of computational
+science as a discipline.
+Finite difference methods were a popular choice in the early days of CFD, but these slowly gave way to finite volumes as the dominant choice.
+As the analysis techniques in computational science have matured, it has been increasingly desirable to be able to prove certain properties of
+numerical methods.
+The solid mathematical foundation of the finite element method renders it especially nice for analysis, and in recent years finite elements have 
+been developing a growing following among CFD practitioners.
 
-\subsubsection{Finite difference and finite volume methods}
+\subsubsection{Finite Difference and Finite Volume Methods}
+Finite difference methods approximate derivatives in the strong form of the equation under consideration with finite difference approximations.
+These methods were first popularized for conservation laws by Lax who also introduced the idea of numerical flux and ideal of a monotone scheme.
+For fluid dynamics applications, popular finite difference schemes use numerical fluxes to reconstruct approximate derivatives at certain mesh points.
 
-\subsubsection{Stabilized finite element methods}
+Finite volume methods can be derived from applying finite difference principles to the integral form of the conservation law under consideration.
+They are often derived by reference to a \emph{control volume}. 
+The primary benefit of finite volume methods over their finite difference counterparts is that they are much easier to develop for general unstructured meshes.
+Finite difference schemes typically require uniform or smoothly varying structured grids.
+
+The presence of shocks in compressible Navier-Stokes simulations present a difficult problem for any numerical method.
+The so called Gibbs phenomenon causes polynomial representations of unresolved discontinuous fields to develop undershoots and overshoots.
+The length scale of shocks in the solution of the Navier-Stokes equations is often on the order of several mean free paths of the fluid under consideration.
+So any simulation that does not resolve down to this level is going to have to deal with Gibbs.
+This can be a problem when the undershoots threaten to take density or energy negative which can quickly cause the entire solution to
+lose stability and return garbage.
+The three classical techniques used to counter this possibility in finite difference and finite volume schemes are artificial viscosity, 
+total variation diminishing schemes, and slope limiters.
+
+\subsubsection{Stabilized Finite Element Methods}
 \paragraph{SUPG}
 \paragraph{VMS}
 \paragraph{DG}
@@ -89,4 +117,6 @@ General ideas 1-2 pages
 
 
 \section{Goal}
+
+\subsection{Organization of this Proposal}
 \end{document}
