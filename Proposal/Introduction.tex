@@ -99,14 +99,144 @@ This can be a problem when the undershoots threaten to take density or energy ne
 lose stability and return garbage.
 The three classical techniques used to counter this possibility in finite difference and finite volume schemes are artificial viscosity, 
 total variation diminishing schemes, and slope limiters.
+Each of these techniques has its own flaws, whether loss of accuracy, limitations in multi dimensions, or numerous parameters that need 
+to be tuned on a problem specific basis.
+The weighted essentially non-oscillatory (WENO) scheme\cite{WENO} remains a popular solution among many CFD practitioners and was itself an improvement
+on the earlier essentially non-oscillatory (ENO) scheme of Harten, Enquist, Osher, and Chakravarthy\cite{ENO}.
+Despite the various implementation details, most of these methods for handling shocks can be interpreted as adding some sort of artificial diffusion
+into the numerical scheme.
+These means that the scheme is now solving a modified version of the original equations under consideration 
+-- one with artificially introduced diffusion terms.
 
 \subsubsection{Stabilized Finite Element Methods}
-\paragraph{SUPG}
-\paragraph{VMS}
-\paragraph{DG}
-\paragraph{HDG}
+Finite difference methods are very easy to implement, but remain limited to structured grids. 
+Finite volume methods fix many of the limitations of finite differences, 
+but are much harder to generalize to higher order and remain much more difficult to analyze mathematically. 
+The rigorous mathematical foundation of finite element methods has lead to growing interest from computational scientists.
+Additionally, the finite element framework allows for weaker regularity constraints on the solution than implied by the strong form of the equations 
+and a natural way to solve on general physical domains with arbitrarily high approximation order.
+Finite element methods found early success in the field of computational solid mechanics where the symmetric positive-definite nature of such problems
+allowed classical Bubnov-Galerkin methods to produce optimal or near-optimal results.
+Unfortunately, classical finite element methods perform poorly on singularly perturbed problems, 
+and more general formulations had to be explored.
+Some of the early pioneers of finite elements for CFD include Oden, Zienkiewicz, Karniadakis, and Hughes\cite{ChungCFD}.
 
-\subsection{Space-time finite elements}
+Residual based stabilization has been a popular means of fixing the loss of robustness on singularly perturbed problems.
+A given bilinear form is modified by adding the strong form of the residual multiplied by a test function and scaled by some
+stabilization parameter $\tau$ (possible a function).
+The classical example of this technique is streamline upwind Petrov-Galerkin (SUPG) method for convection-diffusion using piecewise linear
+continuous finite elements\cite{SUPG}.
+In addition to removing the spurious oscillations of Bubnov-Galerkin methods, SUPG recovers the optimal approximation in the $H^1$ norm in 1D.
+
+\paragraph{Streamline Upwind Petrov-Galerkin Method}
+In general, the trial (approximating) and test (weighting) spaces in the finite element method need not the the same as they are in the Bubnov-Galerkin method.
+The term Petrov-Galerkin refers to methods in which the two space differ.
+The original motivation behind the method was that in 1D convection-diffusion, it is possible to recover the exact solution at nodal points 
+using a finite difference method with ``exact'' artificial diffusion based on the mesh size $h$, 
+the convection magnitude $\bfbeta$, and the viscosity $\epsilon$.
+Tom Hughes, who developed the method, adapted these ideas to a finite element framework be modifying the test functions rather than by direct
+modification of the equations.
+
+In the abstract, the convection-diffusion equation can be written as 
+\[
+Lu=(L_{adv}+L_{diff})u=f\,,
+\]
+where $L_{adv}u:=\Div(\bfbeta u)$ is the advection operator and $L_{diff}u:=-\epsilon\Delta u$ is the diffusion operator.
+If $u$ is a linear combination of piece-wise linear basis functions $\phi_i,\,i=0,\cdots,N$, then within each element, the second order diffusion operator is zero.
+Given $b(u,v)$ and $l(v)$ from as the bilinear form and load from the standard Galerkin formulation, SUPG defines a new system $b_{SUPG}(u,v)=l_{SUPG}$ where
+\begin{align*}
+	b_{SUPG}(u,v)&=b(u,v)+\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
+	l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
+\end{align*}
+where $\tau$ is the SUPG parameter selected to match ``exact diffusion'' on uniform meshes, in which case SUPG gives the same results as the 
+exact diffusion finite difference method.
+However, unlike exact diffusion finite differences, SUPG gives optimal $H_0^1$ approximation and nodal interpolation of the exact solution 
+on nonuniform meshes and when $f\neq0$.
+Unfortunately, SUPG loses this nodal interpolation property in higher dimensions, but still remains close to the $H_0^1$ best approximation.
+Though developed with first order elements in mind, the method can be generalized to higher order elements with a modification of $\tau$.
+SUPG preserves \emph{consistency} of the variational problem -- since the stabilization is based on the residual, the exact solution 
+satisfies the stabilized variational problem. 
+This property does not hold for the exact diffusion finite difference or finite volume methods.
+
+We can interpret the residual based stabilization terms as modifying the test functions from the original bilinear form:
+\[
+b(u,\tilde v)
+\]
+where the SUPG test function $\tilde v$ is defined element-wise as
+\[
+\tilde v=\phi+\tau L_{adv}\phi\,.
+\]
+That is, we perturb our original test functions by a scaled advection operator applied to the original test function.
+For low order $C^0$ test functions, this naturally gives each test functions an upwind bias.
+This introduces an important idea -- that optimal convergence and stabilization can be achieved through suitable choice of test functions.
+
+\paragraph{Variational Multiscale Methods}
+The variational multiscale method generalized and systematized the ideas behind SUPG for a larger class of problems.
+The motivation was that blind application of Bubnov-Galerkin does not produce robust results in the presence of multiscale physics\cite{VMS}.
+The approach is to decompose the solution into a coarse and fine scale: $u=\bar u+u'$. The coarse scale, $\bar u$, is solved numerically,
+while attempting to solve for the fine scales, $u'$, analytically.
+One issue that arises in this process is approximating the fine-scale Green's function for the operator under consideration which is usually nonlocal.
+Similarly, the effect of the fine scales on the coarse scales in nonlocal.
+The variational multiscale method gives a framework from which stabilized methods can be derived for large classes of problems,
+but deep analysis of the problem at hand is required to derive the effect of the fine scales on the coarse scales.
+Computationally, VMS methods allow for computation with standard $C^0$ finite elements which avoids the annoying propagation of unknowns in
+discontinuous Galerkin methods.
+
+\paragraph{Discontinuous Galerkin Methods}
+Discontinuous Galerkin finite elements were first introduced by Reed and Hill in 1973 for neutron transport problems\cite{ReedHillDG}.
+Early contributors included Babu\v{s}ka, Lions, Nitsche, and Zlamal, but Arnold, Brezzi, Cockburn, and Marini put together a unified analysis
+of DG methods for elliptic problems in \cite{ArnoldDG}. 
+Of particular interest to our work in CFD is the paper by Cockburn and Shu\cite{CockburnShuDG} on DG for conservation laws.
+The method combines attractive features of the finite element and finite volume methods and has become hugely successful for fluid dynamics simulations.
+DG is a finite element method with the same rigorous mathematical foundation and other benefits of FEM, but uses a nonconforming basis such that
+In fact, the lowest order DG method is identical to the first order finite volume method.
+there is no explicit continuity between elements (though approximate conformity is enforced in a weak sense). 
+In the vein of finite volume methods, a numerical flux is used to facilitate communication between neighboring elements.
+The piecewise discontinuous nature of DG allows for very simple $h$ and $p$ adaptivity and straightforward parallelization.
+
+Like finite volume methods, the numerical flux is some function of the edge values from two neighboring elements, 
+The numerical flux can also be interpreted as a form of stabilization\cite{DGStabilization}.
+Consider the steady 1D advection equation:
+\[
+\pd{(\beta(x)u)}{x}=f\,,\quad u(0)=u_0\,.
+\]
+Multiply by test function $v$ and integrate by parts over each element $K=[x_K,x_{K+1}]$:
+\[
+-\int_K\beta(x)u\pd{v}{x}+\beta uv\|_{x_K}^{x_{K+1}}=\int_K fv\,.
+\]
+The global formulation is formed by summing up each of the local contributions.
+Since our discretization is piece-wise discontinuous, boundary terms are dual valued, and we need
+to make a choice about which ones to use.
+Let $u(x_K^-)$ denote the upwind value at point $x^K$ (left side for $\beta$ positive), and $u(x_K^+)$ the downwind side.
+Then for element $K$, $u(x_K^+)$ and $u(x_{K+1}^-)$ refer to the values local to that element while $u(x_K^-)$ and $u(x_{K+1}^+)$ refer to the 
+values from its two neighboring elements.
+The stable choice is always choose the upwind value for $u$ while choosing the element local value for $v$.
+Choosing downwind values of $u$ will give an unconditionally unstable method, while choosing average values will result in something similar
+to an $H^1$ conforming continuous Galerkin discretization\cite{DGStabilization}.
+
+The DG method has proven to be extremely successful in the field of computational fluid dynamics (and many other fields) due
+to several properties that are very important to fluid dynamicists.
+It is automatically locally conservative since the test function span the space of constants.
+The lowest order case is identical to first order finite volume methods.
+However, the most audible criticism of the DG method is the proliferation of unknown relative to continuous finite elements.
+For linear elements in 1D, there will be twice as many unknowns, for 2D quadrilateral elements, four times as many, and with 3D hexahedral elements, eight
+times as many. 
+This problem is assuaged when higher order elements are used, in which case the ratio approaches one as the element order goes to infinity.
+The other issue with DG is that there is a pre-asymptotic regime where the solution may go unstable if the mesh is not fine enough.
+This is a relevant issue when comparing to DPG, but most other methods encounter this as well, so it is not vocalized as a DG specific problem.
+
+\paragraph*{Hybridized Discontinuous Galerkin Methods}
+The hybridized discontinuous Galerkin method was first introduced by Cockburn, Gopalakrishnan, and Lazarov\cite{HDG}
+as a way to address some of the issues with the standard DG method 
+-- notably the proliferation of unknowns.
+HDG introduces numerical traces (result of integrating a gradient by parts) and numerical fluxes (result of integrating a divergence by parts) 
+which are handled differently. 
+New coupling unknowns are introduced for the numerical trace that only live on the mesh skeleton.
+The global problem can then be reframed exclusively in terms of these numerical traces and interior degrees of freedom
+can be solved in a fully parallel post-processing step.
+Numerical fluxes are treated in the same fashion as standard DG and hence contribute the same stabilization needed for convection dominated problems.
+
+\subsection{Space-Time Finite Elements}
 Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
 \cite{Klaij2006}
 \cite{Rhebergen2013}
