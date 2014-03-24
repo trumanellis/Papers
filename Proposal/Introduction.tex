@@ -49,7 +49,8 @@ Much of science is driven by curiosity, and this especially holds for computatio
 There is inherent value in exploring new methodologies because they may hold the keys to solving new problems or old problems in a better way.
 A new method may also help us to better understand existing methods. 
 The variational multiscale approach to finite element analysis helped to elucidate on some of the success of the much older streamwise upwind Petrov-Galerkin method while generalizing and improving it.
-The DPG method itself can be viewed as a generalization of least-squares finite elements or even of mixed methods. 
+The DPG method itself can be viewed as a generalization of least-squares finite elements 
+from a multiscale point of view\cite{DPGMultiscale} or even of mixed methods\cite{DPGMixed}. 
 
 Curiosity similarly motivates the desire to explore a space-time DPG formulation for computational fluid dynamics. 
 Based on our past experience with steady DPG, we anticipate space-time DPG to be a very interesting technique that could extend the automaticity of DPG in very novel ways.
@@ -378,8 +379,42 @@ serves as the most relevant model problem for our research.
 Norms for Navier-Stokes are derived by analogy to the convection-diffusion norm.
 
 DPG has been successfully applied to a wide range of physical problems.
+Early work on the Poisson equation was published in \cite{DPGPoisson}.
+Demkowicz \etal\cite{DPGHelmholtz}, Gopalakrishnan \etal\cite{Gopalakrishnan2014}, and Zitelli \etal\cite{DPG4} 
+analyzed and solved the Helmholtz equation with DPG.
+DPG was applied to linear elasticity and plate problems in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}.
+A 2D Maxwell cloaking problem was solved wit DPG in \cite{DPGCloaking} 
+and a 3D DPG theory for Maxwell was developed by Wieners and Wolmuth\cite{WohlmuthReport}.
+DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,Ellis2013Report},
+Stokes\cite{DPGStokes}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{}
 
 \section{Goal}
+The goal of this work is to develop a space-time formulation of DPG with the purpose of simulating transient 
+fluid dynamics problems.
+The emphasis will be on incompressible Navier-Stokes, but we also intend to study the compressible equations.
+We will also consider the convection-diffusion equation as a simplified model for developing robust space-time DPG methods.
 
 \subsection{Organization of this Proposal}
+This proposal is organized as follows. 
+In Chapter~\ref{sec:conservation} I summarize my past work developing a locally conservative DPG formulation for steady-state problems.
+I develop the method by augmenting the DPG system with Lagrange multipliers, then prove stability and robustness of the new formulation.
+Several numerical experiments are shown for convection-diffusion, Burgers' equation, and Stokes flow that demonstrate the effectiveness of the method.
+There is no reason the locally conservative formulation would not work in space-time; in fact I've done some preliminary simulations 
+(not covered in this proposal) for 1D compressible Navier-Stokes that seem to confirm that everything works as expected. 
+Of course, for problems as simple as 1D shock tubes, local conservation doesn't affect very much.
+
+Chapter~\ref{sec:timestepping} covers some exploratory work on coupling DPG with time stepping techniques.
+In particular, I single out the explicit singly diagonal implicit Runge-Kutta (ESDIRK) methods as promising options for
+coupling with DPG.
+Ultimately, we decided that space-time DPG offered a more attractive option, but time stepping techniques are not disqualified as an possibility.
+
+Chapter~\ref{sec:spacetime} presents the completed work so far on developing space-time DPG for 1D problems.
+The heat equation serves as a useful model as it is the simplest parabolic (first order in time, second order in space) problem.
+The ideas developed for the heat equation translate directly to convection-diffusion and the transient compressible Navier-Stokes equations.
+I present some preliminary results for several 1D shock tube problems.
+
+Finally, Chapter~\ref{sec:proposed} presents my proposed plans for this dissertation, emphasizing 2D space-time problems and development of 
+a mathematical theory for space-time DPG.
+I then summarize my contributions to areas A, B, and C according to the ICES Ph.D. requirements.
+
 \end{document}
