@@ -16,31 +16,34 @@
 % \heading{First A. Author, Second B. Author and Third C. Author}
 \heading{Truman E. Ellis, Leszek F. Demkowicz, Nathan V. Roberts, Jesse L. Chan and Robert D. Moser}
 
-\address{$^{*}$ The Institute for Computational Engineering and Sciences (ICES)\\
+\address{$^{*}$ Institute for Computational Engineering and Sciences,
 University of Texas at Austin\\
-201 East 24th St, Stop C0200, Austin, TX 78703\\
-e-mail: truman@ices.utexas.edu
+201 East 24th St, Stop C0200, Austin, TX 78703
+% e-mail: truman@ices.utexas.edu
 \and
-$^{\dag}$Argonne Leadership Computing Facility\\
+$^{\dag}$Argonne Leadership Computing Facility,
 Argonne National Laboratory\\
 9700 South Cass Avenue Building 240, Argonne, IL 60439
 \and
-$^{\ddag}$Computational and Applied Mathematics\\
+$^{\ddag}$Computational and Applied Mathematics,
 Rice University\\
 6100 Main MS-134 Houston, TX 77005
 }
 
-\keywords{CFD methodology, Parallel methodology, Parallel CFD applications}
+% \keywords{CFD methodology, Parallel methodology, Parallel CFD applications}
+\keywords{Discontinuous Petrov-Galerkin, Space-time finite elements}
 
-\abstract{This document provides information and instructions for preparing an Extended Abstract to be included in the Proceedings of \emph{Parallel CFD2014 Conference}. It can be written in Word.}
+% \abstract{This document provides information and instructions for preparing an Extended Abstract to be included in the Proceedings of \emph{Parallel CFD2014 Conference}. It can be written in Word.}
+\abstract{
+We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
+}
 
 \begin{document}
 %\maketitle
 
-\section{INTRODUCTION}
-
-The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
-Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+\section{A ROBUST ADAPTIVE METHOD FOR CFD}
+The discontinuous Petrov-Galerkin method\cite{DPGOverview} is a novel adaptive finite element framework with exceptional stability properties.
+Mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
 mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
 DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
 \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
@@ -51,16 +54,24 @@ Human intervention to correct or adapt a failed massively parallel simulation ca
 numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
 An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory requirements.
 These are all observed properties of the discontinuous Petrov-Galerkin finite element method.
-Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
-Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Locally computed \emph{optimal test functions} ensure stability on convection-dominated flows as well as resolved viscous flow.
+% Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Element contributions to the global stiffness matrix can be computed independently due to the use of discontinuous test functions.
 Furthermore, static condensation allows the global solve to concern only the \emph{trace} degrees of freedom; 
 trace variables are defined on the mesh skeleton.  
 This allows significant reduction of the cost of the global solve.  
 The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
 
+\section{SPACE-TIME DPG FOR TRANSIENT PROBLEMS}
 We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
-in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
+in the same way that we already do with spatial adaptivity. 
+
+\section{NUMERICAL RESULTS}
+Preliminary results have been generated with Camellia\cite{CamelliaDPG} for spatially 1D flows,
 and a rewrite of Camellia for higher dimensions is currently in progress.
+Figure~\ref{fig:sod} shows a simulation of the 1D Sod shock tube with a physical viscosity of $10^{-5}$ (and no artificial viscosity) 
+until a final time of $t=0.2$.
+We start on a coarse mesh of only 4 space-time elements and adaptively refine toward a resolved solution.
 
 \begin{figure}[h]
 \centering
@@ -94,6 +105,7 @@ and a rewrite of Camellia for higher dimensions is currently in progress.
 
 
 \section{CONCLUSIONS}
+Initial results indicate that space-time DPG could be an effective method for adaptive simulations of transient CFD problems with multiple resolution scales.
 
 % \begin{itemize}
 % \item[-] Extended Abstracts in format for publication should be submitted electronically via the web page of the Conference \texttt{http://congress.cimne.com/ParCFD2014}, before \textbf{April 5th 2014}. They must be translated into Portable Document Format (PDF) before submission. The maximum size of the file is 4 Mb.
@@ -101,12 +113,14 @@ and a rewrite of Camellia for higher dimensions is currently in progress.
 % \item[-] The speaker (contact author) should register and pay his registration fee during the advance period (before \textbf{April 5th 2014}) for their Extended Abstract to be included in the final programme of the Conference.
 % \end{itemize}
 
-\begin{thebibliography}{99}
-\bibitem{Zienkiewicz}  Zienkiewicz, O.C. and  Taylor, R.L. \textit{The finite element method}. McGraw Hill,
-Vol. I., (1989), Vol. II., (1991).
-\bibitem{Idelsohn} Idelsohn, S.R. and O\~{n}ate, E. Finite element and finite volumes. Two good friends.
-\textit{Int. J. Num. Meth. Engng.} (1994) \textbf{37}:3323--3341.
-\end{thebibliography}
+\bibliographystyle{plain}
+\bibliography{../Papers}
+% \begin{thebibliography}{99}
+% \bibitem{Zienkiewicz}  Zienkiewicz, O.C. and  Taylor, R.L. \textit{The finite element method}. McGraw Hill,
+% Vol. I., (1989), Vol. II., (1991).
+% \bibitem{Idelsohn} Idelsohn, S.R. and O\~{n}ate, E. Finite element and finite volumes. Two good friends.
+% \textit{Int. J. Num. Meth. Engng.} (1994) \textbf{37}:3323--3341.
+% \end{thebibliography}
 
 \end{document}
 
