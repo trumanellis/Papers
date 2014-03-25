@@ -1,0 +1,113 @@
+\documentclass{parcfd2014}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\input{../preamble.tex}
+
+% \title{INSTRUCTIONS TO PREPARE AN EXTENDED ABSTRACT FOR THE
+% 26$^{\rm th}$ INTERNATIONAL CONFERENCE ON PARALLEL FLUID DYNAMICS – PARALLEL CFD 2014
+% }
+\title{Space-Time DPG: Designing a Method for Massively Parallel CFD}
+
+\author{Truman E. Ellis$^{*}$, Leszek F. Demkowicz$^{*}$, Nathan V. Roberts$^{\dag}$,\\ Jesse L. Chan$^{\ddag}$ and Robert D. Moser$^{*}$}
+
+% \heading{First A. Author, Second B. Author and Third C. Author}
+\heading{Truman E. Ellis, Leszek F. Demkowicz, Nathan V. Roberts, Jesse L. Chan and Robert D. Moser}
+
+\address{$^{*}$ The Institute for Computational Engineering and Sciences (ICES)\\
+University of Texas at Austin\\
+201 East 24th St, Stop C0200, Austin, TX 78703\\
+e-mail: truman@ices.utexas.edu
+\and
+$^{\dag}$Argonne Leadership Computing Facility\\
+Argonne National Laboratory\\
+9700 South Cass Avenue Building 240, Argonne, IL 60439
+\and
+$^{\ddag}$Computational and Applied Mathematics\\
+Rice University\\
+6100 Main MS-134 Houston, TX 77005
+}
+
+\keywords{CFD methodology, Parallel methodology, Parallel CFD applications}
+
+\abstract{This document provides information and instructions for preparing an Extended Abstract to be included in the Proceedings of \emph{Parallel CFD2014 Conference}. It can be written in Word.}
+
+\begin{document}
+%\maketitle
+
+\section{INTRODUCTION}
+
+The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
+DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
+\emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
+that indicates error in the energy norm.
+
+Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
+Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
+numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
+An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory requirements.
+These are all observed properties of the discontinuous Petrov-Galerkin finite element method.
+Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
+Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Furthermore, static condensation allows the global solve to concern only the \emph{trace} degrees of freedom; 
+trace variables are defined on the mesh skeleton.  
+This allows significant reduction of the cost of the global solve.  
+The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
+
+We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
+in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
+and a rewrite of Camellia for higher dimensions is currently in progress.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figs/Sod1e-5/den15.pdf}
+\caption{Density}
+\label{fig:sod_den14}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figs/Sod1e-5/vel15.pdf}
+\caption{Velocity}
+\label{fig:sod_vel14}
+\end{subfigure}
+\begin{subfigure}[c]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figs/Sod1e-5/pres15.pdf}
+\caption{Pressure}
+\label{fig:sod_pres14}
+\end{subfigure}
+\begin{subfigure}[c]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figs/Sod1e-5/mesh15.png}
+\caption{Density with space-time mesh}
+\label{fig:sod_mesh14}
+\end{subfigure}
+\caption{Sod problem after 14 adaptive refinements}
+\label{fig:sod}
+\end{figure}
+
+
+\section{CONCLUSIONS}
+
+% \begin{itemize}
+% \item[-] Extended Abstracts in format for publication should be submitted electronically via the web page of the Conference \texttt{http://congress.cimne.com/ParCFD2014}, before \textbf{April 5th 2014}. They must be translated into Portable Document Format (PDF) before submission. The maximum size of the file is 4 Mb.
+
+% \item[-] The speaker (contact author) should register and pay his registration fee during the advance period (before \textbf{April 5th 2014}) for their Extended Abstract to be included in the final programme of the Conference.
+% \end{itemize}
+
+\begin{thebibliography}{99}
+\bibitem{Zienkiewicz}  Zienkiewicz, O.C. and  Taylor, R.L. \textit{The finite element method}. McGraw Hill,
+Vol. I., (1989), Vol. II., (1991).
+\bibitem{Idelsohn} Idelsohn, S.R. and O\~{n}ate, E. Finite element and finite volumes. Two good friends.
+\textit{Int. J. Num. Meth. Engng.} (1994) \textbf{37}:3323--3341.
+\end{thebibliography}
+
+\end{document}
+
+
