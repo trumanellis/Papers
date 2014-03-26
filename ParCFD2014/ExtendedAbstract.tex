@@ -6,14 +6,10 @@
 \usepackage{amssymb}
 \input{../preamble.tex}
 
-% \title{INSTRUCTIONS TO PREPARE AN EXTENDED ABSTRACT FOR THE
-% 26$^{\rm th}$ INTERNATIONAL CONFERENCE ON PARALLEL FLUID DYNAMICS – PARALLEL CFD 2014
-% }
 \title{Space-Time DPG: Designing a Method for Massively Parallel CFD}
 
 \author{Truman E. Ellis$^{*}$, Leszek F. Demkowicz$^{*}$, Nathan V. Roberts$^{\dag}$,\\ Jesse L. Chan$^{\ddag}$ and Robert D. Moser$^{*}$}
 
-% \heading{First A. Author, Second B. Author and Third C. Author}
 \heading{Truman E. Ellis, Leszek F. Demkowicz, Nathan V. Roberts, Jesse L. Chan and Robert D. Moser}
 
 \address{$^{*}$ Institute for Computational Engineering and Sciences,
@@ -33,21 +29,19 @@ Rice University\\
 % \keywords{CFD methodology, Parallel methodology, Parallel CFD applications}
 \keywords{Discontinuous Petrov-Galerkin, Space-time finite elements}
 
-% \abstract{This document provides information and instructions for preparing an Extended Abstract to be included in the Proceedings of \emph{Parallel CFD2014 Conference}. It can be written in Word.}
 \abstract{
-We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
-}
-
-\begin{document}
-%\maketitle
-
-\section{A ROBUST ADAPTIVE METHOD FOR CFD}
-The discontinuous Petrov-Galerkin method\cite{DPGOverview} is a novel adaptive finite element framework with exceptional stability properties.
+The discontinuous Petrov-Galerkin method\cite{DPGOverview2} is a novel adaptive finite element framework with exceptional stability properties.
 Mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
 mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
 DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
 \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
 that indicates error in the energy norm.
+We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
+}
+
+\begin{document}
+
+\section{A ROBUST ADAPTIVE METHOD FOR CFD}
 
 Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
 Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
@@ -105,7 +99,9 @@ We start on a coarse mesh of only 4 space-time elements and adaptively refine to
 
 
 \section{CONCLUSIONS}
-Initial results indicate that space-time DPG could be an effective method for adaptive simulations of transient CFD problems with multiple resolution scales.
+Initial 1D space-time results are promising, and we are under active development to extend Camellia to allow higher dimensional space-time simulations.
+We believe 
+% Initial results indicate that space-time DPG could be an effective method for adaptive simulations of transient CFD problems with multiple resolution scales.
 
 % \begin{itemize}
 % \item[-] Extended Abstracts in format for publication should be submitted electronically via the web page of the Conference \texttt{http://congress.cimne.com/ParCFD2014}, before \textbf{April 5th 2014}. They must be translated into Portable Document Format (PDF) before submission. The maximum size of the file is 4 Mb.
@@ -115,12 +111,6 @@ Initial results indicate that space-time DPG could be an effective method for ad
 
 \bibliographystyle{plain}
 \bibliography{../Papers}
-% \begin{thebibliography}{99}
-% \bibitem{Zienkiewicz}  Zienkiewicz, O.C. and  Taylor, R.L. \textit{The finite element method}. McGraw Hill,
-% Vol. I., (1989), Vol. II., (1991).
-% \bibitem{Idelsohn} Idelsohn, S.R. and O\~{n}ate, E. Finite element and finite volumes. Two good friends.
-% \textit{Int. J. Num. Meth. Engng.} (1994) \textbf{37}:3323--3341.
-% \end{thebibliography}
 
 \end{document}
 
