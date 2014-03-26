@@ -1,0 +1,699 @@
+\documentclass[18pt,xcolor=table]{beamer}
+\input{../preamble.tex}
+\graphicspath{{./figs/}}
+
+\usepackage{bbm}
+\usepackage{textpos}
+\usepackage{pgf,tikz}
+\usepackage{graphicx}
+\usepackage{forloop}
+\usepackage{comment}
+
+\definecolor{utorange}{RGB}{203,96,21}
+\definecolor{utblack}{RGB}{99,102,106}
+\definecolor{utbrown}{RGB}{110,98,89}
+\definecolor{utsecbrown}{RGB}{217,200,158}
+\definecolor{utsecgreen}{RGB}{208,222,187}
+\definecolor{utsecblue}{RGB}{127,169,174}
+
+\mode<presentation>
+{
+  % \usetheme{Pittsburgh}
+  \usetheme{Boadilla}
+  \usefonttheme[onlymath]{serif}
+
+  \setbeamercovered{invisible}
+  \setbeamertemplate{navigation symbols}{}
+
+  % Color Theme
+    \setbeamercolor{normal text}{bg=white,fg=utblack}
+  \setbeamercolor{structure}{fg=utorange}
+
+  \setbeamercolor{alerted text}{fg=red!85!black}
+
+  \setbeamercolor{item projected}{use=item,fg=black,bg=item.fg!35}
+
+  \setbeamercolor*{palette primary}{use=structure,fg=white, bg=utorange}
+  \setbeamercolor*{palette secondary}{use=structure,bg=utsecbrown}
+  \setbeamercolor*{palette tertiary}{use=structure,bg=utsecgreen}
+  \setbeamercolor*{palette quaternary}{use=structure,fg=structure.fg,bg=utsecblue}
+
+  % \setbeamercolor*{frametitle}{use=structure,fg=utorange, bg=utsecbrown}
+  \setbeamercolor*{framesubtitle}{fg=utbrown}
+
+  \setbeamercolor*{block title}{parent=structure,fg=black,bg=utsecgreen}
+  \setbeamercolor*{block body}{fg=black,bg=utblack!10}
+  \setbeamercolor*{block title alerted}{parent=alerted text,bg=black!15}
+  \setbeamercolor*{block title example}{parent=example text,bg=black!15}
+
+  \setbeamerfont{framesubtitle}{size=\small}
+}
+
+% \usepackage[orientation=landscape,size=custom,width=16,height=9.75,scale=0.5,debug]{beamerposter}
+% \usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.5,debug]{beamerposter}
+
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+    \hbox{%
+      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+        \usebeamerfont{author in head/foot}\insertshortauthor%~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+      \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \usebeamerfont{title in head/foot}\insertshorttitle
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+        \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+        \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+      \end{beamercolorbox}}%
+        \vskip0pt%
+}
+\makeatother
+
+\usepackage{kerkis}
+\usepackage[T1]{fontenc}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{amsmath}
+
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+
+\pgfdeclareimage[height=1.2cm]{utbig}{logos/UTWordmark}
+\pgfdeclareimage[height=0.6cm]{ut}{logos/UTWordmark}
+% \pgfdeclareimage[height=10.0cm]{utbig}{logos/ICES-wordmark-teal.pdf}
+% \pgfdeclareimage[height=0.6cm]{ut}{logos/ICES-wordmark-teal.pdf}
+% \pgfdeclareimage[height=1.5cm]{iceslogo}{logos/ICES-wordmark-teal.png}
+% \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
+
+\title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+% \subtitle{If you have one}
+\author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
+Leszek Demkowicz, Robert Moser
+}
+
+% \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
+\institute{
+\pgfuseimage{utbig}
+\\ \vspace{2ex}
+\includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
+}
+\date[Finite Element Rodeo 2014]%{\pgfuseimage{iceslogo} }
+
+\begin{document}
+
+\tikzstyle{block} = [rectangle, draw, rounded corners, shade, top color=white, text width=5em,
+  bottom color=blue!50!black!20, draw=blue!40!black!60, very thick, text centered, minimum height=4em]
+  \tikzstyle{line} = [draw, -latex']
+  \tikzstyle{cloud} = [draw, ellipse,top color=white, bottom color=red!20, node distance=2cm, minimum height=2em]
+
+
+  \beamertemplateballitem
+  %\beamertemplatetransparentcoveredhigh
+
+  \frame{\titlepage}
+
+  \addtobeamertemplate{frametitle}{}{%
+      \begin{textblock*}{100mm}(0.87\textwidth,-0.75cm)
+    \pgfuseimage{ut}
+    \end{textblock*}
+  }
+
+%   /$$      /$$             /$$     /$$                        /$$     /$$                    
+%  | $$$    /$$$            | $$    |__/                       | $$    |__/                    
+%  | $$$$  /$$$$  /$$$$$$  /$$$$$$   /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$ $$/$$ $$ /$$__  $$|_  $$_/  | $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  $$$| $$| $$  \ $$  | $$    | $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$\  $ | $$| $$  | $$  | $$ /$$| $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$ \/  | $$|  $$$$$$/  |  $$$$/| $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                              
+%                                                                                              
+%  
+\section{Introduction}
+
+% ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Motivation}
+% \framesubtitle{DPG for Massively Parallel CFD}  %% needed for proper positioning of the logo ...
+% Pre-asymptotic stability and automatic adaptivity make a powerful synthesis.
+% \begin{itemize}
+%   \item Initial mesh design is a time consuming and expensive part of CFD.
+%   \item Pre-asymptotic stability allows a DPG simulation to begin on the coarsest possible mesh.
+%   \item Many methods become unstable in the pre-asymptotic regime.
+%   \item Human intervention to correct a failed massively parallel simulation can be very costly.
+%   \item Error indicator function indicates targets most important areas for refinement.
+%   \item Provably robust for singularly perturbed problems.
+% \end{itemize}
+
+% \vspace{2ex}
+% Space-time DPG extends these benefits to transient problems.
+% \begin{itemize}
+%   \item Localizes temporal adaptivity similar to spatial adaptivity.
+% \end{itemize}
+% \end{frame}
+
+\begin{comment}
+Good afternoon. Looks like I'm the only thing between you and your evening, so I'm going to try to keep this brief.
+My name is Truman Ellis, and I've been working with Dr. Demkowicz on DPG for fluid problems.
+At past FEM rodeos I talked about some of our work on a locally conservative formulation of DPG. 
+This talk is going to be about some of our preliminary results on space-time DPG for transient CFD problems.
+The ultimate application of course is that we think this space-time DPG formulation will be ideal for
+high-performance computing on future architectures.
+I'm not going to explicitly address the parallel programming side in this talk, but it will be implicit in the motivations
+behind the design of the method.
+\end{comment}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{DPG Summary}  %% needed for proper positioning of the logo ...
+Overview of Features
+\begin{itemize}
+\item Robust for singularly perturbed problems
+\item Stable in the preasymptotic regime
+\item Designed for adaptive mesh refinement
+\item Ideal for high-performance computing
+\end{itemize}
+\medskip
+
+DPG is a minimum residual method:
+\[
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
+\]
+\vspace{-1em}
+\[
+\scalebox{1.8}{\ensuremath{\Updownarrow}}
+\]
+\vspace{-1em}
+\[
+b(u_h,R_V^{-1}B\delta u_h)
+=l(R_V^{-1}B\delta u_h)
+\quad\forall\delta u_h\in U_h
+\]
+\vspace{-2ex}
+
+where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
+\textcolor{utblack}{\textbf{optimal test functions}}.
+
+% \vspace{4ex}
+% For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
+% \[
+% \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
+% \]
+% where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
+\end{frame}
+\begin{comment}
+Before I begin, we'll start with an ultra-brief summary of DPG and why we might 
+want to apply it to problems in CFD.
+For one, DPG has proven very robust in the face of singularly
+perturbed problems (think high Reynolds number flows).
+You do not need a domain expert to craft well designed meshes for each new
+problem. We are mathematically guaranteed to remain stable under very coarse
+meshes while adaptively refining toward a solution.
+
+Mathematically, DPG can be characterized as a minimum
+residual method. This means that through the choice of specific optimal test
+functions we automatically minimize the residual in the dual norm of a
+Hilbert space V. We also have a well-defined process to generate the optimal
+test functions which is computationally feasible.
+\end{comment}
+
+%   /$$   /$$                       /$$    
+%  | $$  | $$                      | $$    
+%  | $$  | $$  /$$$$$$   /$$$$$$  /$$$$$$  
+%  | $$$$$$$$ /$$__  $$ |____  $$|_  $$_/  
+%  | $$__  $$| $$$$$$$$  /$$$$$$$  | $$    
+%  | $$  | $$| $$_____/ /$$__  $$  | $$ /$$
+%  | $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/
+%  |__/  |__/ \_______/ \_______/   \___/  
+%                                          
+%                                          
+%  
+\section{Heat Equation}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Heat Equation}
+\framesubtitle{Simplest Nontrivial Space-Time Problem}  %% needed for proper positioning of the logo ...
+
+Equation is elliptic in space, but hyperbolic in time (parabolic in space-time).
+\begin{equation*}
+  \frac{\partial u}{\partial t}-\epsilon\Delta u=f
+\end{equation*}
+
+This is really just a composite of Fourier's law and conservation of energy.
+\begin{equation*}
+\begin{aligned}
+\bfsigma-\epsilon\Grad u&=0\\
+\frac{\partial u}{\partial t}-\Div\bfsigma&=f
+\end{aligned}
+\end{equation*}
+
+We can rewrite this in terms of a space-time divergence.
+\begin{equation*}
+\begin{aligned}
+\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+\Divxt\vecttwo{-\bfsigma}{u}&=f
+\end{aligned}
+\end{equation*}
+\end{frame}
+\begin{comment}
+Without further ado, we'll jump into the simplest representative spatial-temporal problem: the heat equation.
+The interesting thing about this equation is that it is elliptic in space, but hyperbolic in time.
+We can split this into two first order equations: conservation of energy and Fourier's law.
+Notice that we can rewrite this as a constitutive equation and a space-time divergence.
+\end{comment}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Heat Equation}
+\framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
+\vspace{-2ex}
+Multiply by test function and integrate by parts over space-time element K.
+\begin{equation*}
+\begin{aligned}
+\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f
+\end{aligned}
+\end{equation*}
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+where
+\begin{align*}
+\hat u&:=\trace(u)\\
+\hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
+\end{align*}
+\vspace{-4ex}
+\begin{itemize}
+  \item Trace $\hat u$ defined on spatial boundaries
+  \item Flux $\hat t$ defined on all boundaries
+\end{itemize}
+\end{column}
+\begin{column}[T]{0.6\textwidth} % alternative top-align that's better for graphics
+\vspace{-2ex}
+\begin{block}{Support of Trace Variables}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm, scale=0.6, every node/.style={scale=0.6}]
+\clip(-0.7,-0.6) rectangle (5.27,2.09);
+\draw (0,2)-- (0,0);
+\draw (0,0)-- (1,0);
+\draw (1,0)-- (4,0);
+\draw (4,0)-- (5,0);
+\draw (5,0)-- (5,2);
+\draw (5,2)-- (3,2);
+\draw (3,2)-- (2,2);
+\draw (2,2)-- (0,2);
+\draw (1,0)-- (1.5,1);
+\draw (1.5,1)-- (2,2);
+\draw (1.5,1)-- (3.5,1);
+\draw (3,2)-- (3.5,1);
+\draw (3.5,1)-- (4,0);
+\draw (-0.21,0.9) node[anchor=south west] {$\hat u$};
+\draw (4.82,0.9) node[anchor=south west] {$\hat u$};
+\draw (3.5,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.0,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.5,1.4) node[anchor=south west] {$\hat u$};
+\draw (3.0,1.4) node[anchor=south west] {$\hat u$};
+\draw (0.05,0.9) node[anchor=south west] {$\hat t$};
+\draw (1.40,0.45) node[anchor=south west] {$\hat t$};
+\draw (3.79,0.45) node[anchor=south west] {$\hat t$};
+\draw (2.47,1.0) node[anchor=south west] {$\hat t$};
+\draw (3.33,1.4) node[anchor=south west] {$\hat t$};
+\draw (1.89,1.4) node[anchor=south west] {$\hat t$};
+\draw (5.07,0.9) node[anchor=south west] {$\hat t$};
+\draw (4.44,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.46,0.0) node[anchor=south west] {$\hat t$};
+\draw (0.45,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.44,1.7) node[anchor=south west] {$\hat t$};
+\draw (0.76,1.7) node[anchor=south west] {$\hat t$};
+\draw (4.21,1.7) node[anchor=south west] {$\hat t$};
+\draw [->] (-0.5,-0.5) -- (-0.5,0);
+\draw [->] (-0.5,-0.5) -- (0,-0.5);
+\draw (-0.54,0.29) node[anchor=north west] {$t$};
+\draw (0.07,-0.35) node[anchor=north west] {$x$};
+\end{tikzpicture}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{comment}
+We then follow standard DPG procedure and multiply by test functions tau and v 
+where tau is vector valued with dimension equal to the spatial dimension.
+Then we integrate each equation by parts.
+But the first equation is only integrated over spatial dimensions, so the resulting trace term is limited
+to boundaries with a nonzero spatial normal component.
+The integration by parts in space-time yields a flux that is defined on all boundaries, but with different
+character across spatial and temporal boundaries.
+\end{comment}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Heat equation}
+\framesubtitle{Pulsed Source Problem}  %% needed for proper positioning of the logo ...
+\vspace{-1ex}
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[c]{0.3\textwidth} % each column can also be its own environment
+% \vspace{3ex}
+\begin{itemize}
+  \item Initial condition $u=0$.
+  \item Apply unit source $x\in[3/8,5/8]$,\\$t\in[1/4,1/2]$.
+  \item Should see no temporal diffusion.
+  \item Space-time adaptivity picks up areas of rapid change.
+\end{itemize}
+\end{column}
+\begin{column}[c]{0.7\textwidth} % each column can also be its own environment
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/u.png}
+\\$u$\\\vspace{1ex}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
+\\$\sigma$\\\vspace{1ex}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
+\\$\hat u$
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
+\\$\hat t$
+\end{subfigure}
+% \caption{Pulsed space-time heat problem after 4 refinements}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{comment}
+Here we have a very contrived example problem. 
+We start with a completely zero initial condition and then turn on a unit source from t = 1/4 to t=1/2,
+then watch the inputted heat diffuse over the rest of the time interval.
+The key thing to watch for is making sure we don't get any heat bleeding backwards in time. 
+Indeed we get  very clean start at t=1/4.
+Notice also how u hat exists only on vertical boundaries, while the flux lives on the entire mesh skeleton.
+We also see how the method naturally picks on on areas of rapid temporal or spatial changes and adapts to resolve them.
+\end{comment}
+
+%    /$$$$$$                                                                            /$$ /$$       /$$          
+%   /$$__  $$                                                                          |__/| $$      | $$          
+%  | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$ /$$| $$$$$$$ | $$  /$$$$$$ 
+%  | $$       /$$__  $$| $$_  $$_  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/ /$$_____/| $$| $$__  $$| $$ /$$__  $$
+%  | $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$  \__/| $$$$$$$$|  $$$$$$ |  $$$$$$ | $$| $$  \ $$| $$| $$$$$$$$
+%  | $$    $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$_____/ \____  $$ \____  $$| $$| $$  | $$| $$| $$_____/
+%  |  $$$$$$/|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$      |  $$$$$$$ /$$$$$$$/ /$$$$$$$/| $$| $$$$$$$/| $$|  $$$$$$$
+%   \______/  \______/ |__/ |__/ |__/| $$____/ |__/       \_______/|_______/ |_______/ |__/|_______/ |__/ \_______/
+%                                    | $$                                                                          
+%                                    | $$                                                                          
+%                                    |__/    
+\section{Compressible Navier-Stokes}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Strong Form}  %% needed for proper positioning of the logo ...
+The compressible Navier-Stokes equations are
+\begin{align*}
+\frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
++\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{D}}
+%TODO: Possible error above. cfd-online seems to have T^T
+=\svectthree{f_c}{\bff_m}{f_e}\,,
+\end{align*}
+where
+\begin{equation*}
+  \mathbb{D}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
+\end{equation*}
+\begin{equation*}
+  \bfq=-C_p\frac{\mu}{Pr}\Grad T\,,
+\end{equation*}
+and (assuming an ideal gas EOS)
+\[
+p=\rho R T\,.
+\]
+\end{frame}
+\begin{comment}
+Now we make a huge jump to the compressible Navier-Stokes equations, but all of the same ideas carry over.
+We write our conservation equations in strong form with constitutive laws for the deviatoric stress tensor, heat flux, and pressure.
+\end{comment}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{First Order Space-Time Form}  %% needed for proper positioning of the logo ...
+Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$:
+\begin{align*}
+  \mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
+  \bfq+C_p\frac{\mu}{Pr}\Grad T&=0\\
+  \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+  \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+  \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
+\end{align*}
+\end{frame}
+\begin{comment}
+We follow the same course as we did for the heat equation and write this as a first order system of equations
+with the conservation laws in space-time divergence form.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
+Multiplying by test functions and integrating by parts:
+% \scalebox{0.9}{
+{
+\small
+\begin{align*}
+  \LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\trace{\mathbb{S}}}
+  -\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+  \LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{C_p\frac{\mu}{Pr}\hat T,\tau_n}&=0\\
+  -\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+  -\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+  -\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+  +\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align*}
+}
+% }
+where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
+\end{frame}
+\begin{comment}
+Again we multiply by test functions and integrate by parts. In this case S is a symmetric tensor valued test function,
+tau is a vector valued test function of spatial dimension, v_c and v_e are scalar valued, and v_m is vector valued matching the spatial dimension.
+We've also introduced spatial traces u hat and T had and fluxes for each conservation law.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Flux and Trace Variables}  %% needed for proper positioning of the logo ...
+Spatial traces and fluxes are defined as follows:
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat T&=\trace(T)\\
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
+&\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
+\end{equation*}
+\begin{block}{Linearization}
+Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to linearize in $\rho$, $\bfu$, $T$, and $\mathbb{D}$ 
+(Jacobian and residual not shown here).
+\end{block}
+\end{frame}
+\begin{comment}
+The above integration by parts gives the following definitions for the spatial traces and fluxes.
+Notice the analog to the heat equation where the fluxes change nature depending on whether they are on temporal or spatial boundaries.
+
+In the above bilinear form, the fluxes, traces, and heat flux are linear.
+All of the other variables are involved in nonlinearities and will need to be linearized and solved via a Gauss-Newton iteration.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
+The test norm is
+{
+\small
+\begin{align*}
+&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\|\frac{1}{\mu}\mathbb{S}\|^2
++\|\frac{Pr}{C_p\mu}\bftau\|^2
++\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
+\,.
+\end{align*}
+}
+\end{frame}
+\begin{comment}
+Choice of test norm can be one of the most influential factors in the success of a particular DPG method.
+For steady Navier-Stokes we developed a robust test norm by analogy to steady convection-diffusion.
+We need to perform a similar analysis for space-time convection-diffusion, but we've found that the following norm
+for Navier-Stokes seems to work better than the standard graph norm.
+Essentially, we've taken the standard graph norm based off the adjoint equation and decoupled the Eulerian and viscous terms.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
+
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+\begin{comment}
+We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
+space-time elements. 
+Traditionally the Sod shock tube is defined for the Euler equations, 
+but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
+We instead just solve the problem with a small physical viscosity of order 10^-5.
+You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
+Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
+resolve the flow features.
+We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
+You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
+With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+Infinitely strong shock propagation.
+\foreach \n in {1,...,9}
+{
+\only<\n>
+{
+\vspace{4ex}
+% \begin{figure}[ht]
+% \centering
+
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+\end{column}
+% \end{subfigure}
+\hspace{8ex}
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.4\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+\end{column}
+\end{columns}
+% \end{subfigure}
+% \end{figure}
+}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Conclusions and Future Work}
+\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+Conclusions
+\begin{itemize}
+  \item A problem in conservation form can be transformed to a space-time divergence.
+  \item Fluxes change character from spatial to temporal boundaries.
+  \item Traces are only defined on spatial boundaries.
+\end{itemize}
+\bigskip
+
+Future Work
+\begin{itemize}
+  \item Proof of robustness for convection-diffusion.
+  \item Analysis of robust test norms.
+  \item Time slabs will reduce the simulation cost.
+  \item Two and three dimensions for more realistic problems.
+  \item Incompressible Navier-Stokes.
+  \item Iterative solvers for parallel scalability.
+\end{itemize}
+\end{frame}
+\begin{comment}
+It is extremely helpful to be able to write the governing equations in terms of a space-time divergence
+since that frames things in a way that we are familiar with from steady DPG.
+The oddity is that this leaves traces on temporal edges undefined, so our code needs to know not to put degrees
+of freedom there. 
+
+These are all very preliminary results, but they give an indication of what we can expect in the future.
+We still need to analyze the space-time convection-diffusion equation and develop robust norms in this context
+before we can extend the ideas to Navier-Stokes.
+We also have some rough work done on time-slabs which should improve the computational efficiency.
+Obviously, we are going to need to move to two and three dimensional problems in order to simulate anything of interest.
+My primary target is actually incompressible Navier-Stokes, which should be easier since we don't have to deal with shocks.
+But in 1D incompressible gives absolutely trivial solutions, so we didn't pursue it here.
+I don't know if we will get to this during my dissertation, but if we really want a scalable method, we need to address the 
+lack of preconditioners for DPG and develop a decent iterative solver.
+\end{comment}
+
+\end{document}
