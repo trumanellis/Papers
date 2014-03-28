@@ -20,7 +20,7 @@ Committee: Leszek~Demkowicz (co-advisor), Robert~Moser (co-advisor), Thomas~Hugh
 % \textbf{Motivation} 
 \paragraph{DPG - a robust adaptive method for CFD.}
 The discontinuous Petrov-Galerkin method\cite{DPGOverview} is a novel adaptive finite element framework with exceptional stability properties.
-Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+Initial mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
 mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
 DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
 \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
@@ -32,8 +32,9 @@ Human intervention to correct or adapt a failed massively parallel simulation ca
 numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
 An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory requirements\cite{BlastWebPage}.
 These are all observed properties of the discontinuous Petrov-Galerkin finite element method.
-Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
-Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Locally computed \emph{optimal test functions} ensure stability on convection-dominated flows as well as resolved viscous flow.
+% Individual contributions from each element to the global stiffness matrix can be computed completely independently due to the discontinuous nature of DPG.
+Element contributions to the global stiffness matrix can be computed independently due to the use of discontinuous test functions.
 Furthermore, static condensation allows the global solve to concern only the \emph{trace} degrees of freedom; 
 trace variables are defined on the mesh skeleton.  
 This allows significant reduction of the cost of the global solve.  

@@ -9,6 +9,14 @@
 \usepackage{forloop}
 \usepackage{comment}
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \definecolor{utorange}{RGB}{203,96,21}
 \definecolor{utblack}{RGB}{99,102,106}
 \definecolor{utbrown}{RGB}{110,98,89}
@@ -132,7 +140,13 @@ Leszek Demkowicz, Robert Moser
 %                                                                                              
 %                                                                                              
 %  
-\section{Introduction}
+\section{Motivation}
+\subsection{Other Methods}
+
+\section{Overview of DPG}
+\subsection{Minimum Residual Method}
+\subsection{Mixed Method}
+\subsection{Multiscale Method}
 
 % ------------------------------------------------------------
 % \begin{frame}[t]
@@ -573,88 +587,88 @@ Essentially, we've taken the standard graph norm based off the adjoint equation 
 \end{comment}
 
 
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
-\foreach \n in {1,...,15}
-{
-\only<\n>
-{
-\vspace{-2ex}
-\begin{figure}[ht]
-\centering
-
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
-\end{subfigure}
-\end{figure}
-}
-}
-\end{frame}
-\begin{comment}
-We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
-space-time elements. 
-Traditionally the Sod shock tube is defined for the Euler equations, 
-but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
-We instead just solve the problem with a small physical viscosity of order 10^-5.
-You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
-Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
-resolve the flow features.
-We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
-You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
-With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
-\end{comment}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-Infinitely strong shock propagation.
-\foreach \n in {1,...,9}
-{
-\only<\n>
-{
-\vspace{4ex}
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+% \foreach \n in {1,...,15}
+% {
+% \only<\n>
+% {
+% \vspace{-2ex}
 % \begin{figure}[ht]
 % \centering
 
-\begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
-\end{column}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
 % \end{subfigure}
-\hspace{8ex}
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% \begin{subfigure}[c]{0.4\textwidth}
-\centering
-\vspace{2ex}
-\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
-\end{column}
-\end{columns}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
 % \end{subfigure}
 % \end{figure}
-}
-}
-\end{frame}
-\begin{comment}
-\end{comment}
+% }
+% }
+% \end{frame}
+% \begin{comment}
+% We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
+% space-time elements. 
+% Traditionally the Sod shock tube is defined for the Euler equations, 
+% but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
+% We instead just solve the problem with a small physical viscosity of order 10^-5.
+% You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
+% Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
+% resolve the flow features.
+% We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
+% You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
+% With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+% \end{comment}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+% Infinitely strong shock propagation.
+% \foreach \n in {1,...,9}
+% {
+% \only<\n>
+% {
+% \vspace{4ex}
+% % \begin{figure}[ht]
+% % \centering
+
+% \begin{columns}[t] % contents are top vertically aligned
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+% \end{column}
+% % \end{subfigure}
+% \hspace{8ex}
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.4\textwidth}
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+% \end{column}
+% \end{columns}
+% % \end{subfigure}
+% % \end{figure}
+% }
+% }
+% \end{frame}
+% \begin{comment}
+% \end{comment}
 
 
 % ------------------------------------------------------------

@@ -30,18 +30,18 @@ Rice University\\
 \keywords{Discontinuous Petrov-Galerkin, Space-time finite elements}
 
 \abstract{
-The discontinuous Petrov-Galerkin method\cite{DPGOverview2} is a novel adaptive finite element framework with exceptional stability properties.
-Mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
-mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
-DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
-\emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
-that indicates error in the energy norm.
 We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
 }
 
 \begin{document}
 
 \section{A ROBUST ADAPTIVE METHOD FOR CFD}
+The discontinuous Petrov-Galerkin method\cite{DPGOverview2} is a novel adaptive finite element framework with exceptional stability properties.
+Mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
+mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
+DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
+\emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
+that indicates error in the energy norm.
 
 Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
 Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
@@ -56,16 +56,23 @@ trace variables are defined on the mesh skeleton.
 This allows significant reduction of the cost of the global solve.  
 The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
 
-\section{SPACE-TIME DPG FOR TRANSIENT PROBLEMS}
+\section{APPLICATION TO TRANSIENT FLOWS}
 We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
 in the same way that we already do with spatial adaptivity. 
-
-\section{NUMERICAL RESULTS}
 Preliminary results have been generated with Camellia\cite{CamelliaDPG} for spatially 1D flows,
 and a rewrite of Camellia for higher dimensions is currently in progress.
 Figure~\ref{fig:sod} shows a simulation of the 1D Sod shock tube with a physical viscosity of $10^{-5}$ (and no artificial viscosity) 
 until a final time of $t=0.2$.
 We start on a coarse mesh of only 4 space-time elements and adaptively refine toward a resolved solution.
+
+\section{CONCLUSIONS}
+Initial 1D space-time results are promising.
+The higher dimensional version with exceptional automaticity should be an attractive method for high performance computing.
+% Initial results for 1D transient flows are promising; work to extend Camellia allow higher dimensional space-time computations is underway.
+% A scalable transient flow solver with superior stability properties and automatic adaptivity has a lot of potential for future HPC simulations.
+% The initial 1D space-time results are promising, and the design of the method holds a lot of potential for HPC simulations.
+% Initial 1D space-time results are promising, and we are under active development to extend Camellia to allow higher dimensional space-time simulations.
+% We believe 
 
 \begin{figure}[h]
 \centering
@@ -97,10 +104,6 @@ We start on a coarse mesh of only 4 space-time elements and adaptively refine to
 \label{fig:sod}
 \end{figure}
 
-
-\section{CONCLUSIONS}
-Initial 1D space-time results are promising, and we are under active development to extend Camellia to allow higher dimensional space-time simulations.
-We believe 
 % Initial results indicate that space-time DPG could be an effective method for adaptive simulations of transient CFD problems with multiple resolution scales.
 
 % \begin{itemize}
