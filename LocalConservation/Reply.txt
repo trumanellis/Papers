@@ -1,0 +1,205 @@
+Ms. Ref. No.:  CAMWA-D-14-00186  Title: Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems  Computers and Mathematics with Applications
+
+Hi Truman --
+
+Please find the attached reviewer comments. Please submit a revision addressing the comments. 
+
+While going through Referee 2's comments, I suspect the Ayuso et al reference is wrong. I think what the referee intended was a comparison with  "Discontinuous Galerkin methods for advection-diffusion-reaction problems" by 
+Blanca Ayuso and L. D. Marini, SIAM J Numer. Anal., 2009, Volume 47, pp 1391-1420. Please check both this and the citation of the referee and decide which one is closer. 
+
+Details from the editorial system are below. 
+
+Best, -- Jay 
+
+
+
+Please follow the guidelines below to process your revised manuscript within 30 days:      
+
+a) outline each change made (point by point) as raised in the reviewer comments          
+
+AND/OR    
+
+b) provide a suitable rebuttal to each reviewer comment not addressed      
+
+To submit your revision, please do the following:    
+
+1. Go to: http://ees.elsevier.com/camwa/    
+
+2. Enter your login details     
+
+3. Click [Author Login]  This takes you to the Author Main Menu.    
+
+4. Click [Submissions Needing Revision]    
+
+5. Click [Revise Submission]    I look forward to receiving your revised manuscript.    
+
+Yours sincerely,    
+
+Jay Gopalakrishnan  
+Managing Editor 
+Computers and Mathematics with Applications    
+
+    
+    
+
+Editor's and Reviewers' comments:    
+
+
+Reviewer #1: This is a  carefully written research paper. It addresses the local conservative issue among DPG method, 
+which is a rising numerical technique. In fact, the technique developed is this paper has the potential 
+to be applied to other residual minimisation methods. It also give possibility to do hybridisation to 
+residual minimisation methods. The proof is correct. And, solid numerical results 
+are provided. This paper deserves a quick publication at CAMWA.
+
+
+
+Reviewer #2: The paper investigates an interesting problem, and does a good job of demonstrating its results and supporting its conclusions with proofs and empirical results.  The paper is a useful addition to the journal, and I can recommend publication with the following revisions:
+
+1) At the beginning of page two, the method of Chang and Nelson is called restricted and the authors' method is called conservative, as it is also called in section two.  However, at the end of page six, the authors' method is called restricted.  If the authors want to say restricted throughout I can accept that.  If they want to say it is conservative, then I suggest a revision where:
+1a) they call it conservative throughout
+1b) they explicitly define what they mean by conservative, and
+1c) they show that their method meets that definition
+
+We decided to just use conservative throughout.
+
+2) As at the beginning of page 2, they mention the negative that their method is a saddle point problem.  I would want to see a comparison with "A simple preconditioner for a discontinuous Galerkin method for the Stokes problem" by Blanca Ayuso de Dios, Franco Brezzi, L. Donatella Marini, Jinchao Xu, Ludmil Zikatanov since both papers address saddle point problems for the Stokes problem.  This will come up again in item 12 of these revision recommendations when I ask about conditioning.  If the robustness result come at a price, this should be noted appropriately, and if the method performs as well as de Dios et. al that should be celebrated appropriately.
+
+3) The end of section 1.2 says that working with an enriched finite dimensional space works in practice.  There are published theoretical results about why that works, namely, "An analysis of the practical DPG method" by J. Gopalakrishnan and W. Qiu.  This work should be referenced appropriately.
+
+Fixed.
+
+4) The term Gamma, is never defined, I suggest it be defined  right after Omega is defined as the problem domain near the end of page 2
+
+Fixed.
+
+5) Typographical issues on page 4
+5a) vec{v} is defined as (v,vec{tau}) on page 4 and used throughout the rest of the paper, but the first five times it is used the order is reversed, later it is fine so those five uses should be reversed to the preferred order (v,vec{tau}).
+
+Fixed.
+
+5b) The first equation on page 4 should have partial K both times, not delta K
+
+Fixed.
+5c) hatfn would be clearer as hat{t} both to be consistent with the rest of the paper and since hatFh as the discrete space has yet to be introduced at this point
+
+Fixed.
+
+5d) The five times ||v|| appears before equation 9, it should be ||vec{v}||
+
+Fixed.
+
+5e) The sentence immediately after equation 9 is hard to read, it should be revised, and a suggestion is to replace "is optimal bounds independently of epsilon the L2 norm; as" could be "is optimal bounds the L^2 norm independently of epsilon.  So, as"
+
+I agree. Thanks for the suggestion.
+
+5f) When vec{uh} is introduced the formatting is poor, no periods and just three commas to separate the four terms would suffice.
+
+I'm not sure what happened here. Thanks for catching it.
+
+5g) In equation 10, lambda_k should be lambda_K (or even something more explicit than lambda_K like {lambda_K}K or sum lambda_K 1_K )
+
+Fixed.
+
+5h) In equation 11 first line, lambda_K b(vec{u}_h,(1,0)) should be lambda_K b(delta vec{u}_h,(1,0) 
+
+Fixed.
+
+6) Minor typographical issues on page 5
+6a) H(div, Omega_h) should not have the div in math font before equation 12
+
+Fixed.
+
+6b) definite articles "Let function Psi" could be "Let the function Psi" and "interpolant of function" could be "interpolant of the function"
+
+Fixed.
+
+
+7) Minor issue with proof (equation 14).  The authors want to show that c is continuous and c has vec{u} as an argument but the proof ends with a norm of hat{t} instead of a norm of vec{u}.  Since ||hat{t}|| leq ||vec{u}|| the authors can (and should) just add leq || lambda|| ||vec{u}||, but this problem reappeared when the authors worked with the energy norm where it wasn't as straightforward.
+
+Good point. Fixed.
+
+8) Minor typographical issues on page 6
+8a) The norms used in equation 18 are not stated, but I can accept that
+
+Noted.
+
+8b) The action < hat{t},1_K> should have a partial K outside
+
+Fixed.
+
+8c) definite articles "error estimate and continuity constant" could be "error estimate and the continuity constant" and "error involves only solution" could be "error involves only the solution" and "the fact that DPG method" could be "the fact that the DPG method"
+
+Fixed.
+
+8d) The unlabelled equation after equation 21 ends on gamma || u|| but should be gamma || vec{u} ||
+
+Fixed.
+
+8e) Equation 22 needs hat{w}h in the infimum quantifier to match the hat{w}h term inside the energy norm
+
+Fixed.
+
+9) Minor typographical issues on page 7
+9a) definite articles "the energy norm of flux" could be "the energy norm of the flux" and "corresponding to flux" could be "corresponding to the flux" and "is the evaluation of norm of" could be "is the evaluation of the norm of"
+
+Fixed.
+
+9b) Subscripts K.  In equations 23 and 24 v and vec{tau} have subscripts K for element K, but elsewhere they disappear even though sometimes there is a sum over K, so it can't just be implicit.  It should be modified to have subscripts K throughout equations 26 through 31 inclusive, and including the parts between equation 26 and equation 27
+
+Fixed.
+
+9c) equation 25 < hat{t},1_K> should have a partial K outside
+
+Fixed.
+
+9d) In equation 27 in addition to adding the K subscript to v and tau, it should be added to the inner product (1_K,v_K)_K to match equation 26
+
+Fixed.
+
+9e) In equation 28, LHS can be |(1_K,v_K)_K|
+
+Fixed.
+
+9f) In equation 28, RHS once (v,vec{tau}) is replaced with (v_K,vec{tau}_K) then the norm can be || dot ||_V instead of the vague || dot ||_K which doesn't match equation 27
+
+Good point. Fixed.
+
+10) Minor typographical issues on page 8
+10a) before equation 32 < hat{t},1_K> should have a partial K outside
+
+Fixed.
+
+10b) Equations 36 and 37 are actually one equation, so should have only one number
+
+Fixed.
+
+10c) In equation 38, the first v should be v_delta vec u h and the second v should be delta v
+
+Fixed.
+
+11) Issue with proof (equation 34).  The authors want to show that c is continuous and c has vec{u} as an argument but the proof ends with an energy norm of hat{t} instead of a norm of vec{u}.  Now ||hat{t}|| leq ||vec{u}|| even in the energy norm, however the argument is not so obvious that it shouldn't be mentioned.  Specifically the unlabelled equation before equation 32 should be explicit about c(q,vec{u}), i.e. copy the first part of equation 14, and then 34 needs more proof so that it ends with ||vec u||_E instead of || hat t ||_E.  While in equation 14 the inequality was obvious so just needs to be stated, this time the proof needs to be lengthened.
+
+12) The alpha -> 0 limit is confusing.  In the end of that paragraph it says it is convenient, but that is vague, about whether it is easier to implement, has better conditioning, or other issues.  In general saying that "we can pass in local problems with alpha -> 0" is unclear, are the authors saying that they will do so, and that this will be good, neutral or have a consequence?  Revisions should make it clear about the benefits (implementation, conditioning, easy of analysis, etc.) and costs (conditioning, implementing the equivalence class, the alpha dependency that would then appear in equation 31, etc.) of the alpha -> 0 limit adjustment and the revision should consider comparisons to other limiting norms such as that in "Dispersive and dissipative errors in the DPG method with scaled norms for Helmholtz equation" by Jay Gopalakrishnan, Ignacio Muga, and Nicole Olivares
+
+13) Page 8 last paragraph, the delta t in hat F^e is confusing, firstly F^e is not introduced anywhere, and it shouldn't be delta t, revising to hat{t} in hat Fh seems fine, but it should be revised in line with making the section about alpha -> 0 limit being clear, so both changes together should make it clear.
+
+14) Minor typographical issues on page 9
+14a) "we wish the perform" should be "we wish to perform"
+14b) The unlabelled equation between eq 40 and eq 41 should replace the equals sign with an inequality from the triangle inequality
+14c) Equation 41 is missing a factor of mu(K)^{1/2} after the last inequality
+
+15) Minor typographical issue on page 10,  the first unlabelled equation should have an f for a RHS.
+
+16) The experimental section discussion about alpha -> 0 should be modified if needed based on the earlier modification of the discussion of the alpha-> 0 limit.
+
+17) The conclusion should be modified if needed based on any newly included citations about other saddle point formulations (de Dios et al.), practical DPG implementations (Gopalakrishnan and Qui), and/or other limiting norms (Gopalakrishnan et al.).
+
+I enjoyed the paper.
+
+
+     
+
+ ******************************************  Please note that the editorial process varies considerably from journal to journal. To view a sample editorial process, please click here:  http://ees.elsevier.com/eeshelp/sample_editorial_process.pdf    
+
+For further assistance, please visit our customer support site at http://help.elsevier.com/app/answers/list/p/7923. Here you can search for solutions on a range of topics, find answers to frequently asked questions and learn more about EES via interactive tutorials. You will also find our 24/7 support contact details should you need any further assistance from one of our customer support representatives.
+
