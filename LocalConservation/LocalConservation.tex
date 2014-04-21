@@ -789,11 +789,9 @@ Find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
 \end{align}
 where typically $\alpha=1$.
 
-With a locally conservative formulation, we can pass in local problem
-\eqref{eq:localSolve} with $\alpha\rightarrow0$. The fact that the test
-functions will be determined then up to a constant does not matter, for
-$\delta\hat t\in\hat F_h^e$, equation
-\eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.
+With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}. 
+The fact that the test functions will be determined then up to a constant does not matter, for
+$\hat t$ in equation \eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.
 Mathematically, we are dealing with equivalence classes of functions, but in
 order to obtain a single function that we can deal with numerically, we
 replace the alpha term with a zero mean scaling condition to obtain the new
@@ -813,8 +811,9 @@ number of the actual solve. In practice, we use $\frac{1}{\mu(K)^2}$
 since $\int_K\vdeltau$ and $\int_K\delta v$ both scale like
 $\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient for the analysis in the
 next section.
-It is convenient to be able to take $\alpha\rightarrow0$ as we will see in
+It is convenient to be able to take $\alpha=0$ as we will see in
 some later numerical experiments.
+We've noticed that this particularly helps with conditioning of the local problem as the mesh size decreases.
 
 \subsubsection{Verification of Robust Stability Estimate}
 In the robustness analysis in Section~\ref{sec:robustnessAnalysis}, we argued
@@ -844,12 +843,12 @@ product on the right hand side. By Cauchy-Schwarz
 where $\norm{(v,\btau)}_K$ is the norm derived from the inner product.
 Condition~\eqref{eq:robust_est2} comes out the same since
 $$|(
-(v,\btau),(1_K,{\bf0}))| =
+(v,\btau),(1_K,{\bf0}))| \leq
 \sum_K|(1_K,v_K)|\leq\sum_K\mu(K)^{1/2}\norm{(v,\btau)}_K
 $$
 element-wise.
 
-Now we wish the perform the same analysis for the modified inner product in
+Now we need to perform the same analysis for the modified inner product in
 \eqref{eq:localSolveMod}. In this case,
 condition~\eqref{eq:robustEst1} follows even more naturally as
 \begin{equation}
@@ -876,7 +875,7 @@ The inviscid Burger's equation is
 Define the space-time gradient: $\Grad_{xt}=\LRp{\frac{\partial}{\partial
 x},\frac{\partial}{\partial t}}^T$. We can now rewrite this as
 \[
-\Grad_{xt}\cdot\vecttwo{u^2/2}{u}=0\,.
+\Grad_{xt}\cdot\vecttwo{u^2/2}{u}=f\,.
 \]
 Multiplying by a test function $v$, and integrating by parts:
 \[

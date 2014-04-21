@@ -3,7 +3,7 @@
 \begin{document}
 \chapter{Space-time DPG}
 \label{sec:spacetime}
-We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can fake it for 1D spatial problems by pretending the $y$-direction is time.
+We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can hack it for 1D spatial problems by pretending the $y$-direction is time.
 Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
 Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
 Practically, this means that I had to hack the Camellia code in order to support these ``spatial traces''.

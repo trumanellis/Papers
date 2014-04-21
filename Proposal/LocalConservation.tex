@@ -2,7 +2,7 @@
 \documentclass[Proposal.tex]{subfiles} 
 \graphicspath{{../LocalConservation/}}
 \begin{document}
-\chapter{Conservation in steady-state}
+\chapter{Conservation in Steady-State}
 \label{sec:conservation}
 We summarize some of our completed work on a locally conservative DPG formulation that was invented to address mass loss concerns for standard DPG.
 Locally conservative methods hold a special place for numerical analysts in
@@ -53,64 +53,64 @@ restricted DPG method (RDPG).
 %                                                                                                                                                 
 %                                                                                                                                                 
 %               
-\section{DPG is a minimum residual method}
-Roberts \etal presents a brief history and derivation of DPG with optimal test functions in
-\cite{DPGStokes}. We follow his derivation of the standard DPG method as a
-minimum residual method. Let $U$ be the trial Hilbert space and $V$ the test
-Hilbert space for a well-posed variational problem $b(u,v)=l(v)$. In operator
-form this is $Bu=l$, where $B:U\rightarrow V'$ and $\LRa{Bu,v}=b(u,v)$. We seek to minimize the
-residual for the discrete space $U_h\subset U$:
-\begin{equation}
-u_h=\argmin_{u_h\in U_h}\frac{1}{2}\norm{Bu_h-l}^2_{V'}\,.
-\label{minresidual}
-\end{equation}
-Recalling that the Riesz operator $R_V:V\rightarrow V'$ is an isometry defined
-by
-\[
-\LRa{R_Vv,\delta v}=\LRp{v,\delta v}_V,\quad\forall\delta v\in V,
-\]
-we can use the Riesz inverse to minimize in the $V$-norm rather than its dual:
-\begin{equation}
-\frac{1}{2}\norm{Bu_h-l}^2_{V'}=\frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}^2_V
-=\frac{1}{2}\LRp{R_V^{-1}(Bu_h-l),R_V^{-1}(Bu_h-l)}_V\,.
-\label{eq:rieszapplied}
-\end{equation}
-The first order optimality condition for \eqnref{rieszapplied} requires
-the G\^ateaux derivative to be zero in all directions $\delta u \in
-U_h$, i.e.,
-\[
-\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U.
-\]
-By definition of the Riesz operator, this is equivalent to
-\begin{equation}
-\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
-\label{eq:DPGbilinearform}
-\end{equation}
-Now, we can identify $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ as the
-optimal test function for trial function $\delta u_h$. Define $T:=R_V^{-1}B:U_h\rightarrow V$ as the trial-to-test operator. Now we can rewrite
-\eqnref{DPGbilinearform} as
-\begin{equation}
-b(u_h,v_{\delta u_h})=l(v_{\delta u_h}).
-\label{eq:DPGmethod}
-\end{equation}
-The DPG method then is to solve \eqnref{DPGmethod} with optimal test functions
-$v_{\delta u_h}\in V$ that solve the auxiliary problem
-\begin{equation}
-\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
-=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
-\label{eq:optimaltestproblem}
-\end{equation}
-Using a continuous test basis would result in a global solve for every optimal
-test function. Therefore DPG uses a discontinuous test basis which makes each
-solve element-local and much more computationally tractable. Of course,
-\eqnref{optimaltestproblem} still requires the inversion of the
-infinite-dimensional Riesz map, but approximating $V$ by a finite
-dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
-``enriched space'') works well in practice.
+% \section{DPG is a minimum residual method}
+% Roberts \etal presents a brief history and derivation of DPG with optimal test functions in
+% \cite{DPGStokes}. We follow his derivation of the standard DPG method as a
+% minimum residual method. Let $U$ be the trial Hilbert space and $V$ the test
+% Hilbert space for a well-posed variational problem $b(u,v)=l(v)$. In operator
+% form this is $Bu=l$, where $B:U\rightarrow V'$ and $\LRa{Bu,v}=b(u,v)$. We seek to minimize the
+% residual for the discrete space $U_h\subset U$:
+% \begin{equation}
+% u_h=\argmin_{u_h\in U_h}\frac{1}{2}\norm{Bu_h-l}^2_{V'}\,.
+% \label{minresidual}
+% \end{equation}
+% Recalling that the Riesz operator $R_V:V\rightarrow V'$ is an isometry defined
+% by
+% \[
+% \LRa{R_Vv,\delta v}=\LRp{v,\delta v}_V,\quad\forall\delta v\in V,
+% \]
+% we can use the Riesz inverse to minimize in the $V$-norm rather than its dual:
+% \begin{equation}
+% \frac{1}{2}\norm{Bu_h-l}^2_{V'}=\frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}^2_V
+% =\frac{1}{2}\LRp{R_V^{-1}(Bu_h-l),R_V^{-1}(Bu_h-l)}_V\,.
+% \label{eq:rieszapplied}
+% \end{equation}
+% The first order optimality condition for \eqnref{rieszapplied} requires
+% the G\^ateaux derivative to be zero in all directions $\delta u \in
+% U_h$, i.e.,
+% \[
+% \left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U.
+% \]
+% By definition of the Riesz operator, this is equivalent to
+% \begin{equation}
+% \LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
+% \label{eq:DPGbilinearform}
+% \end{equation}
+% Now, we can identify $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ as the
+% optimal test function for trial function $\delta u_h$. Define $T:=R_V^{-1}B:U_h\rightarrow V$ as the trial-to-test operator. Now we can rewrite
+% \eqnref{DPGbilinearform} as
+% \begin{equation}
+% b(u_h,v_{\delta u_h})=l(v_{\delta u_h}).
+% \label{eq:DPGmethod}
+% \end{equation}
+% The DPG method then is to solve \eqnref{DPGmethod} with optimal test functions
+% $v_{\delta u_h}\in V$ that solve the auxiliary problem
+% \begin{equation}
+% \LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+% =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+% \label{eq:optimaltestproblem}
+% \end{equation}
+% Using a continuous test basis would result in a global solve for every optimal
+% test function. Therefore DPG uses a discontinuous test basis which makes each
+% solve element-local and much more computationally tractable. Of course,
+% \eqnref{optimaltestproblem} still requires the inversion of the
+% infinite-dimensional Riesz map, but approximating $V$ by a finite
+% dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
+% ``enriched space'') works well in practice.
 
-No assumptions have been made so far on the definition of the inner product on
-$V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
-between a solid DPG method and one that suffers from robustness issues.
+% No assumptions have been made so far on the definition of the inner product on
+% $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
+% between a solid DPG method and one that suffers from robustness issues.
 
 %    /$$$$$$                                                                           /$$     /$$                    
 %   /$$__  $$                                                                         | $$    |__/                    
@@ -123,7 +123,7 @@ between a solid DPG method and one that suffers from robustness issues.
 %                                                                                                                     
 %                                                                                                                     
 %                                                                                                                     
-\section{Element conservative convection-diffusion}
+\section{Element Conservative Convection-Diffusion}
 We now proceed to develop a locally conservative formulation of DPG for
 convection-diffusion type problems, but there are a few terms that we need to
 define first. If $\Omega$ is our problem domain, then we can partition it into
@@ -161,7 +161,7 @@ convection-diffusion problem with homogeneous Dirichlet boundary conditions read
 \[
 \left\{
 \begin{array}[c]{rrl}
-\div(\bfbeta u)-\epsilon\Delta u & =f & \text{in }\Omega\\
+\Div(\bfbeta u)-\epsilon\Delta u & =f & \text{in }\Omega\\
 u & =0 & \text{on }\Gamma\,,
 \end{array}
 \right.
@@ -172,7 +172,7 @@ conditions are straightforward but would add technicality to the following
 discussion. Let us write this as an equivalent system of first
 order equations:
 \begin{align*}
-\div(\bfbeta u-\bfsigma)&=f\\
+\Div(\bfbeta u-\bfsigma)&=f\\
 \frac{1}{\epsilon}\bfsigma-\Grad u&=\bs0\,.
 \end{align*}
 If we then multiply the first equation by some scalar test function $v$ and the

@@ -181,16 +181,37 @@ Fixed.
 
 12) The alpha -> 0 limit is confusing.  In the end of that paragraph it says it is convenient, but that is vague, about whether it is easier to implement, has better conditioning, or other issues.  In general saying that "we can pass in local problems with alpha -> 0" is unclear, are the authors saying that they will do so, and that this will be good, neutral or have a consequence?  Revisions should make it clear about the benefits (implementation, conditioning, easy of analysis, etc.) and costs (conditioning, implementing the equivalence class, the alpha dependency that would then appear in equation 31, etc.) of the alpha -> 0 limit adjustment and the revision should consider comparisons to other limiting norms such as that in "Dispersive and dissipative errors in the DPG method with scaled norms for Helmholtz equation" by Jay Gopalakrishnan, Ignacio Muga, and Nicole Olivares
 
+Sorry for the confusion. This isn't actually a limiting procedure. We just set alpha to 0 (don't include this term).
+The nonconservative DPG method needs it in order to make a complete norm, but the zero mean term supplied zero mean term mentioned in the next paragraph
+is sufficient to take its place and make this a full norm.
+The main benefits to this are theoretical (this term required some slightly inconvenient assumptions in the original development, 
+mentioned later in the paper) and we've also noticed some improvements on conditioning of the local problem.
+I've tried to reword things to make it a little more clear what we've done.
+
 13) Page 8 last paragraph, the delta t in hat F^e is confusing, firstly F^e is not introduced anywhere, and it shouldn't be delta t, revising to hat{t} in hat Fh seems fine, but it should be revised in line with making the section about alpha -> 0 limit being clear, so both changes together should make it clear.
+
+F^e should be H^{-1/2}, but on further consideration, I don't really need to have the space here. I can just say \hat{t}.
 
 14) Minor typographical issues on page 9
 14a) "we wish the perform" should be "we wish to perform"
+
+Fixed.
+
 14b) The unlabelled equation between eq 40 and eq 41 should replace the equals sign with an inequality from the triangle inequality
+
+Fixed.
+
 14c) Equation 41 is missing a factor of mu(K)^{1/2} after the last inequality
+
+There is a mu(K)^{1/2} in both the numerator and denominator of the middle term that cancel.
 
 15) Minor typographical issue on page 10,  the first unlabelled equation should have an f for a RHS.
 
+Fixed.
+
 16) The experimental section discussion about alpha -> 0 should be modified if needed based on the earlier modification of the discussion of the alpha-> 0 limit.
+
+Thanks. I think the earlier discussion clears things up.
 
 17) The conclusion should be modified if needed based on any newly included citations about other saddle point formulations (de Dios et al.), practical DPG implementations (Gopalakrishnan and Qui), and/or other limiting norms (Gopalakrishnan et al.).
 

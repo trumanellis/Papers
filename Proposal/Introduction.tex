@@ -420,12 +420,12 @@ I develop the method by augmenting the DPG system with Lagrange multipliers, the
 Several numerical experiments are shown for convection-diffusion, Burgers' equation, and Stokes flow that demonstrate the effectiveness of the method.
 There is no reason the locally conservative formulation would not work in space-time; in fact I've done some preliminary simulations 
 (not covered in this proposal) for 1D compressible Navier-Stokes that seem to confirm that everything works as expected. 
-Of course, for problems as simple as 1D shock tubes, local conservation doesn't affect very much.
+Of course, for problems as simple as 1D shock tubes, local conservation doesn't affect the solutions very much.
 
 Chapter~\ref{sec:timestepping} covers some exploratory work on coupling DPG with time stepping techniques.
 In particular, I single out the explicit singly diagonal implicit Runge-Kutta (ESDIRK) methods as promising options for
 coupling with DPG.
-Ultimately, we decided that space-time DPG offered a more attractive option, but time stepping techniques are not disqualified as an possibility.
+Ultimately, we decided that space-time DPG offered a more attractive option, but time stepping techniques are not disqualified as a possibility.
 
 Chapter~\ref{sec:spacetime} presents the completed work so far on developing space-time DPG for 1D problems.
 The heat equation serves as a useful model as it is the simplest parabolic (first order in time, second order in space) problem.

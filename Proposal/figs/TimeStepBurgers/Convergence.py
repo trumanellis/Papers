@@ -15,7 +15,7 @@ l2error = [
 
 slope,intercept=polyfit(log(h),log(l2error),1)
 
-loglog(h, l2error, label='slope = '+"{:.2f}".format(slope))
+loglog(h, l2error, '-o', label='slope = '+"{:.2f}".format(slope))
 xlabel('h, dt')
 ylabel('error')
 legend(loc='best')
