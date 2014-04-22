@@ -92,7 +92,7 @@ been developing a growing following among CFD practitioners.
 
 \subsubsection{Finite Difference and Finite Volume Methods}
 Finite difference methods approximate derivatives in the strong form of the equation under consideration with finite difference approximations, 
-but proofs of convergence rely on a distributional understanding of the equations (covering both differential equations and RK conditions) 
+but proofs of convergence rely on a distributional understanding of the equations (covering both differential equations and Rankine-Hugoniot conditions) 
 and various forms of entropy conditions.
 These methods were first popularized for conservation laws by Lax who also introduced the idea of numerical flux and ideal of a monotone scheme.
 For fluid dynamics applications, popular finite difference schemes use numerical fluxes to reconstruct approximate derivatives at certain mesh points.
@@ -306,7 +306,7 @@ Abedi, Petracovici, and Haber\cite{Abedi2006} applied this causal mesh generatio
 
 % Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
 
-\subsection{DPG}
+\subsection{Discontinuous Petrov-Galerkin Method}
 The discontinuous Petrov-Galerkin finite element method with optimal test functions 
 was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG1, DPG2}.
 The basic ideas are fairly straight-forward; DPG minimizes the residual in a user defined energy norm.
@@ -424,7 +424,7 @@ We will also consider the convection-diffusion equation as a simplified model fo
 
 \subsection{Organization of this Proposal}
 This proposal is organized as follows. 
-In Chapter~\ref{sec:conservation} I summarize my past work developing a locally conservative DPG formulation for steady-state problems.
+In Chapter~\ref{sec:conservation}, I summarize my past work developing a locally conservative DPG formulation for steady-state problems.
 I develop the method by augmenting the DPG system with Lagrange multipliers, then prove stability and robustness of the new formulation.
 Several numerical experiments are shown for convection-diffusion, Burgers' equation, and Stokes flow that demonstrate the effectiveness of the method.
 There is no reason the locally conservative formulation would not work in space-time; in fact I've done some preliminary simulations 
