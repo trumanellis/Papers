@@ -64,6 +64,8 @@ We decided to just use conservative throughout.
 
 2) As at the beginning of page 2, they mention the negative that their method is a saddle point problem.  I would want to see a comparison with "A simple preconditioner for a discontinuous Galerkin method for the Stokes problem" by Blanca Ayuso de Dios, Franco Brezzi, L. Donatella Marini, Jinchao Xu, Ludmil Zikatanov since both papers address saddle point problems for the Stokes problem.  This will come up again in item 12 of these revision recommendations when I ask about conditioning.  If the robustness result come at a price, this should be noted appropriately, and if the method performs as well as de Dios et. al that should be celebrated appropriately.
 
+The authors are confused, and are not sure of the relevance of this reference to the provided work.
+
 3) The end of section 1.2 says that working with an enriched finite dimensional space works in practice.  There are published theoretical results about why that works, namely, "An analysis of the practical DPG method" by J. Gopalakrishnan and W. Qiu.  This work should be referenced appropriately.
 
 Fixed.

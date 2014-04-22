@@ -8,14 +8,14 @@ We did spend some time exploring popular alternatives such as some ESDIRK (expli
 before we ultimately concluded that a space-time formulation might more naturally fit with our adaptive techniques.
 In this chapter, we briefly outline some of our exploratory work on implicit time integrators with DPG.
 
-There are two different ways of coupling a spatial solver and a temporal solver\cite{DemkowiczTransientAcoustics}.
+There are two different ways of coupling a spatial solver and a temporal solver.
 The \emph{method of lines} first discretizes the spatial variables, which converts the original initial-boundary-value problem into a system
 of ordinary differential equations (ODEs) which are then discretized in time. 
 It is unclear whether this approach is possible for DPG since the semi-discrete residual is not well defined and DPG is a minimum residual method.
 The alternative, sometimes called the \emph{method of discretization in time} or \emph{Rothe's method} reverses the order of discretization.
 The first temporal discretization converts the problem into a sequence of boundary-value (-like) problems. 
 In this case, it is possible to build a DPG method since it is much clearer how to define a residual.
-It is worth noting that spatial and temporal discretization in general do not commute.
+It is worth noting that spatial and temporal discretization in general do not commute\cite{DemkowiczTransientAcoustics}.
 
 
 Finally, there is the choice between explicit and implicit time-stepping versions of the method of discretization in time.

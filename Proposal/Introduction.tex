@@ -91,7 +91,9 @@ The solid mathematical foundation of the finite element method renders it especi
 been developing a growing following among CFD practitioners.
 
 \subsubsection{Finite Difference and Finite Volume Methods}
-Finite difference methods approximate derivatives in the strong form of the equation under consideration with finite difference approximations.
+Finite difference methods approximate derivatives in the strong form of the equation under consideration with finite difference approximations, 
+but proofs of convergence rely on a distributional understanding of the equations (covering both differential equations and RK conditions) 
+and various forms of entropy conditions.
 These methods were first popularized for conservation laws by Lax who also introduced the idea of numerical flux and ideal of a monotone scheme.
 For fluid dynamics applications, popular finite difference schemes use numerical fluxes to reconstruct approximate derivatives at certain mesh points.
 
@@ -215,7 +217,7 @@ Consider the steady 1D advection equation:
 \]
 Multiply by test function $v$ and integrate by parts over each element $K=[x_K,x_{K+1}]$:
 \[
--\int_K\beta(x)u\pd{v}{x}+\beta uv\|_{x_K}^{x_{K+1}}=\int_K fv\,.
+-\int_K\beta(x)u\pd{v}{x}+\beta uv|_{x_K}^{x_{K+1}}=\int_K fv\,.
 \]
 The global formulation is formed by summing up each of the local contributions.
 Since our discretization is piece-wise discontinuous, boundary terms are dual valued, and we need
@@ -226,6 +228,10 @@ values from its two neighboring elements.
 The stable choice is always choose the upwind value for $u$ while choosing the element local value for $v$.
 Choosing downwind values of $u$ will give an unconditionally unstable method, while choosing average values will result in something similar
 to an $H^1$ conforming continuous Galerkin discretization\cite{DGStabilization}.
+The upwind bilinear form for positive $\beta$ on element $K$ will then be
+\[
+-\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
+\]
 
 DG methods has proven to be extremely successful in the field of computational fluid dynamics (and many other fields) due
 to several properties that are very important to fluid dynamicists.
@@ -257,9 +263,11 @@ is usually solved by a finite difference method.
 The benefit of this procedure is that it is simple to implement and well understood numerically.
 Hughes\cite{HughesSpaceTimeElastoDynamics} notes that 
 ``It is frequently argued that finite elements represent a superior methodology to finite differences'' 
-and that it is not surprising that many efforts have been made to apply finite element technologies to the time domain.
-Some of the earliest proponents of this approach were Argyris and Scharpf\cite{ArgyrisSpaceTime}, Fried\cite{FriedSpaceTime}, and Oden\cite{OdenSpaceTime}.
+and that it is not surprising that many efforts have been made to apply finite element technologies to the space-time domain.
+Some of the earliest proponents of this approach were Kaczkowski\cite{Kaczkowski1975}, 
+Argyris and Scharpf\cite{ArgyrisSpaceTime}, Fried\cite{FriedSpaceTime}, and Oden\cite{OdenSpaceTime}.
 These techniques were built on the underlying concept of Hamilton's principle.
+Bajer and Bonthoux present a nice review in \cite{Bonthoux1991}.
 
 Space-time finite elements present an attractive way to handle meshes with moving boundaries.
 Lesoinne and Farhat\cite{GCL} studied several techniques for solving on moving meshes including Arbitrary Lagrangian-Eulerian
@@ -348,7 +356,7 @@ These optimal Petrov-Galerkin methods produce Hermitian, positive-definite stiff
 \[
 b(u_h,\vdeltau)=(v_{u_h},\vdeltau)_V=\overline{(\vdeltau,v_{u_h})}=\overline{b(\delta u_h,v_{u_h})}\,.
 \]
-We can calculate the energy norm of the Galerkin error without knowing the exact solution by using the residual:
+We can calculate the energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of the Galerkin error without knowing the exact solution by using the residual:
 \[
 \norm{u_h-u}_E=\norm{B(u_h-u)}_{V'}=\norm{Bu_h-l}_{V'}=\norm{R_V^{-1}(Bu_h-l)}_V\,,
 \]
@@ -367,7 +375,7 @@ then the Galerkin error satisfies the bound
 Optimal test functions realize the supremum in the discrete discrete inf-sup condition such that $\gamma_h\geq\gamma$, 
 the infinite-dimensional inf-sup constant.
 If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
-the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
+the optimal Petrov-Galerkin method is the most stable method possible.
 
 There are still many features of the method that are left to be decided, for example the $U$ and $V$ spaces.
 If $V$ is taken to be a continuous space, then the auxiliary problem becomes global in scope, something that we would like to avoid.
@@ -392,7 +400,8 @@ If the norm produces unresolved boundary layers in the auxiliary problem, then m
 But elimination of boundary layers in the auxiliary solve is not the only requirement at play. 
 This choice also controls what norm the residual is minimized in. 
 Often we want this norm to be equivalent to the $L^2$ norm.
-Fortunately, we have found that it is possible to design norms that are provably robust and equivalent to $L^2$ for convection-diffusion which
+Fortunately, we have found that it is possible to design test norms such that the implied energy norm 
+is provably robust and equivalent to $L^2$ for convection-diffusion which
 serves as the most relevant model problem for our research.
 Norms for Navier-Stokes are derived by analogy to the convection-diffusion norm.
 

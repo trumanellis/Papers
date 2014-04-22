@@ -613,7 +613,9 @@ Then the graph norm would be defined by
 \end{equation}
 where $\alpha_c$, $\alpha_m$, $\alpha_e$, $\alpha_s$, and $\alpha_f$ are scaling constants, usually one.
 
-Unfortunately, the graph norm is known to not be robust for steady convection-diffusion or Navier-Stokes,
+Unfortunately, the graph norm develops unresolvable internal boundary layers in the optimal test functions leading to a non-robust
+local solve for steady convection-diffusion or Navier-Stokes,
+% is known to not be robust for steady convection-diffusion or Navier-Stokes,
 and we saw that non-robustness manifest when we tried to use this norm for transient simulations as well.
 For steady state DPG, we developed a robust test norm for convection-diffusion and drew analogies to create 
 a robust norm for Navier-Stokes.
@@ -684,7 +686,7 @@ We consider two 1D test problems as verification.
 The Sod shock tube and Noh implosion both have analytical solutions derived based on an inviscid flow assumption (Euler's equations).
 However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
 artificial viscosity in order to select a unique solution.
-Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks\cite{?}.
+Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks.
 We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical
 viscosity: $\mu=10^{-5}$ for Sod and $\mu=10^{-3}$ for Noh.
 Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler.
