@@ -421,7 +421,7 @@ bound from above with a constant independent of $\epsilon$), then we can
 divide through to get
 \begin{equation}
 \LRp{\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2}^{\frac{1}{2}} \lesssim
-\norm{u,\bfsigma,\uh,\hat t}_E.
+\norm{(u,\bfsigma,\uh,\hat t)}_E.
 \label{eq:robustBound}
 \end{equation}
 % In other words, the energy norm in which DPG is optimal bounds independently
@@ -969,21 +969,21 @@ shown in Figure \ref{fig:erickson}.
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.6\textwidth]{figs/Erickson/exact.png}
+\includegraphics[width=0.5\textwidth]{figs/Erickson/exact.png}
 \caption{Erickson-Johnson exact solution}
 \label{fig:erickson}
 \end{figure}
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/Erickson/modifiedError.pdf}
+\includegraphics[width=0.7\textwidth]{figs/Erickson/modifiedError.pdf}
 \caption{Error in Erickson-Johnson solutions}
 \label{fig:ericksonError}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/Erickson/modifiedFlux.pdf}
+\includegraphics[width=0.7\textwidth]{figs/Erickson/modifiedFlux.pdf}
 \caption{Flux imbalance in Erickson-Johnson solutions}
 \label{ericksonFlux}
 \end{figure}
@@ -1017,7 +1017,7 @@ of boundary edges to 1 at corners. We don't enforce an outflow boundary.
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/Vortex/modifiedFlux.pdf}
+\includegraphics[width=0.7\textwidth]{figs/Vortex/modifiedFlux.pdf}
 \caption{Flux imbalance in vortex solutions}
 \label{fig:vortex_flux}
 \end{figure}
@@ -1050,7 +1050,7 @@ scaled to  $[-1.110,0.889]$.
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/Discontinuous/modifiedFlux.pdf}
+\includegraphics[width=0.7\textwidth]{figs/Discontinuous/modifiedFlux.pdf}
 \caption{Flux imbalance in discontinuous source solutions}
 \label{fig:discontinuous_flux}
 \end{figure}
@@ -1081,7 +1081,7 @@ hyperbolic equation, there is no need to set a boundary condition on the top.
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/Burgers/graphFlux.pdf}
+\includegraphics[width=0.7\textwidth]{figs/Burgers/graphFlux.pdf}
 \caption{Flux imbalance in Burgers' solutions}
 \label{fig:burgers_flux}
 \end{figure}
@@ -1147,13 +1147,13 @@ where $S$ is some vertical mesh line.
 
 \begin{figure}[p]
 \centering
-\begin{subfigure}[t]{0.6\textwidth}
+\begin{subfigure}[t]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesCylinder/mesh6_0.png}
 \caption{Mesh for $r=0.6$}
 \label{fig:stokesMesh6}
 \end{subfigure}
-\begin{subfigure}[t]{0.6\textwidth}
+\begin{subfigure}[t]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesCylinder/mesh9_0.png}
 \caption{Mesh for $r=0.9$}
@@ -1219,12 +1219,12 @@ where $S$ is some vertical mesh line.
 
 \begin{figure}[p]
 \centering
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss6_NC.pdf}
 \caption{Nonconservative}
 \label{fig:stokesCylinder6MassLossNC}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss6_C.pdf}
 \caption{Conservative}
 \label{fig:stokesCylinder6MassLossC}
@@ -1235,12 +1235,12 @@ where $S$ is some vertical mesh line.
 
 \begin{figure}[p]
 \centering
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss9_NC.pdf}
 \caption{Nonconservative}
 \label{fig:stokesCylinder9MassLossNC}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss9_C.pdf}
 \caption{Conservative}
 \label{fig:stokesCylinder9MassLossC}
@@ -1267,7 +1267,7 @@ test functions.
 \begin{figure}[!h]
 \centering
 \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.3cm,y=1.3cm]
-\clip(-0.5,-0.3) rectangle (10.67,5);
+\clip(-0.5,-0.3) rectangle (10.67,2);
 \draw [line width=1.0pt] (0,0.5)-- (2,0.5);
 \draw [line width=1.0pt] (2,0.5)-- (2,0);
 \draw [line width=1.0pt] (10,0)-- (2,0);
@@ -1289,23 +1289,23 @@ test functions.
 
 \begin{figure}[p]
 \centering
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_NC0.png}
 \caption{Nonconservative on initial mesh}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_C0.png}
 \caption{Conservative on initial mesh}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_NC8.png}
 \caption{Nonconservative after 8 refinement steps}
 \label{fig:stokesStepNC}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_C8.png}
 \caption{Conservative after 8 refinement steps}
@@ -1317,12 +1317,12 @@ test functions.
 
 \begin{figure}[p]
 \centering
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesStep/MassLoss_NC.pdf}
 \caption{Nonconservative}
 \label{fig:stokesStepMassLossNC}
 \end{subfigure}
-\begin{subfigure}[t]{0.8\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \includegraphics[width=\textwidth]{figs/StokesStep/MassLoss_C.pdf}
 \caption{Conservative}
 \label{fig:stokesStepMassLossC}
