@@ -9,6 +9,8 @@
 \usepackage{forloop}
 \usepackage{comment}
 
+\newcounter{nn}
+
 \AtBeginSection[]
 {
   \begin{frame}
@@ -149,17 +151,8 @@ Leszek Demkowicz, Robert Moser
 \subsubsection{Coarse Mesh Simulation}
 \subsection{DPG for HPC}
 \subsection{Space-Time DPG}
-\section{Locally Conservative DPG}
-\subsection{Mathematics}
-\subsection{Numerical Results}
-\section{Space-Time DPG}
-\subsection{Mathematics}
-\subsection{Numerical Results}
 \subsubsection{Heat Equation}
 \subsubsection{Compressible Navier-Stokes}
-
-\section{Backup Slides}
-\subsection{Inf-Sup}
 
 % \section{Motivation}
 % \subsection{Mesh Generation}
@@ -169,76 +162,6 @@ Leszek Demkowicz, Robert Moser
 % \subsection{Minimum Residual Method}
 % \subsection{Mixed Method}
 % \subsection{Multiscale Method}
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Motivation}
-\framesubtitle{Superior Stability Simplifies Mesh Generation}  %% needed for proper positioning of the logo ...
-\begin{itemize}
-  \item Initial mesh design is a time-consuming and expensive part of CFD
-  \item DPG has no pre-asymptotic regime
-  \item Works on the coarsest possible mesh which represents the geometry
-  \item DPG + NURBS
-\end{itemize}
-\end{frame}
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Motivation}
-\framesubtitle{Initial Mesh Design is Expensive and Time-Consuming}
-\begin{columns}[t]
-\begin{column}[c]{0.5\textwidth}
-\begin{figure}[t]
-\centering
-\includegraphics[width=1.0\textwidth]{Motivation/NumecaRaceCar.png}
-\\\small{Formula 1 mesh by Numeca}\\
-\end{figure}
-\end{column}
-\begin{column}[c]{0.3\textwidth}
-\vspace{-3ex}
-\begin{figure}[t]
-\centering
-\includegraphics[width=1.0\textwidth]{Motivation/PointwiseAirfoil1.png}\\
-\includegraphics[width=1.0\textwidth]{Motivation/PointwiseAirfoil2.png}
-\\\small{Airfoil mesh by Pointwise}\\
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-
-
-% ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Motivation}
-% \framesubtitle{DPG for Massively Parallel CFD}  %% needed for proper positioning of the logo ...
-% Pre-asymptotic stability and automatic adaptivity make a powerful synthesis.
-% \begin{itemize}
-%   \item Initial mesh design is a time consuming and expensive part of CFD.
-%   \item Pre-asymptotic stability allows a DPG simulation to begin on the coarsest possible mesh.
-%   \item Many methods become unstable in the pre-asymptotic regime.
-%   \item Human intervention to correct a failed massively parallel simulation can be very costly.
-%   \item Error indicator function indicates targets most important areas for refinement.
-%   \item Provably robust for singularly perturbed problems.
-% \end{itemize}
-
-% \vspace{2ex}
-% Space-time DPG extends these benefits to transient problems.
-% \begin{itemize}
-%   \item Localizes temporal adaptivity similar to spatial adaptivity.
-% \end{itemize}
-% \end{frame}
-
-\begin{comment}
-Good afternoon. Looks like I'm the only thing between you and your evening, so I'm going to try to keep this brief.
-My name is Truman Ellis, and I've been working with Dr. Demkowicz on DPG for fluid problems.
-At past FEM rodeos I talked about some of our work on a locally conservative formulation of DPG. 
-This talk is going to be about some of our preliminary results on space-time DPG for transient CFD problems.
-The ultimate application of course is that we think this space-time DPG formulation will be ideal for
-high-performance computing on future architectures.
-I'm not going to explicitly address the parallel programming side in this talk, but it will be implicit in the motivations
-behind the design of the method.
-\end{comment}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Motivation}
@@ -280,20 +203,92 @@ where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
 % where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
 \end{frame}
 \begin{comment}
-Before I begin, we'll start with an ultra-brief summary of DPG and why we might 
-want to apply it to problems in CFD.
-For one, DPG has proven very robust in the face of singularly
-perturbed problems (think high Reynolds number flows).
-You do not need a domain expert to craft well designed meshes for each new
-problem. We are mathematically guaranteed to remain stable under very coarse
-meshes while adaptively refining toward a solution.
-
-Mathematically, DPG can be characterized as a minimum
-residual method. This means that through the choice of specific optimal test
-functions we automatically minimize the residual in the dual norm of a
-Hilbert space V. We also have a well-defined process to generate the optimal
-test functions which is computationally feasible.
 \end{comment}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{Initial mesh design is expensive and time-consuming}
+\begin{columns}[t]
+\begin{column}[c]{0.4\textwidth}
+\begin{itemize}
+  \item Surface mesh must accurately represent geometry
+  \item Volume mesh needs sufficient resolution for asymptotic regime
+  % Before we accurately know the flow features
+  \item Boundary layer meshes must respect $y^+$ guidelines
+  \item Engineers often forced to work by trial and error
+  \item Bad in the context of HPC
+\end{itemize}
+\end{column}
+\begin{column}[c]{0.6\textwidth}
+\vspace{2ex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/NumecaRaceCar.png}
+\\\small{Formula 1 Mesh by Numeca}\\
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Adaptive Mesh Refinement from Coarse Meshes}
+\framesubtitle{Adaptive solve of the Carter plate problem}
+\foreach \n in {1,...,11}
+{
+\only<\n>
+{
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
+\vspace{-1ex}
+{\scriptsize Velocity}\\
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
+\vspace{-1ex}
+{\scriptsize Temperature}\\
+\end{subfigure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
+\vspace{-1ex}
+{\scriptsize Mesh \n}\\
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+
+
+
+% ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Motivation}
+% \framesubtitle{DPG for Massively Parallel CFD}  %% needed for proper positioning of the logo ...
+% Pre-asymptotic stability and automatic adaptivity make a powerful synthesis.
+% \begin{itemize}
+%   \item Initial mesh design is a time consuming and expensive part of CFD.
+%   \item Pre-asymptotic stability allows a DPG simulation to begin on the coarsest possible mesh.
+%   \item Many methods become unstable in the pre-asymptotic regime.
+%   \item Human intervention to correct a failed massively parallel simulation can be very costly.
+%   \item Error indicator function indicates targets most important areas for refinement.
+%   \item Provably robust for singularly perturbed problems.
+% \end{itemize}
+
+% \vspace{2ex}
+% Space-time DPG extends these benefits to transient problems.
+% \begin{itemize}
+%   \item Localizes temporal adaptivity similar to spatial adaptivity.
+% \end{itemize}
+% \end{frame}
+
+
 
 
 %   /$$        /$$$$$$ 
@@ -307,6 +302,9 @@ test functions which is computationally feasible.
 %                      
 %                      
 %      
+\section{Locally Conservative DPG}
+% \subsection{Mathematics}
+% \subsection{Numerical Results}
 %===============================================================================
 % NEW SLIDE
 %===============================================================================
@@ -974,6 +972,9 @@ Conservative
 %                                          
 %  
 
+\section{Space-Time DPG}
+% \subsection{Mathematics}
+% \subsection{Numerical Results}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Heat Equation}
@@ -1259,6 +1260,7 @@ All of the other variables are involved in nonlinearities and will need to be li
 \end{comment}
 
 
+%TODO: Fix test norm
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
@@ -1324,137 +1326,174 @@ Essentially, we've taken the standard graph norm based off the adjoint equation 
 %                                                     
 % 
 % ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
-\foreach \n in {1,...,15}
-{
-\only<\n>
-{
-\vspace{-2ex}
-\begin{figure}[ht]
-\centering
-
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
-\end{subfigure}
-\end{figure}
-}
-}
-\end{frame}
-\begin{comment}
-We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
-space-time elements. 
-Traditionally the Sod shock tube is defined for the Euler equations, 
-but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
-We instead just solve the problem with a small physical viscosity of order 10^-5.
-You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
-Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
-resolve the flow features.
-We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
-You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
-With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
-\end{comment}
-
-
-%   /$$   /$$           /$$      
-%  | $$$ | $$          | $$      
-%  | $$$$| $$  /$$$$$$ | $$$$$$$ 
-%  | $$ $$ $$ /$$__  $$| $$__  $$
-%  | $$  $$$$| $$  \ $$| $$  \ $$
-%  | $$\  $$$| $$  | $$| $$  | $$
-%  | $$ \  $$|  $$$$$$/| $$  | $$
-%  |__/  \__/ \______/ |__/  |__/
-%                                
-%                                
-% 
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-Infinitely strong shock propagation.
-\foreach \n in {1,...,9}
-{
-\only<\n>
-{
-\vspace{4ex}
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+% \foreach \n in {1,...,15}
+% {
+% \only<\n>
+% {
+% \vspace{-2ex}
 % \begin{figure}[ht]
 % \centering
 
-\begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
-\end{column}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
 % \end{subfigure}
-\hspace{8ex}
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% \begin{subfigure}[c]{0.4\textwidth}
-\centering
-\vspace{2ex}
-\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
-\end{column}
-\end{columns}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
 % \end{subfigure}
 % \end{figure}
-}
-}
-\end{frame}
-\begin{comment}
-\end{comment}
+% }
+% }
+% \end{frame}
+% \begin{comment}
+% We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
+% space-time elements. 
+% Traditionally the Sod shock tube is defined for the Euler equations, 
+% but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
+% We instead just solve the problem with a small physical viscosity of order 10^-5.
+% You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
+% Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
+% resolve the flow features.
+% We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
+% You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
+% With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+% \end{comment}
 
 
-% ------------------------------------------------------------
+% %   /$$   /$$           /$$      
+% %  | $$$ | $$          | $$      
+% %  | $$$$| $$  /$$$$$$ | $$$$$$$ 
+% %  | $$ $$ $$ /$$__  $$| $$__  $$
+% %  | $$  $$$$| $$  \ $$| $$  \ $$
+% %  | $$\  $$$| $$  | $$| $$  | $$
+% %  | $$ \  $$|  $$$$$$/| $$  | $$
+% %  |__/  \__/ \______/ |__/  |__/
+% %                                
+% %                                
+% % 
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+% Infinitely strong shock propagation.
+% \foreach \n in {1,...,9}
+% {
+% \only<\n>
+% {
+% \vspace{4ex}
+% % \begin{figure}[ht]
+% % \centering
+
+% \begin{columns}[t] % contents are top vertically aligned
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+% \end{column}
+% % \end{subfigure}
+% \hspace{8ex}
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.4\textwidth}
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+% \end{column}
+% \end{columns}
+% % \end{subfigure}
+% % \end{figure}
+% }
+% }
+% \end{frame}
+% \begin{comment}
+% \end{comment}
+
+
+\section{Proposed Work}
 \begin{frame}[t]
-\frametitle{Conclusions and Future Work}
+\frametitle{Proposed Work}
 \framesubtitle{~~}  %% needed for proper positioning of the logo ...
-Conclusions
+Area A: Applicable Mathematics
 \begin{itemize}
-  \item A problem in conservation form can be transformed to a space-time divergence.
-  \item Fluxes change character from spatial to temporal boundaries.
-  \item Traces are only defined on spatial boundaries.
+  \item Something
 \end{itemize}
 \bigskip
 
-Future Work
+Area B: Scientific Computation
 \begin{itemize}
-  \item Proof of robustness for convection-diffusion.
-  \item Analysis of robust test norms.
-  \item Time slabs will reduce the simulation cost.
-  \item Two and three dimensions for more realistic problems.
-  \item Incompressible Navier-Stokes.
-  \item Iterative solvers for parallel scalability.
+  \item Something
+\end{itemize}
+\bigskip
+
+Area C: Modeling and Applications
+\begin{itemize}
+  \item Something
 \end{itemize}
 \end{frame}
-\begin{comment}
-It is extremely helpful to be able to write the governing equations in terms of a space-time divergence
-since that frames things in a way that we are familiar with from steady DPG.
-The oddity is that this leaves traces on temporal edges undefined, so our code needs to know not to put degrees
-of freedom there. 
 
-These are all very preliminary results, but they give an indication of what we can expect in the future.
-We still need to analyze the space-time convection-diffusion equation and develop robust norms in this context
-before we can extend the ideas to Navier-Stokes.
-We also have some rough work done on time-slabs which should improve the computational efficiency.
-Obviously, we are going to need to move to two and three dimensional problems in order to simulate anything of interest.
-My primary target is actually incompressible Navier-Stokes, which should be easier since we don't have to deal with shocks.
-But in 1D incompressible gives absolutely trivial solutions, so we didn't pursue it here.
-I don't know if we will get to this during my dissertation, but if we really want a scalable method, we need to address the 
-lack of preconditioners for DPG and develop a decent iterative solver.
-\end{comment}
+
+% ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Conclusions and Future Work}
+% \framesubtitle{~~}  %% needed for proper positioning of the logo ...
+% Conclusions
+% \begin{itemize}
+%   \item A problem in conservation form can be transformed to a space-time divergence.
+%   \item Fluxes change character from spatial to temporal boundaries.
+%   \item Traces are only defined on spatial boundaries.
+% \end{itemize}
+% \bigskip
+
+% Future Work
+% \begin{itemize}
+%   \item Proof of robustness for convection-diffusion.
+%   \item Analysis of robust test norms.
+%   \item Time slabs will reduce the simulation cost.
+%   \item Two and three dimensions for more realistic problems.
+%   \item Incompressible Navier-Stokes.
+%   \item Iterative solvers for parallel scalability.
+% \end{itemize}
+% \end{frame}
+% \begin{comment}
+% It is extremely helpful to be able to write the governing equations in terms of a space-time divergence
+% since that frames things in a way that we are familiar with from steady DPG.
+% The oddity is that this leaves traces on temporal edges undefined, so our code needs to know not to put degrees
+% of freedom there. 
+
+% These are all very preliminary results, but they give an indication of what we can expect in the future.
+% We still need to analyze the space-time convection-diffusion equation and develop robust norms in this context
+% before we can extend the ideas to Navier-Stokes.
+% We also have some rough work done on time-slabs which should improve the computational efficiency.
+% Obviously, we are going to need to move to two and three dimensional problems in order to simulate anything of interest.
+% My primary target is actually incompressible Navier-Stokes, which should be easier since we don't have to deal with shocks.
+% But in 1D incompressible gives absolutely trivial solutions, so we didn't pursue it here.
+% I don't know if we will get to this during my dissertation, but if we really want a scalable method, we need to address the 
+% lack of preconditioners for DPG and develop a decent iterative solver.
+% \end{comment}
+
+%   /$$$$$$$                      /$$                          
+%  | $$__  $$                    | $$                          
+%  | $$  \ $$  /$$$$$$   /$$$$$$$| $$   /$$ /$$   /$$  /$$$$$$ 
+%  | $$$$$$$  |____  $$ /$$_____/| $$  /$$/| $$  | $$ /$$__  $$
+%  | $$__  $$  /$$$$$$$| $$      | $$$$$$/ | $$  | $$| $$  \ $$
+%  | $$  \ $$ /$$__  $$| $$      | $$_  $$ | $$  | $$| $$  | $$
+%  | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$|  $$$$$$/| $$$$$$$/
+%  |_______/  \_______/ \_______/|__/  \__/ \______/ | $$____/ 
+%                                                    | $$      
+%                                                    | $$      
+%                                                    |__/ 
+% \section{Backup Slides}
+% \subsection{Inf-Sup}
 
 \end{document}
