@@ -602,12 +602,12 @@ Then the graph norm would be defined by
 -C_v\tilde\rho\tilde\bfu\Grad v_e
 -R\tilde\rho\tilde\bfu\Grad v_e
 -C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right\|\\
+\right\|^2\\
 +&\alpha_c\norm{v_c}^2
 +\alpha_m\norm{\bfv_m}^2
 +\alpha_e\norm{v_e}^2
-+\alpha_s\norm{\mathbb{S}}
-+\alpha_f\norm{\bftau}
++\alpha_s\norm{\mathbb{S}}^2
++\alpha_f\norm{\bftau}^2
 \,,
 \end{aligned}
 \end{equation}
@@ -656,11 +656,11 @@ This modified graph norm is then:
 -C_v\tilde\rho\tilde\bfu\Grad v_e
 -R\tilde\rho\tilde\bfu\Grad v_e
 -C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right\|\\
-+&\frac{1}{\mu}\norm{\mathbb{S}}
-+2\norm{\Div\mathbb{S}-\frac{1}{3}\Grad\trace{\mathbb{S}}}
-+\frac{Pr}{c_p\mu}\bftau\norm{\bftau}
-+\norm{\Div\bftau}\\
+\right\|^2\\
++&\frac{1}{\mu}\norm{\mathbb{S}}^2
++\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
++\frac{Pr}{c_p\mu}\norm{\bftau}^2
++\norm{\Div\bftau}^2\\
 +&\norm{v_c}^2
 +\norm{\bfv_m}^2
 +\norm{v_e}^2
