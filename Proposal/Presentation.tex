@@ -142,17 +142,59 @@ Leszek Demkowicz, Robert Moser
 %  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
 %                                                                                              
 %                                                                                              
-%  
-\section{Overview of DPG}
-\subsection{Most Stable Petrov-Galerkin Method}
-\subsection{Minimum Residual Method}
-\section{Motivation}
-\subsection{DPG for CFD}
-\subsubsection{Coarse Mesh Simulation}
-\subsection{DPG for HPC}
-\subsection{Space-Time DPG}
-\subsubsection{Heat Equation}
-\subsubsection{Compressible Navier-Stokes}
+%% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Navier-Stokes Equations}
+\framesubtitle{Numerical Challenges}
+\begin{columns}[c]
+\begin{column}{.6\textwidth}
+% Transient fluid dynamics simulations remain a challenging, but important part of engineering design.
+Robust simulation of unsteady fluid dynamics remains a challenging issue.
+\vspace{2ex}
+
+\begin{itemize}
+\item{} Resolving solution features (sharp, localized viscous-scale phenomena)
+\begin{itemize}
+\item{} Shocks
+\item{} Boundary layers - resolution needed for drag/load
+\item{} Turbulence (non-localized)
+\end{itemize}
+\item{} Nonlinear convergence and uniqueness of solutions
+\item{} Stability of numerical schemes
+\begin{itemize}
+\item{} Coarse/adaptive grids
+\item{} Higher order
+\end{itemize}
+\end{itemize}
+\vspace{-3ex}
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.5\textwidth]{Motivation/AdaptiveMesh.png}
+% \end{figure}
+\end{column}
+\begin{column}{.4\textwidth}
+\vspace{-3ex}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{Motivation/bullet_shock.png}\\
+Shock\\\vspace{1ex}
+\includegraphics[width=0.9\textwidth]{Motivation/boundary_layer.png}\\
+Boundary layer
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}  
+
+% \section{Overview of DPG}
+% \subsection{Most Stable Petrov-Galerkin Method}
+% \subsection{Minimum Residual Method}
+% \section{Motivation}
+% \subsection{DPG for CFD}
+% \subsubsection{Coarse Mesh Simulation}
+% \subsection{DPG for HPC}
+% \subsection{Space-Time DPG}
+% \subsubsection{Heat Equation}
+% \subsubsection{Compressible Navier-Stokes}
 
 % \section{Motivation}
 % \subsection{Mesh Generation}
@@ -163,47 +205,132 @@ Leszek Demkowicz, Robert Moser
 % \subsection{Mixed Method}
 % \subsection{Multiscale Method}
 % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Motivation}
+% \framesubtitle{DPG Summary}
+% Overview of Features
+% \begin{itemize}
+% \item Robust for singularly perturbed problems
+% \item Stable in the preasymptotic regime
+% \item Designed for adaptive mesh refinement
+% \item Ideal for high-performance computing
+% \item DPG is an optimal Petrov-Galerkin method
+% \end{itemize}
+% \medskip
+% DPG is a minimum residual method:
+% \[
+% u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+% \norm{Bw_{h}-l}_{V'}^{2}
+% \]
+% \vspace{-1em}
+% \[
+% \scalebox{1.8}{\ensuremath{\Updownarrow}}
+% \]
+% \vspace{-1em}
+% \[
+% b(u_h,R_V^{-1}B\delta u_h)
+% =l(R_V^{-1}B\delta u_h)
+% \quad\forall\delta u_h\in U_h
+% \]
+% \vspace{-2ex}
+
+% where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
+% \textcolor{utblack}{\textbf{optimal test functions}}.
+
+% % \vspace{4ex}
+% % For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
+% % \[
+% % \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
+% % \]
+% % where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
+% \end{frame}
+
+
+% ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Motivation}
-\framesubtitle{DPG Summary}  %% needed for proper positioning of the logo ...
-Overview of Features
-\begin{itemize}
-\item Robust for singularly perturbed problems
-\item Stable in the preasymptotic regime
-\item Designed for adaptive mesh refinement
-\item Ideal for high-performance computing
-\end{itemize}
-\medskip
-
-DPG is a minimum residual method:
+\framesubtitle{Dual Minimum Residual Method}
+Find $u\in U$ such that
 \[
-u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
-\norm{Bw_{h}-l}_{V'}^{2}
+b(u,v)=l(v)\quad\forall v\in V
 \]
-\vspace{-1em}
-\[
-\scalebox{1.8}{\ensuremath{\Updownarrow}}
-\]
-\vspace{-1em}
-\[
-b(u_h,R_V^{-1}B\delta u_h)
-=l(R_V^{-1}B\delta u_h)
-\quad\forall\delta u_h\in U_h
-\]
-\vspace{-2ex}
+with operator $B:U\rightarrow V'$ defined by $b(u,v)=\LRa{Bu,v}_{V'\times V}$.
 
-where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
-\textcolor{utblack}{\textbf{optimal test functions}}.
-
-% \vspace{4ex}
-% For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
-% \[
-% \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
-% \]
-% where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
+This give the operator equation 
+\[
+Bu=l\quad\in V'\,.
+\]
+We wish to minimize the residual $Bu-l\in V'$:
+\[
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bu-l}^2_{V'}\,.
+\]
+Dual norms are not computationally tractable. 
+Inverse Riesz map moves the residual to a more accessible space:
+\[
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
+\]
 \end{frame}
-\begin{comment}
-\end{comment}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{Optimal Petrov-Galerkin Methods}
+Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
+U_h$ gives,
+\[
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U,
+\]
+which by definition of the Riesz map is equivalent to 
+\begin{equation*}
+\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,,
+\end{equation*}
+with optimal test functions $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ for each trial function $\delta u_h$.
+\begin{block}{Optimal Petrov-Galerkin System}
+This gives a simple bilinear form
+\begin{equation*}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
+\end{equation*}
+with $v_{\delta u_h}\in V$ that solves the auxiliary problem
+\begin{equation*}
+\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+\end{equation*}
+\end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{The Most Stable Petrov-Galerkin Method}
+Babu\v{s}ka's theorem\cite{Babuska70} guarantees that \emph{discrete stability and approximability imply convergence}.
+If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
+with constant $\gamma_h$,
+\[
+\sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
+\]
+then the Galerkin error satisfies the bound
+\[
+\norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
+\]
+Optimal test function realize the supremum such that $\gamma_h\geq\gamma$.\\
+\begin{block}{Optimal Error Estimates}
+If we use the energy norm in the error estimate, then $\norm{b}=\gamma=1$.
+Babu\v{s}ka's theorem
+implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method.
+\end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{The \emph{Discontinuous} Petrov-Galerkin Method}
+A continuous test space would produce a globally coupled auxiliary problem.\\
+Goal is solve for optimal test functions in an embarrassingly parallel fashion.
+\end{frame}
+
 
 % ------------------------------------------------------------
 \begin{frame}[t]
