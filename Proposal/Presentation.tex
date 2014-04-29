@@ -148,7 +148,6 @@ Leszek Demkowicz, Robert Moser
 \framesubtitle{Numerical Challenges}
 \begin{columns}[c]
 \begin{column}{.6\textwidth}
-% Transient fluid dynamics simulations remain a challenging, but important part of engineering design.
 Robust simulation of unsteady fluid dynamics remains a challenging issue.
 \vspace{2ex}
 
@@ -167,10 +166,6 @@ Robust simulation of unsteady fluid dynamics remains a challenging issue.
 \end{itemize}
 \end{itemize}
 \vspace{-3ex}
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.5\textwidth]{Motivation/AdaptiveMesh.png}
-% \end{figure}
 \end{column}
 \begin{column}{.4\textwidth}
 \vspace{-3ex}
@@ -185,70 +180,37 @@ Boundary layer
 \end{columns}
 \end{frame}  
 
-% \section{Overview of DPG}
-% \subsection{Most Stable Petrov-Galerkin Method}
-% \subsection{Minimum Residual Method}
-% \section{Motivation}
-% \subsection{DPG for CFD}
-% \subsubsection{Coarse Mesh Simulation}
-% \subsection{DPG for HPC}
-% \subsection{Space-Time DPG}
-% \subsubsection{Heat Equation}
-% \subsubsection{Compressible Navier-Stokes}
-
-% \section{Motivation}
-% \subsection{Mesh Generation}
-% \subsection{Other Methods}
-
-% \section{Overview of DPG}
-% \subsection{Minimum Residual Method}
-% \subsection{Mixed Method}
-% \subsection{Multiscale Method}
-% ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Motivation}
-% \framesubtitle{DPG Summary}
-% Overview of Features
-% \begin{itemize}
-% \item Robust for singularly perturbed problems
-% \item Stable in the preasymptotic regime
-% \item Designed for adaptive mesh refinement
-% \item Ideal for high-performance computing
-% \item DPG is an optimal Petrov-Galerkin method
-% \end{itemize}
-% \medskip
-% DPG is a minimum residual method:
-% \[
-% u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
-% \norm{Bw_{h}-l}_{V'}^{2}
-% \]
-% \vspace{-1em}
-% \[
-% \scalebox{1.8}{\ensuremath{\Updownarrow}}
-% \]
-% \vspace{-1em}
-% \[
-% b(u_h,R_V^{-1}B\delta u_h)
-% =l(R_V^{-1}B\delta u_h)
-% \quad\forall\delta u_h\in U_h
-% \]
-% \vspace{-2ex}
-
-% where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
-% \textcolor{utblack}{\textbf{optimal test functions}}.
-
-% % \vspace{4ex}
-% % For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
-% % \[
-% % \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
-% % \]
-% % where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
-% \end{frame}
-
 
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Motivation}
+\framesubtitle{Initial Mesh Design is Expensive and Time-Consuming}
+\begin{columns}[t]
+\begin{column}[c]{0.4\textwidth}
+\begin{itemize}
+  \item Surface mesh must accurately represent geometry
+  \item Volume mesh needs sufficient resolution for asymptotic regime
+  % Before we accurately know the flow features
+  \item Boundary layer meshes must respect $y^+$ guidelines
+  \item Engineers often forced to work by trial and error
+  \item Bad in the context of HPC
+\end{itemize}
+\end{column}
+\begin{column}[c]{0.6\textwidth}
+\vspace{2ex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/NumecaRaceCar.png}
+\\\small{Formula 1 Mesh by Numeca}\\
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
 \framesubtitle{Dual Minimum Residual Method}
 Find $u\in U$ such that
 \[
@@ -274,7 +236,7 @@ u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Motivation}
+\frametitle{Overview of DPG}
 \framesubtitle{Optimal Petrov-Galerkin Methods}
 Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
 U_h$ gives,
@@ -302,7 +264,7 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Motivation}
+\frametitle{Overview of DPG}
 \framesubtitle{The Most Stable Petrov-Galerkin Method}
 Babu\v{s}ka's theorem\cite{Babuska70} guarantees that \emph{discrete stability and approximability imply convergence}.
 If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
@@ -322,41 +284,6 @@ implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerk
 \end{block}
 \end{frame}
 
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Motivation}
-\framesubtitle{The \emph{Discontinuous} Petrov-Galerkin Method}
-A continuous test space would produce a globally coupled auxiliary problem.\\
-Goal is solve for optimal test functions in an embarrassingly parallel fashion.
-\end{frame}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Motivation}
-\framesubtitle{Initial mesh design is expensive and time-consuming}
-\begin{columns}[t]
-\begin{column}[c]{0.4\textwidth}
-\begin{itemize}
-  \item Surface mesh must accurately represent geometry
-  \item Volume mesh needs sufficient resolution for asymptotic regime
-  % Before we accurately know the flow features
-  \item Boundary layer meshes must respect $y^+$ guidelines
-  \item Engineers often forced to work by trial and error
-  \item Bad in the context of HPC
-\end{itemize}
-\end{column}
-\begin{column}[c]{0.6\textwidth}
-\vspace{2ex}
-\begin{figure}[t]
-\centering
-\includegraphics[width=1.0\textwidth]{Motivation/NumecaRaceCar.png}
-\\\small{Formula 1 Mesh by Numeca}\\
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -392,6 +319,38 @@ Goal is solve for optimal test functions in an embarrassingly parallel fashion.
 }
 \end{frame}
 
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+\framesubtitle{Other Features}
+\begin{block}{Discontinuous Petrov-Galerkin}
+\begin{itemize}
+  \item Continuous test space produces global solve for optimal test functions
+  \item Discontinuous test space results in an embarrassingly parallel solve
+\end{itemize}
+\end{block}
+\begin{block}{Hermitian Positive Definite Stiffness Matrix}
+Property of all minimum residual methods
+\[
+b(u_h,v_{\delta u_h})=\LRp{v_{u_h},v_{\delta u_h}}_V=\overline{\LRp{v_{\delta u_h},v_{u_h}}_V}=\overline{b(\delta u_h,v_{u_h})}
+\]
+\end{block}
+\begin{block}{Error Representation Function}
+Energy norm of Galerkin error (residual) can be computed without exact solution
+\[
+\norm{u_h-u}_E=\norm{B(u_h-u)}_{V'}=\norm{Bu_h-l}_{V'}=\norm{R_V^{-1}(Bu_h-l)}_V
+\]
+\end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+\framesubtitle{High Performance Computing}
+
+\end{frame}
 
 
 % ------------------------------------------------------------
@@ -1129,6 +1088,26 @@ More computationally difficult
   \item More expensive solves
 \end{itemize}
 \end{frame}
+
+%    /$$$$$$                                                  /$$$$$$$$ /$$                        
+%   /$$__  $$                                                |__  $$__/|__/                        
+%  | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$            | $$    /$$ /$$$$$$/$$$$   /$$$$$$ 
+%  |  $$$$$$  /$$__  $$ |____  $$ /$$_____/ /$$__  $$ /$$$$$$   | $$   | $$| $$_  $$_  $$ /$$__  $$
+%   \____  $$| $$  \ $$  /$$$$$$$| $$      | $$$$$$$$|______/   | $$   | $$| $$ \ $$ \ $$| $$$$$$$$
+%   /$$  \ $$| $$  | $$ /$$__  $$| $$      | $$_____/           | $$   | $$| $$ | $$ | $$| $$_____/
+%  |  $$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$           | $$   | $$| $$ | $$ | $$|  $$$$$$$
+%   \______/ | $$____/  \_______/ \_______/ \_______/           |__/   |__/|__/ |__/ |__/ \_______/
+%            | $$                                                                                  
+%            | $$                                                                                  
+%            |__/  
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG}
+\framesubtitle{Motivation}
+
+\end{frame}
+
+
 
 %   /$$   /$$                       /$$    
 %  | $$  | $$                      | $$    
