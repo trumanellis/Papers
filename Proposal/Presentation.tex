@@ -210,6 +210,41 @@ Boundary layer
 
 % ------------------------------------------------------------
 \begin{frame}[t]
+\frametitle{Adaptive Mesh Refinement from Coarse Meshes}
+\framesubtitle{Adaptive solve of the Carter plate problem}
+\foreach \n in {1,...,11}
+{
+\only<\n>
+{
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
+\vspace{-1ex}
+{\scriptsize Velocity}\\
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
+\vspace{-1ex}
+{\scriptsize Temperature}\\
+\end{subfigure}
+\begin{subfigure}[c]{0.5\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
+\vspace{-1ex}
+{\scriptsize Mesh \n}\\
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
 \frametitle{Overview of DPG}
 \framesubtitle{Dual Minimum Residual Method}
 Find $u\in U$ such that
@@ -287,41 +322,6 @@ implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerk
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Adaptive Mesh Refinement from Coarse Meshes}
-\framesubtitle{Adaptive solve of the Carter plate problem}
-\foreach \n in {1,...,11}
-{
-\only<\n>
-{
-\begin{figure}[ht]
-\centering
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
-\vspace{-1ex}
-{\scriptsize Velocity}\\
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
-\vspace{-1ex}
-{\scriptsize Temperature}\\
-\end{subfigure}
-\begin{subfigure}[c]{0.5\textwidth}
-\centering
-\vspace{2ex}
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
-\vspace{-1ex}
-{\scriptsize Mesh \n}\\
-\end{subfigure}
-\end{figure}
-}
-}
-\end{frame}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
 \frametitle{Overview of DPG}
 \framesubtitle{Other Features}
 \begin{block}{Discontinuous Petrov-Galerkin}
@@ -349,6 +349,37 @@ Energy norm of Galerkin error (residual) can be computed without exact solution
 \begin{frame}[t]
 \frametitle{Overview of DPG}
 \framesubtitle{High Performance Computing}
+\begin{columns}[c]
+\begin{column}{.5\textwidth}
+Eliminates human intervention
+\begin{itemize}
+  \item Stability
+  \item Robustness
+  \item Adaptivity
+  \item Automaticity
+  \item Compute intensive
+  \item Embarrassingly parallel local solves
+  \item Low communication
+  \item Symmetric positive definite stiffness matrix
+  \item Multiphysics
+\end{itemize}
+
+Issues to be solved
+\begin{itemize}
+  \item Iterative solvers
+\end{itemize}
+\end{column}
+\begin{column}{.5\textwidth}
+\vspace{-3ex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{Motivation/Stampede.png}
+\\\small{Stampede Supercomputer at TACC}\\
+\includegraphics[width=0.9\textwidth]{Motivation/Mira.png}
+\\\small{Mira Supercomputer at Argonne}\\
+\end{figure}
+\end{column}
+\end{columns}
 
 \end{frame}
 
@@ -415,7 +446,7 @@ u-\bfsigma)\cdot\mathbf{n},v)_{\partial K}&=(g,v)_K\\
 \end{align*}
 Use the ultraweak (DPG) formulation to obtain bilinear form $b(u,v)=l(v)$.
 \begin{align*}
--(\bfbeta u-\bfsigma,\nabla v)_K&+(\hat f,v)_{\partial K}
+-(\bfbeta u-\bfsigma,\nabla v)_K&+(\hat t,v)_{\partial K}
 + \frac{1}{\epsilon}(\bfsigma,\bftau)_K\\
 &+(u,\nabla\cdot\bftau)_K
 -(\hat u,\tau_n)_{\partial K}=(g,v)_K
@@ -453,7 +484,7 @@ u hat and f hat.
 \framesubtitle{Local conservation for convection-diffusion}
 The local conservation law in convection diffusion is
 \[
-\int_{\partial K}\hat f=\int_K g\,,
+\int_{\partial K}\hat t=\int_K g\,,
 \]
 which is equivalent to having $\mathbf{v}_K:=\{v,\bftau\}=\{1_K,\boldsymbol0\}$ in the test space.
 In general, this is not satisfied by the optimal test functions.
@@ -463,7 +494,7 @@ can enforce this condition with Lagrange multipliers:
 \begin{align*}
 L(u_h,\bflambda) = \frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}_V^2
 -\sum_K\lambda_K\underbrace{\langle Bu_h-l,\mathbf{v}_K\rangle}_
-{\langle\hat f, 1_K\rangle_{\partial K}-\langle g,1_K\rangle_K}\,,
+{\langle\hat t, 1_K\rangle_{\partial K}-\langle g,1_K\rangle_K}\,,
 \end{align*}
 where $\bflambda=\{\lambda_1,\cdots,\lambda_N\}$.
 \end{frame}
@@ -524,7 +555,7 @@ the orthogonal complement of constants.
 \begin{frame}
 \frametitle{Locally Conservative DPG}
 \framesubtitle{Optimal Test Functions}
-For each $\mathbf{u}=\{u,\bfsigma,\hat u,\hat f\}\in\mathbf{U}_h$, find
+For each $\mathbf{u}=\{u,\bfsigma,\hat u,\hat t\}\in\mathbf{U}_h$, find
 $\mathbf{v}_{\mathbf{u}}=\{v_\mathbf{u},\bftau_\mathbf{u}\}\in\mathbf{V}$ such that
 \[
 (\mathbf{v_u},\mathbf{w})_\mathbf{V}=b(\mathbf{u},\mathbf{w})\quad\forall\mathbf{w}\in\mathbf{V}
@@ -755,17 +786,17 @@ the optimal test functions given through the trial-to-test operator T .
     norm of solution $\bfu$ with the energy norm, $\gamma$ and the continuity
     constant become one.
   \item In order to investigate the robustness of inf-sup constant $\beta$, we
-    need to understand what the energy norm of flux variable $\hat f$ is.
+    need to understand what the energy norm of flux variable $\hat t$ is.
   \item For an element, $K$, we solve for the optimal test functions,
     $v_K\in H^1(K)$, and $\bftau_K\in\bfH(\text{div},K)$
-    corresponding to flux $\hat f$:
+    corresponding to flux $\hat t$:
     \[
-    ( (v_K,\bftau_K),(\delta v,\delta\bftau) )_V=\LRa{\hat f,\delta v}
+    ( (v_K,\bftau_K),(\delta v,\delta\bftau) )_V=\LRa{\hat t,\delta v}
     \quad\forall\delta v\in H^1(K),\,\delta\bftau\in\bfH(\text{div},K)
     \]
-  \item The energy norm for $\hat f$ is then
+  \item The energy norm for $\hat t$ is then
     \[
-    ||\hat f||_E^2=\sum_K||(v_K,\bftau_K)||_V^2
+    ||\hat t||_E^2=\sum_K||(v_K,\bftau_K)||_V^2
     \]
 \end{itemize}
 \end{frame}
@@ -789,13 +820,13 @@ the optimal test functions given through the trial-to-test operator T .
         \sup_{\hat{f}} \frac{| \sum_K \lambda_K \langle \hat{f},1_K \rangle |}{|| \hat{f} ||_E}
         \geq  \beta \LRp{\sum_K \mu(K) \lambda_K^2}^{1/2}
       \end{equation*}
-    \item Select $\hat f$ as the trace of the Raviart-Thomas interpolant
+    \item Select $\hat t$ as the trace of the Raviart-Thomas interpolant
       $\bfpsi_h$ of $\bfpsi=R(\sum_K\lambda_K1_K)$.
     \item Proceed as in the previous analysis, but evaluation of the norm of
-      $\hat f$ requires a local solve.
+      $\hat t$ requires a local solve.
       \begin{align*}
         ( (v,\bftau),&(\delta v,\delta\bftau) )_V
-        =\LRa{\hat f,\delta v}_{\partial K}
+        =\LRa{\hat t,\delta v}_{\partial K}
         =\int_K\text{div}\bfpsi_h\delta v
         =\int_K\text{div}\bfpsi\delta v\\
         &=\int_K\lambda_K\delta v=\lambda_K(1_K,\delta v)_K
@@ -855,18 +886,18 @@ McIntosh.
 \begin{itemize}
     \item Finally, we need a continuity estimate on
       \[
-      \sum_K\lambda_K\langle\hat f,1_K\rangle
+      \sum_K\lambda_K\langle\hat t,1_K\rangle
       \]
     \item Testing with $(1_K,\boldsymbol0)$ in the local problem, we obtain
       \[
-      ( (v,\bftau),(1_K,\boldsymbol0) )_V=\langle\hat f,1_K\rangle_{\partial K}
+      ( (v,\bftau),(1_K,\boldsymbol0) )_V=\langle\hat t,1_K\rangle_{\partial K}
       \]
     \item With a robust estimate $|( (v,\bftau),(1_K,\boldsymbol0) )_V|\leq
       C\mu(K)^{1/2}||(v,\bftau)||_V$,
       \begin{align*}
-        |\sum_K\lambda_K\langle\hat f,1_K\rangle|
+        |\sum_K\lambda_K\langle\hat t,1_K\rangle|
         &\leq C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}\LRp{\sum_K||(v,\bftau)||_V^2}^{1/2}\\
-        &=C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}||\hat f||_E
+        &=C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}||\hat t||_E
       \end{align*}
 \end{itemize}
 \end{frame}
@@ -898,7 +929,7 @@ same situation as in standard DPG.
 On domain $\Omega=[0,1]^2$, with $\beta=(1,0)^T$, $f=0$ and boundary
 conditions
 \[
-\hat f=u_0,\quad\beta_n\le0\,,\quad\quad\hat u=0,\quad\beta_n > 0
+\hat t=u_0,\quad\beta_n\le0\,,\quad\quad\hat u=0,\quad\beta_n > 0
 \]
 Separation of variabes gives an analytic solution
 \[
