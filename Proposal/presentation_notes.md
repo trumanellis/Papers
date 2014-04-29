@@ -14,9 +14,6 @@ If continuous problem is well-posed, OPG will be as well
 Easier to see with a concrete example (convection-diffusion)
 
 ## TODO
-* Error representation function
-* Hermitian positive definite
-* DPG for HPC
 * Proof outline
 * Study
     * Boundary layer equations

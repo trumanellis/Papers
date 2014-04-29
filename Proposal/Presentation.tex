@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage{forloop}
 \usepackage{comment}
+% \usepackage[aps,prb,citeautoscript]{revtex4-1}
+\usepackage[super]{natbib}
 
 \newcounter{nn}
 
@@ -142,6 +144,7 @@ Leszek Demkowicz, Robert Moser
 %  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
 %                                                                                              
 %                                                                                              
+\section{Motivation}
 %% ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Navier-Stokes Equations}
@@ -243,9 +246,21 @@ Boundary layer
 \end{frame}
 
 
+%   /$$$$$$$  /$$$$$$$   /$$$$$$         /$$$$$$                                            /$$                        
+%  | $$__  $$| $$__  $$ /$$__  $$       /$$__  $$                                          |__/                        
+%  | $$  \ $$| $$  \ $$| $$  \__/      | $$  \ $$ /$$    /$$  /$$$$$$   /$$$$$$  /$$    /$$ /$$  /$$$$$$  /$$  /$$  /$$
+%  | $$  | $$| $$$$$$$/| $$ /$$$$      | $$  | $$|  $$  /$$/ /$$__  $$ /$$__  $$|  $$  /$$/| $$ /$$__  $$| $$ | $$ | $$
+%  | $$  | $$| $$____/ | $$|_  $$      | $$  | $$ \  $$/$$/ | $$$$$$$$| $$  \__/ \  $$/$$/ | $$| $$$$$$$$| $$ | $$ | $$
+%  | $$  | $$| $$      | $$  \ $$      | $$  | $$  \  $$$/  | $$_____/| $$        \  $$$/  | $$| $$_____/| $$ | $$ | $$
+%  | $$$$$$$/| $$      |  $$$$$$/      |  $$$$$$/   \  $/   |  $$$$$$$| $$         \  $/   | $$|  $$$$$$$|  $$$$$/$$$$/
+%  |_______/ |__/       \______/        \______/     \_/     \_______/|__/          \_/    |__/ \_______/ \_____/\___/ 
+%                                                                                                                      
+%                                                                                                                      
+% 
+\section{DPG Overview}
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Overview of DPG}
+\frametitle{Overview of DPG\cite{DPGOverview2}}
 \framesubtitle{Dual Minimum Residual Method}
 Find $u\in U$ such that
 \[
@@ -359,6 +374,7 @@ Eliminates human intervention
   \item Automaticity
   \item Compute intensive
   \item Embarrassingly parallel local solves
+  \item Factorization recyclable
   \item Low communication
   \item Symmetric positive definite stiffness matrix
   \item Multiphysics
@@ -518,7 +534,8 @@ the Lagrange multipliers enforcing local conservation.
 \frametitle{Locally Conservative DPG}
 \framesubtitle{Locally Conservative Saddle Point System}
 Finding the critical points of $L(u,\bflambda)$, we get the following
-equations\textsuperscript{\cite{EllisDemkowiczChan2013}}.
+equations.
+\begin{block}{Locally Conservative Saddle Point System}
 \begin{align*}
 \frac{\partial L(u_h,\bflambda)}{\partial u_h}&=b(u_h,R_V^{-1}B\delta u_h)
 -l(R_V^{-1}B\delta u_h)\\
@@ -530,9 +547,10 @@ u_h,\mathbf{v}_K)}=0\quad\forall\delta u_h\in U_h
 L(u_h,\bflambda)}{\partial\lambda_K}=-b(u_h,\mathbf{v}_K)+l(\mathbf{v}_K)=0\quad\forall
 K
 \]
+\end{block}
 A few consequences:
 \begin{itemize}
-\item We've turned our minimization problem into a saddlepoint problem.
+\item We've turned our minimization problem into a saddle point problem.
 % \item New $\lambda_K$ DOFs can be statically condensed out.
 \item Only need to find the optimal test function in the orthogonal complement
 of constants. % Backup slide
@@ -566,7 +584,8 @@ computationally tractable.
 We recently developed this modification to the \emph{robust test norm}
 \textsuperscript{\cite{ChanHeuerThanhDemkowicz2012}} which behaves better in
 the presence of singularities.
-\begin{minipage}[t][1.5in]{\textwidth}
+\begin{block}{Convection-Diffusion Test Norm}
+\begin{minipage}[t][1.2in]{\textwidth}
 \begin{align*}
 \norm{(v,\bftau)}^2_{\mathbf{V},\Omega_h}&=
 \norm{\min\left\{\frac{1}{\sqrt{\epsilon}},\frac{1}{\sqrt{|K|}}\right\}\bftau}^2
@@ -585,6 +604,7 @@ the presence of singularities.
 }}_{\only<1>{\text{No longer necessary}}\only<2>{\text{Zero mean term}}}
 \end{align*}
 \end{minipage}
+\end{block}
 \end{frame}
 \begin{comment}
 So how does this affect our search for optimal test functions? The process to
@@ -624,8 +644,9 @@ Why is zero mean more friendly than L2?
 %===============================================================================
 \begin{frame}
 \frametitle{Locally Conservative DPG}
-\framesubtitle{Stability Analysis}
-We follow Brezzi's theory for an abstract mixed problem:
+\framesubtitle{Stability and Robustness Analysis}
+\begin{itemize}
+\item We follow Brezzi's theory for an abstract mixed problem:
 \begin{equation*}
 \left\{
 \begin{array}{lll}
@@ -636,277 +657,18 @@ c(q,\bfu) & = g(q) & \forall q \in Q
 \right.
 \end{equation*}
 where $a,c,l,g$ denote the appropriate
-bilinear and linear forms. Note that
-$a(\bfu,\bfw)=b(\bfu,R_V^{-1}B\bfw)=(R_V^{-1}B\bfu,R_V^{-1}B\bfw)_V$.
+bilinear and linear forms. 
+\item $a(\bfu,\bfw)=b(\bfu,R_V^{-1}B\bfw)=(R_V^{-1}B\bfu,R_V^{-1}B\bfw)_V$
+\item $c(p,\bfw)=\sum_K\lambda_K\LRa{\hat t,1_K}_{\partial K}$
 
-Let $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{f}$
-that realizes the minimum in the definition of the quotient (minimum energy
-extension) norm.
+\item Locally conservative DPG satisfies inf-sup and inf-sup in kernel conditions.
 
-The norm for the Lagrange multipliers $\lambda_K$ is implied
-by the quotient norm used for $H^{-1/2}(\Gamma_h)$ and continuity
-bound for form $c(p,\bfw)$:
-\[
-||\bflambda||:=\left(\sum_K \mu(K) \lambda_K^2\right)^{1/2}
-\]
-\end{frame}
-\begin{comment}
-In the following analysis, we neglect the error due to the approximation of optimal test functions.
+\item Robustness is proved by switching to energy norm in Brezzi analysis.
 
-We skip some of the math needed to show this, but it is pretty trivial. The
-full details will be in the ICES report.
-\end{comment}
-
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Inf Sup Condition}
-\only<1>{
-The inf-sup condition relating spaces $\bfU$ and $Q$ is
-\[
-\sup_{\bfw \in \bfU} \frac{| c(p,\bfw) |}{|| \bfw ||_{\bfU}} \geq \beta ||
-p ||_Q
-\]
-Let
-\begin{equation*}
-R\, : \, L^2(\Omega) \ni q \to \bfpsi \in \bfH(\text{div},\Omega) \cap \bfH^1(\Omega)
-=\bfH^1(\Omega)
-\end{equation*}
-be
-the continuous right inverse of the divergence operator constructed by
-Costabel and McIntosh\textsuperscript{\cite{CostabelMcIntosh}}.
-Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
-function
-\begin{equation*}
-\bfpsi = R (\sum_K \lambda_K 1_K)
-\end{equation*}
-Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
-}
-\only<2>{
-Classical $h$-interpolation error estimate for the lowest error
-Raviart-Thomas elements and continuity of operator $R$ imply the stability estimate:
-\begin{equation*}
-\begin{array}{lll}
-|| \bfpsi_h || & \leq || \bfpsi_h - \bfpsi || + || \bfpsi ||\\[8pt]
-&\leq C h || \bfpsi ||_{H^1} +  || \bfpsi || \\[8pt]
-& \leq C || \text{div} \bfpsi || = C (\sum_K \mu(K) \lambda_K^2)^{1/2}
-\end{array}
-\end{equation*}
-Let $\hat{f}$ be the trace of $\bfpsi_h$, then
-\begin{align*}
-\sup_{\hat{f} \in H^{-1/2}(\Gamma_h)} \frac{|  \sum_K \lambda_K \langle
-\hat{f},1_K \rangle_{\partial K} |}{|| \hat{f} ||_{H^{-1/2}(\Gamma_h)}}
-&\geq \frac{| \sum_K \lambda_K \int_K \text{div} \bfpsi_h \: 1_K  |}
-{|| \bfpsi_h ||_{H(\text{div},\Omega)}}\\
-&\geq \frac{1}{C} (\sum_K \mu(K) \lambda_K^2)^{1/2}
-\end{align*}
-}
-\end{frame}
-\begin{comment}
-We proceed now with the discussion of the discrete inf-sup stability
-constants. We skip index h in the notation.
-
-Note that C is a generic, mesh independent constant incorporating the constant
-from the interpolation error estimate and the continuity constant of R.
-
-Notice that we have considered traces of lowest order Raviart-Thomas elements
-for the discretization of the flux.
-
-The inf-sup condition for the lowest order RT spaces implies automatically the
-analogous condition for elements of arbitrary order; increasing space U only
-makes the discrete inf-sup constant bigger.
-\end{comment}
-
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Inf Sup in Kernel Condition}
-We characterize the ``kernel'' space:
-\begin{equation*}
-\begin{array}
-{rl}
-\bfU_0  := & \{ \bfw \in \bfU \, : \, c(q,\bfw) = 0 \quad \forall q \in Q\} \\[8pt]
- = &\{ (u,\bfsigma,\hat{u},\hat{t}) \, : \, \langle \hat{t},1_K \rangle = 0
- \quad \forall K \}
-\end{array}
-\end{equation*}
-With $\bfu \in \bfU_0$, we have then:
-\begin{align*}
-   \sup_{\bfw \in \bfU_0} \frac{| a(\bfu,\bfw) |}{|| \bfw ||_{\bfU} }
-   &\geq \frac{| b(\bfu,T \bfu) |}{|| \bfu ||}
-   = \frac{| b(\bfu,T \bfu) |}{|| T\bfu ||}\frac{||T\bfu||}{||\bfu||}\\
-   &= \sup_{(v,\bftau)}\frac{| b((u,\bfsigma,\hat{u},\hat{t}), (v,\bftau)) |}{|| (v,\bftau) ||}
-   \frac{||T\bfu||}{||\bfu||}
-   \geq \gamma^2 || (u,\bfsigma,\hat{u},\hat{t}) ||
-\end{align*}
-where $\gamma$ is the stability constant for the standard DPG formulation.
-
-The FE error is bounded by the best approximation error. Note that the exact
-Lagrange multipliers are zero, so the best approximation error involves only
-the solution $(u,\bfsigma,\hat{u},\hat{t})$.
-\end{frame}
-\begin{comment}
-This is satisfied automatically due to the use of optimal test functions.
-
-In other words, the kernel space contains only the equilibrated fluxes.
-
-The first inequality follows as we plug in the definition for a and pick w=u.
-The second equality is trivial, while the next one follows by definition of
-the optimal test functions given through the trial-to-test operator T .
-\end{comment}
-
-
-%   /$$$$$$$            /$$                             /$$                                            
-%  | $$__  $$          | $$                            | $$                                            
-%  | $$  \ $$  /$$$$$$ | $$$$$$$  /$$   /$$  /$$$$$$$ /$$$$$$   /$$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$
-%  | $$$$$$$/ /$$__  $$| $$__  $$| $$  | $$ /$$_____/|_  $$_/  | $$__  $$ /$$__  $$ /$$_____/ /$$_____/
-%  | $$__  $$| $$  \ $$| $$  \ $$| $$  | $$|  $$$$$$   | $$    | $$  \ $$| $$$$$$$$|  $$$$$$ |  $$$$$$ 
-%  | $$  \ $$| $$  | $$| $$  | $$| $$  | $$ \____  $$  | $$ /$$| $$  | $$| $$_____/ \____  $$ \____  $$
-%  | $$  | $$|  $$$$$$/| $$$$$$$/|  $$$$$$/ /$$$$$$$/  |  $$$$/| $$  | $$|  $$$$$$$ /$$$$$$$/ /$$$$$$$/
-%  |__/  |__/ \______/ |_______/  \______/ |_______/    \___/  |__/  |__/ \_______/|_______/ |_______/ 
-%                                                                                                      
-%                                                                                                      
-%  
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Robustness Analysis}
-\begin{itemize}
-  \item We prove robustness of the restricted DPG method by switching to the
-    energy norm in Brezzi's stability analysis.
-  \item The inf-sup in kernel condition is simple. Upon replacing the original
-    norm of solution $\bfu$ with the energy norm, $\gamma$ and the continuity
-    constant become one.
-  \item In order to investigate the robustness of inf-sup constant $\beta$, we
-    need to understand what the energy norm of flux variable $\hat t$ is.
-  \item For an element, $K$, we solve for the optimal test functions,
-    $v_K\in H^1(K)$, and $\bftau_K\in\bfH(\text{div},K)$
-    corresponding to flux $\hat t$:
-    \[
-    ( (v_K,\bftau_K),(\delta v,\delta\bftau) )_V=\LRa{\hat t,\delta v}
-    \quad\forall\delta v\in H^1(K),\,\delta\bftau\in\bfH(\text{div},K)
-    \]
-  \item The energy norm for $\hat t$ is then
-    \[
-    ||\hat t||_E^2=\sum_K||(v_K,\bftau_K)||_V^2
-    \]
+\item Full details can be found in \emph{Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems}\cite{EllisLC}.
 \end{itemize}
 \end{frame}
-\begin{comment}
-  With robust test norms, standard DPG delivers a robust error bound because
-  it minimizes the residual in the energy norm. Restricted DPG no longer
-  minimizes the residual, so can we claim robustness for this version as well?
-\end{comment}
 
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Robustness Analysis}
-\begin{itemize}
-    \item Need to establish conditions under which the inf-sup constant is
-      independent of viscosity.
-      \begin{equation*}
-        \sup_{\hat{f}} \frac{| \sum_K \lambda_K \langle \hat{f},1_K \rangle |}{|| \hat{f} ||_E}
-        \geq  \beta \LRp{\sum_K \mu(K) \lambda_K^2}^{1/2}
-      \end{equation*}
-    \item Select $\hat t$ as the trace of the Raviart-Thomas interpolant
-      $\bfpsi_h$ of $\bfpsi=R(\sum_K\lambda_K1_K)$.
-    \item Proceed as in the previous analysis, but evaluation of the norm of
-      $\hat t$ requires a local solve.
-      \begin{align*}
-        ( (v,\bftau),&(\delta v,\delta\bftau) )_V
-        =\LRa{\hat t,\delta v}_{\partial K}
-        =\int_K\text{div}\bfpsi_h\delta v
-        =\int_K\text{div}\bfpsi\delta v\\
-        &=\int_K\lambda_K\delta v=\lambda_K(1_K,\delta v)_K
-        \quad\forall\delta v\in
-        H^1(K)\,\forall\delta\bftau\in\bfH(\text{div},K)
-      \end{align*}
-\end{itemize}
-\end{frame}
-\begin{comment}
-We need to establish sufficient conditions under which the inf-sup and continuity constants for the bilinear
-form representing the constraint are independent of viscosity
-
-R is the right inverse of the divergence operator constructed by Costabel and
-McIntosh.
-\end{comment}
-
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Robustness Analysis}
-\begin{itemize}
-    \item We need an upper bound for the energy norm of $(v_h,\bftau_h)$:
-      \[
-      \LRp{\sum_K||(v,\bftau)||^2_V}^{1/2}
-      \]
-    \item Substituting $(v,\bftau)$ for $(\delta v,\delta\bftau)$ in the
-      previous slide:
-      \[
-      ||(v,\bftau)||^2_V=\lambda_K(1_K,v_k)
-      \]
-    \item With a robust stability estimate
-      $
-      (1_K,v_K)\leq C\mu(K)^{1/2}||(v,\bftau)||_K\,,
-      $
-      \[
-      ||(v,\bftau)||_V\leq C\mu(K)^{1/2}|\lambda_K|
-      \]
-      \[
-      \sum_K||(v,\bftau)||_V^2\leq C^2\sum_K\mu(K)\lambda_K^2
-      \]
-      which leads to the robust estimate of inf-sup constant $\beta$.
-\end{itemize}
-\end{frame}
-\begin{comment}
-\end{comment}
-
-
-%===============================================================================
-% NEW SLIDE
-%===============================================================================
-\begin{frame}
-\frametitle{Locally Conservative DPG}
-\framesubtitle{Robustness Analysis}
-\begin{itemize}
-    \item Finally, we need a continuity estimate on
-      \[
-      \sum_K\lambda_K\langle\hat t,1_K\rangle
-      \]
-    \item Testing with $(1_K,\boldsymbol0)$ in the local problem, we obtain
-      \[
-      ( (v,\bftau),(1_K,\boldsymbol0) )_V=\langle\hat t,1_K\rangle_{\partial K}
-      \]
-    \item With a robust estimate $|( (v,\bftau),(1_K,\boldsymbol0) )_V|\leq
-      C\mu(K)^{1/2}||(v,\bftau)||_V$,
-      \begin{align*}
-        |\sum_K\lambda_K\langle\hat t,1_K\rangle|
-        &\leq C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}\LRp{\sum_K||(v,\bftau)||_V^2}^{1/2}\\
-        &=C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}||\hat t||_E
-      \end{align*}
-\end{itemize}
-\end{frame}
-\begin{comment}
-With the robust stability and continuity constants for the mixed problem, the
-energy error of solution and Lagrange multipliers is bounded robustly by the
-best approximation error measured in the energy norm. We arrive thus at the
-same situation as in standard DPG.
-\end{comment}
 
 
 %   /$$$$$$$$           /$$           /$$                                    
@@ -1092,9 +854,20 @@ Conservative
 \end{comment}
 
 
+
+%    /$$$$$$                                                  /$$$$$$$$ /$$                        
+%   /$$__  $$                                                |__  $$__/|__/                        
+%  | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$            | $$    /$$ /$$$$$$/$$$$   /$$$$$$ 
+%  |  $$$$$$  /$$__  $$ |____  $$ /$$_____/ /$$__  $$ /$$$$$$   | $$   | $$| $$_  $$_  $$ /$$__  $$
+%   \____  $$| $$  \ $$  /$$$$$$$| $$      | $$$$$$$$|______/   | $$   | $$| $$ \ $$ \ $$| $$$$$$$$
+%   /$$  \ $$| $$  | $$ /$$__  $$| $$      | $$_____/           | $$   | $$| $$ | $$ | $$| $$_____/
+%  |  $$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$           | $$   | $$| $$ | $$ | $$|  $$$$$$$
+%   \______/ | $$____/  \_______/ \_______/ \_______/           |__/   |__/|__/ |__/ |__/ \_______/
+%            | $$                                                                                  
+%            | $$                                                                                  
+%            |__/  
 \section{Space-Time DPG}
-% \subsection{Mathematics}
-% \subsection{Numerical Results}-
+% ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time DPG}
 \framesubtitle{Motivation}
@@ -1118,24 +891,6 @@ More computationally difficult
   \item Equations often first order in time but second order in space
   \item More expensive solves
 \end{itemize}
-\end{frame}
-
-%    /$$$$$$                                                  /$$$$$$$$ /$$                        
-%   /$$__  $$                                                |__  $$__/|__/                        
-%  | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$            | $$    /$$ /$$$$$$/$$$$   /$$$$$$ 
-%  |  $$$$$$  /$$__  $$ |____  $$ /$$_____/ /$$__  $$ /$$$$$$   | $$   | $$| $$_  $$_  $$ /$$__  $$
-%   \____  $$| $$  \ $$  /$$$$$$$| $$      | $$$$$$$$|______/   | $$   | $$| $$ \ $$ \ $$| $$$$$$$$
-%   /$$  \ $$| $$  | $$ /$$__  $$| $$      | $$_____/           | $$   | $$| $$ | $$ | $$| $$_____/
-%  |  $$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$           | $$   | $$| $$ | $$ | $$|  $$$$$$$
-%   \______/ | $$____/  \_______/ \_______/ \_______/           |__/   |__/|__/ |__/ |__/ \_______/
-%            | $$                                                                                  
-%            | $$                                                                                  
-%            |__/  
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time DPG}
-\framesubtitle{Motivation}
-
 \end{frame}
 
 
@@ -1504,98 +1259,98 @@ Essentially, we've taken the standard graph norm based off the adjoint equation 
 %                                                     
 % 
 % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
-% \foreach \n in {1,...,15}
-% {
-% \only<\n>
-% {
-% \vspace{-2ex}
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
+
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+\begin{comment}
+We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
+space-time elements. 
+Traditionally the Sod shock tube is defined for the Euler equations, 
+but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
+We instead just solve the problem with a small physical viscosity of order 10^-5.
+You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
+Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
+resolve the flow features.
+We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
+You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
+With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
+\end{comment}
+
+
+%   /$$   /$$           /$$      
+%  | $$$ | $$          | $$      
+%  | $$$$| $$  /$$$$$$ | $$$$$$$ 
+%  | $$ $$ $$ /$$__  $$| $$__  $$
+%  | $$  $$$$| $$  \ $$| $$  \ $$
+%  | $$\  $$$| $$  | $$| $$  | $$
+%  | $$ \  $$|  $$$$$$/| $$  | $$
+%  |__/  \__/ \______/ |__/  |__/
+%                                
+%                                
+% 
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+Infinitely strong shock propagation.
+\foreach \n in {1,...,9}
+{
+\only<\n>
+{
+\vspace{4ex}
 % \begin{figure}[ht]
 % \centering
 
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
+\centering
+\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+\end{column}
 % \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
+\hspace{8ex}
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.4\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+\end{column}
+\end{columns}
 % \end{subfigure}
 % \end{figure}
-% }
-% }
-% \end{frame}
-% \begin{comment}
-% We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
-% space-time elements. 
-% Traditionally the Sod shock tube is defined for the Euler equations, 
-% but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
-% We instead just solve the problem with a small physical viscosity of order 10^-5.
-% You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
-% Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
-% resolve the flow features.
-% We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
-% You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
-% With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
-% \end{comment}
-
-
-% %   /$$   /$$           /$$      
-% %  | $$$ | $$          | $$      
-% %  | $$$$| $$  /$$$$$$ | $$$$$$$ 
-% %  | $$ $$ $$ /$$__  $$| $$__  $$
-% %  | $$  $$$$| $$  \ $$| $$  \ $$
-% %  | $$\  $$$| $$  | $$| $$  | $$
-% %  | $$ \  $$|  $$$$$$/| $$  | $$
-% %  |__/  \__/ \______/ |__/  |__/
-% %                                
-% %                                
-% % 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-% Infinitely strong shock propagation.
-% \foreach \n in {1,...,9}
-% {
-% \only<\n>
-% {
-% \vspace{4ex}
-% % \begin{figure}[ht]
-% % \centering
-
-% \begin{columns}[t] % contents are top vertically aligned
-% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% % \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
-% \end{column}
-% % \end{subfigure}
-% \hspace{8ex}
-% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% % \begin{subfigure}[c]{0.4\textwidth}
-% \centering
-% \vspace{2ex}
-% \includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
-% \end{column}
-% \end{columns}
-% % \end{subfigure}
-% % \end{figure}
-% }
-% }
-% \end{frame}
-% \begin{comment}
-% \end{comment}
+}
+}
+\end{frame}
+\begin{comment}
+\end{comment}
 
 
 \section{Proposed Work}
@@ -1691,7 +1446,305 @@ Area C: Modeling and Applications
 %                                                    | $$      
 %                                                    | $$      
 %                                                    |__/ 
-% \section{Backup Slides}
-% \subsection{Inf-Sup}
+
+%    /$$$$$$    /$$               /$$       /$$ /$$ /$$   /$$              
+%   /$$__  $$  | $$              | $$      |__/| $$|__/  | $$              
+%  | $$  \__/ /$$$$$$    /$$$$$$ | $$$$$$$  /$$| $$ /$$ /$$$$$$   /$$   /$$
+%  |  $$$$$$ |_  $$_/   |____  $$| $$__  $$| $$| $$| $$|_  $$_/  | $$  | $$
+%   \____  $$  | $$      /$$$$$$$| $$  \ $$| $$| $$| $$  | $$    | $$  | $$
+%   /$$  \ $$  | $$ /$$ /$$__  $$| $$  | $$| $$| $$| $$  | $$ /$$| $$  | $$
+%  |  $$$$$$/  |  $$$$/|  $$$$$$$| $$$$$$$/| $$| $$| $$  |  $$$$/|  $$$$$$$
+%   \______/    \___/   \_______/|_______/ |__/|__/|__/   \___/   \____  $$
+%                                                                 /$$  | $$
+%                                                                |  $$$$$$/
+%                                                                 \______/ 
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Stability Analysis}
+We follow Brezzi's theory\cite{Brezzi1974} for an abstract mixed problem:
+\begin{equation*}
+\left\{
+\begin{array}{lll}
+\bfu \in \bfU, p \in Q\\
+a(\bfu,\bfw) + c(p,\bfw) & = l(\bfw) & \forall \bfw \in \bfU \\
+c(q,\bfu) & = g(q) & \forall q \in Q
+\end{array}
+\right.
+\end{equation*}
+where $a,c,l,g$ denote the appropriate
+bilinear and linear forms. Note that
+$a(\bfu,\bfw)=b(\bfu,R_V^{-1}B\bfw)=(R_V^{-1}B\bfu,R_V^{-1}B\bfw)_V$.
+
+Let $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{t}$
+that realizes the minimum in the definition of the quotient (minimum energy
+extension) norm.
+
+The norm for the Lagrange multipliers $\lambda_K$ is implied
+by the quotient norm used for $H^{-1/2}(\Gamma_h)$ and continuity
+bound for form $c(p,\bfw)$:
+\[
+||\bflambda||:=\left(\sum_K \mu(K) \lambda_K^2\right)^{1/2}
+\]
+\end{frame}
+\begin{comment}
+In the following analysis, we neglect the error due to the approximation of optimal test functions.
+
+We skip some of the math needed to show this, but it is pretty trivial. The
+full details will be in the ICES report.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Inf Sup Condition}
+\only<1>{
+The inf-sup condition relating spaces $\bfU$ and $Q$ is
+\[
+\sup_{\bfw \in \bfU} \frac{| c(p,\bfw) |}{|| \bfw ||_{\bfU}} \geq \beta ||
+p ||_Q
+\]
+Let
+\begin{equation*}
+R\, : \, L^2(\Omega) \ni q \to \bfpsi \in \bfH(\text{div},\Omega) \cap \bfH^1(\Omega)
+=\bfH^1(\Omega)
+\end{equation*}
+be
+the continuous right inverse of the divergence operator constructed by
+Costabel and McIntosh\textsuperscript{\cite{CostabelMcIntosh}}.
+Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
+function
+\begin{equation*}
+\bfpsi = R (\sum_K \lambda_K 1_K)
+\end{equation*}
+Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
+}
+\only<2>{
+Classical $h$-interpolation error estimate for the lowest error
+Raviart-Thomas elements and continuity of operator $R$ imply the stability estimate:
+\begin{equation*}
+\begin{array}{lll}
+|| \bfpsi_h || & \leq || \bfpsi_h - \bfpsi || + || \bfpsi ||\\[8pt]
+&\leq C h || \bfpsi ||_{H^1} +  || \bfpsi || \\[8pt]
+& \leq C || \text{div} \bfpsi || = C (\sum_K \mu(K) \lambda_K^2)^{1/2}
+\end{array}
+\end{equation*}
+Let $\hat{t}$ be the trace of $\bfpsi_h$, then
+\begin{align*}
+\sup_{\hat{t} \in H^{-1/2}(\Gamma_h)} \frac{|  \sum_K \lambda_K \langle
+\hat{t},1_K \rangle_{\partial K} |}{|| \hat{t} ||_{H^{-1/2}(\Gamma_h)}}
+&\geq \frac{| \sum_K \lambda_K \int_K \text{div} \bfpsi_h \: 1_K  |}
+{|| \bfpsi_h ||_{H(\text{div},\Omega)}}\\
+&\geq \frac{1}{C} (\sum_K \mu(K) \lambda_K^2)^{1/2}
+\end{align*}
+}
+\end{frame}
+\begin{comment}
+We proceed now with the discussion of the discrete inf-sup stability
+constants. We skip index h in the notation.
+
+Note that C is a generic, mesh independent constant incorporating the constant
+from the interpolation error estimate and the continuity constant of R.
+
+Notice that we have considered traces of lowest order Raviart-Thomas elements
+for the discretization of the flux.
+
+The inf-sup condition for the lowest order RT spaces implies automatically the
+analogous condition for elements of arbitrary order; increasing space U only
+makes the discrete inf-sup constant bigger.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Inf Sup in Kernel Condition}
+We characterize the ``kernel'' space:
+\begin{equation*}
+\begin{array}
+{rl}
+\bfU_0  := & \{ \bfw \in \bfU \, : \, c(q,\bfw) = 0 \quad \forall q \in Q\} \\[8pt]
+ = &\{ (u,\bfsigma,\hat{u},\hat{t}) \, : \, \langle \hat{t},1_K \rangle = 0
+ \quad \forall K \}
+\end{array}
+\end{equation*}
+With $\bfu \in \bfU_0$, we have then:
+\begin{align*}
+   \sup_{\bfw \in \bfU_0} \frac{| a(\bfu,\bfw) |}{|| \bfw ||_{\bfU} }
+   &\geq \frac{| b(\bfu,T \bfu) |}{|| \bfu ||}
+   = \frac{| b(\bfu,T \bfu) |}{|| T\bfu ||}\frac{||T\bfu||}{||\bfu||}\\
+   &= \sup_{(v,\bftau)}\frac{| b((u,\bfsigma,\hat{u},\hat{t}), (v,\bftau)) |}{|| (v,\bftau) ||}
+   \frac{||T\bfu||}{||\bfu||}
+   \geq \gamma^2 || (u,\bfsigma,\hat{u},\hat{t}) ||
+\end{align*}
+where $\gamma$ is the stability constant for the standard DPG formulation.
+
+The FE error is bounded by the best approximation error. Note that the exact
+Lagrange multipliers are zero, so the best approximation error involves only
+the solution $(u,\bfsigma,\hat{u},\hat{t})$.
+\end{frame}
+\begin{comment}
+This is satisfied automatically due to the use of optimal test functions.
+
+In other words, the kernel space contains only the equilibrated fluxes.
+
+The first inequality follows as we plug in the definition for a and pick w=u.
+The second equality is trivial, while the next one follows by definition of
+the optimal test functions given through the trial-to-test operator T .
+\end{comment}
+
+
+%   /$$$$$$$            /$$                             /$$                                            
+%  | $$__  $$          | $$                            | $$                                            
+%  | $$  \ $$  /$$$$$$ | $$$$$$$  /$$   /$$  /$$$$$$$ /$$$$$$   /$$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$
+%  | $$$$$$$/ /$$__  $$| $$__  $$| $$  | $$ /$$_____/|_  $$_/  | $$__  $$ /$$__  $$ /$$_____/ /$$_____/
+%  | $$__  $$| $$  \ $$| $$  \ $$| $$  | $$|  $$$$$$   | $$    | $$  \ $$| $$$$$$$$|  $$$$$$ |  $$$$$$ 
+%  | $$  \ $$| $$  | $$| $$  | $$| $$  | $$ \____  $$  | $$ /$$| $$  | $$| $$_____/ \____  $$ \____  $$
+%  | $$  | $$|  $$$$$$/| $$$$$$$/|  $$$$$$/ /$$$$$$$/  |  $$$$/| $$  | $$|  $$$$$$$ /$$$$$$$/ /$$$$$$$/
+%  |__/  |__/ \______/ |_______/  \______/ |_______/    \___/  |__/  |__/ \_______/|_______/ |_______/ 
+%                                                                                                      
+%                                                                                                      
+%  
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Robustness Analysis}
+\begin{itemize}
+  \item We prove robustness of the restricted DPG method by switching to the
+    energy norm in Brezzi's stability analysis.
+  \item The inf-sup in kernel condition is simple. Upon replacing the original
+    norm of solution $\bfu$ with the energy norm, $\gamma$ and the continuity
+    constant become one.
+  \item In order to investigate the robustness of inf-sup constant $\beta$, we
+    need to understand what the energy norm of flux variable $\hat t$ is.
+  \item For an element, $K$, we solve for the optimal test functions,
+    $v_K\in H^1(K)$, and $\bftau_K\in\bfH(\text{div},K)$
+    corresponding to flux $\hat t$:
+    \[
+    ( (v_K,\bftau_K),(\delta v,\delta\bftau) )_V=\LRa{\hat t,\delta v}
+    \quad\forall\delta v\in H^1(K),\,\delta\bftau\in\bfH(\text{div},K)
+    \]
+  \item The energy norm for $\hat t$ is then
+    \[
+    ||\hat t||_E^2=\sum_K||(v_K,\bftau_K)||_V^2
+    \]
+\end{itemize}
+\end{frame}
+\begin{comment}
+  With robust test norms, standard DPG delivers a robust error bound because
+  it minimizes the residual in the energy norm. Restricted DPG no longer
+  minimizes the residual, so can we claim robustness for this version as well?
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Robustness Analysis}
+\begin{itemize}
+    \item Need to establish conditions under which the inf-sup constant is
+      independent of viscosity.
+      \begin{equation*}
+        \sup_{\hat{t}} \frac{| \sum_K \lambda_K \langle \hat{t},1_K \rangle |}{|| \hat{t} ||_E}
+        \geq  \beta \LRp{\sum_K \mu(K) \lambda_K^2}^{1/2}
+      \end{equation*}
+    \item Select $\hat t$ as the trace of the Raviart-Thomas interpolant
+      $\bfpsi_h$ of $\bfpsi=R(\sum_K\lambda_K1_K)$.
+    \item Proceed as in the previous analysis, but evaluation of the norm of
+      $\hat t$ requires a local solve.
+      \begin{align*}
+        ( (v,\bftau),&(\delta v,\delta\bftau) )_V
+        =\LRa{\hat t,\delta v}_{\partial K}
+        =\int_K\text{div}\bfpsi_h\delta v
+        =\int_K\text{div}\bfpsi\delta v\\
+        &=\int_K\lambda_K\delta v=\lambda_K(1_K,\delta v)_K
+        \quad\forall\delta v\in
+        H^1(K)\,\forall\delta\bftau\in\bfH(\text{div},K)
+      \end{align*}
+\end{itemize}
+\end{frame}
+\begin{comment}
+We need to establish sufficient conditions under which the inf-sup and continuity constants for the bilinear
+form representing the constraint are independent of viscosity
+
+R is the right inverse of the divergence operator constructed by Costabel and
+McIntosh.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Robustness Analysis}
+\begin{itemize}
+    \item We need an upper bound for the energy norm of $(v_h,\bftau_h)$:
+      \[
+      \LRp{\sum_K||(v,\bftau)||^2_V}^{1/2}
+      \]
+    \item Substituting $(v,\bftau)$ for $(\delta v,\delta\bftau)$ in the
+      previous slide:
+      \[
+      ||(v,\bftau)||^2_V=\lambda_K(1_K,v_k)
+      \]
+    \item With a robust stability estimate
+      $
+      (1_K,v_K)\leq C\mu(K)^{1/2}||(v,\bftau)||_K\,,
+      $
+      \[
+      ||(v,\bftau)||_V\leq C\mu(K)^{1/2}|\lambda_K|
+      \]
+      \[
+      \sum_K||(v,\bftau)||_V^2\leq C^2\sum_K\mu(K)\lambda_K^2
+      \]
+      which leads to the robust estimate of inf-sup constant $\beta$.
+\end{itemize}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}[noframenumbering]
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Robustness Analysis}
+\begin{itemize}
+    \item Finally, we need a continuity estimate on
+      \[
+      \sum_K\lambda_K\langle\hat t,1_K\rangle
+      \]
+    \item Testing with $(1_K,\boldsymbol0)$ in the local problem, we obtain
+      \[
+      ( (v,\bftau),(1_K,\boldsymbol0) )_V=\langle\hat t,1_K\rangle_{\partial K}
+      \]
+    \item With a robust estimate $|( (v,\bftau),(1_K,\boldsymbol0) )_V|\leq
+      C\mu(K)^{1/2}||(v,\bftau)||_V$,
+      \begin{align*}
+        |\sum_K\lambda_K\langle\hat t,1_K\rangle|
+        &\leq C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}\LRp{\sum_K||(v,\bftau)||_V^2}^{1/2}\\
+        &=C\LRp{\sum_K\mu(K)\lambda_K^2}^{1/2}||\hat t||_E
+      \end{align*}
+\end{itemize}
+\end{frame}
+\begin{comment}
+With the robust stability and continuity constants for the mixed problem, the
+energy error of solution and Lagrange multipliers is bounded robustly by the
+best approximation error measured in the energy norm. We arrive thus at the
+same situation as in standard DPG.
+\end{comment}
 
 \end{document}
