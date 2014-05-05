@@ -9,7 +9,10 @@
 \usepackage{forloop}
 \usepackage{comment}
 % \usepackage[aps,prb,citeautoscript]{revtex4-1}
-\usepackage[super]{natbib}
+% \usepackage[super]{natbib}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{alphalph}
+\bibliography{../Papers}
 
 \newcounter{nn}
 
@@ -18,7 +21,14 @@
   \begin{frame}
     \frametitle{Table of Contents}
     \framesubtitle{\hspace{1ex}}
-    \tableofcontents[currentsection]
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\AtBeginSubsection[] {
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \framesubtitle{\hspace{1ex}}
+    \tableofcontents[currentsection,currentsubsection]
   \end{frame}
 }
 
@@ -93,6 +103,9 @@
 
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
 
 \pgfdeclareimage[height=1.2cm]{utbig}{logos/UTWordmark}
 \pgfdeclareimage[height=0.6cm]{ut}{logos/UTWordmark}
@@ -104,7 +117,7 @@
 \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
-Leszek Demkowicz, Robert Moser
+{\footnotesize Advisors: Leszek Demkowicz, Robert Moser}
 }
 
 % \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
@@ -113,7 +126,7 @@ Leszek Demkowicz, Robert Moser
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Finite Element Rodeo 2014]%{\pgfuseimage{iceslogo} }
+\date[Proposal Defense]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 
@@ -144,8 +157,9 @@ Leszek Demkowicz, Robert Moser
 %  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
 %                                                                                              
 %                                                                                              
-\section{Motivation}
-%% ------------------------------------------------------------
+\section{Introduction}
+\subsection{Motivation}
+% ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Navier-Stokes Equations}
 \framesubtitle{Numerical Challenges}
@@ -213,37 +227,124 @@ Boundary layer
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Adaptive Mesh Refinement from Coarse Meshes}
-\framesubtitle{Adaptive solve of the Carter plate problem}
-\foreach \n in {1,...,11}
-{
-\only<\n>
-{
-\begin{figure}[ht]
+\frametitle{DPG on Coarse Meshes}
+\framesubtitle{Adaptive Solve of the Carter Plate Problem\footfullcite{JesseDissertation} $Re=1000$}
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
 \centering
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T0.png}\\
 \vspace{-1ex}
-{\scriptsize Velocity}\\
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
+{\scriptsize Temperature on Initial Mesh}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T8.png}
 \vspace{-1ex}
-{\scriptsize Temperature}\\
-\end{subfigure}
-\begin{subfigure}[c]{0.5\textwidth}
-\centering
-\vspace{2ex}
-\includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
-\vspace{-1ex}
-{\scriptsize Mesh \n}\\
-\end{subfigure}
+{\scriptsize Temperature after 8 Refinements}
+\vspace{1ex}
+
 \end{figure}
-}
-}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T4.png}\\
+\vspace{-1ex}
+{\scriptsize Temperature after 4 Refinements}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T11.png}
+\vspace{-1ex}
+{\scriptsize Temperature after 11 Refinements}
+\vspace{1ex}
+\end{figure}
+\end{column}
+\end{columns}
+% \foreach \n in {1,...,11}
+% {
+% \only<\n>
+% {
+% \begin{figure}[ht]
+% \centering
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Velocity}\\
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Temperature}\\
+% \end{subfigure}
+% \begin{subfigure}[c]{0.5\textwidth}
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Mesh \n}\\
+% \end{subfigure}
+% \end{figure}
+% }
+% }
 \end{frame}
+
+%   /$$       /$$   /$$           /$$$$$$$                       /$$                        
+%  | $$      |__/  | $$          | $$__  $$                     |__/                        
+%  | $$       /$$ /$$$$$$        | $$  \ $$  /$$$$$$  /$$    /$$ /$$  /$$$$$$  /$$  /$$  /$$
+%  | $$      | $$|_  $$_/        | $$$$$$$/ /$$__  $$|  $$  /$$/| $$ /$$__  $$| $$ | $$ | $$
+%  | $$      | $$  | $$          | $$__  $$| $$$$$$$$ \  $$/$$/ | $$| $$$$$$$$| $$ | $$ | $$
+%  | $$      | $$  | $$ /$$      | $$  \ $$| $$_____/  \  $$$/  | $$| $$_____/| $$ | $$ | $$
+%  | $$$$$$$$| $$  |  $$$$/      | $$  | $$|  $$$$$$$   \  $/   | $$|  $$$$$$$|  $$$$$/$$$$/
+%  |________/|__/   \___/        |__/  |__/ \_______/    \_/    |__/ \_______/ \_____/\___/ 
+%                                                                                           
+%                                                                                           
+%        
+\subsection{Literature Review}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Stabilized Finite Elements for CFD}
+% \framesubtitle{Streamwise-Upwind Petrov-Galerkin}
+\framesubtitle{SUPG Improves Stability by Modifying the Test Space}
+% SUPG pioneered the idea of modifying the test space to improve stability\footfullcite{SUPG}.
+
+Convection-diffusion can be written as
+\[
+Lu=(L_{adv}+L_{diff})u=f\,.
+\]
+The SUPG bilinear form is
+\[
+b(u,\tilde v)=l(\tilde v)
+\]
+where
+\[
+\tilde v = v+\tau L_{adv}v\,.
+\]
+$\tau$ is the SUPG stabilization parameter.
+\begin{itemize}
+  \item Optimal $H_0^1$ approximation in 1D
+  \item Can be generalized to higher order with modification of $\tau$
+  \item Preserves consistency of variational problem
+  \item Upwind bias of test functions
+\end{itemize}
+
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Stabilized Finite Elements for CFD}
+\framesubtitle{Discontinuous Galerkin}
+\begin{itemize}
+  \item Invented for neutron transport\footfullcite{ReedHillDG}
+  \item Popular for all kinds of conservation laws
+  \item Significant contributions to CFD by Cockburn and Shu\footfullcite{CockburnShuDG}
+  \item Simple parallelization
+  \item Lowest order DG is equivalent to finite volumes
+  \item Natural extension to higher order
+  \item Upwind numerical flux provides stabilization
+\end{itemize}
+\end{frame}
+
 
 
 %   /$$$$$$$  /$$$$$$$   /$$$$$$         /$$$$$$                                            /$$                        
@@ -260,15 +361,15 @@ Boundary layer
 \section{DPG Overview}
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Overview of DPG\cite{DPGOverview2}}
-\framesubtitle{Dual Minimum Residual Method}
+\frametitle{Overview of DPG}
+\framesubtitle{DPG is a Minimum Residual Method}
 Find $u\in U$ such that
 \[
 b(u,v)=l(v)\quad\forall v\in V
 \]
 with operator $B:U\rightarrow V'$ defined by $b(u,v)=\LRa{Bu,v}_{V'\times V}$.
 
-This give the operator equation 
+This gives the operator equation 
 \[
 Bu=l\quad\in V'\,.
 \]
@@ -316,7 +417,7 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 \begin{frame}[t]
 \frametitle{Overview of DPG}
 \framesubtitle{The Most Stable Petrov-Galerkin Method}
-Babu\v{s}ka's theorem\cite{Babuska70} guarantees that \emph{discrete stability and approximability imply convergence}.
+Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
 If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
 with constant $\gamma_h$,
 \[
@@ -328,7 +429,7 @@ then the Galerkin error satisfies the bound
 \]
 Optimal test function realize the supremum such that $\gamma_h\geq\gamma$.\\
 \begin{block}{Optimal Error Estimates}
-If we use the energy norm in the error estimate, then $\norm{b}=\gamma=1$.
+If we use the energy norm in the error estimate, then $M=\gamma=1$.
 Babu\v{s}ka's theorem
 implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method.
 \end{block}
@@ -337,7 +438,7 @@ implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerk
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Overview of DPG}
+\frametitle{Overview of DPG\footfullcite{DPGOverview2}}
 \framesubtitle{Other Features}
 \begin{block}{Discontinuous Petrov-Galerkin}
 \begin{itemize}
@@ -367,6 +468,8 @@ Energy norm of Galerkin error (residual) can be computed without exact solution
 \begin{columns}[c]
 \begin{column}{.5\textwidth}
 Eliminates human intervention
+\medskip
+
 \begin{itemize}
   \item Stability
   \item Robustness
@@ -380,10 +483,10 @@ Eliminates human intervention
   \item Multiphysics
 \end{itemize}
 
-Issues to be solved
-\begin{itemize}
-  \item Iterative solvers
-\end{itemize}
+% Issues to be solved
+% \begin{itemize}
+%   \item Iterative solvers
+% \end{itemize}
 \end{column}
 \begin{column}{.5\textwidth}
 \vspace{-3ex}
@@ -435,7 +538,8 @@ Issues to be solved
 %                      
 %                      
 %      
-\section{Locally Conservative DPG}
+\section{Preliminary Work}
+\subsection{Local Conservation}
 % \subsection{Mathematics}
 % \subsection{Numerical Results}
 %===============================================================================
@@ -455,17 +559,17 @@ Rewrite as a system of first-order equations.
 \end{align*}
 Multiply by test functions and integrate by parts over each element, $K$.
 \begin{align*}
--(\bfbeta u-\bfsigma,\nabla v)_K+((\bfbeta
-u-\bfsigma)\cdot\mathbf{n},v)_{\partial K}&=(g,v)_K\\
+-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{(\bfbeta
+u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(g,v)_K\\
 \frac{1}{\epsilon}(\bfsigma,\bftau)_K+(u,\nabla\cdot\bftau)_K
--(u,\tau_n)_{\partial K}&=0
+-\LRa{u,\tau_n}_{\partial K}&=0
 \end{align*}
 Use the ultraweak (DPG) formulation to obtain bilinear form $b(u,v)=l(v)$.
 \begin{align*}
--(\bfbeta u-\bfsigma,\nabla v)_K&+(\hat t,v)_{\partial K}
+-(\bfbeta u-\bfsigma,\nabla v)_K&+\LRa{\hat t,v}_{\partial K}
 + \frac{1}{\epsilon}(\bfsigma,\bftau)_K\\
 &+(u,\nabla\cdot\bftau)_K
--(\hat u,\tau_n)_{\partial K}=(g,v)_K
+-\LRa{\hat u,\tau_n}_{\partial K}=(g,v)_K
 \end{align*}
 \end{frame}
 \begin{comment}
@@ -497,15 +601,15 @@ u hat and f hat.
 %===============================================================================
 \begin{frame}
 \frametitle{Locally Conservative DPG}
-\framesubtitle{Local conservation for convection-diffusion}
+\framesubtitle{Local Conservation for Convection-Diffusion}
 The local conservation law in convection diffusion is
 \[
 \int_{\partial K}\hat t=\int_K g\,,
 \]
 which is equivalent to having $\mathbf{v}_K:=\{v,\bftau\}=\{1_K,\boldsymbol0\}$ in the test space.
 In general, this is not satisfied by the optimal test functions.
-Following Moro et al\textsuperscript{\cite{MoroNguyenPeraire11}} (also
-Chang and Nelson\textsuperscript{\cite{ChangNelson1997}}), we
+Following Moro et al\footfullcite{MoroNguyenPeraire11} (also
+Chang and Nelson\footfullcite{ChangNelson1997}), we
 can enforce this condition with Lagrange multipliers:
 \begin{align*}
 L(u_h,\bflambda) = \frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}_V^2
@@ -582,7 +686,7 @@ where $\mathbf{V}$ becomes $\mathbf{V}_{p+\Delta p}$ in order to make this
 computationally tractable.
 
 We recently developed this modification to the \emph{robust test norm}
-\textsuperscript{\cite{ChanHeuerThanhDemkowicz2012}} which behaves better in
+\footfullcite{ChanHeuerThanhDemkowicz2012} which behaves better in
 the presence of singularities.
 \begin{block}{Convection-Diffusion Test Norm}
 \begin{minipage}[t][1.2in]{\textwidth}
@@ -665,7 +769,7 @@ bilinear and linear forms.
 
 \item Robustness is proved by switching to energy norm in Brezzi analysis.
 
-\item Full details can be found in \emph{Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems}\cite{EllisLC}.
+\item Full details can be found in \emph{Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems}\footfullcite{EllisLC}.
 \end{itemize}
 \end{frame}
 
@@ -854,6 +958,7 @@ Conservative
 \end{comment}
 
 
+\subsection{Time Stepping with DPG}
 
 %    /$$$$$$                                                  /$$$$$$$$ /$$                        
 %   /$$__  $$                                                |__  $$__/|__/                        
@@ -866,7 +971,24 @@ Conservative
 %            | $$                                                                                  
 %            | $$                                                                                  
 %            |__/  
-\section{Space-Time DPG}
+\subsection{Space-Time DPG}
+\setcounter{footnote}{0}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Finite Elements}
+\framesubtitle{Space-Time Methods Treat Time as Another Dimension}
+\begin{itemize}
+  \item Creates a $d+1$ dimensional mesh in space-time
+  \item Satisfies geometric conservation laws\footfullcite{GCL}
+  \item Tezduyar \etal\footfullcite{Tezduyar1992} developed a deforming-spatial-domain/space-time procedure 
+  with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
+  \item Space-time DG\footfullcite{vanderVegtEuler} has become a popular choice
+  \item Tent-pitcher algorithm\footfullcite{TentPitcher} decouples space-time elements
+\end{itemize}
+\end{frame}
+
+
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time DPG}
@@ -911,7 +1033,7 @@ More computationally difficult
 \frametitle{Heat Equation}
 \framesubtitle{Simplest Nontrivial Space-Time Problem}  %% needed for proper positioning of the logo ...
 
-Equation is elliptic in space, but hyperbolic in time (parabolic in space-time).
+Equation is parabolic in space-time.
 \begin{equation*}
   \frac{\partial u}{\partial t}-\epsilon\Delta u=f
 \end{equation*}
@@ -1357,16 +1479,17 @@ Infinitely strong shock propagation.
 \begin{frame}[t]
 \frametitle{Proposed Work}
 \framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\vspace{-3ex}
 Area A: Applicable Mathematics
 \begin{itemize}
   \item Robustness analysis for space-time convection-diffusion
   \item Explore positivity preserving techniques for compressible Navier-Stokes
 \end{itemize}
-\bigskip
+\smallskip
 
 Area B: Scientific Computation
 \begin{itemize}
-  \item Support development of Camellia\cite{CamelliaDPG}
+  \item Support development of Camellia\footfullcite{CamelliaDPG}
   \begin{itemize}
     \item Development and verification of 2D space-time simulations.
     \item Implement time slabs to decrease solve size
@@ -1375,7 +1498,7 @@ Area B: Scientific Computation
   \item Run parallel simulations on HPC systems at TACC and ANL
   % \item Investigate iterative solvers for DPG
 \end{itemize}
-\bigskip
+\smallskip
 
 Area C: Modeling and Applications
 \begin{itemize}
@@ -1387,53 +1510,13 @@ Area C: Modeling and Applications
 \end{frame}
 
 
-% ------------------------------------------------------------
 % \begin{frame}[t]
-% \frametitle{Conclusions and Future Work}
+% \frametitle{Bibliography}
 % \framesubtitle{~~}  %% needed for proper positioning of the logo ...
-% Conclusions
-% \begin{itemize}
-%   \item A problem in conservation form can be transformed to a space-time divergence.
-%   \item Fluxes change character from spatial to temporal boundaries.
-%   \item Traces are only defined on spatial boundaries.
-% \end{itemize}
-% \bigskip
-
-% Future Work
-% \begin{itemize}
-%   \item Proof of robustness for convection-diffusion.
-%   \item Analysis of robust test norms.
-%   \item Time slabs will reduce the simulation cost.
-%   \item Two and three dimensions for more realistic problems.
-%   \item Incompressible Navier-Stokes.
-%   \item Iterative solvers for parallel scalability.
-% \end{itemize}
+% {\oldfootnotesize
+% \printbibliography
+% }
 % \end{frame}
-% \begin{comment}
-% It is extremely helpful to be able to write the governing equations in terms of a space-time divergence
-% since that frames things in a way that we are familiar with from steady DPG.
-% The oddity is that this leaves traces on temporal edges undefined, so our code needs to know not to put degrees
-% of freedom there. 
-
-% These are all very preliminary results, but they give an indication of what we can expect in the future.
-% We still need to analyze the space-time convection-diffusion equation and develop robust norms in this context
-% before we can extend the ideas to Navier-Stokes.
-% We also have some rough work done on time-slabs which should improve the computational efficiency.
-% Obviously, we are going to need to move to two and three dimensional problems in order to simulate anything of interest.
-% My primary target is actually incompressible Navier-Stokes, which should be easier since we don't have to deal with shocks.
-% But in 1D incompressible gives absolutely trivial solutions, so we didn't pursue it here.
-% I don't know if we will get to this during my dissertation, but if we really want a scalable method, we need to address the 
-% lack of preconditioners for DPG and develop a decent iterative solver.
-% \end{comment}
-
-\begin{frame}[t]
-\frametitle{Bibliography}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
-\bibliographystyle{plain}
-{\scriptsize
-\bibliography{../Papers}
-}
-\end{frame}
 
 %   /$$$$$$$                      /$$                          
 %  | $$__  $$                    | $$                          
@@ -1464,7 +1547,7 @@ Area C: Modeling and Applications
 \begin{frame}[noframenumbering]
 \frametitle{Locally Conservative DPG}
 \framesubtitle{Stability Analysis}
-We follow Brezzi's theory\cite{Brezzi1974} for an abstract mixed problem:
+We follow Brezzi's theory for an abstract mixed problem:
 \begin{equation*}
 \left\{
 \begin{array}{lll}
@@ -1516,7 +1599,7 @@ R\, : \, L^2(\Omega) \ni q \to \bfpsi \in \bfH(\text{div},\Omega) \cap \bfH^1(\O
 \end{equation*}
 be
 the continuous right inverse of the divergence operator constructed by
-Costabel and McIntosh\textsuperscript{\cite{CostabelMcIntosh}}.
+Costabel and McIntosh\textsuperscript{\footfullcite{CostabelMcIntosh}}.
 Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
 function
 \begin{equation*}
