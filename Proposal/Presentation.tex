@@ -303,36 +303,61 @@ Boundary layer
 \subsection{Literature Review}
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Streamline Upwind Petrov-Galerkin}
-\framesubtitle{Two Views: Residual Based Stabilization}
-% SUPG pioneered the idea of modifying the test space to improve stability\footfullcite{SUPG}.
-
-Convection-diffusion can be written as
-$
-Lu=(L_{adv}+L_{diff})u=f\,.
-$\\
-The SUPG\footfullcite{SUPG}
-problem is $b_{SUPG}(u,v)=l_{SUPG}(v)$ where
-\begin{align*}
-  b_{SUPG}(u,v)&=b(u,v)+\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
-  l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
-\end{align*}
-and $\tau$ is the SUPG stabilization parameter.
+\frametitle{Stabilized Finite Elements for CFD}
+\framesubtitle{Streamline Upwind Petrov-Galerkin}
+\begin{columns}[c]
+\begin{column}{.65\textwidth}
 \begin{itemize}
+  \item First successful finite element method for CFD\footnotemark
+  \item Residual based stabilization preserves consistency
+  \item Upwind biasing of test functions
+  \item Higher order generalizations possible
   \item Optimal $H_0^1$ approximation in 1D
-  \item Can be generalized to higher order with modification of $\tau$
-  \item Preserves consistency of variational problem
-\footnote{SUPG spawned a huge interest in stabilized methods. A small sampling of contributors includes L.P. Franca, C. Johnson, R. Codina, T. Tezduyar and many others. The variational multiscale method has become a prominent heir to and generalization of SUPG.} 
+  \item Gave rise to the field of stabilized finite elements
+  \item Major contributors include Franca, Johnson, Codina, Tezduyar, and many others
+  \item Variational multiscale can be considered the spiritual successor to SUPG\footnotemark
 \end{itemize}
+\end{column}
+\footnotetext{\fullcite{SUPG}}
+\footnotetext{\fullcite{VMS}}
+\begin{column}{.35\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/SUPG.png}
+\\\small{$H_0^1$ Projection}\\
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
+
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-% \frametitle{Stabilized Finite Elements for CFD}
 \frametitle{Streamline Upwind Petrov-Galerkin}
-\framesubtitle{Two Views: Stabilization by Modifying the Test Space}
-% SUPG pioneered the idea of modifying the test space to improve stability\footfullcite{SUPG}.
-System can alternatively be written as
+\framesubtitle{Two Equivalent Views on Stabilization}
+Convection-diffusion can be written as
+$$
+Lu=(L_{adv}+L_{diff})u=f\,.
+$$\\
+% Two equivalent views on stabilization.
+\vspace{-3ex}
+\begin{columns}[t]
+\begin{column}{.65\textwidth}
+\begin{block}{Residual Based Stabilization}
+\[
+b_{SUPG}(u,v)=l_{SUPG}(v)
+\]
+where
+\begin{align*}
+  b_{SUPG}(u,v)&=b(u,v)
+  +\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
+  l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
+\end{align*}
+$\tau$ is the SUPG stabilization parameter.
+\end{block}
+\end{column}
+\begin{column}{.33\textwidth}
+\begin{block}{Test Space Modification}
 \[
 b(u,\tilde v)=l(\tilde v)
 \]
@@ -340,22 +365,11 @@ where
 \[
 \tilde v = v+\tau L_{adv}v\,.
 \]
-\begin{columns}[c]
-\begin{column}{.5\textwidth}
-\begin{figure}[t]
-\centering
-\includegraphics[height=0.3\textheight]{Motivation/SUPGtest.png}
-\\\small{Upwind Bias of SUPG Test Function}\\
-\end{figure}
-\end{column}
-\begin{column}{.5\textwidth}
-\begin{figure}[t]
-\centering
-\includegraphics[height=0.3\textheight]{Motivation/SUPG.png}
-\\\small{$H_0^1$ Projection of SUPG Solution}\\
-\end{figure}
+\includegraphics[width=1.0\textwidth]{Motivation/SUPGtest.png}
+\end{block}
 \end{column}
 \end{columns}
+\medskip
 \end{frame}
 
 
@@ -394,9 +408,7 @@ Apply upwind flux
 \[
 -\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
 \]
-\begin{itemize}
-  \item Hybridized DPG method introduces trace unknowns but allows static condensation\footfullcite{HDG}
-\end{itemize}
+Hybridized DPG method introduces trace unknowns which facilitates static condensation\footfullcite{HDG}.
 \end{frame}
 
 % ------------------------------------------------------------
@@ -404,15 +416,26 @@ Apply upwind flux
 \frametitle{Space-Time Finite Element Methods}
 \framesubtitle{Treat Time as Another Dimension to be Discretized}
 Space-time methods treat time as just another dimension to be discretized.
+\begin{columns}[c]
+\begin{column}{.7\textwidth}
 \begin{itemize}
-  \item Creates a $d+1$ dimensional mesh in space-time
-  \item Satisfies geometric conservation laws\footfullcite{GCL}
-  \item Tezduyar \etal\footfullcite{Tezduyar1992} developed a Galerkin/least-squares method to handle moving boundaries
+  \item Creates a $d+1$ dimensional mesh
+  \item Satisfies geometric conservation laws\footnotemark
+  \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
   % deforming-spatial-domain/space-time procedure 
   % with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
-  \item Space-time DG\footfullcite{vanderVegtEuler} has become a popular choice
-  \item Tent-pitcher algorithm\footfullcite{TentPitcher} decouples space-time elements
+  \item Van der Vegt \etal developed a popular Space-time DG method\footnotemark
+  \item {\"U}ng{\"o}r's tent-pitcher algorithm\footnotemark decouples space-time elements
 \end{itemize}
+\end{column}
+\footnotetext{\fullcite{GCL}}
+\footnotetext{\fullcite{Tezduyar1992}}
+\footnotetext{\fullcite{vanderVegtEuler}}
+\footnotetext{\fullcite{TentPitcher}}
+\begin{column}{.3\textwidth}
+\includegraphics[width=1.0\textwidth]{Motivation/TentPitcher.png}
+\end{column}
+\end{columns}
 \end{frame}
 
 
