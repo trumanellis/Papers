@@ -129,6 +129,7 @@
 \date[Proposal Defense]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
+\def\thefootnote{\arabic{footnote}}
 
 \tikzstyle{block} = [rectangle, draw, rounded corners, shade, top color=white, text width=5em,
   bottom color=blue!50!black!20, draw=blue!40!black!60, very thick, text centered, minimum height=4em]
@@ -302,16 +303,36 @@ Boundary layer
 \subsection{Literature Review}
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Stabilized Finite Elements for CFD}
-% \framesubtitle{Streamwise-Upwind Petrov-Galerkin}
-\framesubtitle{SUPG Improves Stability by Modifying the Test Space}
+\frametitle{Streamline Upwind Petrov-Galerkin}
+\framesubtitle{Two Views: Residual Based Stabilization}
 % SUPG pioneered the idea of modifying the test space to improve stability\footfullcite{SUPG}.
 
 Convection-diffusion can be written as
-\[
+$
 Lu=(L_{adv}+L_{diff})u=f\,.
-\]
-The SUPG bilinear form is
+$\\
+The SUPG\footfullcite{SUPG}
+problem is $b_{SUPG}(u,v)=l_{SUPG}(v)$ where
+\begin{align*}
+  b_{SUPG}(u,v)&=b(u,v)+\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
+  l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
+\end{align*}
+and $\tau$ is the SUPG stabilization parameter.
+\begin{itemize}
+  \item Optimal $H_0^1$ approximation in 1D
+  \item Can be generalized to higher order with modification of $\tau$
+  \item Preserves consistency of variational problem
+\footnote{SUPG spawned a huge interest in stabilized methods. A small sampling of contributors includes L.P. Franca, C. Johnson, R. Codina, T. Tezduyar and many others. The variational multiscale method has become a prominent heir to and generalization of SUPG.} 
+\end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+% \frametitle{Stabilized Finite Elements for CFD}
+\frametitle{Streamline Upwind Petrov-Galerkin}
+\framesubtitle{Two Views: Stabilization by Modifying the Test Space}
+% SUPG pioneered the idea of modifying the test space to improve stability\footfullcite{SUPG}.
+System can alternatively be written as
 \[
 b(u,\tilde v)=l(\tilde v)
 \]
@@ -319,14 +340,22 @@ where
 \[
 \tilde v = v+\tau L_{adv}v\,.
 \]
-$\tau$ is the SUPG stabilization parameter.
-\begin{itemize}
-  \item Optimal $H_0^1$ approximation in 1D
-  \item Can be generalized to higher order with modification of $\tau$
-  \item Preserves consistency of variational problem
-  \item Upwind bias of test functions
-\end{itemize}
-
+\begin{columns}[c]
+\begin{column}{.5\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[height=0.3\textheight]{Motivation/SUPGtest.png}
+\\\small{Upwind Bias of SUPG Test Function}\\
+\end{figure}
+\end{column}
+\begin{column}{.5\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[height=0.3\textheight]{Motivation/SUPG.png}
+\\\small{$H_0^1$ Projection of SUPG Solution}\\
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 
@@ -335,13 +364,54 @@ $\tau$ is the SUPG stabilization parameter.
 \frametitle{Stabilized Finite Elements for CFD}
 \framesubtitle{Discontinuous Galerkin}
 \begin{itemize}
-  \item Invented for neutron transport\footfullcite{ReedHillDG}
-  \item Popular for all kinds of conservation laws
-  \item Significant contributions to CFD by Cockburn and Shu\footfullcite{CockburnShuDG}
-  \item Simple parallelization
-  \item Lowest order DG is equivalent to finite volumes
-  \item Natural extension to higher order
-  \item Upwind numerical flux provides stabilization
+  \item Combines elements of finite volumes and finite elements
+  \item First proposed for neutron transport\footfullcite{ReedHillDG}
+  \item Early contributors include Babu\v{s}ka, Lions, Nitsche, and Zlamal
+  \item Development for elliptic problems given by Arnold, Brezzi, Cockburn, and Marini\footfullcite{ArnoldDG}
+  \item Rigorous mathematical foundation of finite elements
+  \item Nonconforming basis
+  \item Locally conservative
+  \item Naturally high order, but may require additional stabilization
+  \item Simple to parallelizable
+  \item Other notable contributors include Peraire, Persson, Shu, Karniadakis \dots
+\end{itemize}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Stabilized Finite Elements for CFD}
+\framesubtitle{Discontinuous Galerkin}
+Consider 1D convection equation
+\[
+\pd{\beta(x)u}{x}=f,\quad u(0)=u_0\,.
+\]
+Multiply by test function and integrate by parts over each element $K=[x_K,x_{x+1}]$
+\[
+-\int_K\beta(x)u\pd{v}{x}+\beta uv|_{x_K}^{x_{K+1}}=\int_K fv\,.
+\]
+Apply upwind flux
+\[
+-\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
+\]
+\begin{itemize}
+  \item Hybridized DPG method introduces trace unknowns but allows static condensation\footfullcite{HDG}
+\end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Finite Element Methods}
+\framesubtitle{Treat Time as Another Dimension to be Discretized}
+Space-time methods treat time as just another dimension to be discretized.
+\begin{itemize}
+  \item Creates a $d+1$ dimensional mesh in space-time
+  \item Satisfies geometric conservation laws\footfullcite{GCL}
+  \item Tezduyar \etal\footfullcite{Tezduyar1992} developed a Galerkin/least-squares method to handle moving boundaries
+  % deforming-spatial-domain/space-time procedure 
+  % with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
+  \item Space-time DG\footfullcite{vanderVegtEuler} has become a popular choice
+  \item Tent-pitcher algorithm\footfullcite{TentPitcher} decouples space-time elements
 \end{itemize}
 \end{frame}
 
@@ -791,7 +861,7 @@ bilinear and linear forms.
 %===============================================================================
 \begin{frame}
 \frametitle{Numerical Experiments}
-\framesubtitle{Erickson-Johnson Problem}
+\framesubtitle{Eriksson-Johnson Problem}
 On domain $\Omega=[0,1]^2$, with $\beta=(1,0)^T$, $f=0$ and boundary
 conditions
 \[
@@ -958,7 +1028,7 @@ Conservative
 \end{comment}
 
 
-\subsection{Time Stepping with DPG}
+% \subsection{Time Stepping with DPG}
 
 %    /$$$$$$                                                  /$$$$$$$$ /$$                        
 %   /$$__  $$                                                |__  $$__/|__/                        
@@ -972,21 +1042,6 @@ Conservative
 %            | $$                                                                                  
 %            |__/  
 \subsection{Space-Time DPG}
-\setcounter{footnote}{0}
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Finite Elements}
-\framesubtitle{Space-Time Methods Treat Time as Another Dimension}
-\begin{itemize}
-  \item Creates a $d+1$ dimensional mesh in space-time
-  \item Satisfies geometric conservation laws\footfullcite{GCL}
-  \item Tezduyar \etal\footfullcite{Tezduyar1992} developed a deforming-spatial-domain/space-time procedure 
-  with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
-  \item Space-time DG\footfullcite{vanderVegtEuler} has become a popular choice
-  \item Tent-pitcher algorithm\footfullcite{TentPitcher} decouples space-time elements
-\end{itemize}
-\end{frame}
 
 
 % ------------------------------------------------------------

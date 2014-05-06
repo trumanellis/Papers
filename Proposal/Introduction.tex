@@ -56,7 +56,7 @@ The obvious downside to such an approach is that for 2D spatial problems, we now
 Much of science is driven by curiosity, and this especially holds for computational science. 
 There is inherent value in exploring new methodologies because they may hold the keys to solving new problems or old problems in a better way.
 A new method may also help us to better understand existing methods. 
-The variational multiscale approach to finite element analysis helped to elucidate on some of the success of the much older streamwise upwind Petrov-Galerkin method while generalizing and improving it.
+The variational multiscale approach to finite element analysis helped to elucidate on some of the success of the much older streamline upwind Petrov-Galerkin method while generalizing and improving it.
 The DPG method itself can be viewed as a generalization of least-squares finite elements 
 from a multiscale point of view\cite{DPGMultiscale} or even of mixed methods\cite{DPGMixed}. 
 
@@ -156,7 +156,7 @@ Lu=(L_{adv}+L_{diff})u=f\,,
 \]
 where $L_{adv}u:=\Div(\bfbeta u)$ is the advection operator and $L_{diff}u:=-\epsilon\Delta u$ is the diffusion operator.
 If $u$ is a linear combination of piece-wise linear basis functions $\phi_i,\,i=0,\cdots,N$, then within each element, the second order diffusion operator is zero.
-Given $b(u,v)$ and $l(v)$ from as the bilinear form and load from the standard Galerkin formulation, SUPG defines a new system $b_{SUPG}(u,v)=l_{SUPG}$ where
+Given $b(u,v)$ and $l(v)$ from as the bilinear form and load from the standard Galerkin formulation, SUPG defines a new system $b_{SUPG}(u,v)=l_{SUPG}(v)$ where
 \begin{align*}
 	b_{SUPG}(u,v)&=b(u,v)+\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
 	l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
