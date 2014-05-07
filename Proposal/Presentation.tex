@@ -520,11 +520,11 @@ then the Galerkin error satisfies the bound
 \[
 \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
 \]
-Optimal test function realize the supremum such that $\gamma_h\geq\gamma$.\\
+Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
 \begin{block}{Optimal Error Estimates}
-If we use the energy norm in the error estimate, then $M=\gamma=1$.
+If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
 Babu\v{s}ka's theorem
-implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method.
+implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
 \end{block}
 \end{frame}
 
@@ -572,7 +572,7 @@ Eliminates human intervention
   \item Embarrassingly parallel local solves
   \item Factorization recyclable
   \item Low communication
-  \item Symmetric positive definite stiffness matrix
+  \item SPD stiffness matrix
   \item Multiphysics
 \end{itemize}
 
@@ -935,19 +935,31 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n
 \begin{frame}
 \frametitle{Numerical Experiments}
 \framesubtitle{Stokes Flow Around a Cylinder}
+\only<1>{
+\centering
+Horizontal Velocity
+\vspace{-1ex}
+}
+\only<2>{
+\centering
+Percent Mass Loss at Vertical Mesh Lines
+\vspace{-5ex}
+}
 \begin{columns}
 \begin{column}{0.49\textwidth}
 \only<1>{
 \begin{figure}
 \centering
-\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_NC1.png}\\
+\includegraphics[width=0.95\textwidth]{StokesCylinder/umag9_NC1.png}\\
 \vspace{-1ex}
+
 {\scriptsize 1 Refinement}\\
 \vspace{1ex}
-\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_NC6.png}
+\includegraphics[width=0.95\textwidth]{StokesCylinder/umag9_NC6.png}
 \vspace{-1ex}
+
 {\scriptsize 6 Refinements}
-\vspace{1ex}
+% \vspace{1ex}
 
 Nonconservative
 \end{figure}
@@ -955,14 +967,16 @@ Nonconservative
 \begin{column}{0.49\textwidth}
 \begin{figure}
 \centering
-\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_C1.png}\\
+\includegraphics[width=0.95\textwidth]{StokesCylinder/umag9_C1.png}\\
 \vspace{-1ex}
+
 {\scriptsize 1 Refinement}\\
 \vspace{1ex}
-\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_C6.png}
+\includegraphics[width=0.95\textwidth]{StokesCylinder/umag9_C6.png}
 \vspace{-1ex}
+
 {\scriptsize 6 Refinements}
-\vspace{1ex}
+% \vspace{1ex}
 
 Conservative
 \end{figure}
@@ -995,7 +1009,16 @@ Conservative
 %===============================================================================
 \begin{frame}
 \frametitle{Numerical Experiments}
-\framesubtitle{Stokes Flow Backward Facing Step}
+\framesubtitle{Stokes Flow Over a Backward Facing Step}
+\only<1>{
+\centering
+Horizontal Velocity
+}
+\only<2>{
+\centering
+Percent Mass Loss at Vertical Mesh Lines
+\vspace{-5ex}
+}
 \begin{columns}
 \begin{column}{0.49\textwidth}
 \only<1>{
@@ -1088,8 +1111,8 @@ More computationally difficult
 \begin{itemize}
   \item Solve requires $d+1$ dimensions
   \item Mesh structure more difficult
-  \item Equations often first order in time but second order in space
-  \item More expensive solves
+  \item Need to differentiate between spatial and temporal boundaries
+  \item Larger global solves than finite difference time stepping
 \end{itemize}
 \end{frame}
 
