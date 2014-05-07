@@ -11,7 +11,7 @@
 % \usepackage[aps,prb,citeautoscript]{revtex4-1}
 % \usepackage[super]{natbib}
 \usepackage[backend=bibtex]{biblatex}
-\usepackage{alphalph}
+\usepackage{animate}
 \bibliography{../Papers}
 
 \newcounter{nn}
@@ -117,7 +117,7 @@
 \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
-{\footnotesize Advisors: Leszek Demkowicz, Robert Moser}
+{\oldfootnotesize Advisors: Leszek Demkowicz, Robert Moser}
 }
 
 % \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
@@ -183,7 +183,6 @@ Robust simulation of unsteady fluid dynamics remains a challenging issue.
 \item{} Higher order
 \end{itemize}
 \end{itemize}
-\vspace{-3ex}
 \end{column}
 \begin{column}{.4\textwidth}
 \vspace{-3ex}
@@ -314,12 +313,12 @@ Boundary layer
   \item Higher order generalizations possible
   \item Optimal $H_0^1$ approximation in 1D
   \item Gave rise to the field of stabilized finite elements
-  \item Major contributors include Franca, Johnson, Codina, Tezduyar, and many others
-  \item Variational multiscale can be considered the spiritual successor to SUPG\footnotemark
+  \item Major contributors include Hughes, Franca, Johnson, Codina, Tezduyar, and many others
+  \item Variational multiscale may be considered the spiritual successor to SUPG\footnotemark
 \end{itemize}
 \end{column}
-\footnotetext{\fullcite{SUPG}}
-\footnotetext{\fullcite{VMS}}
+\footnotetext[2]{\fullcite{SUPG}}
+\footnotetext[3]{\fullcite{VMS}}
 \begin{column}{.35\textwidth}
 \begin{figure}[t]
 \centering
@@ -381,13 +380,13 @@ where
   \item Combines elements of finite volumes and finite elements
   \item First proposed for neutron transport\footfullcite{ReedHillDG}
   \item Early contributors include Babu\v{s}ka, Lions, Nitsche, and Zlamal
+  \item Develoment for CFD by Cockburn and Shu\footfullcite{CockburnShuDG}
   \item Development for elliptic problems given by Arnold, Brezzi, Cockburn, and Marini\footfullcite{ArnoldDG}
-  \item Rigorous mathematical foundation of finite elements
-  \item Nonconforming basis
-  \item Locally conservative
+  % \item Rigorous mathematical foundation of finite elements
+  \item Nonconforming basis, locally conservative
   \item Naturally high order, but may require additional stabilization
   \item Simple to parallelizable
-  \item Other notable contributors include Peraire, Persson, Shu, Karniadakis \dots
+  \item Other notable contributors include Peraire, Persson, Karniadakis \dots
 \end{itemize}
 \end{frame}
 
@@ -408,7 +407,7 @@ Apply upwind flux
 \[
 -\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
 \]
-Hybridized DPG method introduces trace unknowns which facilitates static condensation\footfullcite{HDG}.
+Hybridized DG (HDG) method introduces trace unknowns which facilitates static condensation, reducing interface unknowns\footfullcite{HDG}.
 \end{frame}
 
 % ------------------------------------------------------------
@@ -419,7 +418,7 @@ Space-time methods treat time as just another dimension to be discretized.
 \begin{columns}[c]
 \begin{column}{.7\textwidth}
 \begin{itemize}
-  \item Creates a $d+1$ dimensional mesh
+  \item Early contributors include Kaczkowski and Oden 
   \item Satisfies geometric conservation laws\footnotemark
   \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
   % deforming-spatial-domain/space-time procedure 
@@ -428,10 +427,10 @@ Space-time methods treat time as just another dimension to be discretized.
   \item {\"U}ng{\"o}r's tent-pitcher algorithm\footnotemark decouples space-time elements
 \end{itemize}
 \end{column}
-\footnotetext{\fullcite{GCL}}
-\footnotetext{\fullcite{Tezduyar1992}}
-\footnotetext{\fullcite{vanderVegtEuler}}
-\footnotetext{\fullcite{TentPitcher}}
+\footnotetext[8]{\fullcite{GCL}}
+\footnotetext[9]{\fullcite{Tezduyar1992}}
+\footnotetext[10]{\fullcite{vanderVegtEuler}}
+\footnotetext[11]{\fullcite{TentPitcher}}
 \begin{column}{.3\textwidth}
 \includegraphics[width=1.0\textwidth]{Motivation/TentPitcher.png}
 \end{column}
@@ -481,7 +480,8 @@ u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Overview of DPG}
-\framesubtitle{Optimal Petrov-Galerkin Methods}
+\framesubtitle{DPG is a Minimum Residual Method}
+% \framesubtitle{Optimal Petrov-Galerkin Methods}
 Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
 U_h$ gives,
 \[
@@ -492,7 +492,7 @@ which by definition of the Riesz map is equivalent to
 \LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,,
 \end{equation*}
 with optimal test functions $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ for each trial function $\delta u_h$.
-\begin{block}{Optimal Petrov-Galerkin System}
+\begin{block}{Resulting Petrov-Galerkin System}
 This gives a simple bilinear form
 \begin{equation*}
 b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
@@ -509,7 +509,7 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Overview of DPG}
-\framesubtitle{The Most Stable Petrov-Galerkin Method}
+\framesubtitle{DPG is the Most Stable Petrov-Galerkin Method}
 Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
 If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
 with constant $\gamma_h$,
@@ -521,10 +521,10 @@ then the Galerkin error satisfies the bound
 \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
 \]
 Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
-\begin{block}{Optimal Error Estimates}
+\begin{block}{Energy Norm}
 If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
 Babu\v{s}ka's theorem
-implies that the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
+implies that the minimum residual method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
 \end{block}
 \end{frame}
 
@@ -942,7 +942,7 @@ Horizontal Velocity
 }
 \only<2>{
 \centering
-Percent Mass Loss at Vertical Mesh Lines
+Percent Mass Loss at $x=[-1, -0.95, 0, 0.95, 3]$
 \vspace{-5ex}
 }
 \begin{columns}
@@ -1016,7 +1016,7 @@ Horizontal Velocity
 }
 \only<2>{
 \centering
-Percent Mass Loss at Vertical Mesh Lines
+Percent Mass Loss at $x=[0,0.5,\cdots,9.5,10]$
 \vspace{-5ex}
 }
 \begin{columns}
@@ -1254,7 +1254,7 @@ character across spatial and temporal boundaries.
 \begin{itemize}
   \item Initial condition $u=0$.
   \item Apply unit source $x\in[3/8,5/8]$,\\$t\in[1/4,1/2]$.
-  \item Should see no temporal diffusion.
+  \item Should not violate causality
   \item Space-time adaptivity picks up areas of rapid change.
 \end{itemize}
 \end{column}
@@ -1608,6 +1608,35 @@ Area C: Modeling and Applications
   \item Incompressible vortex shedding problems
   \item Possibly investigate compressible Sedov and Noh problems
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Thank You!}
+\framesubtitle{~~}
+\vspace{-4ex}
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/vel}{1}{15}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/pres}{1}{15}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/mesh}{1}{15}
+\end{subfigure}
+\end{figure}
+% \begin{center}
+%   \animategraphics[autoplay,loop,width=0.6\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
+% \end{center}
 \end{frame}
 
 
