@@ -7,7 +7,6 @@
 \usepackage{pgf,tikz}
 \usepackage{graphicx}
 \usepackage{forloop}
-\usepackage{comment}
 % \usepackage[aps,prb,citeautoscript]{revtex4-1}
 % \usepackage[super]{natbib}
 \usepackage[backend=bibtex]{biblatex}
@@ -379,7 +378,7 @@ where
 \begin{itemize}
   \item Combines elements of finite volumes and finite elements
   \item First proposed for neutron transport\footfullcite{ReedHillDG}
-  \item Early contributors include Babu\v{s}ka, Lions, Nitsche, and Zlamal
+  \item Early contributors include Babu\v{s}ka, Lions, Nitsche, and Zl\'{a}mal
   \item Develoment for CFD by Cockburn and Shu\footfullcite{CockburnShuDG}
   \item Development for elliptic problems given by Arnold, Brezzi, Cockburn, and Marini\footfullcite{ArnoldDG}
   % \item Rigorous mathematical foundation of finite elements
@@ -423,7 +422,7 @@ Space-time methods treat time as just another dimension to be discretized.
   \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
   % deforming-spatial-domain/space-time procedure 
   % with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
-  \item Van der Vegt \etal developed a popular Space-time DG method\footnotemark
+  \item Van der Vegt and Van der Ven developed a popular space-time DG method\footnotemark
   \item {\"U}ng{\"o}r's tent-pitcher algorithm\footnotemark decouples space-time elements
 \end{itemize}
 \end{column}
@@ -647,35 +646,24 @@ Start with the strong-form PDE.
 \]
 Rewrite as a system of first-order equations.
 \begin{align*}
-\nabla\cdot(\bfbeta u-\bfsigma)&=g\\
-\frac{1}{\epsilon}\bfsigma-\nabla u&=\boldsymbol0
+\frac{1}{\epsilon}\bfsigma-\nabla u&=\boldsymbol0\\
+\nabla\cdot(\bfbeta u-\bfsigma)&=g
 \end{align*}
 Multiply by test functions and integrate by parts over each element, $K$.
 \begin{align*}
--(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{(\bfbeta
-u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(g,v)_K\\
 \frac{1}{\epsilon}(\bfsigma,\bftau)_K+(u,\nabla\cdot\bftau)_K
--\LRa{u,\tau_n}_{\partial K}&=0
+-\LRa{u,\tau_n}_{\partial K}&=0\\
+-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{(\bfbeta
+u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(g,v)_K
 \end{align*}
 Use the ultraweak (DPG) formulation to obtain bilinear form $b(u,v)=l(v)$.
 \begin{align*}
--(\bfbeta u-\bfsigma,\nabla v)_K&+\LRa{\hat t,v}_{\partial K}
-+ \frac{1}{\epsilon}(\bfsigma,\bftau)_K\\
-&+(u,\nabla\cdot\bftau)_K
--\LRa{\hat u,\tau_n}_{\partial K}=(g,v)_K
+\frac{1}{\epsilon}(\bfsigma,\bftau)_K
+&+(u,\nabla\cdot\bftau)_K-\LRa{\hat u,\tau_n}_{\partial K}\\
+&-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{\hat t,v}_{\partial K}
+=(g,v)_K
 \end{align*}
 \end{frame}
-\begin{comment}
-With that ultra-brief refresher, we can now apply DPG to the
-convection-diffusion equation. We prefer to work with systems of first order
-equations. Then, multiplying the top equation by a scalar valued test
-function, v, and the second by a vector valued test function tau, we can
-integrate by parts over each element, K. Combining the two equations, we get
-our bilinear form for convection diffusion. We seek the field variable, u and
-sigma in L2, but that leaves their traces undefined. So, in a manner similar
-to the hybridized DG method, we define new unknowns for our traces and fluxes,
-u hat and f hat.
-\end{comment}
 
 
 %    /$$$$$$                                                                           /$$     /$$                     
@@ -711,17 +699,6 @@ L(u_h,\bflambda) = \frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}_V^2
 \end{align*}
 where $\bflambda=\{\lambda_1,\cdots,\lambda_N\}$.
 \end{frame}
-\begin{comment}
-So what does local conservation mean for the convection-diffusion equation. We
-want the integral of our fluxes over the element faces to be balanced by any
-source terms in the RHS. This is equivalent to having one in the test space.
-You can see this if you look at the bilinear form on the previous slide and
-plug one and zero in as test functions. Unfortunately the optimal test
-functions do not always span constants. It turns out we can augment our test
-space with constants through the use of Lagrange multipliers. So taking a
-couple of steps backward in the abstract form, we can augment our system with
-the Lagrange multipliers enforcing local conservation.
-\end{comment}
 
 
 %===============================================================================
@@ -753,15 +730,6 @@ A few consequences:
 of constants. % Backup slide
 \end{itemize}
 \end{frame}
-\begin{comment}
-Now, proceeding forward again and setting the derivatives to zero, we have
-turned our minimization problem into a saddle point problem. Note that we have
-added extra DOFs equal to the number of mesh elements, but the structure of
-the problem allows these to be statically condensed out. The most interesting
-consequence of this modification (apart from enforcing local conservation) is
-that we can modify the search space for our optimal test functions to be
-the orthogonal complement of constants.
-\end{comment}
 
 
 %===============================================================================
@@ -798,31 +766,11 @@ the presence of singularities.
 +\left(\frac{1}{|K|}\int_Kv\right)^2
 }$
 \end{minipage}
-}}_{\only<1>{\text{No longer necessary}}\only<2>{\text{Zero mean term}}}
+}}_{\only<1>{\text{No longer necessary}}\only<2>{\text{Scaling term}}}
 \end{align*}
 \end{minipage}
 \end{block}
 \end{frame}
-\begin{comment}
-So how does this affect our search for optimal test functions? The process to
-compute optimal test functions is as follows. For each trial function we are
-considering, we want to find the test function in an enriched space that
-satisfies the following relation - that the inner product of vu with w equals
-the bilinear form acting on u and w for all w in V.
-
-The choice of norm on V can significantly affect the robustness of the
-solution. Unfortunately, the optimal test norm is not localizable, and for
-convection diffusion, the quasi-optimal test norm has boundary layers arising
-from the adjoint and thus has approximability issues. Fortunately a
-couple of collaborators developed a robust test norm for convection-diffusion.
-Sadly, this norm also has its issues as the final zero order term in the
-expression is somewhat troublesome. (???)
-
-Why can we replace the L2 term with the zero mean term?
-Why is zero mean more friendly than L2?
-- Not mesh dependent
-- No boundary layers
-\end{comment}
 
 
 %    /$$$$$$    /$$               /$$       /$$ /$$ /$$   /$$              
@@ -914,8 +862,6 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n
 \end{column}
 \end{columns}
 \end{frame}
-\begin{comment}
-\end{comment}
 
 
 %    /$$$$$$    /$$               /$$                          
@@ -1000,8 +946,6 @@ Conservative
 \end{column}
 \end{columns}
 \end{frame}
-\begin{comment}
-\end{comment}
 
 
 %===============================================================================
@@ -1070,8 +1014,6 @@ Conservative
 \end{column}
 \end{columns}
 \end{frame}
-\begin{comment}
-\end{comment}
 
 
 % \subsection{Time Stepping with DPG}
@@ -1098,7 +1040,7 @@ Extends the capabilities of a DPG solver
 \begin{itemize}
   \item Preserves stability and robustness of DPG method
   \item Unified treatment of space and time
-  \item Local space-time adaptivity
+  \item Local space-time adaptivity (local time stepping)
   \begin{itemize}
     \item Small solution features require small time step
     \item Global time step not limited to smallest element
@@ -1155,12 +1097,6 @@ We can rewrite this in terms of a space-time divergence.
 \end{aligned}
 \end{equation*}
 \end{frame}
-\begin{comment}
-Without further ado, we'll jump into the simplest representative spatial-temporal problem: the heat equation.
-The interesting thing about this equation is that it is elliptic in space, but hyperbolic in time.
-We can split this into two first order equations: conservation of energy and Fourier's law.
-Notice that we can rewrite this as a constitutive equation and a space-time divergence.
-\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -1233,15 +1169,6 @@ where
 \end{column}
 \end{columns}
 \end{frame}
-\begin{comment}
-We then follow standard DPG procedure and multiply by test functions tau and v 
-where tau is vector valued with dimension equal to the spatial dimension.
-Then we integrate each equation by parts.
-But the first equation is only integrated over spatial dimensions, so the resulting trace term is limited
-to boundaries with a nonzero spatial normal component.
-The integration by parts in space-time yields a flux that is defined on all boundaries, but with different
-character across spatial and temporal boundaries.
-\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -1286,15 +1213,6 @@ character across spatial and temporal boundaries.
 \end{column}
 \end{columns}
 \end{frame}
-\begin{comment}
-Here we have a very contrived example problem. 
-We start with a completely zero initial condition and then turn on a unit source from t = 1/4 to t=1/2,
-then watch the inputted heat diffuse over the rest of the time interval.
-The key thing to watch for is making sure we don't get any heat bleeding backwards in time. 
-Indeed we get  very clean start at t=1/4.
-Notice also how u hat exists only on vertical boundaries, while the flux lives on the entire mesh skeleton.
-We also see how the method naturally picks on on areas of rapid temporal or spatial changes and adapts to resolve them.
-\end{comment}
 
 %    /$$$$$$                                                                            /$$ /$$       /$$          
 %   /$$__  $$                                                                          |__/| $$      | $$          
@@ -1331,10 +1249,6 @@ and (assuming an ideal gas EOS)
 p=\rho R T\,.
 \]
 \end{frame}
-\begin{comment}
-Now we make a huge jump to the compressible Navier-Stokes equations, but all of the same ideas carry over.
-We write our conservation equations in strong form with constitutive laws for the deviatoric stress tensor, heat flux, and pressure.
-\end{comment}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -1349,10 +1263,6 @@ Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\
   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
 \end{align*}
 \end{frame}
-\begin{comment}
-We follow the same course as we did for the heat equation and write this as a first order system of equations
-with the conservation laws in space-time divergence form.
-\end{comment}
 
 
 % ------------------------------------------------------------
@@ -1376,11 +1286,6 @@ Multiplying by test functions and integrating by parts:
 % }
 where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
 \end{frame}
-\begin{comment}
-Again we multiply by test functions and integrate by parts. In this case S is a symmetric tensor valued test function,
-tau is a vector valued test function of spatial dimension, v_c and v_e are scalar valued, and v_m is vector valued matching the spatial dimension.
-We've also introduced spatial traces u hat and T had and fluxes for each conservation law.
-\end{comment}
 
 
 % ------------------------------------------------------------
@@ -1405,13 +1310,6 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 (Jacobian and residual not shown here).
 \end{block}
 \end{frame}
-\begin{comment}
-The above integration by parts gives the following definitions for the spatial traces and fluxes.
-Notice the analog to the heat equation where the fluxes change nature depending on whether they are on temporal or spatial boundaries.
-
-In the above bilinear form, the fluxes, traces, and heat flux are linear.
-All of the other variables are involved in nonlinearities and will need to be linearized and solved via a Gauss-Newton iteration.
-\end{comment}
 
 
 %TODO: Fix test norm
@@ -1461,13 +1359,6 @@ All of the other variables are involved in nonlinearities and will need to be li
 \end{align*}
 }
 \end{frame}
-\begin{comment}
-Choice of test norm can be one of the most influential factors in the success of a particular DPG method.
-For steady Navier-Stokes we developed a robust test norm by analogy to steady convection-diffusion.
-We need to perform a similar analysis for space-time convection-diffusion, but we've found that the following norm
-for Navier-Stokes seems to work better than the standard graph norm.
-Essentially, we've taken the standard graph norm based off the adjoint equation and decoupled the Eulerian and viscous terms.
-\end{comment}
 
 
 %    /$$$$$$                  /$$                     
@@ -1513,19 +1404,6 @@ Essentially, we've taken the standard graph norm based off the adjoint equation 
 }
 }
 \end{frame}
-\begin{comment}
-We illustrate our space-time formulation with the Sod shock tube problem starting on an initially very coarse mesh of 4
-space-time elements. 
-Traditionally the Sod shock tube is defined for the Euler equations, 
-but every numerical method that I know uses some sort of artificial viscosity to handle the shock.
-We instead just solve the problem with a small physical viscosity of order 10^-5.
-You can see that even on this extremely coarse mesh, we have a somewhat sound solution.
-Moreover, the adaptive error control of DPG begins to work to refine the mesh in the correct areas in order to
-resolve the flow features.
-We'll step through each adaptive refinement step to see how the DPG solution converges to the exact solution.
-You can see that after 14 refinement steps we are nearly right on top of the exact solution. 
-With one or two more steps we could probably completely eliminate the tiny overshoots at the shock.
-\end{comment}
 
 
 %   /$$   /$$           /$$      
@@ -1572,8 +1450,6 @@ Infinitely strong shock propagation.
 }
 }
 \end{frame}
-\begin{comment}
-\end{comment}
 
 
 \section{Proposed Work}
@@ -1702,12 +1578,6 @@ bound for form $c(p,\bfw)$:
 ||\bflambda||:=\left(\sum_K \mu(K) \lambda_K^2\right)^{1/2}
 \]
 \end{frame}
-\begin{comment}
-In the following analysis, we neglect the error due to the approximation of optimal test functions.
-
-We skip some of the math needed to show this, but it is pretty trivial. The
-full details will be in the ICES report.
-\end{comment}
 
 
 %===============================================================================
@@ -1757,20 +1627,6 @@ Let $\hat{t}$ be the trace of $\bfpsi_h$, then
 \end{align*}
 }
 \end{frame}
-\begin{comment}
-We proceed now with the discussion of the discrete inf-sup stability
-constants. We skip index h in the notation.
-
-Note that C is a generic, mesh independent constant incorporating the constant
-from the interpolation error estimate and the continuity constant of R.
-
-Notice that we have considered traces of lowest order Raviart-Thomas elements
-for the discretization of the flux.
-
-The inf-sup condition for the lowest order RT spaces implies automatically the
-analogous condition for elements of arbitrary order; increasing space U only
-makes the discrete inf-sup constant bigger.
-\end{comment}
 
 
 %===============================================================================
@@ -1803,15 +1659,6 @@ The FE error is bounded by the best approximation error. Note that the exact
 Lagrange multipliers are zero, so the best approximation error involves only
 the solution $(u,\bfsigma,\hat{u},\hat{t})$.
 \end{frame}
-\begin{comment}
-This is satisfied automatically due to the use of optimal test functions.
-
-In other words, the kernel space contains only the equilibrated fluxes.
-
-The first inequality follows as we plug in the definition for a and pick w=u.
-The second equality is trivial, while the next one follows by definition of
-the optimal test functions given through the trial-to-test operator T .
-\end{comment}
 
 
 %   /$$$$$$$            /$$                             /$$                                            
@@ -1852,11 +1699,6 @@ the optimal test functions given through the trial-to-test operator T .
     \]
 \end{itemize}
 \end{frame}
-\begin{comment}
-  With robust test norms, standard DPG delivers a robust error bound because
-  it minimizes the residual in the energy norm. Restricted DPG no longer
-  minimizes the residual, so can we claim robustness for this version as well?
-\end{comment}
 
 
 %===============================================================================
@@ -1887,13 +1729,6 @@ the optimal test functions given through the trial-to-test operator T .
       \end{align*}
 \end{itemize}
 \end{frame}
-\begin{comment}
-We need to establish sufficient conditions under which the inf-sup and continuity constants for the bilinear
-form representing the constraint are independent of viscosity
-
-R is the right inverse of the divergence operator constructed by Costabel and
-McIntosh.
-\end{comment}
 
 
 %===============================================================================
@@ -1925,8 +1760,6 @@ McIntosh.
       which leads to the robust estimate of inf-sup constant $\beta$.
 \end{itemize}
 \end{frame}
-\begin{comment}
-\end{comment}
 
 
 %===============================================================================
@@ -1953,11 +1786,5 @@ McIntosh.
       \end{align*}
 \end{itemize}
 \end{frame}
-\begin{comment}
-With the robust stability and continuity constants for the mixed problem, the
-energy error of solution and Lagrange multipliers is bounded robustly by the
-best approximation error measured in the energy norm. We arrive thus at the
-same situation as in standard DPG.
-\end{comment}
 
 \end{document}
