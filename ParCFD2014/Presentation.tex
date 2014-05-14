@@ -200,7 +200,7 @@
 \begin{frame}[t]
 \frametitle{Motivation}
 \framesubtitle{Initial Mesh Design is Expensive and Time-Consuming}
-Stability requirements of numerical methods dictate that mesh mush anticipate solution.
+Stability requirements of numerical methods dictate that mesh must anticipate solution.
 \begin{columns}[t]
 \begin{column}[c]{0.4\textwidth}
 \begin{itemize}
@@ -841,30 +841,30 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 %                                
 % 
 % ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-Infinitely strong shock propagation.
-\foreach \n in {1,...,9}
-{
-\only<\n>
-{
-\vspace{4ex}
-\begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-\centering
-\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
-\end{column}
-\hspace{8ex}
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-\centering
-\vspace{2ex}
-\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
-\end{column}
-\end{columns}
-}
-}
-\end{frame}
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+% Infinitely strong shock propagation.
+% \foreach \n in {1,...,9}
+% {
+% \only<\n>
+% {
+% \vspace{4ex}
+% \begin{columns}[t] % contents are top vertically aligned
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \centering
+% \includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+% \end{column}
+% \hspace{8ex}
+% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+% \end{column}
+% \end{columns}
+% }
+% }
+% \end{frame}
 
 
 \section{Conclusions and Future Work}

@@ -1,40 +1,258 @@
-\documentclass{parcfd2014}
+
+% Template for Elsevier CRC journal article
+% version 1.2 dated 09 May 2011
+
+% This file (c) 2009-2011 Elsevier Ltd.  Modifications may be freely made,
+% provided the edited file is saved under a different name
+
+% This file contains modifications for Procedia Engineering
+
+% Changes since version 1.1
+% - added "procedia" option compliant with ecrc.sty version 1.2a
+%   (makes the layout approximately the same as the Word CRC template)
+% - added example for generating copyright line in abstract
+
+%-----------------------------------------------------------------------------------
+
+%% This template uses the elsarticle.cls document class and the extension package ecrc.sty
+%% For full documentation on usage of elsarticle.cls, consult the documentation "elsdoc.pdf"
+%% Further resources available at http://www.elsevier.com/latex
+
+%-----------------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                          %%
+%% Important note on usage                                  %%
+%% -----------------------                                  %%
+%% This file should normally be compiled with PDFLaTeX      %%
+%% Using standard LaTeX should work but may produce clashes %%
+%%                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The '3p' and 'times' class options of elsarticle are used for Elsevier CRC
+%% The 'procedia' option causes ecrc to approximate to the Word template
+\documentclass[3p,times,procedia]{elsarticle}
+
+%% The `ecrc' package must be called to make the CRC functionality available
+\usepackage{ecrc}
+
+%% The ecrc package defines commands needed for running heads and logos.
+%% For running heads, you can set the journal name, the volume, the starting page and the authors
+
+%% set the volume if you know. Otherwise `00'
+\volume{00}
+
+%% set the starting page if not 1
+\firstpage{1}
+
+%% Give the name of the journal
+\journalname{Procedia Engineering}
+
+%% Give the author list to appear in the running head
+%% Example \runauth{C.V. Radhakrishnan et al.}
+\runauth{T. Ellis et al.}
+
+%% The choice of journal logo is determined by the \jid and \jnltitlelogo commands.
+%% A user-supplied logo with the name <\jid>logo.pdf will be inserted if present.
+%% e.g. if \jid{yspmi} the system will look for a file yspmilogo.pdf
+%% Otherwise the content of \jnltitlelogo will be set between horizontal lines as a default logo
+
+%% Give the abbreviation of the Journal.
+\jid{proeng}
+
+%% Give a short journal name for the dummy logo (if needed)
+\jnltitlelogo{Procedia Engineering}
+
+%% Provide the copyright line to appear in the abstract
+%% Usage:
+%   \CopyrightLine[<text-before-year>]{<year>}{<restt-of-the-copyright-text>}
+%   \CopyrightLine[Crown copyright]{2011}{Published by Elsevier Ltd.}
+%   \CopyrightLine{2011}{Elsevier Ltd. All rights reserved}
+\CopyrightLine{2014}{Published by Elsevier Ltd.}
+
+%% Hereafter the template follows `elsarticle'.
+%% For more details see the existing template files elsarticle-template-harv.tex and elsarticle-template-num.tex.
+
+%% Elsevier CRC generally uses a numbered reference style
+%% For this, the conventions of elsarticle-template-num.tex should be followed (included below)
+%% If using BibTeX, use the style file elsarticle-num.bst
+
+%% End of ecrc-specific commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+% if you have landscape tables
+\usepackage[figuresright]{rotating}
+
+% put your own definitions here:
+%   \newcommand{\cZ}{\cal{Z}}
+%   \newtheorem{def}{Definition}[section]
+%   ...
 \input{../preamble.tex}
 \graphicspath{{../Proposal/figs/}}
 
-\title{Space-Time DPG: Designing a Method for Massively Parallel CFD}
+% add words to TeX's hyphenation exception list
+%\hyphenation{author another created financial paper re-commend-ed Post-Script}
 
-\author{Truman E. Ellis$^{*}$, Leszek F. Demkowicz$^{*}$, Nathan V. Roberts$^{\dag}$,\\ Jesse L. Chan$^{\ddag}$ and Robert D. Moser$^{*}$}
-
-\heading{Truman E. Ellis, Leszek F. Demkowicz, Nathan V. Roberts, Jesse L. Chan and Robert D. Moser}
-
-\address{$^{*}$ Institute for Computational Engineering and Sciences,
-University of Texas at Austin\\
-201 East 24th St, Stop C0200, Austin, TX 78703
-% e-mail: truman@ices.utexas.edu
-\and
-$^{\dag}$Argonne Leadership Computing Facility,
-Argonne National Laboratory\\
-9700 South Cass Avenue Building 240, Argonne, IL 60439
-\and
-$^{\ddag}$Computational and Applied Mathematics,
-Rice University\\
-6100 Main MS-134 Houston, TX 77005
-}
-
-% \keywords{CFD methodology, Parallel methodology, Parallel CFD applications}
-\keywords{Discontinuous Petrov-Galerkin, Space-time finite elements}
-
-\abstract{
-We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
-}
+% declarations for front matter
 
 \begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+% \dochead{26\textsuperscript{th} International Conference on Parallel Computational Fluid Dynamics}
+\dochead{Parallel Computational Fluid Dynamics Conference (ParCFD2014)}
+%% Use \dochead if there is an article header, e.g. \dochead{Short communication}
+%% \dochead can also be used to include a conference title, if directed by the editors
+%% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
+
+\title{Space-time DPG: Designing a method for massively parallel CFD}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author[ices]{T.~Ellis\corref{cor1}}
+\ead{truman@ices.utexas.edu}
+\author[ices]{L.~Demkowicz}
+\author[anl]{N.~Roberts}
+\author[rice]{J.~Chan}
+\author[ices]{R.~Moser}
+\address[ices]{Institute for Computational Engineering and Sciences,
+University of Texas at Austin
+201 East 24th St, Stop C0200, Austin, TX 78703}
+\address[anl]{Argonne Leadership Computing Facility,
+Argonne National Laboratory
+9700 South Cass Avenue Building 240, Argonne, IL 60439}
+\address[rice]{Computational and Applied Mathematics,
+Rice University
+6100 Main MS-134, Houston, TX 77005}
+\cortext[cor1]{Corresponding author}
+
+\begin{abstract}
+%% Text of abstract
+We develop a space-time discontinuous Petrov-Galerkin finite element method ideal for parallel simulation of transient fluid dynamics problems.
+\end{abstract}
+
+\begin{keyword}
+Discontinuous Petrov-Galerkin \sep
+Finite Elements \sep
+Space-Time \sep
+Navier-Stokes
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+% \linenumbers
+
+%% main text
+
+% \begin{nomenclature}
+% \begin{deflist}[A]
+% \defitem{$u_{\theta}$}\defterm{velocity in the direction of (m/s)}
+% \defitem{A}\defterm{radius of (m)}
+% \defitem{B}\defterm{position of}
+% \defitem{C}\defterm{further nomenclature continues down the page inside the text box}
+% \subsubsection*{Greek symbols}
+% \defitem{$\gamma$}\defterm{stoichiometric coefficient}
+% \defitem{$\delta$}\defterm{boundary layer thicknesses(m)}
+% \subsubsection*{Subscripts}
+% \defitem{$r$}\defterm{radial coordinate}
+% \end{deflist}
+% \end{nomenclature}
+
 \section{Introduction}
-\subsection{Motivation}
-\subsection{Overview of DPG}
-The discontinuous Petrov-Galerkin finite element method with optimal test functions 
-was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG1, DPG2}.
+Initial mesh design for computational fluid dynamics can be a time-consuming and expensive process. 
+The stability properties and nonlinear convergence of most numerical methods rely on a minimum level of mesh resolution. 
+This means that unless the initial computational mesh is fine enough, convergence can not be guaranteed. 
+Any meshes below this minimum resolution level are termed to be in the ``pre-asymptotic regime.'' 
+This condition implies that meshes need to in some way anticipate the solution before it is known. 
+On top of the minimum requirement that the surface meshes must adequately represent the geometry of the problem under consideration, 
+resolution requirements on the volume mesh make the CFD practitioners job significantly more time consuming. 
+This is not to mention auxiliary requirements from turbulence models needed to accurately resolve boundary layers. 
+Thus, mesh design and simulation become an iterative trial and error process.
+A common process is for an engineer to study the problem at hand and attempt to predict regions that require extra resolution. 
+Then they will spend hours coaxing the mesher to produce an adequate mesh before importing the mesh into the solver.
+Too often, the solver will fail to converge on the given mesh due to some unforeseen mesh inadequacy on part of the solution domain.
+The engineer then needs to descend back into the mesher to fix the problem elements.
+This process is repeated until the solver is satisfied and convergence can be reached.
+This iterative trial and error is undesirable while working on personal computers or modestly sized compute clusters, 
+but becomes increasing costly as the problem is scaled up to the tens or hundreds of thousands of processors common in high performance computing environments.
+
+In contrast to most other numerical methods, the discontinuous Petrov-Galerkin finite element method retains exceptional stability on extremely coarse meshes.
+DPG is also inherently very adaptive.
+It is possible to compute the residual error without knowledge of the exact solution, which can be used to robustly drive adaptivity.
+This results in a very automated technology, as the user can initialize a computation on the coarsest mesh which adequately represents the geometry 
+then step back and let the program solve and adapt iteratively until it resolves the solution features.
+
+\section{Overview of DPG}
+% The discontinuous Petrov-Galerkin finite element method with optimal test functions 
+% was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG1, DPG2}.
+For a full treatment of the various ideas in DPG, please see \cite{DPGOverview2}.
 The basic ideas are fairly straight-forward; DPG minimizes the residual in a user defined energy norm.
 Consider a variational problem: find $u\in U$ such that
 \[
@@ -89,19 +307,19 @@ We can calculate the energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of th
 where we designate $R_V^{-1}(Bu_h-l)$ the \emph{error representation function}.
 This has proven to be a very reliable \emph{a-posteriori} error estimator for driving adaptivity.
 
-Babu\v{s}ka's theorem\cite{Babuska70} says that discrete stability and approximability imply convergence.
-That is, if $M$ is the continuity constant for $b(u,v)$ which satisfies the discrete inf-sup condition with constant $\gamma_h$,
-\[
-\sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
-\]
-then the Galerkin error satisfies the bound
-\[
-\norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
-\]
-Optimal test functions realize the supremum in the discrete discrete inf-sup condition such that $\gamma_h\geq\gamma$, 
-the infinite-dimensional inf-sup constant.
-If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
-the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
+% Babu\v{s}ka's theorem\cite{Babuska70} says that discrete stability and approximability imply convergence.
+% That is, if $M$ is the continuity constant for $b(u,v)$ which satisfies the discrete inf-sup condition with constant $\gamma_h$,
+% \[
+% \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
+% \]
+% then the Galerkin error satisfies the bound
+% \[
+% \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
+% \]
+% Optimal test functions realize the supremum in the discrete discrete inf-sup condition such that $\gamma_h\geq\gamma$, 
+% the infinite-dimensional inf-sup constant.
+% If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
+% the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
 
 There are still many features of the method that are left to be decided, for example the $U$ and $V$ spaces.
 If $V$ is taken to be a continuous space, then the auxiliary problem becomes global in scope, something that we would like to avoid.
@@ -131,30 +349,72 @@ is provably robust and equivalent to $L^2$ for convection-diffusion which
 serves as the most relevant model problem for our research.
 Norms for Navier-Stokes are derived by analogy to the convection-diffusion norm.
 
-DPG has been successfully applied to a wide range of physical problems.
-Early work on the Poisson equation was published in \cite{DPGPoisson}.
-Demkowicz \etal\cite{DPGHelmholtz}, Gopalakrishnan \etal\cite{Gopalakrishnan2014}, and Zitelli \etal\cite{DPG4} 
-analyzed and solved the Helmholtz equation with DPG.
-DPG was applied to linear elasticity and plate problems in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}.
-A 2D Maxwell cloaking problem was solved wit DPG in \cite{DPGCloaking} 
-and a 3D DPG theory for Maxwell was developed by Wieners and Wohlmuth\cite{WohlmuthReport}.
-DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,Ellis2013Report},
-Stokes\cite{DPGStokes,Ellis2013Report}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation}, 
-and compressible Navier-Stokes\cite{JesseDissertation}.
+% DPG has been successfully applied to a wide range of physical problems.
+% Early work on the Poisson equation was published in \cite{DPGPoisson}.
+% Demkowicz \etal\cite{DPGHelmholtz}, Gopalakrishnan \etal\cite{Gopalakrishnan2014}, and Zitelli \etal\cite{DPG4} 
+% analyzed and solved the Helmholtz equation with DPG.
+% DPG was applied to linear elasticity and plate problems in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}.
+% A 2D Maxwell cloaking problem was solved wit DPG in \cite{DPGCloaking} 
+% and a 3D DPG theory for Maxwell was developed by Wieners and Wohlmuth\cite{WohlmuthReport}.
+% DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC},
+% Stokes\cite{DPGStokes,EllisLC}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation}, 
+% and compressible Navier-Stokes\cite{JesseDissertation}.
+
+
+%   /$$   /$$ /$$$$$$$   /$$$$$$ 
+%  | $$  | $$| $$__  $$ /$$__  $$
+%  | $$  | $$| $$  \ $$| $$  \__/
+%  | $$$$$$$$| $$$$$$$/| $$      
+%  | $$__  $$| $$____/ | $$      
+%  | $$  | $$| $$      | $$    $$
+%  | $$  | $$| $$      |  $$$$$$/
+%  |__/  |__/|__/       \______/ 
+%                                
+%                                
+%   
 \subsection{DPG for High Performance Computing}
-Finally a few notes on some of the implications for high performance computing.
-The goal is to design a method that eliminates human intervention as much as possible.
+Many of the features inherent in the DPG method appear promising in the context of high performance computing.
+Our goal is to design a method that eliminates human intervention as much as possible.
+The superior stability of the method promises to prevent a solution from crashing which could eliminate expensive restarts on large systems.
+Preliminary studies on convection-diffusion indicate exceptional robustness of the method in terms of diminishing viscosity, 
+promising successful application to a large class of flow problems.
+The adaptivity lent by the \emph{error representation function} provides a reliable and automated way to start from a coarse mesh and only refine
+toward solution features in need. 
+This uses compute resources much more efficiently than uniform refinements, allowing larger simulations with fewer resources.
+These features combine to produce a high degree of automaticity.
+Ultimately, it is desirable that an engineer could produce a rough mesh that just captures the geometry of the problem, 
+start a DPG simulation that automatically picks up solution features without the user needing to jump back in and fix things.
 
-* Exceptional stability properties prevent a solution from crashing, eliminating expensive restarts
-* The method runs robustly on a wide range of Reynolds numbers
-* Adaptivity allocates degrees of freedom efficiently to allow larger simulations with fewer resources
-* Automaticity means that you can start a simulation and let it solve and adapt without needing to jump in and fix things part way through
-* DPG is very compute intensive, with a large portion of the work being done in the embarrassingly parallel local solves and stiffness matrix assembly. Also, higher order methods tend to prevent a better compute/memory/communication profile than low order methods, and exceptional stability makes high order very easy.
-* In our code, we do the local solves via QR factorization. But the local solve can be viewed as having multiple right hand sides, so that QR factorization can be recycled multiple times.
-* Degrees of freedom can be separated into two categories: internal and trace. The internal degrees of freedom can be condensed out and the global solve can be conducted purely in terms of the trace variables which have limited coupling, reducing fill in of the stiffness matrix. The internal DOFs can then be solved for in an embarrassingly parallel post-processing phase. This is a similar process behind the hybridized DG method.
-* As I mentioned earlier, an SPD stiffness matrix seems like a promising thing for iterative solvers, but we haven't really explored the benefits.
-* Many supercomputer simulations are increasingly coupling multiphysics. The only stability requirement for a DPG method is that the continuous problem is well-posed. As such, it has successfully been applied to a wide range of problems from Helmholtz to solid mechanics to Navier-Stokes and Maxwell's equations.
+DPG is very compute intensive compared to the associated communication and memory costs.
+Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
+Additionally, the stability properties of DPG make high order solves a triviality, and in general, 
+high order methods tend to have a more attractive compute/memory/communication profile than low order methods.
+In our codes, we use QR factorization for the optimal test function solves, but this factorization is recyclable as we essentially have many right hand sides.
+The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
+a solve purely in terms of the skeleton degrees of freedom.
+In addition to significantly cutting down on the size of the global solve, 
+this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
+This property was one of the motivations behind the development of the hybridized discontinuous Galerkin\cite{HDG} method.
+No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
+positive definite stiffness matrix for the global solve.
+This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
+anticipate it might be an attractive feature in the future.
+As compute resources scale up, many more HPC simulations are increasingly becoming coupled in multiphysics simulations.
+Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- no need to develop many different methods for each part of the simulation.
+Already DPG has been successfully applied to domains as disparate as solid mechanics\cite{BramwellDPG}, Helmholtz\cite{DPGHelmholtz}, 
+Navier-Stokes\cite{NateDissertation,JesseDissertation}, and Maxwell's equations\cite{PracticalDPG}.
 
+%    /$$$$$$                                                  /$$$$$$$$ /$$                        
+%   /$$__  $$                                                |__  $$__/|__/                        
+%  | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$            | $$    /$$ /$$$$$$/$$$$   /$$$$$$ 
+%  |  $$$$$$  /$$__  $$ |____  $$ /$$_____/ /$$__  $$ /$$$$$$   | $$   | $$| $$_  $$_  $$ /$$__  $$
+%   \____  $$| $$  \ $$  /$$$$$$$| $$      | $$$$$$$$|______/   | $$   | $$| $$ \ $$ \ $$| $$$$$$$$
+%   /$$  \ $$| $$  | $$ /$$__  $$| $$      | $$_____/           | $$   | $$| $$ | $$ | $$| $$_____/
+%  |  $$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$           | $$   | $$| $$ | $$ | $$|  $$$$$$$
+%   \______/ | $$____/  \_______/ \_______/ \_______/           |__/   |__/|__/ |__/ |__/ \_______/
+%            | $$                                                                                  
+%            | $$                                                                                  
+%            |__/  
 \section{Space-Time DPG}
 We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can hack it for 1D spatial problems by pretending the $y$-direction is time.
 Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
@@ -178,11 +438,10 @@ simply defined from the adjoint of the system supplemented with $L^2$ terms to u
 %                                          
 %                                          
 %  
-\section{Heat Equation}
+\subsection{Heat Equation}
 The simplest space-time problem we can consider where the the spatial and temporal dimensions are treated differently is the heat equation.
 We start with a general $n$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
 
-\subsection{Derivation}
 Let $\Omega(t)\subset\mathbb{R}^d$ be the spatial domain with boundary $\partial\Omega$.
 The heat equation is
 \begin{equation}
@@ -231,6 +490,7 @@ On the other hand, flux $\hat t$ exists on all mesh boundaries, but changes natu
 a mixed nature on slanted boundaries. We illustrate the support of these skeleton variables in Figure~\ref{fig:heatMesh}.
 
 \begin{figure}[h!]
+\centering
 \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm]
 \clip(-0.7,-1.01) rectangle (5.27,2.29);
 \draw (0,2)-- (0,0);
@@ -274,140 +534,59 @@ a mixed nature on slanted boundaries. We illustrate the support of these skeleto
 \label{fig:heatMesh}
 \end{figure}
 
-\subsection{Problems considered}
-If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
-the exact solution is
-\begin{equation*}
-	u=\cos(2\pi x)e^{-4*\pi^2\epsilon t}\,.
-\end{equation*}
-We ran this with $\epsilon=10^{-2}$ on a sequence of uniform meshes and $p=2$ for the field representation of $u$. 
-We were able to achieve the expected third order convergence as demonstrated in Figure \ref{fig:spaceTimeHeatConvergence}.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
-	\caption{$L^2$ convergence of $u$ for the space-time heat equation}
-	\label{fig:spaceTimeHeatConvergence}
-\end{figure}
-
-In order to demonstrate local space-time adaptivity we consider one more problem for the heat equation. 
-On the same domain, and with the same boundary conditions as the previous example, we let the initial heat distribution be zero.
-Then between $t=0.25$ and $t=0.5$ we turn on a pulse source term of one on $0.375\leq x\leq 0.625$. 
-Starting from an initial mesh of $4x4$, we adaptively refine four times and obtain the results in Figure \ref{fig:spaceTimeHeatPulse}.
-Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
-Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
-
-\begin{figure}[p]
-\centering
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/u.png}
-\caption{$u$}
-\label{fig:spaceTimeHeatu}
-\end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
-\caption{$\sigma$}
-\label{fig:spaceTimeHeatsigma}
-\end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
-\caption{$\hat u$}
-\label{fig:spaceTimeHeatuhat}
-\end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
-\caption{$\hat t$}
-\label{fig:spaceTimeHeatfhat}
-\end{subfigure}
-\caption{Pulsed space-time heat problem after 4 refinements}
-\label{fig:spaceTimeHeatPulse}
-\end{figure}
-
-%    /$$$$$$                       /$$$$$$                      /$$                    
-%   /$$__  $$                     /$$__  $$                    |__/                    
-%  | $$  \__/  /$$$$$$  /$$$$$$$ | $$  \__/ /$$   /$$  /$$$$$$$ /$$  /$$$$$$  /$$$$$$$ 
-%  | $$       /$$__  $$| $$__  $$| $$$$    | $$  | $$ /$$_____/| $$ /$$__  $$| $$__  $$
-%  | $$      | $$  \ $$| $$  \ $$| $$_/    | $$  | $$|  $$$$$$ | $$| $$  \ $$| $$  \ $$
-%  | $$    $$| $$  | $$| $$  | $$| $$      | $$  | $$ \____  $$| $$| $$  | $$| $$  | $$
-%  |  $$$$$$/|  $$$$$$/| $$  | $$| $$      |  $$$$$$/ /$$$$$$$/| $$|  $$$$$$/| $$  | $$
-%   \______/  \______/ |__/  |__/|__/       \______/ |_______/ |__/ \______/ |__/  |__/
-%                                                                                      
-%                                                                                      
-%        
-% \section{Convection-Diffusion}
-% Transient convection-diffusion is identical to the heat equation with the addition of a convective term:
+% \subsubsection{Numerical Experiment}
+% If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
+% the exact solution is
 % \begin{equation*}
-% \frac{\partial u}{\partial t}+\Div(\bfbeta u)-\epsilon\Delta u=f\,.
+% 	u=\cos(2\pi x)e^{-4*\pi^2\epsilon t}\,.
 % \end{equation*}
-% The $d$-dimensional transient convection-diffusion equations could be viewed as a $d+1$ steady convection-diffusion problem with zero diffusion in the time direction.
+% We ran this with $\epsilon=10^{-2}$ on a sequence of uniform meshes and $p=2$ for the field representation of $u$. 
+% We were able to achieve the expected third order convergence as demonstrated in Figure \ref{fig:spaceTimeHeatConvergence}.
 
-% \subsection{Derivation}
-% As a first order system in space-time, this is
-% \begin{equation}
-% \label{eq:confusionFirstOrder}
-% \begin{aligned}
-% \frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
-% \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\,.
-% \end{aligned}
-% \end{equation}
-% % We can view the second equation as a full space-time divergence on group variable $\bfU:=\LRc{\bfbeta u-\bfsigma,u}$ as before:
-% % \begin{equation}
-% % 	\Divxt\LRp{\bfU}=f\,.
-% % \end{equation}
-% Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by parts over each element, we obtain the following bilinear form:
-% \begin{equation}
-% \label{eq:confusionBF}
-% 	\begin{aligned}
-% 		\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
-% 		-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\,,
-% 		% -\LRp{u,\frac{\partial v}{\partial t}}-\LRp{\bfbeta u,\Grad v}+\LRp{\bfsigma,\Grad v}-\LRa{\hat t,v}&=\LRp{f,v}\,,
-% 	\end{aligned}
-% \end{equation}
-% where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $v$ live in the same spaces as for the heat equation.
+% \begin{figure}[!ht]
+% 	\centering
+% 	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
+% 	\caption{$L^2$ convergence of $u$ for the space-time heat equation}
+% 	\label{fig:spaceTimeHeatConvergence}
+% \end{figure}
 
-% \subsection{Problems considered}
-% Since space-time convection-diffusion is identical the heat equation with the addition of a convective term, we only pursue one numerical experiment to demonstrate that everything works as expected. 
-% This problem is inspired by the previous heat problem with the spatial domain extended to prevent the convected heat from impinging on the right wall.
-% It might be interesting to impose a zero boundary condition on $\hat u$ and watch a boundary layer build up on the right wall, 
-% but instead we enforce a zero flux condition and content ourselves with the inner layer that forms around the source pulse.
-% This is an arbitrary requirement necessitated by the ``hackish'' nature of this code.
-% We haven't taken the time to allow enforcement of Dirichlet boundary conditions on spatial fluxes, and since the code in this state was intended to be short-lived, it doesn't make sense to invest too heavily in adding features. 
-% Thus we enforce zero flux conditions on both walls as before. 
-% For this problem, the domain extends from $[0,1.5]\times[0,1]$ with the pulse occurring at $[0.25,0.5]\times[0.25,0.5]$.
+% In order to demonstrate local space-time adaptivity we consider one more problem for the heat equation. 
+% On the same domain, and with the same boundary conditions as the previous example, we let the initial heat distribution be zero.
+% Then between $t=0.25$ and $t=0.5$ we turn on a pulse source term of one on $0.375\leq x\leq 0.625$. 
+% Starting from an initial mesh of $4x4$, we adaptively refine four times and obtain the results in Figure \ref{fig:spaceTimeHeatPulse}.
+% Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
+% Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
 
 % \begin{figure}[p]
 % \centering
 % \begin{subfigure}[t]{0.45\textwidth}
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeConfusion/u.png}
+% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/u.png}
 % \caption{$u$}
-% \label{fig:spaceTimeConfusionu}
+% \label{fig:spaceTimeHeatu}
 % \end{subfigure}
 % \begin{subfigure}[t]{0.45\textwidth}
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeConfusion/sigma.png}
+% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
 % \caption{$\sigma$}
-% \label{fig:spaceTimeConfusionsigma}
+% \label{fig:spaceTimeHeatsigma}
 % \end{subfigure}
 % \begin{subfigure}[t]{0.45\textwidth}
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeConfusion/uhat.png}
+% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
 % \caption{$\hat u$}
-% \label{fig:spaceTimeConfusionuhat}
+% \label{fig:spaceTimeHeatuhat}
 % \end{subfigure}
 % \begin{subfigure}[t]{0.45\textwidth}
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeConfusion/fhat.png}
+% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
 % \caption{$\hat t$}
-% \label{fig:spaceTimeConfusionfhat}
+% \label{fig:spaceTimeHeatfhat}
 % \end{subfigure}
-% \caption{Space-time convection-diffusion problem after 4 refinements}
-% \label{fig:spaceTimeConfusion}
+% \caption{Pulsed space-time heat problem after 4 refinements}
+% \label{fig:spaceTimeHeatPulse}
 % \end{figure}
+
 
 
 %    /$$$$$$                                                                            /$$ /$$       /$$          
@@ -421,7 +600,7 @@ Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} autom
 %                                    | $$                                                                          
 %                                    | $$                                                                          
 %                                    |__/    
-\section{Transient Compressible Navier-Stokes}
+\subsection{Transient Compressible Navier-Stokes}
 We make a large jump from convection-diffusion to the compressible Navier-Stokes equations.
 The following discussion holds in any dimension, but the provided results are only for spatially 1D flows.
 The compressible Navier-Stokes equations are
@@ -480,265 +659,263 @@ where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 %                                                                                           
 %                                                                                           
 %              
-\subsection{Derivation of Space-Time DPG Formulation}
-We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
-then integrate by parts over each space-time element $K$:
-\begin{subequations}
-\label{eq:compressibleNSBF}
-\begin{align}
-	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
-	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
-	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
-	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
-	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
-	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
-\end{align}
-\end{subequations}
-where 
-\begin{equation*}
-\begin{aligned}
-\hat\bfu&=\trace(\bfu)\\
-\hat T&=\trace(T)\\
-\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
-+\trace\LRp{\rho}n_t\\
-\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
-+\trace\LRp{\rho\bfu} n_t\\
-\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
-+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
-\end{aligned}
-\end{equation*}
-Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
-This is a much more complicated system of equations than we had for the space-time heat equation, but the situation has many similarities.
-Test function $\bftau\in\HdivK$ where the divergence is taken only over spatial dimensions, $v_c,v_e\in\HOneK$, and $\bfv_m\in\HOneVecK$.
-These are all familiar spaces from our work with the heat equation.
-Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ components must be at least in $L^2(K)$, $\Div\mathbb{S}\in\LVecK$, and
-$\Grad\trace{\mathbb{S}}\in\LVecK$.
-In practice, we will probably just seek each component in $\HOneK$.
+% \subsubsection{Derivation of Space-Time DPG Formulation}
+% We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
+% then integrate by parts over each space-time element $K$:
+% \begin{subequations}
+% \label{eq:compressibleNSBF}
+% \begin{align}
+% 	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
+% 	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+% 	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+% 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+% 	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+% 	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+% 	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+% \end{align}
+% \end{subequations}
+% where 
+% \begin{equation*}
+% \begin{aligned}
+% \hat\bfu&=\trace(\bfu)\\
+% \hat T&=\trace(T)\\
+% \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
+% +\trace\LRp{\rho}n_t\\
+% \hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
+% +\trace\LRp{\rho\bfu} n_t\\
+% \hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
+% +\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+% \end{aligned}
+% \end{equation*}
+% Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
+% This is a much more complicated system of equations than we had for the space-time heat equation, but the situation has many similarities.
+% Test function $\bftau\in\HdivK$ where the divergence is taken only over spatial dimensions, $v_c,v_e\in\HOneK$, and $\bfv_m\in\HOneVecK$.
+% These are all familiar spaces from our work with the heat equation.
+% Unfortunately, $\mathbb{S}$ has some weird requirements: each $d\times d$ components must be at least in $L^2(K)$, $\Div\mathbb{S}\in\LVecK$, and
+% $\Grad\trace{\mathbb{S}}\in\LVecK$.
+% In practice, we will probably just seek each component in $\HOneK$.
 
-%   /$$       /$$                                         /$$                       /$$     /$$                    
-%  | $$      |__/                                        |__/                      | $$    |__/                    
-%  | $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$ /$$$$$$$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
-%  | $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$| $$|____ /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
-%  | $$      | $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$  \__/| $$   /$$$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
-%  | $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$      | $$  /$$__/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
-%  | $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$      | $$ /$$$$$$$$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
-%  |________/|__/|__/  |__/ \_______/ \_______/|__/      |__/|________/ \_______/   \___/  |__/ \______/ |__/  |__/
-%                                                                                                                  
-%                                                                                                                  
-%   
-\subsubsection{Linearization}
-We follow a standard residual-Jacobian linearization procedure coupled with a Gauss-Newton solve.
-Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ be a group solution variable which we can decompose into two parts:
-$U:=\tilde U+\Delta U$, where
-$\tilde U = \LRc{\tilde\rho,\tilde\bfu,\tilde T,\tilde{\mathbb{D}},\bs0,\bs0,0,0,\bs0,0}$ is the previous iteration approximation, 
-and $\Delta U=\LRc{\Delta\rho,\Delta\bfu,\Delta T,\Delta\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ is the update.
-Note that $\tilde U$ only contains terms which participate in nonlinearities in \eqref{eq:compressibleNSBF} 
-while $\Delta U$ contains the full linear terms and the updates to the nonlinear terms.
-Also, we drop the $\Delta$ and $\tilde\cdot$ notation for linear terms.
-Define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
-% Let $\tilde U$ be an approximate solution for the minimization of the residual. 
-% We wish to solve for an increment $\Delta U$ such that $U=\tilde U+\Delta U$ is a better approximation of the true solution.
-Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
-\begin{equation}
-	R'(\tilde U)\Delta U=-R(\tilde U)\,.
-\end{equation}
-This is an instance of a Gauss-Newton nonlinear solve.
-We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
-The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
-\begin{equation}
-\label{eq:compressibleJacobian}
-\begin{aligned}
-	&\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
-	%
-	&+\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
-	%
-	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
-	{\Delta\rho},\Gradxt v_c}
-	+\LRa{\hat t_c,v_c}\\
-	%
-	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-	+\LRp{\Delta\rho R\tilde T+\tilde\rho R\Delta T}\bfI-\Delta\mathbb{D}}
-	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
-	+\LRa{\hat\bft_m,\bfv_m}\\
-	%
-	&-\LRp{\vectthree{[C_v\Delta\rho\tilde T\tilde\bfu+C_v\tilde\rho\Delta T\tilde\bfu+C_v\tilde\rho\tilde T\Delta\bfu
-	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
-	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
-	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
-	+\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
-	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
-	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
-	&+\LRa{\hat t_e,v_e}\,.
-\end{aligned}
-\end{equation}
-The residual, $R(\tilde U)$, is then
-\begin{equation}
-\begin{aligned}
-	&\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
-	&-\LRp{\tilde T,\Div\bftau}\\
-	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
-	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
-	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
-	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
-	-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
-	\Gradxt v_e}-\LRp{f_e,v_e}\,.
-\end{aligned}
-\end{equation}
+% %   /$$       /$$                                         /$$                       /$$     /$$                    
+% %  | $$      |__/                                        |__/                      | $$    |__/                    
+% %  | $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$ /$$$$$$$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+% %  | $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$| $$|____ /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+% %  | $$      | $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$  \__/| $$   /$$$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+% %  | $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$      | $$  /$$__/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+% %  | $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$      | $$ /$$$$$$$$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+% %  |________/|__/|__/  |__/ \_______/ \_______/|__/      |__/|________/ \_______/   \___/  |__/ \______/ |__/  |__/
+% %                                                                                                                  
+% %                                                                                                                  
+% %   
+% \paragraph{Linearization}
+% We follow a standard residual-Jacobian linearization procedure coupled with a Gauss-Newton solve.
+% Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ be a group solution variable which we can decompose into two parts:
+% $U:=\tilde U+\Delta U$, where
+% $\tilde U = \LRc{\tilde\rho,\tilde\bfu,\tilde T,\tilde{\mathbb{D}},\bs0,\bs0,0,0,\bs0,0}$ is the previous iteration approximation, 
+% and $\Delta U=\LRc{\Delta\rho,\Delta\bfu,\Delta T,\Delta\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ is the update.
+% Note that $\tilde U$ only contains terms which participate in nonlinearities in \eqref{eq:compressibleNSBF} 
+% while $\Delta U$ contains the full linear terms and the updates to the nonlinear terms.
+% Also, we drop the $\Delta$ and $\tilde\cdot$ notation for linear terms.
+% Define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
+% Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
+% \begin{equation}
+% 	R'(\tilde U)\Delta U=-R(\tilde U)\,.
+% \end{equation}
+% This is an instance of a Gauss-Newton nonlinear solve.
+% We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
+% The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
+% \begin{equation}
+% \label{eq:compressibleJacobian}
+% \begin{aligned}
+% 	&\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}
+% 	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
+% 	%
+% 	&+\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
+% 	%
+% 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
+% 	{\Delta\rho},\Gradxt v_c}
+% 	+\LRa{\hat t_c,v_c}\\
+% 	%
+% 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
+% 	+\LRp{\Delta\rho R\tilde T+\tilde\rho R\Delta T}\bfI-\Delta\mathbb{D}}
+% 	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
+% 	+\LRa{\hat\bft_m,\bfv_m}\\
+% 	%
+% 	&-\LRp{\vectthree{[C_v\Delta\rho\tilde T\tilde\bfu+C_v\tilde\rho\Delta T\tilde\bfu+C_v\tilde\rho\tilde T\Delta\bfu
+% 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
+% 	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
+% 	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
+% 	+\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
+% 	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
+% 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
+% 	&+\LRa{\hat t_e,v_e}\,.
+% \end{aligned}
+% \end{equation}
+% The residual, $R(\tilde U)$, is then
+% \begin{equation}
+% \begin{aligned}
+% 	&\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
+% 	&-\LRp{\tilde T,\Div\bftau}\\
+% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
+% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
+% 	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
+% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
+% 	-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
+% 	\Gradxt v_e}-\LRp{f_e,v_e}\,.
+% \end{aligned}
+% \end{equation}
 
-%   /$$$$$$$$                       /$$           /$$   /$$                                  
-%  |__  $$__/                      | $$          | $$$ | $$                                  
-%     | $$     /$$$$$$   /$$$$$$$ /$$$$$$        | $$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$ 
-%     | $$    /$$__  $$ /$$_____/|_  $$_/        | $$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$
-%     | $$   | $$$$$$$$|  $$$$$$   | $$          | $$  $$$$| $$  \ $$| $$  \__/| $$ \ $$ \ $$
-%     | $$   | $$_____/ \____  $$  | $$ /$$      | $$\  $$$| $$  | $$| $$      | $$ | $$ | $$
-%     | $$   |  $$$$$$$ /$$$$$$$/  |  $$$$/      | $$ \  $$|  $$$$$$/| $$      | $$ | $$ | $$
-%     |__/    \_______/|_______/    \___/        |__/  \__/ \______/ |__/      |__/ |__/ |__/
-%                                                                                            
-%                                                                                            
-%      
-\subsubsection{Test Norm}
-The most obvious first choice for test norm in the local solve is the graph norm, which comes from the 
-problem adjoint.
-We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable to get
-\begin{equation}
-\begin{aligned}
-&\LRp{\Delta\mathbb{D},\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}\\
-+&\LRp{\bfq,\frac{Pr}{C_p\mu}\bftau-\Grad v_e}\\
-+&\left(\Delta\rho,-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}
--\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
--R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
--R\tilde T\tilde\bfu\Grad v_e
--C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-\right)\\
-+&\left(\Delta\bfu,2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
--\tilde\rho\Grad v_c
--\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
--\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
-&\left.
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
--\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T_\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-\right)\\
-+&\left(\Delta T,-\Div\bftau
--R\tilde\rho\Div\bfv_m
--C_v\tilde\rho\tilde\bfu\Grad v_e
--R\tilde\rho\tilde\bfu\Grad v_e
--C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right)\\
-+&\LRp{\hat\bfu,-\frac{4}{3}\mathbb{S}\bfn_x}\\
-+&\LRp{\hat T,\tau_n}\\
-+&\LRp{\hat t_c,v_c}\\
-+&\LRp{\hat\bft_m,\bfv_m}\\
-+&\LRp{\hat t_e,v_e}\,.
-\end{aligned}	
-\end{equation}
+% %   /$$$$$$$$                       /$$           /$$   /$$                                  
+% %  |__  $$__/                      | $$          | $$$ | $$                                  
+% %     | $$     /$$$$$$   /$$$$$$$ /$$$$$$        | $$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$ 
+% %     | $$    /$$__  $$ /$$_____/|_  $$_/        | $$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$
+% %     | $$   | $$$$$$$$|  $$$$$$   | $$          | $$  $$$$| $$  \ $$| $$  \__/| $$ \ $$ \ $$
+% %     | $$   | $$_____/ \____  $$  | $$ /$$      | $$\  $$$| $$  | $$| $$      | $$ | $$ | $$
+% %     | $$   |  $$$$$$$ /$$$$$$$/  |  $$$$/      | $$ \  $$|  $$$$$$/| $$      | $$ | $$ | $$
+% %     |__/    \_______/|_______/    \___/        |__/  \__/ \______/ |__/      |__/ |__/ |__/
+% %                                                                                            
+% %                                                                                            
+% %      
+% \paragraph{Test Norm}
+% The most obvious first choice for test norm in the local solve is the graph norm, which comes from the 
+% problem adjoint.
+% We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable to get
+% \begin{equation}
+% \begin{aligned}
+% &\LRp{\Delta\mathbb{D},\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}\\
+% +&\LRp{\bfq,\frac{Pr}{C_p\mu}\bftau-\Grad v_e}\\
+% +&\left(\Delta\rho,-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}
+% -\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right)\\
+% +&\left(\Delta\bfu,2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e\right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -R\tilde\rho\tilde T_\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right)\\
+% +&\left(\Delta T,-\Div\bftau
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right)\\
+% +&\LRp{\hat\bfu,-\frac{4}{3}\mathbb{S}\bfn_x}\\
+% +&\LRp{\hat T,\tau_n}\\
+% +&\LRp{\hat t_c,v_c}\\
+% +&\LRp{\hat\bft_m,\bfv_m}\\
+% +&\LRp{\hat t_e,v_e}\,.
+% \end{aligned}	
+% \end{equation}
 
-Then the graph norm would be defined by
-\begin{equation}
-\begin{aligned}
-&\norm{\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
-+&\norm{\frac{Pr}{C_p\mu}\bftau-\Grad v_e}^2\\
-+&\left\|
--\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
--R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
--R\tilde T\tilde\bfu\Grad v_e
--C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
--\tilde\rho\Grad v_c
--\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
--\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
-&\left.
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
--\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|-\Div\bftau
--R\tilde\rho\Div\bfv_m
--C_v\tilde\rho\tilde\bfu\Grad v_e
--R\tilde\rho\tilde\bfu\Grad v_e
--C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\alpha_c\norm{v_c}^2
-+\alpha_m\norm{\bfv_m}^2
-+\alpha_e\norm{v_e}^2
-+\alpha_s\norm{\mathbb{S}}^2
-+\alpha_f\norm{\bftau}^2
-\,,
-\end{aligned}
-\end{equation}
-where $\alpha_c$, $\alpha_m$, $\alpha_e$, $\alpha_s$, and $\alpha_f$ are scaling constants, usually one.
+% Then the graph norm would be defined by
+% \begin{equation}
+% \begin{aligned}
+% &\norm{\frac{1}{\mu}\mathbb{S}+\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
+% +&\norm{\frac{Pr}{C_p\mu}\bftau-\Grad v_e}^2\\
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e\right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -R\tilde\rho\tilde T\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|-\Div\bftau
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\alpha_c\norm{v_c}^2
+% +\alpha_m\norm{\bfv_m}^2
+% +\alpha_e\norm{v_e}^2
+% +\alpha_s\norm{\mathbb{S}}^2
+% +\alpha_f\norm{\bftau}^2
+% \,,
+% \end{aligned}
+% \end{equation}
+% where $\alpha_c$, $\alpha_m$, $\alpha_e$, $\alpha_s$, and $\alpha_f$ are scaling constants, usually one.
 
-Unfortunately, the graph norm develops unresolvable internal boundary layers in the optimal test functions leading to a non-robust
-local solve for steady convection-diffusion or Navier-Stokes,
-% is known to not be robust for steady convection-diffusion or Navier-Stokes,
-and we saw that non-robustness manifest when we tried to use this norm for transient simulations as well.
-For steady state DPG, we developed a robust test norm for convection-diffusion and drew analogies to create 
-a robust norm for Navier-Stokes.
-A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
-so we are on shakier footing developing a robust norm for transient Navier-Stokes.
-Nevertheless, we can make some guesses about how to modify the test norm in order to obtain some preliminary results.
-The graph norm has proven to be sufficient for simulations of pure convection. 
-So an obvious first guess might be to take the graph norm on the convective quantities and decouple the viscous terms.
-Indeed, this selection proved to be more robust for the test problems considered in the next section.
-This modified graph norm is then:
-\begin{equation}
-\begin{aligned}
-&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
-+&\norm{-\Grad v_e}^2\\
-+&\left\|
--\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
--R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
--R\tilde T\tilde\bfu\Grad v_e
--C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|
--\tilde\rho\Grad v_c
--\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
--\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
-&\left.
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
--\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|
--R\tilde\rho\Div\bfv_m
--C_v\tilde\rho\tilde\bfu\Grad v_e
--R\tilde\rho\tilde\bfu\Grad v_e
--C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\frac{1}{\mu}\norm{\mathbb{S}}^2
-+\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
-+\frac{Pr}{c_p\mu}\norm{\bftau}^2
-+\norm{\Div\bftau}^2\\
-+&\norm{v_c}^2
-+\norm{\bfv_m}^2
-+\norm{v_e}^2
-\,.
-\end{aligned}
-\end{equation}
-From a number of numerical tests, it appears that this norm is not completely robust, but it does seem to perform somewhat better
-than the standard graph norm.
+% Unfortunately, the graph norm develops unresolvable internal boundary layers in the optimal test functions leading to a non-robust
+% local solve for steady convection-diffusion or Navier-Stokes,
+% % is known to not be robust for steady convection-diffusion or Navier-Stokes,
+% and we saw that non-robustness manifest when we tried to use this norm for transient simulations as well.
+% For steady state DPG, we developed a robust test norm for convection-diffusion and drew analogies to create 
+% a robust norm for Navier-Stokes.
+% A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
+% so we are on shakier footing developing a robust norm for transient Navier-Stokes.
+% Nevertheless, we can make some guesses about how to modify the test norm in order to obtain some preliminary results.
+% The graph norm has proven to be sufficient for simulations of pure convection. 
+% So an obvious first guess might be to take the graph norm on the convective quantities and decouple the viscous terms.
+% Indeed, this selection proved to be more robust for the test problems considered in the next section.
+% This modified graph norm is then:
+% \begin{equation}
+% \begin{aligned}
+% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
+% +&\norm{-\Grad v_e}^2\\
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e\right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -R\tilde\rho\tilde T\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\frac{1}{\mu}\norm{\mathbb{S}}^2
+% +\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
+% +\frac{Pr}{c_p\mu}\norm{\bftau}^2
+% +\norm{\Div\bftau}^2\\
+% +&\norm{v_c}^2
+% +\norm{\bfv_m}^2
+% +\norm{v_e}^2
+% \,.
+% \end{aligned}
+% \end{equation}
+% From a number of numerical tests, it appears that this norm is not completely robust, but it does seem to perform somewhat better
+% than the standard graph norm.
 
 %   /$$   /$$                                             /$$                     /$$
 %  | $$$ | $$                                            |__/                    | $$
@@ -751,7 +928,7 @@ than the standard graph norm.
 %                                                                                    
 %                                                                                    
 % 
-\subsection{Numerical Results}
+\subsubsection{Numerical Results}
 We consider two 1D test problems as verification.
 The Sod shock tube and Noh implosion both have analytical solutions derived based on an inviscid flow assumption (Euler's equations).
 However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
@@ -764,7 +941,7 @@ We mentioned previously that the test norm we are using is not entirely robust, 
 could simulate with this preliminary norm.
 Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
 
-\subsubsection{Sod Shock Tube}
+\paragraph{Sod Shock Tube}
 The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 
 of compressible Navier-Stokes and Euler solvers.
 It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
@@ -863,67 +1040,102 @@ We see significant overshoots and undershoots as we start to pick up on the shoc
 \label{fig:sod}
 \end{figure}
 
-\subsubsection{Noh Implosion}
-The Noh implosion problem\cite{Noh1987} is another standard test for Euler solvers.
-The initial conditions are of an ideal gas with $\gamma=5/3$, zero pressure, uniform initial density of 1, 
-and uniform velocity toward the center of the domain.
-An infinitely strong shock propagates outward at a speed of 1/3.
-For 1D flow, the post shock density jumps to 4.
-We run this problem to a final time of $t=1.0$.
-The longer time nature of this problem recommended the use of multiple time slabs rather than a single solve like the previous problem.
-We run with four time slabs of thickness 0.25 each with 4 initial space-time elements.
-We run the first slab to 8 adaptive refinements and set the initial conditions on the next slab to the refined solution on the previous slab.
+% \paragraph{Noh Implosion}
+% The Noh implosion problem\cite{Noh1987} is another standard test for Euler solvers.
+% The initial conditions are of an ideal gas with $\gamma=5/3$, zero pressure, uniform initial density of 1, 
+% and uniform velocity toward the center of the domain.
+% An infinitely strong shock propagates outward at a speed of 1/3.
+% For 1D flow, the post shock density jumps to 4.
+% We run this problem to a final time of $t=1.0$.
+% The longer time nature of this problem recommended the use of multiple time slabs rather than a single solve like the previous problem.
+% We run with four time slabs of thickness 0.25 each with 4 initial space-time elements.
+% We run the first slab to 8 adaptive refinements and set the initial conditions on the next slab to the refined solution on the previous slab.
 
-Each of the slabs are put together into one long time solution in Figure~\ref{fig:noh}. 
-Again we plot the solution on the initial mesh, a halfway resolved mesh, and a final mesh after 8 refinement steps.
-We get some very odd behavior around the shock on the middle mesh, but this goes away by the final mesh.
-We see the same behavior with overshoots and undershoots that we saw with the Sod problem. 
+% Each of the slabs are put together into one long time solution in Figure~\ref{fig:noh}. 
+% Again we plot the solution on the initial mesh, a halfway resolved mesh, and a final mesh after 8 refinement steps.
+% We get some very odd behavior around the shock on the middle mesh, but this goes away by the final mesh.
+% We see the same behavior with overshoots and undershoots that we saw with the Sod problem. 
 
-\begin{figure}[p]
-\centering
-\begin{subfigure}[c]{0.3\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den1.pdf}
-\caption{Density on initial mesh}
-\label{fig:noh_den0}
-\end{subfigure}
-\begin{subfigure}[c]{0.3\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den5.pdf}
-\caption{After 4 refinements}
-\label{fig:noh_den4}
-\end{subfigure}
-\begin{subfigure}[c]{0.3\textwidth}
-\centering
-\includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den9.pdf}
-\caption{After 8 refinements}
-\label{fig:noh_den8}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh1.png}
-\caption{Density with initial mesh}
-\label{fig:noh_mesh0}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh5.png}
-\caption{Density with mesh after 4 refinements}
-\label{fig:noh_mesh4}
-\end{subfigure}
-\begin{subfigure}[c]{0.9\textwidth}
-\centering
-\includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh9.png}
-\caption{Density with mesh after 8 refinements}
-\label{fig:noh_mesh8}
-\end{subfigure}
-\caption{Noh problem with final time $t=1.0$}
-\label{fig:noh}
-\end{figure}
+% \begin{figure}[p]
+% \centering
+% \begin{subfigure}[c]{0.3\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den1.pdf}
+% \caption{Density on initial mesh}
+% \label{fig:noh_den0}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.3\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den5.pdf}
+% \caption{After 4 refinements}
+% \label{fig:noh_den4}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.3\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{SpaceTimeCNS/Noh1e-3/den9.pdf}
+% \caption{After 8 refinements}
+% \label{fig:noh_den8}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh1.png}
+% \caption{Density with initial mesh}
+% \label{fig:noh_mesh0}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh5.png}
+% \caption{Density with mesh after 4 refinements}
+% \label{fig:noh_mesh4}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.9\textwidth}
+% \centering
+% \includegraphics[width=0.65\textwidth]{SpaceTimeCNS/Noh1e-3/mesh9.png}
+% \caption{Density with mesh after 8 refinements}
+% \label{fig:noh_mesh8}
+% \end{subfigure}
+% \caption{Noh problem with final time $t=1.0$}
+% \label{fig:noh}
+% \end{figure}
 
-\bibliographystyle{plain}
+\section{Conclusions and Future Work}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}         ==>>  [#]
+%%   \cite[chap. 2]{key} ==>> [#, chap. 2]
+%%
+
+%% References with BibTeX database:
+
+\bibliographystyle{elsarticle-num}
 \bibliography{../Papers}
+
+%% Authors are advised to use a BibTeX database file for their reference list.
+%% The provided style file elsarticle-num.bst formats references in the required Procedia style
+
+%% For references without a BibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
 
 \end{document}
 
-
+%%
+%% End of file `proeng-template.tex'.
