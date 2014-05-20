@@ -416,15 +416,16 @@ Navier-Stokes\cite{NateDissertation,JesseDissertation}, and Maxwell's equations\
 %            | $$                                                                                  
 %            |__/  
 \section{Space-Time DPG}
-We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can hack it for 1D spatial problems by pretending the $y$-direction is time.
-Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
-Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
-Practically, this means that I had to hack the Camellia code in order to support these ``spatial traces''.
-We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
-but plan is to do this according to better software practices in the proposed work, since the current implementation is not very maintainable.
+Space-time discussion, HPC. 
+% We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can hack it for 1D spatial problems by pretending the $y$-direction is time.
+% Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
+% Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
+% Practically, this means that I had to hack the Camellia code in order to support these ``spatial traces''.
+% We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
+% but plan is to do this according to better software practices in the proposed work, since the current implementation is not very maintainable.
 
-All of the following problems (unless otherwise noted) are run with the graph norm which is
-simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
+% All of the following problems (unless otherwise noted) are run with the graph norm which is
+% simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
 
 
 %   /$$   /$$                       /$$    
@@ -659,6 +660,7 @@ where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 %                                                                                           
 %                                                                                           
 %              
+Due to page constraints, we omit many of the details of the derivation, but analogy to the space-time equation takes us most of the way.
 % \subsubsection{Derivation of Space-Time DPG Formulation}
 % We start with \eqref{eq:compressibleNSFirstOrder} and multiply by test functions $\mathbb{S}$ (symmetric tensor), $\bftau$, $v_c$, $\bfv_m$, $v_e$, 
 % then integrate by parts over each space-time element $K$:
@@ -929,23 +931,29 @@ where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
 %                                                                                    
 % 
 \subsubsection{Numerical Results}
-We consider two 1D test problems as verification.
-The Sod shock tube and Noh implosion both have analytical solutions derived based on an inviscid flow assumption (Euler's equations).
-However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
-artificial viscosity in order to select a unique solution.
-Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks.
-We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical
-viscosity: $\mu=10^{-5}$ for Sod and $\mu=10^{-3}$ for Noh.
-Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler.
-We mentioned previously that the test norm we are using is not entirely robust, and in fact these viscosity values were on the lower end of what we
-could simulate with this preliminary norm.
-Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
+% We consider two 1D test problems as verification.
+% The Sod shock tube has an analytical solution derived based on an inviscid flow assumption (Euler's equations).
+% However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
+% artificial viscosity in order to select a unique solution.
+% Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks.
+% We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical
+% viscosity: $\mu=10^{-5}$.
+% Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler.
+% We mentioned previously that the test norm we are using is not entirely robust, and in fact these viscosity values were on the lower end of what we
+% could simulate with this preliminary norm.
+% Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
 
 \paragraph{Sod Shock Tube}
 The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 
 of compressible Navier-Stokes and Euler solvers.
 It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
 all in one domain.
+The Sod shock tube has an analytical solution derived based on an inviscid flow assumption (Euler's equations).
+However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
+artificial viscosity in order to select a unique solution.
+Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks.
+We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical
+viscosity: $\mu=10^{-5}$.
 The domain of interest is a shock tube of length 1 with a material interface in the middle. The material on the left has initial conditions of 
 $(\rho_L,p_L,u_L)=(1,1,0)$ while the material on the right has $(\rho_R,p_R,u_R)=(0.125,0.1,0)$; both materials have $\gamma=1.4$. 
 The $t=0$ the interface between the materials is broken, 
@@ -957,6 +965,7 @@ In our case, we set $\hat t_c=\hat t_m=\hat t_e=0$ on the left and right boundar
 initial conditions on the $t=0$ boundary. 
 No boundary condition is required on the $t=0.2$ boundary since the equations are hyperbolic in time.
 We solve this with one continuous time slab starting with only 4 space-time elements.
+The field variables are represented with quadratics.
 
 The results are plotted in Figure~\ref{fig:sod} for three different refinement levels: the initial coarse mesh, 7 adaptive refinements, and 14 refinements.
 The coarsest mesh is obviously not sufficient to resolve the features of the flow, but it is at least somewhat representative of the exact solution.

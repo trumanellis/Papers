@@ -113,7 +113,8 @@
 % \pgfdeclareimage[height=1.5cm]{iceslogo}{logos/ICES-wordmark-teal.png}
 % \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
 
-\title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+% \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+\title[Space-Time DPG for Transient CFD]{Space-Time DPG: Designing a Method for \\Massively Parallel CFD}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
 {\oldfootnotesize Advisors: Leszek Demkowicz, Robert Moser}
@@ -125,7 +126,7 @@
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Proposal Defense]%{\pgfuseimage{iceslogo} }
+\date[ParCFD 2014]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -328,27 +329,27 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 \end{frame}
 
 
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Overview of DPG}
-\framesubtitle{DPG is the Most Stable Petrov-Galerkin Method}
-Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
-If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
-with constant $\gamma_h$,
-\[
-\sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
-\]
-then the Galerkin error satisfies the bound
-\[
-\norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
-\]
-Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
-\begin{block}{Energy Norm}
-If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
-Babu\v{s}ka's theorem
-implies that the minimum residual method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
-\end{block}
-\end{frame}
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{DPG is the Most Stable Petrov-Galerkin Method}
+% Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
+% If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
+% with constant $\gamma_h$,
+% \[
+% \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
+% \]
+% then the Galerkin error satisfies the bound
+% \[
+% \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
+% \]
+% Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
+% \begin{block}{Energy Norm}
+% If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
+% Babu\v{s}ka's theorem
+% implies that the minimum residual method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
+% \end{block}
+% \end{frame}
 
 
 % ------------------------------------------------------------
@@ -735,53 +736,52 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 \end{frame}
 
 
-%TODO: Fix test norm
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
-\vspace{-3ex}
-{
-\small
-\begin{align*}
-&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
-+&\left\|
--\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
--R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
--R\tilde T\tilde\bfu\Grad v_e
--C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|
--\tilde\rho\Grad v_c
--\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
--\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
-\right.\\
-&\left.
--\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
--\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
--\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\left\|
--R\tilde\rho\Div\bfv_m
--C_v\tilde\rho\tilde\bfu\Grad v_e
--R\tilde\rho\tilde\bfu\Grad v_e
--C_v\tilde\rho\frac{\partial v_e}{\partial t}
-\right\|^2\\
-+&\|\frac{1}{\mu}\mathbb{S}\|^2
-+\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
-+\|\frac{Pr}{C_p\mu}\bftau\|^2
-+\norm{\Div\bftau}^2\\
-+&\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
-\,.
-\end{align*}
-}
-\end{frame}
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
+% \vspace{-3ex}
+% {
+% \small
+% \begin{align*}
+% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% \right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -R\tilde\rho\tilde T\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\|\frac{1}{\mu}\mathbb{S}\|^2
+% +\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
+% +\|\frac{Pr}{C_p\mu}\bftau\|^2
+% +\norm{\Div\bftau}^2\\
+% +&\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
+% \,.
+% \end{align*}
+% }
+% \end{frame}
 
 
 %    /$$$$$$                  /$$                     
@@ -867,7 +867,7 @@ Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to
 % \end{frame}
 
 
-\section{Conclusions and Future Work}
+\section{Conclusions}
 \begin{frame}[t]
 \frametitle{Conclusions and Future Work}
 \framesubtitle{~~}Conclusions
