@@ -1,0 +1,639 @@
+diff --git a/LocalConservation/LocalConservation.tex b/LocalConservation/LocalConservation.tex
+index b4b188f..4635a37 100644
+--- a/LocalConservation/LocalConservation.tex
++++ b/LocalConservation/LocalConservation.tex
+@@ -213,8 +213,9 @@ equations with Lagrange multipliers explicitly enforcing mass conservation
+ element-wise. Our conservative formulation of DPG takes a similar approach and
+ both methods share a similar negative of transforming a minimization method to a
+ saddle point problem. In the interest of crediting Chang and Nelson's
+-restricted LSFEM, we call the following locally conservative DPG method the
+-restricted DPG method (RDPG).
++restricted LSFEM, we could call the following locally conservative DPG method the
++restricted DPG method, but we prefer to the term conservative DPG.
++Note that conservation is preserved with respect to fluxes rather than field variables as we explain later.
+ 
+ \subsection{DPG is a Minimum Residual Method}
+ Roberts \etal presents a brief history and derivation of DPG with optimal test functions in
+@@ -269,7 +270,7 @@ solve element-local and much more computationally tractable. Of course,
+ \eqnref{optimaltestproblem} still requires the inversion of the
+ infinite-dimensional Riesz map, but approximating $V$ by a finite
+ dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
+-``enriched space'') works well in practice.
++``enriched space'') works well in practice\cite{DPGOverview2}.
+ 
+ No assumptions have been made so far on the definition of the inner product on
+ $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
+@@ -284,7 +285,7 @@ finite elements $K$ such that
+ \[
+ \overline{\Omega} = \bigcup_K  \bar{K},\: \quad K \text { open},
+ \]
+-with corresponding {\em skeleton} $\Gamma_h$ and {\em interior
++with corresponding external boundary $\Gamma$, {\em skeleton} $\Gamma_h$ and {\em interior
+   skeleton} $\Gamma_h^0$,
+ \[
+ \Gamma_h := \bigcup_K \partial K\qquad \Gamma_h^0 := \Gamma_h - \Gamma.
+@@ -387,8 +388,8 @@ follow the methodology introduced by Heuer and Demkowicz in
+ \cite{DemkowiczHeuer}: the ultra-weak variational formulation for
+ convection-diffusion can be refactored as
+ \[
+-b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{\bftau,v}} =
+-\sum_{K\in \Oh}\LRs{\LRa{\hat t,v}_{\delta K}
++b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}} =
++\sum_{K\in \Oh}\LRs{\LRa{\hat t,v}_{\partial K}
+ +\LRa{\uh,\tau_n}_{\delta K} + \LRp{u,\div \bftau
+ -\bbeta\cdot\grad v}_{L^2(K)}
+ +\LRp{\bfsigma,\frac{1}{\epsilon} \bftau + \grad v}_{L^2(K)}},
+@@ -399,35 +400,40 @@ modulo application of boundary data.  If we choose specific
+ \div \bftau - \bbeta \cdot \grad v &= u,\\
+ \frac{1}{\epsilon} \bftau + \grad v &= \bfsigma,
+ \end{align*}
+-then evaluating $b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}$ at these
++then evaluating $b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}$ at these
+ specific test functions returns back $\norm{u}^2 + \norm{\bfsigma}^2$, the $L^2$
+ norm of our field variables.  Multiplying and dividing through by the test
+-norm $\norm{v}_V$, we have
++norm $\norm{\bfv}_V$, we have
+ \[
+ \norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2 =
+-b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}} =
+-\frac{b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}}{\norm{v}_V}\norm{v}_V
+-\leq \norm{u,\bfsigma,\uh,\fnh}_E\norm{v}_V,
++b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}} =
++\frac{b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}}{\norm{\bfv}_V}\norm{\bfv}_V
++\leq \norm{u,\bfsigma,\uh,\hat t}_E\norm{\bfv}_V,
+ \]
+ where
+ \[
+-\norm{u,\bfsigma,\uh,\fnh}_E = \sup_{v\in
+-V\setminus\LRc{0}}\frac{b\LRp{\LRp{u,\bfsigma,\uh,\fnh},\LRp{\bftau,v}}}{\norm{v}_V}
++\norm{u,\bfsigma,\uh,\hat t}_E = \sup_{v\in
++V\setminus\LRc{0}}\frac{b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}}{\norm{\bfv}_V}
+ \]
+-is the DPG energy norm.  If we can robustly bound the test norm $\norm{v}_V
++is the DPG energy norm.  If we can robustly bound the test norm $\norm{\bfv}_V
+ \lesssim \LRp{\norm{u}_{\L}^2+\norm{\bfsigma}^2_{\L}}^{1/2}$ (i.e. derive a
+ bound from above with a constant independent of $\epsilon$), then we can
+ divide through to get
+ \begin{equation}
+ \LRp{\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2}^{\frac{1}{2}} \lesssim
+-\norm{u,\bfsigma,\uh,\fnh}_E.
++\norm{(u,\bfsigma,\uh,\hat t)}_E.
+ \label{eq:robustBound}
+ \end{equation}
+-In other words, the energy norm in which DPG is optimal bounds independently
+-of $\epsilon$ the $L^2$ norm; as we drive our energy error down to zero, we
++% In other words, the energy norm in which DPG is optimal bounds independently
++% of $\epsilon$ the $L^2$ norm; as we drive our energy error down to zero, we
++% can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
++In other words, the energy norm in which DPG 
++% is optimal bounds independently of $\epsilon$ the $L^2$ norm; as 
++is optimal bounds the $L^2$ norm independently of epsilon.  So, as
++we drive our energy error down to zero, we
+ can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
+ 
+-We note that the construction of the test norm $\norm{v}_V$ for a robust DPG
++We note that the construction of the test norm $\norm{\bfv}_V$ for a robust DPG
+ method depends on two things: the test norm, as well as the adjoint equation.
+ In \cite{DemkowiczHeuer}, the standard problem with Dirichlet conditions
+ enforced over the entire boundary was considered; in
+@@ -443,11 +449,12 @@ Section~\secref{robustNorms}.
+ Having reviewed and laid the foundation for DPG methods, we can now formulate our conservative DPG scheme.  % added by Jesse
+ Let $\bs U_h:=U_h\times\bs S_h\times\hat U_h\times\hat F_h\subset L^2(\Omega_h)\times\bs
+ L^2(\Omega_h)\times H^{\frac{1}{2}}(\Gamma_h)\times H^{-\frac{1}{2}}(\Gamma_h)$
+-be a finite-dimensional subspace, and let $\bs u_h:=(u_h.\bfsigma_h,\hat
+-u_h\hat t_h)\in\bs U_h$ be the group variable. The element conservative DPG scheme is
++be a finite-dimensional subspace, and let 
++$\bs u_h:=(u_h,\bfsigma_h,\hat u_h,\hat t_h)\in\bs U_h$ 
++be the group variable. The element conservative DPG scheme is
+ derived from the Lagrangian:
+ \begin{equation}
+-L(\bs u_h,\lambda_k)=\frac{1}{2}\norm{R_V^{-1}(b(\bs
++L(\bs u_h,\lambda_K)=\frac{1}{2}\norm{R_V^{-1}(b(\bs
+ u_h,\cdot)-(f,\cdot))}^2_{\bs V}-\sum_K\lambda_K(b(\bs u_h,(1_K,\bs0))-l((1_K,\bs0)))\,,
+ \label{eq:lagrangian}
+ \end{equation}
+@@ -458,7 +465,7 @@ of equations:
+ \begin{equation}
+ \left\{
+ \begin{array}[c]{rll}
+-b(\bs u_h,T(\delta\bs u_h))-\sum_K\lambda_K b(\bs u_h,(1_K,\bs0))
++b(\bs u_h,T(\delta\bs u_h))-\sum_K\lambda_K b(\delta\bs u_h,(1_K,\bs0))
+ &=l(T(\delta\bs u_h)) & \forall\delta\bs u_h\in\bs U_h\\
+ b(\bs u_h,(1_K,\bs0)) &=l((1_K,\bs0)) & \forall K\,,
+ \end{array}
+@@ -468,7 +475,7 @@ b(\bs u_h,(1_K,\bs0)) &=l((1_K,\bs0)) & \forall K\,,
+ where $T:=R_V^{-1}B:\bs U_h\rightarrow\bs V$ is the same trial-to-test operator as in the original formulation.
+ 
+ Denote $T(\delta\bfu_h)=\LRp{\vdeltau,\taudeltau}\in
+-H^1(\Omega_h)\times\bfH(div,\Omega_h)$.
++H^1(\Omega_h)\times\bfH(\text{div},\Omega_h)$.
+ Then, putting \eqref{eq:conservativeSystem} into more concrete terms for
+ convection-diffusion, we get:
+ \begin{equation}
+@@ -506,7 +513,7 @@ where $\bfU,Q$ are Hilbert spaces, and $a,c,l,g$ denote the appropriate
+ bilinear and linear forms. Note that $a(\bfu,\bfw)=b(\bfu,T\bfw)=(T\bfu,T\bfw)_V$ in
+ the notation from the previous section.
+ 
+-Let function $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{t}$
++Let the function $\bfpsi$ denote the $\bfH(\text{div},\Omega)$ extension of flux $\hat{t}$
+ that realizes the minimum in the definition of the quotient (minimum energy
+ extension) norm.
+ The choice of norm for the Lagrange multipliers $\lambda_K$ is implied
+@@ -521,7 +528,9 @@ bound for form $c(p,\bfw)$ representing the constraint:
+ & \leq \sum_K  \lambda_K || \text{div} \bfpsi ||_{L^2(K)} \mu(K)^{1/2} \\[8pt]
+ & \leq (\sum_K \mu(K) \lambda_K^2)^{1/2} \: (\sum_K || \text{div} \bfpsi ||_{L^2(K)}^2 )^{1/2} \\[8pt]
+ & \leq \underbrace{\left(\sum_K \mu(K) \lambda_K^2\right)^{1/2}}_{=: || \bflambda ||} ||
+-\hat{t} ||_{H^{-1/2}(\Gamma_h)}\,,
++\hat{t} ||_{H^{-1/2}(\Gamma_h)}\\[8pt]
++& \leq \norm{\bflambda}\norm{\bfu}
++\,,
+ \end{array}
+ \end{equation}
+ where $\mu(K)$ stands for the area (measure) of element $K$.
+@@ -543,7 +552,7 @@ be
+ the continuous right inverse of the divergence operator constructed by
+ Costabel and McIntosh in \cite{CostabelMcIntosh}.
+ Let $\bfpsi_h$ denote the classical, lowest order Raviart-Thomas (RT) interpolant of
+-function
++the function
+ \begin{equation}
+ \bfpsi = R (\sum_K \lambda_K 1_K) \: .
+ \end{equation}
+@@ -560,7 +569,7 @@ Raviart-Thomas elements and continuity of operator $R$ imply the stability estim
+ \label{eq:stab}
+ \end{equation}
+ Above, $C$ is a generic, mesh independent constant incorporating constant from
+-the interpolation error estimate and continuity constant of $R$.
++the interpolation error estimate and the continuity constant of $R$.
+ Let $\hat{t}$ be the trace of $\bfpsi_h$. We have then,
+ \begin{equation}
+ \sup_{\hat{t} \in H^{-1/2}(\Gamma_h)} \frac{|  \sum_K \lambda_K \langle
+@@ -585,7 +594,7 @@ test functions. First of all, we characterize the ``kernel'' space:
+ \begin{equation}
+ \begin{array}{rl}
+ \bfU_0  := & \LRc{ \bfw \in \bfU \, : \, c(q,\bfw) = 0 \quad \forall q \in Q} \\[8pt]
+- = &\{ (u,\bfsig,\hat{u},\hat{t}) \, : \, \langle \hat{t},1_K \rangle = 0
++ = &\{ (u,\bfsig,\hat{u},\hat{t}) \, : \, \langle \hat{t},1_K \rangle_{\partial K} = 0
+  \quad \forall K \}\,.
+ \end{array}
+ \end{equation}
+@@ -605,11 +614,11 @@ $\bfw=\bfu$. The second equality is trivial, while the next one follows by defin
+ functions given through the trial-to-test operator $T$. The finally inequality
+ springs from the fact that
+ $\sup_{\bfv}\frac{|b(\bfu,\bfv)|}{||\bfv||}\geq\gamma||\bfu||$ and
+-$||T\bfu||_V=||R_V^{-1}B\bfu||_V=||B\bfu||_{V'}\geq\gamma||u||$.
++$||T\bfu||_V=||R_V^{-1}B\bfu||_V=||B\bfu||_{V'}\geq\gamma||\bfu||$.
+ 
+ With both discrete inf-sup constants in place, we have the standard result: the FE error
+ is bounded by the best approximation error in the constrained space. Notice that the exact Lagrange multipliers
+-are zero, so the best approximation error involves only solution $(u,\bfsig,\hat{u},\hat{t})$.
++are zero, so the best approximation error involves only the solution $(u,\bfsig,\hat{u},\hat{t})$.
+ 
+ 
+ \subsubsection{Robustness Analysis}
+@@ -622,21 +631,21 @@ energy error, \eqref{eq:robustBound}. With robust test norms, we have
+ \begin{array}{ll}
+    \LRp{|| u - u_h ||^2+ || \bfsig - \bfsig_h ||^2}^{\frac{1}{2}}
+ & \lesssim || (u - u_h, \bfsig - \bfsig_h, \hat{u} - \hat{u}_h, \hat{t} - \hat{t}_h ||_E \\[8pt]
+-&= \inf_{(w_h,\bfvarsigma_h,\hat{w},\hat{r}_h)}
++&= \inf_{(w_h,\bfvarsigma_h,\hat{w}_h,\hat{r}_h)}
+ || (u - w_h, \bfsig - \bfvarsigma_h, \hat{u} - \hat{w}_h, \hat{t} - \hat{r}_h ||_E\,.
+ \end{array}
+ \end{equation}
+-The last equality follows from the fact that DPG method delivers the best approximation
++The last equality follows from the fact that the DPG method delivers the best approximation
+ error in the energy norm (minimizes the residual). This is no longer true for the
+-restricted version. So, can we claim robustness in the sense of the inequality above
+-for the restricted version as well?
++conservative version. So, can we claim robustness in the sense of the inequality above
++for the conservative version as well?
+ 
+ One possible way to attack the problem is to switch to the energy norm in the Brezzi stability
+ analysis. Dealing with the ``inf-sup in kernel'' condition is simple. Upon replacing
+ the original norm of solution $\bfu$ with the energy norm, both constant $\gamma$ and continuity
+ constant become unity. In order to investigate the robustness of inf-sup  constant $\beta$,
+-we need to realize first what the energy norm of flux $\hat{t}$ is. Given an element $K$,
+-we solve for the optimal test functions corresponding to flux $\hat{t}$,
++we need to realize first what the energy norm of the flux $\hat{t}$ is. Given an element $K$,
++we solve for the optimal test functions corresponding to the flux $\hat{t}$,
+ \begin{equation}
+ \left\{
+ \begin{array}{ll}
+@@ -656,16 +665,16 @@ the bilinear form representing the constraint are independent of viscosity $\eps
+ 
+ Let us start with the inf-sup condition,
+ \begin{equation}
+-\sup_{\hat{t}} \frac{| \sum_K \lambda_K \langle \hat{t},1_K \rangle |}{|| \hat{t} ||_E}
++\sup_{\hat{t}} \frac{| \sum_K \lambda_K \langle \hat{t},1_K \rangle_{\partial K} |}{|| \hat{t} ||_E}
+ \geq  \beta \LRp{\sum_K \mu(K) \lambda_K^2}^{1/2}\,.
+ \end{equation}
+ As in the previous analysis, we select for $\hat{t}$ the trace of Raviart-Thomas
+ interpolant $\bfpsi_h$ of $\bfpsi = R (\sum_K \lambda_K 1_K)$ where $R$ is the right-inverse
+ of the divergence operator constructed by Costabel and McIntosh. The only change compared
+-with the previous analysis, is the evaluation of norm of $\hat{t}_h$. For this, we need
++with the previous analysis, is the evaluation of the norm of $\hat{t}_h$. For this, we need
+ to solve the local problems:
+ \begin{align}
+-((v,\bftau), (\delta v, \delta \bftau))_V &= \langle \hat{t}, \delta v \rangle_{\ptl K}
++((v_K,\bftau_K), (\delta v, \delta \bftau))_V &= \langle \hat{t}, \delta v \rangle_{\ptl K}
+ = \int_K \text{div} \bfpsi_h \, \delta v = \int_K \text{div} \bfpsi \, \delta v
+ \nonumber\\
+ &= \int_K \lambda_K \delta v
+@@ -675,28 +684,28 @@ H^1(K)\,\forall\delta\bftau\in\bfH(\text{div},K)\,.
+ \end{align}
+ We need then an upper bound of the energy norm of $(v_h,\bftau_h)$:
+ $$
+-\LRp{\sum_K || (v,\bftau) ||_V^2}^{1/2}\,.
++\LRp{\sum_K || (v_K,\bftau_K) ||_V^2}^{1/2}\,.
+ $$
+-Substituting $(v,\bftau)$ for $(\delta v,\delta\bftau)$ in~\eqref{eq:local}, we get,
++Substituting $(v_K,\bftau_K)$ for $(\delta v,\delta\bftau)$ in~\eqref{eq:local}, we get,
+ \begin{equation}
+-|| (v,\bftau) ||_V^2 = \lambda_K (1_K, v_K)\,.
++|| (v_K,\bftau_K) ||_V^2 = \lambda_K (1_K, v_K)_K\,.
+ \end{equation}
+ If we have a robust stability estimate:
+ \begin{equation}
+-(1_K, v_K) \leq C \mu(K)^{1/2} || (v,\bftau) ||_K
++|(1_K, v_K)_K| \leq C \mu(K)^{1/2} || (v_K,\bftau_K) ||_V
+ \label{eq:robustEst1}
+ \end{equation}
+ (i.e. constant $C$ is independent of $\epsilon$), then
+ \begin{equation}
+-||  (v,\bftau) ||_V \leq C \mu(K)^{1/2} | \lambda_K |
++||  (v_K,\bftau_K) ||_V \leq C \mu(K)^{1/2} | \lambda_K |
+ \end{equation}
+ and, eventually as needed,
+ \begin{equation}
+-\sum_K || (v,\bftau) ||_V^2  \leq C^2 \sum_K \mu(K) \lambda_K^2\,,
++\sum_K || (v_K,\bftau_K) ||_V^2  \leq C^2 \sum_K \mu(K) \lambda_K^2\,,
+ \end{equation}
+ which leads to the robust estimate of inf-sup constant $\beta$. For example, it is sufficient if
+ \begin{equation}
+-|| v ||_{L^2(K)} \leq || (v,\bftau) ||_V \, .
++|| v ||_{L^2(K)} \leq || (v_K,\bftau_K) ||_V \, .
+ \label{eq:robust_est1}
+ \end{equation}
+ Notice that the stability analysis with the energy norm was, in a sense, easier than
+@@ -706,7 +715,7 @@ and it coincides with the divergence of $\bfpsi$.
+ 
+ We arrive at a similar situation in the continuity estimate of
+ $$
+-\sum_K \lambda_K \langle \hat{t}, 1_K \rangle\,.
++\sum_K \lambda_K \langle \hat{t}, 1_K \rangle_{\partial K}\,.
+ $$
+ Testing with $(1_K,{\bf 0})$ in the local problem~\eqref{eq:local_problem}, we obtain,
+ \begin{equation}
+@@ -722,7 +731,9 @@ then
+ \begin{equation}
+ | \sum_K \lambda_K \langle \hat{t}, 1_K \rangle | \leq C (\sum_K \mu(K) \lambda_K^2)^{1/2}
+ \, (\sum_K || (v,\bftau) ||_V^2)^{1/2}
+-= C (\sum_K \mu(K) \lambda_K^2)^{1/2}  || \hat{t} ||_E\,,
++= C (\sum_K \mu(K) \lambda_K^2)^{1/2}  || \hat{t} ||_E
++\leq C\norm{\bflambda}\norm{\bfu}_E
++\,,
+ \end{equation}
+ as needed.
+ 
+@@ -743,7 +754,7 @@ DPG method.
+ \label{sec:robustNorms}
+ The optimal test functions are determined by solving local problems determined
+ by the choice of test norm. There are several options to consider.
+-The graph norm \cite{DPGOverview} is one of the most natural norms to consider
++The graph norm \cite{DPGOverview2} is one of the most natural norms to consider
+ as it is derived directly from the adjoint of the problem supplemented with
+ (possibly scaled) $L^2$ field terms to upgrade it from a semi-norm.
+ Chan \etal\cite{ChanHeuerThanhDemkowicz2012} derived a more robust alternative
+@@ -754,7 +765,7 @@ for more details and motivation, see \cite{JesseDissertation}.
+ \begin{align}
+ \norm{\LRp{v,\btau}}_{V,K}^2 &\coloneqq
+ \min\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}\norm{\btau}_K^2,
+-+ \norm{\div \btau - \bbeta\cdot\Grad v}_K^2 \\
+++ \norm{\div \btau - \bbeta\cdot\Grad v}_K^2 \nonumber\\
+ &+\norm{\bbeta\cdot \Grad v}_K^2
+ + \epsilon\norm{\Grad v}_K^2
+ + \norm{v}^2_K\,,
+@@ -768,7 +779,7 @@ Find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
+ \begin{align}
+ \min&\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}(\taudeltau,\delta\btau)_K
+ +(\nabla\cdot\taudeltau-\bbeta\cdot\nabla
+-v,\nabla\cdot\delta\btau-\bbeta\cdot\nabla v)_K
++\vdeltau,\nabla\cdot\delta\btau-\bbeta\cdot\nabla\delta v)_K
+ +(\bbeta\cdot\nabla\vdeltau,\bbeta\cdot\nabla \delta v)_K\nonumber\\
+ &+\epsilon(\nabla\vdeltau,\nabla \delta v)_K
+ +\alpha(\vdeltau,\delta v)_K
+@@ -778,11 +789,9 @@ v,\nabla\cdot\delta\btau-\bbeta\cdot\nabla v)_K
+ \end{align}
+ where typically $\alpha=1$.
+ 
+-With a locally conservative formulation, we can pass in local problem
+-\eqref{eq:localSolve} with $\alpha\rightarrow0$. The fact that the test
+-functions will be determined then up to a constant does not matter, for
+-$\delta\hat t\in\hat F_h^e$, equation
+-\eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.
++With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}. 
++The fact that the test functions will be determined then up to a constant does not matter, for
++$\hat t$ in equation \eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.
+ Mathematically, we are dealing with equivalence classes of functions, but in
+ order to obtain a single function that we can deal with numerically, we
+ replace the alpha term with a zero mean scaling condition to obtain the new
+@@ -802,8 +811,9 @@ number of the actual solve. In practice, we use $\frac{1}{\mu(K)^2}$
+ since $\int_K\vdeltau$ and $\int_K\delta v$ both scale like
+ $\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient for the analysis in the
+ next section.
+-It is convenient to be able to take $\alpha\rightarrow0$ as we will see in
++It is convenient to be able to take $\alpha=0$ as we will see in
+ some later numerical experiments.
++We've noticed that this particularly helps with conditioning of the local problem as the mesh size decreases.
+ 
+ \subsubsection{Verification of Robust Stability Estimate}
+ In the robustness analysis in Section~\ref{sec:robustnessAnalysis}, we argued
+@@ -817,7 +827,7 @@ and
+ | ((v,\bftau),(1_K,{\bf 0}))_V | \leq C \mu(K)^{1/2} \, || (v,\bftau) ||_V\,.
+ \tag{\ref{eq:robust_est2} revisted}
+ \end{equation}
+-then the restricted DPG method is robust.
++then the conservative DPG method is robust.
+ 
+ We now proceed to show that the robust norms we are using satisfy this
+ requirement.
+@@ -833,12 +843,12 @@ product on the right hand side. By Cauchy-Schwarz
+ where $\norm{(v,\btau)}_K$ is the norm derived from the inner product.
+ Condition~\eqref{eq:robust_est2} comes out the same since
+ $$|(
+-(v,\btau),(1_K,{\bf0}))| =
++(v,\btau),(1_K,{\bf0}))| \leq
+ \sum_K|(1_K,v_K)|\leq\sum_K\mu(K)^{1/2}\norm{(v,\btau)}_K
+ $$
+ element-wise.
+ 
+-Now we wish the perform the same analysis for the modified inner product in
++Now we need to perform the same analysis for the modified inner product in
+ \eqref{eq:localSolveMod}. In this case,
+ condition~\eqref{eq:robustEst1} follows even more naturally as
+ \begin{equation}
+@@ -865,7 +875,7 @@ The inviscid Burger's equation is
+ Define the space-time gradient: $\Grad_{xt}=\LRp{\frac{\partial}{\partial
+ x},\frac{\partial}{\partial t}}^T$. We can now rewrite this as
+ \[
+-\Grad_{xt}\cdot\vecttwo{u^2/2}{u}=0\,.
++\Grad_{xt}\cdot\vecttwo{u^2/2}{u}=f\,.
+ \]
+ Multiplying by a test function $v$, and integrating by parts:
+ \[
+@@ -938,8 +948,8 @@ pseudo-color plots, blue corresponds to $0$ and red to $1$ with a linear
+ scaling in between. Also, all convection-diffusion plots are of the field variable $u$.
+ Inviscid Burgers' and Stokes results will be dealt with individually.
+ 
+-\subsubsection{Erickson-Johnson Model Problem}
+-The Erickson-Johnson problem is one of the few convection-diffusion problems
++\subsubsection{Eriksson-Johnson Model Problem}
++The Eriksson-Johnson problem is one of the few convection-diffusion problems
+ with a known analytical solution. Take
+ $\bbeta=(1,0)^T$ and boundary conditions $\hat t=\bbeta\cdot\mathbf{n} u_0$ when
+ $\beta_n\le0$, where $u_0$ is the trace of the exact solution, and $\hat u=0$
+@@ -959,21 +969,21 @@ shown in Figure \ref{fig:erickson}.
+ 
+ \begin{figure}[p]
+ \centering
+-\includegraphics[width=0.6\textwidth]{figs/Erickson/exact.png}
++\includegraphics[width=0.5\textwidth]{figs/Erickson/exact.png}
+ \caption{Erickson-Johnson exact solution}
+ \label{fig:erickson}
+ \end{figure}
+ 
+ \begin{figure}[p]
+ \centering
+-\includegraphics[width=0.8\textwidth]{figs/Erickson/modifiedError.pdf}
++\includegraphics[width=0.7\textwidth]{figs/Erickson/modifiedError.pdf}
+ \caption{Error in Erickson-Johnson solutions}
+ \label{fig:ericksonError}
+ \end{figure}
+ 
+ \begin{figure}[h!]
+ \centering
+-\includegraphics[width=0.8\textwidth]{figs/Erickson/modifiedFlux.pdf}
++\includegraphics[width=0.7\textwidth]{figs/Erickson/modifiedFlux.pdf}
+ \caption{Flux imbalance in Erickson-Johnson solutions}
+ \label{ericksonFlux}
+ \end{figure}
+@@ -1007,7 +1017,7 @@ of boundary edges to 1 at corners. We don't enforce an outflow boundary.
+ 
+ \begin{figure}[p]
+ \centering
+-\includegraphics[width=0.8\textwidth]{figs/Vortex/modifiedFlux.pdf}
++\includegraphics[width=0.7\textwidth]{figs/Vortex/modifiedFlux.pdf}
+ \caption{Flux imbalance in vortex solutions}
+ \label{fig:vortex_flux}
+ \end{figure}
+@@ -1040,7 +1050,7 @@ scaled to  $[-1.110,0.889]$.
+ 
+ \begin{figure}[p]
+ \centering
+-\includegraphics[width=0.8\textwidth]{figs/Discontinuous/modifiedFlux.pdf}
++\includegraphics[width=0.7\textwidth]{figs/Discontinuous/modifiedFlux.pdf}
+ \caption{Flux imbalance in discontinuous source solutions}
+ \label{fig:discontinuous_flux}
+ \end{figure}
+@@ -1071,7 +1081,7 @@ hyperbolic equation, there is no need to set a boundary condition on the top.
+ 
+ \begin{figure}[p]
+ \centering
+-\includegraphics[width=0.8\textwidth]{figs/Burgers/graphFlux.pdf}
++\includegraphics[width=0.7\textwidth]{figs/Burgers/graphFlux.pdf}
+ \caption{Flux imbalance in Burgers' solutions}
+ \label{fig:burgers_flux}
+ \end{figure}
+@@ -1079,7 +1089,7 @@ hyperbolic equation, there is no need to set a boundary condition on the top.
+ \subsubsection{Stokes Flow Around a Cylinder}\label{sec:stokesCylinder}
+ This is a common problem used to stress-test local conservation properties of
+ least squares finite element methods. Since DPG can be viewed as a generalized
+-least squares methods\cite{DPGOverview}, we might expect it to struggle with
++least squares methods\cite{DPGOverview2}, we might expect it to struggle with
+ this problem as well. The problem domain is detailed in
+ Figure~\ref{fig:stokesCylinderDomain} with inlet and outlet velocity profiles
+ \[
+@@ -1089,7 +1099,7 @@ and zero flow on the cylinder and at the top and bottom walls. We use $\mu=$
+ with both Stokes problems and set velocity boundary conditions on $\hat\bfu$.
+ 
+ Bochev \etal~\cite{Bochev2010} run this test with both $r=0.6$ and $r=0.9$; we
+-repeat the same experiments with standard and restricted DPG methods
++repeat the same experiments with standard and conservative DPG methods
+ starting from the very coarse meshes shown in Figure~\ref{fig:stokesMesh}
+ while adaptively refining toward a resolved solution. The extreme pressure
+ gradient in the $r=0.9$ case obviously makes local conservation more
+@@ -1137,13 +1147,13 @@ where $S$ is some vertical mesh line.
+ 
+ \begin{figure}[p]
+ \centering
+-\begin{subfigure}[t]{0.6\textwidth}
++\begin{subfigure}[t]{0.5\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/mesh6_0.png}
+ \caption{Mesh for $r=0.6$}
+ \label{fig:stokesMesh6}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.6\textwidth}
++\begin{subfigure}[t]{0.5\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/mesh9_0.png}
+ \caption{Mesh for $r=0.9$}
+@@ -1209,12 +1219,12 @@ where $S$ is some vertical mesh line.
+ 
+ \begin{figure}[p]
+ \centering
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss6_NC.pdf}
+ \caption{Nonconservative}
+ \label{fig:stokesCylinder6MassLossNC}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss6_C.pdf}
+ \caption{Conservative}
+ \label{fig:stokesCylinder6MassLossC}
+@@ -1225,12 +1235,12 @@ where $S$ is some vertical mesh line.
+ 
+ \begin{figure}[p]
+ \centering
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss9_NC.pdf}
+ \caption{Nonconservative}
+ \label{fig:stokesCylinder9MassLossNC}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesCylinder/MassLoss9_C.pdf}
+ \caption{Conservative}
+ \label{fig:stokesCylinder9MassLossC}
+@@ -1257,7 +1267,7 @@ test functions.
+ \begin{figure}[!h]
+ \centering
+ \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.3cm,y=1.3cm]
+-\clip(-0.5,-0.3) rectangle (10.67,5);
++\clip(-0.5,-0.3) rectangle (10.67,2);
+ \draw [line width=1.0pt] (0,0.5)-- (2,0.5);
+ \draw [line width=1.0pt] (2,0.5)-- (2,0);
+ \draw [line width=1.0pt] (10,0)-- (2,0);
+@@ -1279,23 +1289,23 @@ test functions.
+ 
+ \begin{figure}[p]
+ \centering
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_NC0.png}
+ \caption{Nonconservative on initial mesh}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_C0.png}
+ \caption{Conservative on initial mesh}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_NC8.png}
+ \caption{Nonconservative after 8 refinement steps}
+ \label{fig:stokesStepNC}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \centering
+ \includegraphics[width=\textwidth]{figs/StokesStep/Quartic_C8.png}
+ \caption{Conservative after 8 refinement steps}
+@@ -1307,12 +1317,12 @@ test functions.
+ 
+ \begin{figure}[p]
+ \centering
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesStep/MassLoss_NC.pdf}
+ \caption{Nonconservative}
+ \label{fig:stokesStepMassLossNC}
+ \end{subfigure}
+-\begin{subfigure}[t]{0.8\textwidth}
++\begin{subfigure}[t]{0.7\textwidth}
+ \includegraphics[width=\textwidth]{figs/StokesStep/MassLoss_C.pdf}
+ \caption{Conservative}
+ \label{fig:stokesStepMassLossC}
+@@ -1325,7 +1335,7 @@ test functions.
+ \subsubsection{Convection-Diffusion Results}
+ % Solution quality
+ The general trend we observe from the results is that the solution quality
+-of the standard and restricted formulations is nearly identical once
++of the standard and conservative formulations is nearly identical once
+ sufficiently resolved.
+ 
+ % Overshoots/undershoots
+@@ -1336,7 +1346,7 @@ sufficiently resolved.
+ % would be negligible, but for the inner layer, in which $\epsilon=10^{-6}$, we
+ % get overshoots and undershoots along the separation line. For the
+ % standard formulation, the solution range for $u$ was $[-0.392,1.342]$,
+-% while the restricted solution range was $[-0.389,1.378]$. This difference is
++% while the conservative solution range was $[-0.389,1.378]$. This difference is
+ % easily accounted for by the differences in refinement patterns between the two
+ % methods.
+ 
+@@ -1344,33 +1354,33 @@ sufficiently resolved.
+ It is clear when comparing the refinement patterns that the two methods appear
+ to calculate slightly different error representation functions (which
+ determine which elements to adaptively refine). Standard DPG minimizes the
+-error in the energy norm, but the Lagrange multipliers in the restricted
++error in the energy norm, but the Lagrange multipliers in the conservative
+ formulation shift the solution slightly, so we should see somewhat higher
+ error and different elements will get chosen for refinement. The choice of
+ test norm also plays into this calculation of the error representation
+-function. As discussed earlier, the restricted formulation allows us to
++function. As discussed earlier, the conservative formulation allows us to
+ throw away the $L^2$ term on $v$. The inclusion of this term required certain
+ assumptions on $\bbeta$ \cite{ChanHeuerThanhDemkowicz2012} that break down for
+ the vortex problem, where $\snorm{\bbeta}\rightarrow 0$ in the center of the domain. 
+ Here, we see the standard method needlessly refines
+-in the center of the domain where the solution is constant. The restricted
++in the center of the domain where the solution is constant. The conservative
+ scheme is more discerning about refinements and focuses them where
+ solution features are changing. In general, though, both methods appear to
+ follow very similar refinement patterns.
+ 
+ % Mass conservation
+-It should not come as a surprise that the standard and restricted
+-solutions match each other so closely. The restricted formulation
++It should not come as a surprise that the standard and conservative
++solutions match each other so closely. The conservative formulation
+ enforces local conservation more strictly, but if we examine the flux
+ imbalance plots, the standard DPG formulation is nearly conservative on its
+ own -- and appears to become more conservative with refinement. The flux
+-imbalance of the restricted methods appears to bounce around close to the
++imbalance of the conservative methods appears to bounce around close to the
+ machine epsilon (plus a few orders of magnitude). The level of enforcement
+ appears to creep up with more degrees of freedom, indicating possible
+ accruement of numerical error.
+ 
+ \subsubsection{Burgers' Results}
+-Standard and restricted DPG perform nearly identically for the
++Standard and conservative DPG perform nearly identically for the
+ inviscid Burgers' problem. It is obvious that the Lax-Wendroff condition of
+ local conservation is a sufficient, but not necessary condition for numerical
+ solutions to hyperbolic conservation laws. We see the same behavior with the
+@@ -1389,7 +1399,7 @@ meshes. It seems that the error in approximating the singularity outweighs the
+ error of missed mass conservation. If we focus refinements at the singularity,
+ the error eventually drops far enough for the method to become nearly
+ conservative.
+-The small amount of mass loss for the restricted method is clearly due to
++The small amount of mass loss for the conservative method is clearly due to
+ accumulation of floating point error.
+ 
+ The most significant benefit of enforcing local conservation for these
+@@ -1415,7 +1425,7 @@ problems considered, standard DPG is close to conservative and becomes more so
+ with refinements. For the Stokes problems, standard DPG suffered similar mass
+ loss as standard least squares on coarse meshes, but made up the lost mass with further
+ resolution. For problems where local conservation was stressed,
+-restricted DPG was able to deliver reasonable solutions with much less
++conservative DPG was able to deliver reasonable solutions with much less
+ resolution than standard DPG.
+ Probably the most encouraging result of these experiments is
+ that enforcing local conservation did not change the nature of the solutions
