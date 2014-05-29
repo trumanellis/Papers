@@ -1,7 +1,6 @@
 \documentclass[letterpaper]{article}
-%TODO: check for periods after equations
-%TODO: bold face proper variables
-%TODO: Make sure titles have consistent case
+%TODO: finally -> final
+%TODO: Notes about conservation
 %TODO: Make sure figures work in gray-scale
 \usepackage[margin=1.0in]{geometry}
 \usepackage{authblk}
@@ -218,7 +217,9 @@ saddle point problem. In the interest of crediting Chang and Nelson's
 \red{
 restricted LSFEM, we could call the following locally conservative DPG method the
 restricted DPG method, but we prefer to the term conservative DPG.
-Note that conservation is preserved with respect to fluxes rather than field variables as we explain later.
+% Note that conservation is preserved with respect to fluxes rather than field variables as we explain later.
+It is worth mentioning that enforcing element conservation is possible within more
+standard DG schemes, e.g. see the first two discretization schemes presented in \cite{AyusoMarini}.
 }
 
 \subsection{DPG is a Minimum Residual Method}
@@ -270,11 +271,18 @@ $v_{\delta u_h}\in V$ that solve the auxiliary problem
 \end{equation}
 Using a continuous test basis would result in a global solve for every optimal
 test function. Therefore DPG uses a discontinuous test basis which makes each
-solve element-local and much more computationally tractable. Of course,
-\eqnref{optimaltestproblem} still requires the inversion of the
-infinite-dimensional Riesz map, but approximating $V$ by a finite
-dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
-``enriched space'') works well in practice\red{\cite{DPGOverview2}}.
+solve element-local and much more computationally tractable. 
+% Of course, \eqnref{optimaltestproblem} still requires the inversion of the
+% infinite-dimensional Riesz map, but approximating $V$ by a finite
+% dimensional space, $V_h$, which is of a higher polynomial degree than $U_h$ (hence
+% ``enriched space'') works well in practice\red{\cite{DPGOverview2}}.
+\red{
+Of course, even on the element level, \eqnref{optimaltestproblem} still requires the inversion of the infinite-dimensional 
+Riesz map. In practice, the inversion is approximated using standard Galerkin and an ``enriched test
+space''. The effect of approximating the optimal test functions has been analyzed in \cite{practicalDPG}.
+In this contribution, we assume that error resulting from the approximation of test functions
+is of higher order and can be neglected.
+}
 
 No assumptions have been made so far on the definition of the inner product on
 $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
@@ -441,7 +449,7 @@ In other words, the energy norm in which DPG
 is optimal bounds the $L^2$ norm independently of epsilon.  So, as
 we drive our energy error down to zero, we
 }
-can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
+can expect that the $L^2$ error will also decrease \red{uniformly in} $\epsilon$.
 
 We note that the construction of the test norm \red{$\norm{\bfv}_V$} for a robust DPG
 method depends on two things: the test norm, as well as the adjoint equation.
@@ -457,6 +465,23 @@ Section~\secref{robustNorms}.
 
 
 Having reviewed and laid the foundation for DPG methods, we can now formulate our conservative DPG scheme.  % added by Jesse
+\textcolor{red}{
+A numerical scheme for a conservation law is said to be {\em element conservative}
+if the flux integrals over the element boundary are balanced with the volume integral
+of the source,
+$$
+\int_{\ptl K} \hat{t} = \int_K f
+$$
+In context of the DPG method, this translates in a simple condition that test function
+$(1_K,\bs0)$ should belong to the element test space where $1_K$ denotes the element
+indicator function, i.e. $(1_K , \bs0)$ is the test function in which $v = 1$ on element $K$
+and $0$ elsewhere and $\bftau = \bs0$ everywhere. We note that this property is nowhere
+guaranteed for the space of optimal test functions. The idea proposed by Moro \etal\cite{MoroNguyenPeraire11}
+is based on replacing the (unconstrained) DPG  minimum residual formulation with
+a constrained minimization where the constraint corresponds to enforcing
+the element conservation.}
+% \red{Element conservation is defined such that the surface integral of fluxes is balanced by the volume integral of the source terms element by element.}
+% \red{Element conservation is defined such that the balance of fluxes and source terms is satisfied: $\int_{\partial K}\hat t=\int_K f$.}
 Let $\bs U_h:=U_h\times\bs S_h\times\hat U_h\times\hat F_h\subset L^2(\Omega_h)\times\bs
 L^2(\Omega_h)\times H^{\frac{1}{2}}(\Gamma_h)\times H^{-\frac{1}{2}}(\Gamma_h)$
 be a finite-dimensional subspace, and let 
@@ -468,11 +493,11 @@ derived from the Lagrangian:
 \red{
 \begin{equation}
 L(\bs u_h,\lambda_K)=\frac{1}{2}\norm{R_V^{-1}(b(\bs
-u_h,\cdot)-(f,\cdot))}^2_{\bs V}-\sum_K\lambda_K(b(\bs u_h,(1_K,\bs0))-l((1_K,\bs0)))\,,
+u_h,\cdot)-(f,\cdot))}^2_{\bs V}-\sum_K\lambda_K(b(\bs u_h,(1_K,\bs0))-l((1_K,\bs0)))\,.
 \label{eq:lagrangian}
 \end{equation}
 }
-where $(1_K,\bs0)$ is the test function in which $v=1$ on element $K$ and 0 elsewhere and $\btau=\bs0$ everywhere.
+% where $(1_K,\bs0)$ is the test function in which $v=1$ on element $K$ and 0 elsewhere and $\btau=\bs0$ everywhere.
 
 Taking the G\^ateaux derivatives as before, we arrive at the following system
 of equations:
@@ -770,11 +795,28 @@ If we have a robust estimate,
 then
 \red{
 \begin{equation}
-| \sum_K \lambda_K \langle \hat{t}, 1_K \rangle | \leq C (\sum_K \mu(K) \lambda_K^2)^{1/2}
-\, (\sum_K || (v,\bftau) ||_V^2)^{1/2}
-= C (\sum_K \mu(K) \lambda_K^2)^{1/2}  || \hat{t} ||_E
-\leq C\norm{\bflambda}\norm{\bfu}_E
-\,,
+\begin{array}{lll}
+\vert  \sum_K \lambda_K \langle \hat{t}, 1_K \rangle  \vert 
+& = \vert  \sum_K \mu^{1/2}(K) \lambda_K \, \mu^{-1/2}(K) \langle \hat{t}, 1_K \rangle  \vert \\[8pt]
+& \leq \left( \sum_K \mu(K) \lambda_K^2 \right)^{1/2}\, 
+\left( \sum_K \frac{1}{\mu(K)} \vert \langle \hat{t},1_K \rangle \vert^2 \right)^{1/2}
+& \text{(discrete Cauchy-Schwartz)} \\[8pt]
+& \leq \left( \sum_K \mu(K) \lambda_K^2 \right)^{1/2}\, 
+\left( \sum_K \frac{1}{\mu(K)} \vert ((v_k,\bftau_K),(1_K,0))_V \vert^2 \right)^{1/2}
+& \text{(\ref{eq:local_problem})} \\[8pt]
+& \leq C \left( \sum_K \mu(K) \lambda_K^2 \right)^{1/2}\, 
+\left( \sum_K  \Vert (v_k,\bftau_K) \Vert^2 \right)^{1/2}
+& \text{(assumption (\ref{eq:robust_est2}))} \\[8pt]
+& = C  \left( \sum_K \mu(K) \lambda_K^2 \right)^{1/2}\, 
+ \Vert \hat{t} \Vert_E
+& \text{(definition of energy norm)} \\[8pt]
+& \le C \Vert \bflambda \Vert \, \Vert \bfu \Vert_E 
+\end{array}
+% | \sum_K \lambda_K \langle \hat{t}, 1_K \rangle | \leq C (\sum_K \mu(K) \lambda_K^2)^{1/2}
+% \, (\sum_K || (v,\bftau) ||_V^2)^{1/2}
+% = C (\sum_K \mu(K) \lambda_K^2)^{1/2}  || \hat{t} ||_E
+% \leq C\norm{\bflambda}\norm{\bfu}_E
+% \,,
 \end{equation}
 }
 as needed.
@@ -833,15 +875,21 @@ Find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
 \label{eq:localSolve}
 \end{align}
 }
-where typically $\alpha=1$.
+\red{
+where the coefficient $\alpha$ scaling the $L^2$ term can be selected using
+different criteria, see \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012} for details.
+}
 
-\red{With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}. 
-The fact that the test functions will be determined then up to a constant does not matter, for
-$\hat t$ in equation \eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.}
-Mathematically, we are dealing with equivalence classes of functions, but in
-order to obtain a single function that we can deal with numerically, we
-replace the alpha term with a zero mean scaling condition to obtain the new
-test norm,
+\red{
+With a locally conservative formulation, we can eliminate the $L^2$ term altogether
+by setting $\alpha = 0$ in local problem (\ref{eq:localSolve}). This is related to the fact that,
+with constants $(1_K,0)$ present in the test space, we need to determine
+the optimal test functions {\em only} in the $L^2$-orthogonal complement of the
+constants (the semi-norm is  a norm in the quotient space). In practice, we replace
+the $L^2$-term with the product of integrals of $\vdeltau$ and $\delta v$.
+Notice that the extra term vanishes in the orthogonal complement and, therefore,
+produces implicitly a specific constant component for the optimal test functions
+{\em without} affecting the test space.
 \begin{align}
 \label{eq:localSolveMod}
 \min&\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}(\taudeltau,\delta\btau)_K
@@ -851,27 +899,41 @@ v,\nabla\cdot\delta\btau-\bbeta\cdot\nabla v)_K\\
 +\epsilon(\nabla\vdeltau,\nabla \delta v)_K
 +\frac{1}{\mu(K)}\int_K\vdeltau\int_K\delta v\,,
 \end{align}
-where the $\frac{1}{\mu(K)}$ coefficient is an arbitrary scaling condition
-that doesn't make a difference mathematically, but can affect the condition
-number of the actual solve. In practice, we use $\frac{1}{\mu(K)^2}$
-since $\int_K\vdeltau$ and $\int_K\delta v$ both scale like
-$\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient for the analysis in the
-next section.
-It is convenient to be able to take \red{$\alpha=0$} as we will see in
-some later numerical experiments.
-\red{We've noticed that this particularly helps with conditioning of the local problem as the mesh size decreases.}
+Notice that the coefficient $\frac{1}{\mu{K}}$, convenient for the analysis 
+presented next, can be replaced with any other constant in practical computations.
+In all numerical experiments reported in this paper, we have used $\frac{1}{\mu(K)^2}$
+which renders the term to be $O(1)$ in terms of element size $h$, and seems to have been
+the best scaling for the numerical inversion of the approximate Riesz map.
+}
+
+% \red{With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}. 
+% The fact that the test functions will be determined then up to a constant does not matter, for
+% $\hat t$ in equation \eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.}
+% Mathematically, we are dealing with equivalence classes of functions, but in
+% order to obtain a single function that we can deal with numerically, we
+% replace the alpha term with a zero mean scaling condition to obtain the new
+% test norm,
+% where the $\frac{1}{\mu(K)}$ coefficient is an arbitrary scaling condition
+% that doesn't make a difference mathematically, but can affect the condition
+% number of the actual solve. In practice, we use $\frac{1}{\mu(K)^2}$
+% since $\int_K\vdeltau$ and $\int_K\delta v$ both scale like
+% $\mu(K)$, but $\frac{1}{\mu(K)}$ is more convenient for the analysis in the
+% next section.
+% It is convenient to be able to take \red{$\alpha=0$} as we will see in
+% some later numerical experiments.
+% \red{We've noticed that this particularly helps with conditioning of the local problem as the mesh size decreases.}
 
 \subsubsection{Verification of Robust Stability Estimate}
 In the robustness analysis in Section~\ref{sec:robustnessAnalysis}, we argued
 that if we have robust stability estimates:
 \begin{equation}
 (1_K, v_K) \leq C \mu(K)^{1/2} || (v,\bftau) ||_K
-\tag{\ref{eq:robustEst1} revisted}
+\tag{\ref{eq:robustEst1} revisited}
 \end{equation}
 and
 \begin{equation}
 | ((v,\bftau),(1_K,{\bf 0}))_V | \leq C \mu(K)^{1/2} \, || (v,\bftau) ||_V\,.
-\tag{\ref{eq:robust_est2} revisted}
+\tag{\ref{eq:robust_est2} revisited}
 \end{equation}
 then the \red{conservative} DPG method is robust.
 
@@ -899,11 +961,13 @@ element-wise.
 Now we need \red{to} perform the same analysis for the modified inner product in
 \eqref{eq:localSolveMod}. In this case,
 condition~\eqref{eq:robustEst1} follows even more naturally as
+\red{
 \begin{equation}
    \int_K v\cdot1\leq\mu(K)^{1/2}\frac{1}{\mu(K)^{1/2}}\LRl{\int_Kv}
-   \leq\norm{(v,\btau)}_K\,,
+   \leq\mu(K)^{1/2}\norm{(v,\btau)}_K\,,
    \label{eq:robustProof2}
 \end{equation}
+}
 where $\norm{(v,\btau)}$ now refers to the norm generated by inner product
 \eqref{eq:localSolveMod}. Condition~\eqref{eq:robust_est2} follows by the same
 reasoning.

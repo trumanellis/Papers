@@ -1,0 +1,400 @@
+%\documentstyle[11pt]{article}
+\documentclass[11pt,c]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{a4wide}
+%\usepackage{showlabels}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+\usepackage{pgf}
+
+
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\ptl}{{\partial}}
+
+
+% COLORS
+\def\Reddd{\special{color rgb  1.   0.   0.}} 
+\def\Black{\special{color cmyk 0.   0.   0    1.}} 
+\let\B\Black   
+\let\Rd\Reddd 
+
+
+
+
+\catcode`@=12
+
+             \topmargin 0.0in      %(TOP)  1"
+             \oddsidemargin 0.0in  %(LEFT) 1"
+             \textwidth 6.5in      %(RIGHT)1"
+             \textheight 8.5in     %(BOT)  1"
+             \headsep 0.0in
+             \headheight 0.0in
+
+
+
+
+
+\DeclareMathOperator{\curl}{curl}
+
+\newcommand{\PT}{{\partial T}}
+
+\let\tilde\widetilde
+
+\begin{document}
+\baselineskip=16pt
+\parskip= 4pt
+%*************************************************page 1
+
+
+\begin{center}
+{\large \bf Reply to the Reviewers and the Editor}
+\end{center}
+
+
+We appreciate very much the time and effort of both reviewers. All changes made in the manustript have been
+indicated in red.
+
+\noindent {\bf Reviewer 1:}
+
+{\em This is a  carefully written research paper. It addresses the local conservative issue for the DPG method, 
+which is a rising numerical technique. In fact, the technique developed is this paper has the potential 
+to be applied to other residual minimisation methods. It also give possibility to do hybridisation to 
+residual minimisation methods. The proof is correct. And, solid numerical results 
+are provided. This paper deserves a quick publication in CAMWA.}
+
+We apreciate the nice words. Indeed, the presented technology should apply to all problems where
+the local conservation properties are required, although both the proof of robustness 
+and implementtaional aspects are problem-specific.
+
+\noindent {\bf Reviewer 2:}
+
+
+The paper investigates an interesting problem, and does a good job of demonstrating its results and supporting its conclusions with proofs and empirical results.  The paper is a useful addition to the journal, and I can recommend publication with the following revisions:
+
+\begin{enumerate}
+
+  \item {\em At the beginning of page two, the method of Chang and Nelson is called restricted 
+and the authors' method is called conservative, as it is also called in section two.  However, 
+at the end of page six, the authors' method is called restricted.  If the authors want to say 
+restricted throughout I can accept that.  If they want to say it is conservative, then I suggest 
+a revision where:
+\begin{itemize}
+  \item they call it conservative throughout,
+  \item they explicitly define what they mean by conservative, and
+  \item they show that their method meets that definition.
+\end{itemize}
+}
+
+We decided to use the term ``conservative'' throughout, see comments at the end 
+of Section 1.1. The concept of an ``element conservative'' method has been 
+explicitly defined by the end of Section 2.1 (bottom of page 4).
+
+
+
+  \item {\em As at the beginning of page 2, they mention the negative that their method is 
+a saddle point problem.  I would want to see a comparison with "A simple preconditioner for a 
+discontinuous Galerkin method for the Stokes problem" by Blanca Ayuso de Dios, Franco Brezzi, 
+L. Donatella Marini, Jinchao Xu, Ludmil Zikatanov since both papers address saddle point problems 
+for the Stokes problem.  This will come up again in item 12 of these revision recommendations 
+when I ask about conditioning.  If the robustness result come at a price, this should be 
+noted appropriately, and if the method performs as well as de Dios et. al that should be 
+celebrated appropriately.}
+
+We have read the paper carefully and, frankly speaking, have trouble finding a direct relevance
+of the reference for our work. The main point of the work by de Dios et al. is to apply preconditioners
+developed for the $h$ version of the ``curl-curl'' problem to a special Stokes problem
+(with ``slip'' BC's) discretized with $H(\text{div})$-conforming elements. Among other things, the
+paper contains:
+  \begin{itemize}
+  \item an excellent literature review for this class of problems, 
+  \item well-posedness analysis, 
+  \item convergence analysis
+based on the exact sequence arguments, and rather standard DG methodology (Lemma 4.2 being perhaps
+the most interesting argument),
+  \item a very nice, abstract presentation of Nepomnyaschikh's ``Fictitious Space Lemma'' argument, and
+  \item a couple of numerical experiments confirming the theory developed in the paper.
+\end{itemize}
+The paper is very nicely written\footnote{Numerical experiments are less impressive, manufactured
+smooth solution for L-shaped domain ?} but the only relevance that we can see is that the
+incompressible (almost everywhere) discretization for a Stokes problem is automatically
+locally conservative. Our analysis focuses on convection-dominated diffusion 
+and generalization of the {\em robustness analysis} of Heuer and Demkowicz to the locally conservative
+case. The numerical results on inviscid Burgers' equation and Stokes problem are provided for illustration
+only. The Stokes problem is not a singular perturbation problem, and the convergence analysis
+for the conservative version of DPG for Stokes should be relatively straightforward; the Burgers' equation
+is non-linear, and we have not developed any systematic analysis for DPG methods for non-linear problems so far.
+
+In the end, we have decided to not cite the paper as there are many other contributions for Stokes (see
+e.g. methods based on splines) that rely on divergence-free elements.
+
+
+
+  \item {\em The end of section 1.2 says that working with an enriched finite dimensional space works 
+in practice.  There are published theoretical results about why that works, namely, "An analysis of 
+the practical DPG method" by J. Gopalakrishnan and W. Qiu.  This work should be referenced appropriately.}
+
+Fixed. We have added the reference and an appropriate comment in the text.
+
+  \item {\em The term $\Gamma$, is never defined, I suggest it be defined  right after $\Omega$ is defined as the problem domain near the end of page 2.}
+
+Fixed. Thank you.
+
+  \item {\em Typographical issues on page 4:}
+\begin{description}
+  \item[5a] {\em vec{v} is defined as (v,vec{tau}) on page 4 and used throughout the rest of the paper, but the first five times it is used the order is reversed, later it is fine so those five uses should be reversed to the preferred order (v,vec{tau}).} 
+
+Fixed. 
+
+  \item[5b] {\em  The first equation on page 4 should have partial K both times, not delta K.}
+
+Fixed.
+
+  \item [5c] {\em $\hat f_n$ would be clearer as $\hat t$ both to be consistent with the rest of the paper and since $\hat F_h$ as the discrete space has yet to be introduced at this point.}
+
+Fixed.
+
+  \item [5d] {\em The five times $\Vert v\Vert$ appears before equation 9, it should be $\Vert\mathbf{v}\Vert$.}
+
+Fixed.
+
+  \item[5e] {\em  The sentence immediately after equation 9 is hard to read, it should be revised, and a suggestion is to replace "is optimal bounds independently of epsilon the $L^2$ norm; as" could be "is optimal bounds the 
+$L^2$ norm independently of epsilon.  So, as".}
+
+We agree. Thank you for the suggestion. We have changed it accordingly.
+
+  \item[5f] {\em  When vec{uh} is introduced the formatting is poor, no periods and just three commas to separate the four terms would suffice.}
+
+Corrected. Thanks for catching it.
+
+  \item[5g] {\em In equation 10, $\lambda_k$ should be $\lambda_K$ (or even something more explicit than 
+$\lambda_K$ like {lambda\_K}K or sum lambda\_K 1\_K ).}
+
+Fixed.
+
+  \item[5h] {\em  In equation 11 first line, lambda\_K b(vec{u}\_h,(1,0)) should be lambda\_K b(delta vec{u}\_h,(1,0).} 
+
+Fixed.
+\end{description}
+
+  \item {\em Minor typographical issues on page 6:}
+\begin{description}
+  \item [6a] {\em  H(div, Omega\_h) should not have the div in math font before equation 12.}
+
+Fixed.
+
+  \item [6b] {\em  definite articles "Let function Psi" could be "Let the function Psi" and "interpolant of function" could be "interpolant of the function".}
+
+Fixed.
+\end{description}
+
+
+  \item {\em Minor issue with proof (equation 14).  The authors want to show that c is continuous and c has vec{u} as an argument but the proof ends with a norm of hat{t} instead of a norm of vec{u}.  Since $\Vert hat{t}\Vert  leq \Vert vec{u}\Vert$  the authors can (and should) just add $leq \Vert  \lambda\Vert  \Vert vec{u}\Vert$ , but this problem reappeared when the authors worked with the energy norm where it wasn't as straightforward.}
+
+We have expanded the argument.
+
+  \item {\em Minor typographical issues on page 8:}
+\begin{description}
+  \item [8a] {\em  The norms used in equation 18 are not stated, but I can accept that.}
+
+Noted.
+
+  \item [8b] {\em The action < hat{t},1\_K> should have a partial K outside.}
+
+Fixed.
+
+  \item [8c] {\em  definite articles "error estimate and continuity constant" could be "error estimate and the continuity constant" and "error involves only solution" could be "error involves only the solution" and "the fact that DPG method" could be "the fact that the DPG method".}
+
+Fixed.
+
+  \item[8d] {\em  The unlabelled equation after equation 21 ends on $\gamma \Vert  u\Vert$  but should be $\gamma \Vert  vec{u} \Vert$ .}
+
+Fixed.
+
+  \item [8e]{\em  Equation 22 needs hat{w}h in the infimum quantifier to match the hat{w}h term inside the energy norm.}
+
+Fixed.
+\end{description}
+
+  \item {\em  Minor typographical issues on page 9:}
+\begin{description}
+  \item[9a] {\em  definite articles "the energy norm of flux" could be "the energy norm of the flux" and "corresponding to flux" could be "corresponding to the flux" and "is the evaluation of norm of" could be "is the evaluation of the norm of".}
+
+Fixed.
+
+  \item[9b] {\em  Subscripts K.  In equations 23 and 24 v and vec{tau} have subscripts K for element K, but elsewhere they disappear even though sometimes there is a sum over K, so it can't just be implicit.  It should be modified to have subscripts K throughout equations 26 through 31 inclusive, and including the parts between equation 26 and equation 27.}
+
+Fixed.
+
+  \item [9c] {\em  equation 25 < hat{t},1\_K> should have a partial K outside.}
+
+Fixed.
+
+  \item [9d] {\em  In equation 27 in addition to adding the K subscript to v and tau, it should be added to the inner product (1\_K,v\_K)\_K to match equation 26.}
+
+Fixed.
+
+  \item [9e] {\em  In equation 28, LHS can be $\vert (1_K,v_K)_K\vert$ .}
+
+Fixed.
+
+  \item[9f] {\em In equation 28, RHS once (v,vec{tau}) is replaced with (v\_K,vec{tau}\_K) 
+then the norm can be $\Vert  \dot \Vert_V$ instead of the vague $\Vert  \dot \Vert_K$ which doesn't match equation 27.}
+
+Good point. Fixed.
+\end{description}
+
+  \item {\em Minor typographical issues on page 10:}
+\begin{description}
+  \item[10a] {\em  before equation 32 < hat{t},1\_K> should have a partial K outside}
+
+Fixed.
+
+  \item[10b] {\em  Equations 36 and 37 are actually one equation, so should have only one number}
+
+Fixed.
+
+  \item[10c]{\em  In equation 38, the first v should be v\_delta vec u h and the second v should be delta v}
+
+Fixed.
+\end{description}
+
+  \item {\em Issue with proof (equation 34).  The authors want to show that c is continuous and c has vec{u} as an argument but the proof ends with an energy norm of hat{t} instead of a norm of vec{u}.  Now $\Vert hat{t}\Vert  \leq \Vert vec{u}\Vert$  even in the energy norm, however the argument is not so obvious that it shouldn't be mentioned.  Specifically the unlabelled equation before equation 32 should be explicit about c(q,vec{u}), i.e. copy the first part of equation 14, and then 34 needs more proof so that it ends with $\Vert vec u\Vert_E$ instead of $\Vert  hat t \Vert_E$.  While in equation 14 the inequality was obvious so just needs to be stated, this time the proof needs to be lengthened.}
+
+We have expanded the derivation accounting for all indicated details.
+
+
+  \item {\em The $\alpha \to 0$ limit is confusing.  In the end of that paragraph it says it is convenient, but that is vague, about whether it is easier to implement, has better conditioning, or other issues.  In general saying that "we can pass in local problems with 
+$\alpha \to 0$, is unclear, are the authors saying that they will do so, and that this will be good, neutral or have a consequence?  Revisions should make it clear about the benefits (implementation, conditioning, easy of analysis, etc.) and costs (conditioning, implementing the equivalence class, the alpha dependency that would then appear in equation 31, etc.) of the 
+$\alpha \to 0$ limit adjustment and the revision should consider comparisons to other limiting norms such as that in "Dispersive and dissipative errors in the DPG method with scaled norms for Helmholtz equation" by Jay Gopalakrishnan, Ignacio Muga, and Nicole Olivares}
+
+Sorry for the confusion. There is no limiting procedure here similar to the one for wave propagation
+problems studied by Gopalakrishnan, Muga, and Olivares. We can simply set $\alpha = 0$
+in the definition of the inner product. We have significantly expanded the explanation
+in the text.
+
+
+  \item {\em Page 8 last paragraph, the delta t in hat F\^e is confusing, firstly F\^e is not introduced anywhere, and it shouldn't be delta t, revising to hat{t} in hat Fh seems fine, but it should be revised in line with making the section about alpha -> 0 limit being clear, so both changes together should make it clear.}
+
+
+The paragraph has been completely rewritten, see the response to the previous question.
+
+%$F^e$ should be $H^{-1/2}$, but on further consideration, I don't really need to have the space here. I can %just say $\hat{t}$.
+
+  \item {\em Minor typographical issues on page 14:}
+\begin{description}
+
+  \item[14a] {\em  "we wish the perform" should be "we wish to perform"}
+
+Fixed.
+
+  \item[14b] {\em  The unlabelled equation between eq 40 and eq 41 should replace the equals sign with an inequality from the triangle inequality}
+
+Fixed.
+
+  \item[14c] {\em  Equation 41 is missing a factor of mu(K)\^{1/2} after the last inequality}
+
+Corrected, thank you.
+
+\end{description}
+
+  \item {\em Minor typographical issue on page 10,  the first unlabelled equation should have an f for a RHS.}
+
+Fixed.
+
+  \item {\em The experimental section discussion about alpha -> 0 should be modified if needed based on the earlier modification of the discussion of the alpha-> 0 limit.}
+
+Thanks. We hope that the earlier discussion clears things up.
+
+  \item {\em The conclusion should be modified if needed based on any newly included citations about other saddle point formulations (de Dios et al.), practical DPG implementations (Gopalakrishnan and Qui), and/or other limiting norms (Gopalakrishnan et al.).}
+
+\end{enumerate}
+
+
+
+{\em I enjoyed the paper.}
+
+Thank you!
+
+
+     
+
+\noindent {\bf Editor:}
+
+{\em While going through Referee 2's comments, I suspect the Ayuso et al reference is wrong. I think what the referee intended was a comparison with  "Discontinuous Galerkin methods for advection-diffusion-reaction problems" by 
+Blanca Ayuso and L. D. Marini, SIAM J Numer. Anal., 2009, Volume 47, pp 1391-1420. Please check both this and 
+the citation of the referee and decide which one is closer.}
+
+
+We have read the paper. The work of Ayuso and Marini [2] is devoted to the construction and analysis
+of a large class of {\em robust} DG discretizations for a general convection-reaction dominated
+diffusion problem using the framework of ``weighted residuals method''. The paper does not explicitly address the local conservation property.
+Nevertheless, in absence of reaction terms, the first two of four schemes discussed in the paper 
+satisfy elementwise the identity:
+$$
+\int_K f + \int_{\ptl K} \frac{1}{2} (\sigma_n + \sigma_n^{\text{neig}}) = 0
+$$
+where $\sigma_n$ is the outward flux within element $K$, and $\sigma_n^{\text{neig}}$ is the corresponding
+flux
+for the neigboring element. The methodology {\em does not} identify a single-valued (numerical) flux
+on the interelement boundaries but, if we agree to define it as the average of the fluxes for the
+neighboring elements, these two DG schemes {\em are indeed element conservative}.
+
+The paper is very well written\footnote{Again, numerical examples are rather unimpressive.}
+ and we have added it to our references
+as it provides a useful comparison for the DPG methodology (see the end of Section 1.1).
+
+
+The DG and DPG methodologies differ essentially in practically all aspects. To mention
+a few:
+\begin{itemize}
+  \item DPG introduces traces and fluxes as independent variables. This (roughly) doubles the
+number of interface unknowns compared with $H^1$-conforming schemes and HDG methods but it is comparable
+to that for the DG schemes. The boundary terms in the DPG schemes are interpreted as duality
+pairings. Consequently, there is no need for extra regularity assumptions present in [2] that may be
+contradictory with the actual regularity of the solution in  some extreme cases.
+
+  \item DPG is built on a mesh-dependent variational formulation that holds on the infinite-dimensional
+level and (modulo resolution of optimal test functions) reproduces the stability properties 
+of the exact problem. The stability properties are {\em independent} of the choice of the
+trial spaces and, in particular, are automatically valid for the $hp$ meshes. In contrary, many
+constants in [2] depend upon the polynomial order.
+
+  \item DPG comes with the error evaluation built in and provides from start a methodology for
+adaptive methods. The DG discretizations require an additional work on a-posteriori error estimation.
+\end{itemize}
+
+We could also argue that proving convergence for DPG (compared with lengthy and technical proofs in [2])
+is more elementary and easier but this could be very subjective. On the similarities side, both methodologies
+rely on the careful stability analysis for the continuous problem. The practical difference perhaps is
+that DPG uses this for the design of robust test norms, whereas the DG methodology reproduces those properties 
+on the discrete level (compare use of (4.14) in [2] with stability analysis in [3]).
+
+On the critical side for the DPG method, the DPG element computations are more expensive and,
+the methodology still needs an additional analysis to account for the error in computing the optimal
+test functions (not addressed in this work).
+
+In summary, we have referred to [2] but, at this point, we have not opened the ``Pandora box'' attempting
+a detailed comparison of DG and DPG methodologies  in context of the construction of robust
+discretization schemes for singular perturbation problems.
+
+
+
+{\bf References}
+
+[2] Blanca Ayuso and L. D. Marini, ``Discontinuous Galerkin methods for advection-diffusion-reaction problems
+'', {\em  SIAM J Numer. Anal.},47: 1391-1420, 2009.
+
+[3] L. Demkowicz and N. Heuer. ``Robust DPG method for convection-dominated diffusion problems'',
+{\em SIAM J. Numer. Anal.}, 51(5):1514-1537, 2013.
+
+
+\end{document}
+
+
