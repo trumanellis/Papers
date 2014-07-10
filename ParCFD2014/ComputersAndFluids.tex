@@ -100,12 +100,12 @@ Rice University
 6100 Main MS-134, Houston, TX 77005}
 
 \begin{abstract}
-The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
-Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
-mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
-DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
-\emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
-that indicates error in the energy norm.
+% The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+% Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+% mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
+% DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
+% \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
+% that indicates error in the energy norm.
 
 % Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
 % Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
@@ -122,7 +122,6 @@ that indicates error in the energy norm.
 % We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
 % in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
 % and a rewrite of Camellia for higher dimensions is currently in progress.
-
 \end{abstract}
 
 \begin{keyword}
@@ -213,7 +212,7 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
 \end{equation*}
 We might call this an \emph{optimal Petrov-Galerkin}.
-We arrive at the same method by realizing the supremum in inf-sup condition, motivating the \emph{optimal} nomenclature.
+We arrive at the same method by realizing the supremum in the inf-sup condition, motivating the \emph{optimal} nomenclature.
 These optimal Petrov-Galerkin methods produce Hermitian, positive-definite stiffness matrices since
 \[
 b(u_h,\vdeltau)=(v_{u_h},\vdeltau)_V=\overline{(\vdeltau,v_{u_h})}=\overline{b(\delta u_h,v_{u_h})}\,.
@@ -225,31 +224,31 @@ We can calculate the energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of th
 where we designate $R_V^{-1}(Bu_h-l)$ the \emph{error representation function}.
 This has proven to be a very reliable \emph{a-posteriori} error estimator for driving adaptivity.
 
-% Babu\v{s}ka's theorem\cite{Babuska70} says that discrete stability and approximability imply convergence.
-% That is, if $M$ is the continuity constant for $b(u,v)$ which satisfies the discrete inf-sup condition with constant $\gamma_h$,
-% \[
-% \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
-% \]
-% then the Galerkin error satisfies the bound
-% \[
-% \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
-% \]
-% Optimal test functions realize the supremum in the discrete discrete inf-sup condition such that $\gamma_h\geq\gamma$, 
-% the infinite-dimensional inf-sup constant.
-% If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
-% the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
+Babu\v{s}ka's theorem\cite{Babuska70} says that discrete stability and approximability imply convergence.
+That is, if $M$ is the continuity constant for $b(u,v)$ which satisfies the discrete inf-sup condition with constant $\gamma_h$,
+\[
+\sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
+\]
+then the Galerkin error satisfies the bound
+\[
+\norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
+\]
+Optimal test functions realize the supremum in the discrete discrete inf-sup condition such that $\gamma_h\geq\gamma$, 
+the infinite-dimensional inf-sup constant.
+If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
+the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
 
 There are still many features of the method that are left to be decided, for example the $U$ and $V$ spaces.
 If $V$ is taken to be a continuous space, then the auxiliary problem becomes global in scope, something that we would like to avoid.
 In order to ensure the auxiliary problem can be solved element-by-element, we take $V$ to be discontinuous between elements.
 (Technically, $V$ should also be infinite dimensional, but we have found it to be sufficient to use an ``enriched'' space of higher
-polynomial dimension than the trial space.)
+polynomial dimension than the trial space\cite{PracticalDPG}.)
 The downside to using discontinuous test functions is that it introduces new interface unknowns.
 When the equations are integrated by parts over each element, the jump in test functions introduces new unknowns on the mesh skeleton
 that would have gone away with continuous test functions.
 Moro \etal\cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG method, but the standard DPG method treats
 these as new unknowns to be solved for.
-We still haven't specified our trial space $U$, but the rule is that for ever integration by parts, a new skeleton unknown is introduced.
+We still haven't specified our trial space $U$, but the rule is that for every integration by parts, a new skeleton unknown is introduced.
 Most DPG considerations break a second order PDE into a system of first order PDEs which introduces a trace unknown (from the constitutive law) 
 and a flux unknown (from the conservation law), but Demkowicz and Gopalakrishnan also formulated a \emph{primal DPG} method for second order equations
 that does not introduce a trace unknown.
@@ -293,14 +292,14 @@ Norms for Navier-Stokes are derived by analogy to the convection-diffusion norm.
 \subsection{DPG for High Performance Computing}
 Many of the features inherent in the DPG method appear promising in the context of high performance computing.
 Our goal is to design a method that eliminates human intervention as much as possible.
-The superior stability of the method promises to prevent a solution from crashing which could eliminate expensive restarts on large systems.
+The superior stability of the method promises to prevent a simulation from crashing which could eliminate expensive restarts on large systems.
 Preliminary studies on convection-diffusion indicate exceptional robustness of the method in terms of diminishing viscosity, 
 promising successful application to a large class of flow problems.
 The adaptivity lent by the \emph{error representation function} provides a reliable and automated way to start from a coarse mesh and only refine
 toward solution features in need. 
 This uses compute resources much more efficiently than uniform refinements, allowing larger simulations with fewer resources.
 These features combine to produce a high degree of automaticity.
-Ultimately, it is desirable that an engineer could produce a rough mesh that just captures the geometry of the problem, 
+Ultimately, it is desirable that an engineer could produce a rough mesh that just captures the geometry of the problem and
 start a DPG simulation that automatically picks up solution features without the user needing to jump back in and fix things.
 
 DPG is very compute intensive compared to the associated communication and memory costs.
@@ -334,16 +333,21 @@ Navier-Stokes\cite{NateDissertation,JesseDissertation}, and Maxwell's equations\
 %            | $$                                                                                  
 %            |__/  
 \section{Space-Time DPG}
-Space-time discussion, HPC. 
-% We summarize some completed work on space-time DPG. At the time of writing, Camellia does not officially support space-time computations, but we can hack it for 1D spatial problems by pretending the $y$-direction is time.
-% Complications arise when the PDE under consideration is parabolic (i.e. contains second derivatives in space, but only first derivatives in time). 
-% Mathematically, this leaves traces undefined on element edges without a spatial normal component. 
-% Practically, this means that I had to hack the Camellia code in order to support these ``spatial traces''.
-% We say that the code was ``hacked'' to indicate that we modified the code in an ``ugly'' manner in order to obtain the following results, 
-% but plan is to do this according to better software practices in the proposed work, since the current implementation is not very maintainable.
-
-% All of the following problems (unless otherwise noted) are run with the graph norm which is
-% simply defined from the adjoint of the system supplemented with $L^2$ terms to upgrade it to a full norm.
+The biggest limitation to past explorations of the DPG method is that they were all limited to steady state problems.
+Obviously this seriously limits the variety of interesting problems we could consider. 
+The easiest extension of steady DPG to transient problems would be to do an implicit time stepping technique in time 
+and use DPG for only the spatial solve at each time step.
+We did indeed explore this approach, but it didn't seem to be a natural fit with the adaptive features of DPG.
+Clearly the CFL condition was not binding since we were interested in implicit time integration schemes, 
+but the CFL condition can be a guiding principle for temporal accuracy in this case.
+So if we are interested in temporally accurate solutions, we are limited by the fact that our smallest mesh elements 
+(which may be orders of magnitude smaller than the largest elements) are constrained to proceed at a much smaller time step than the mesh as a whole. 
+We can either restrict the whole mesh to the smallest time step, or we can attempt some sort of local time stepping.
+A space-time DPG formulation presents an attractive choice as we will be able to preserve our natural adaptivity 
+from the steady problems while extending it in time.
+Thus we achieve an adaptive solution technique for transient problems in a unified framework.
+The obvious downside to such an approach is that for 2D spatial problems, 
+we now have to compute on a three dimensional mesh while a spatially 3D problem becomes four dimensional.
 
 
 %   /$$   /$$                       /$$    
@@ -359,12 +363,12 @@ Space-time discussion, HPC.
 %  
 \subsection{Heat Equation}
 The simplest space-time problem we can consider where the the spatial and temporal dimensions are treated differently is the heat equation.
-We start with a general $n$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
+We start with a general $d$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
 
 Let $\Omega(t)\subset\mathbb{R}^d$ be the spatial domain with boundary $\partial\Omega$.
 The heat equation is
 \begin{equation}
-	\frac{\partial u}{\partial t}-\mu\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
+	\frac{\partial u}{\partial t}-\epsilon\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
 \end{equation}
 where $u$ is unknown heat, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
 Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then tessellated into space-time elements $K$.
@@ -402,10 +406,11 @@ where
 \hat u&:=\trace(u)\\
 \hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
 \end{align*}
-are new unknowns that live on the mesh skeleton introduced by the integration by parts.
+are new unknowns that live on the mesh skeleton introduced by the integration by parts 
+(parenthesis indicate volume integrals while angle brackets indicate surface integrals).
 Note that the constitutive law was only integrated by parts over spatial dimensions, which means 
-that ``spatial trace'' $\hat u$ only exists on mesh boundaries with a nonzero spatial normal component.
-On the other hand, flux $\hat t$ exists on all mesh boundaries, but changes nature between pure spatial and temporal edges while taking on 
+that \emph{spatial trace} $\hat u$ only exists on mesh boundaries with a nonzero spatial normal component.
+On the other hand, \emph{flux} $\hat t$ exists on all mesh boundaries, but changes nature between pure spatial and temporal edges while taking on 
 a mixed nature on slanted boundaries. We illustrate the support of these skeleton variables in Figure~\ref{fig:heatMesh}.
 
 \begin{figure}[h!]
@@ -453,59 +458,100 @@ a mixed nature on slanted boundaries. We illustrate the support of these skeleto
 \label{fig:heatMesh}
 \end{figure}
 
-% \subsubsection{Numerical Experiment}
-% If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
-% the exact solution is
-% \begin{equation*}
-% 	u=\cos(2\pi x)e^{-4*\pi^2\epsilon t}\,.
-% \end{equation*}
-% We ran this with $\epsilon=10^{-2}$ on a sequence of uniform meshes and $p=2$ for the field representation of $u$. 
-% We were able to achieve the expected third order convergence as demonstrated in Figure \ref{fig:spaceTimeHeatConvergence}.
+\subsubsection{Numerical Experiment}
+If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
+the exact solution is
+\begin{equation*}
+	u=\cos(2\pi x)e^{-4*\pi^2\epsilon t}\,.
+\end{equation*}
+We ran this with $\epsilon=10^{-2}$ on a sequence of uniform meshes and $p=2$ for the field representation of $u$. 
+We were able to achieve the expected third order convergence as demonstrated in Figure \ref{fig:spaceTimeHeatConvergence}.
 
-% \begin{figure}[!ht]
-% 	\centering
-% 	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
-% 	\caption{$L^2$ convergence of $u$ for the space-time heat equation}
-% 	\label{fig:spaceTimeHeatConvergence}
-% \end{figure}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{SpaceTimeHeat/convergence}
+	\caption{$L^2$ convergence of $u$ for the space-time heat equation}
+	\label{fig:spaceTimeHeatConvergence}
+\end{figure}
 
-% In order to demonstrate local space-time adaptivity we consider one more problem for the heat equation. 
-% On the same domain, and with the same boundary conditions as the previous example, we let the initial heat distribution be zero.
-% Then between $t=0.25$ and $t=0.5$ we turn on a pulse source term of one on $0.375\leq x\leq 0.625$. 
-% Starting from an initial mesh of $4x4$, we adaptively refine four times and obtain the results in Figure \ref{fig:spaceTimeHeatPulse}.
-% Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
-% Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
+In order to demonstrate local space-time adaptivity we consider one more problem for the heat equation. 
+On the same domain, and with the same boundary conditions as the previous example, we let the initial heat distribution be zero.
+Then between $t=0.25$ and $t=0.5$ we turn on a pulse source term of one on $0.375\leq x\leq 0.625$. 
+Starting from an initial mesh of $4x4$, we adaptively refine four times and obtain the results in Figure \ref{fig:spaceTimeHeatPulse}.
+Notice that $\hat u$ in Figure \ref{fig:spaceTimeHeatuhat} only lives on vertical edges as was discussed earlier.
+Also notice that the full mesh shown in Figure \ref{fig:spaceTimeHeatfhat} automatically adapts spatially and temporally to where features are rapidly changing. 
 
-% \begin{figure}[p]
-% \centering
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/u.png}
-% \caption{$u$}
-% \label{fig:spaceTimeHeatu}
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
-% \caption{$\sigma$}
-% \label{fig:spaceTimeHeatsigma}
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
-% \caption{$\hat u$}
-% \label{fig:spaceTimeHeatuhat}
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
-% \caption{$\hat t$}
-% \label{fig:spaceTimeHeatfhat}
-% \end{subfigure}
-% \caption{Pulsed space-time heat problem after 4 refinements}
-% \label{fig:spaceTimeHeatPulse}
-% \end{figure}
+\begin{figure}[p]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/u.png}
+\caption{$u$}
+\label{fig:spaceTimeHeatu}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
+\caption{$\sigma$}
+\label{fig:spaceTimeHeatsigma}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
+\caption{$\hat u$}
+\label{fig:spaceTimeHeatuhat}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
+\caption{$\hat t$}
+\label{fig:spaceTimeHeatfhat}
+\end{subfigure}
+\caption{Pulsed space-time heat problem after 4 refinements}
+\label{fig:spaceTimeHeatPulse}
+\end{figure}
 
+
+%    /$$$$$$                       /$$$$$$                      /$$                    
+%   /$$__  $$                     /$$__  $$                    |__/                    
+%  | $$  \__/  /$$$$$$  /$$$$$$$ | $$  \__/ /$$   /$$  /$$$$$$$ /$$  /$$$$$$  /$$$$$$$ 
+%  | $$       /$$__  $$| $$__  $$| $$$$    | $$  | $$ /$$_____/| $$ /$$__  $$| $$__  $$
+%  | $$      | $$  \ $$| $$  \ $$| $$_/    | $$  | $$|  $$$$$$ | $$| $$  \ $$| $$  \ $$
+%  | $$    $$| $$  | $$| $$  | $$| $$      | $$  | $$ \____  $$| $$| $$  | $$| $$  | $$
+%  |  $$$$$$/|  $$$$$$/| $$  | $$| $$      |  $$$$$$/ /$$$$$$$/| $$|  $$$$$$/| $$  | $$
+%   \______/  \______/ |__/  |__/|__/       \______/ |_______/ |__/ \______/ |__/  |__/
+%                                                                                      
+%                                                                                      
+%        
+\section{Convection-Diffusion}
+Transient convection-diffusion is identical to the heat equation with the addition of a convective term:
+\begin{equation*}
+\frac{\partial u}{\partial t}+\Div(\bfbeta u)-\epsilon\Delta u=f\,.
+\end{equation*}
+The $d$-dimensional transient convection-diffusion equations could be viewed as a $d+1$ steady convection-diffusion problem with zero diffusion in the time direction.
+
+\subsection{Derivation}
+As a first order system in space-time, this is
+\begin{equation}
+\label{eq:confusionFirstOrder}
+\begin{aligned}
+\frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
+\Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\,.
+\end{aligned}
+\end{equation}
+Multiplying \eqref{eq:confusionFirstOrder} by test functions, and integrating by parts over each element, we obtain the following bilinear form:
+\begin{equation}
+\label{eq:confusionBF}
+	\begin{aligned}
+		\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\tau_n}&=0\\
+		-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\,,
+	\end{aligned}
+\end{equation}
+where now $\hat t=\trace\LRp{\bfbeta u-\bfsigma}\cdot\bfn_x+\trace(u)\cdot n_t$, and $\hat u$ is as before. Our test functions, $\bftau$ and $v$ live in the same spaces as for the heat equation.
+
+\subsection{Proof of Robustness}
+Demkowicz, Heuer, and Chan\cite{DemkowiczHeuer, ChanHeuerThanhDemkowicz2012} previously completed a proof of robustness 
+for the DPG method applied to steady convection-diffusion, but in this section we wish to extend those results to the transient case.
 
 
 %    /$$$$$$                                                                            /$$ /$$       /$$          
@@ -521,7 +567,8 @@ a mixed nature on slanted boundaries. We illustrate the support of these skeleto
 %                                    |__/    
 \subsection{Transient Compressible Navier-Stokes}
 We make a large jump from convection-diffusion to the compressible Navier-Stokes equations.
-The following discussion holds in any dimension, but the provided results are only for spatially 1D flows.
+The following discussion holds in any dimension, but the provided results are only for spatially 1D flows 
+(at the time of this writing, our code only supported a maximum of two dimensional meshes).
 The compressible Navier-Stokes equations are
 \begin{align}
 \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
@@ -642,6 +689,7 @@ Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde
 This is an instance of a Gauss-Newton nonlinear solve.
 We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
 The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
+\scriptsize
 \begin{equation}
 \label{eq:compressibleJacobian}
 \begin{aligned}
@@ -669,6 +717,7 @@ The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
 	&+\LRa{\hat t_e,v_e}\,.
 \end{aligned}
 \end{equation}
+\normalsize
 The residual, $R(\tilde U)$, is then
 \begin{equation}
 \begin{aligned}
@@ -694,9 +743,9 @@ The residual, $R(\tilde U)$, is then
 %                                                                                            
 %                                                                                            
 %      
-\paragraph{Test Norm}
-The most obvious first choice for test norm in the local solve is the graph norm, which comes from the 
-problem adjoint.
+\paragraph{\textcolor{red}{Test Norm}}
+Usually our first choice for a DPG test norm is the graph norm which comes from upgrading the seminorm derived from the 
+adjoint to a full norm.
 We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable to get
 \begin{equation}
 \begin{aligned}
@@ -712,14 +761,17 @@ We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable 
 +&\left(\Delta\bfu,2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
 -\tilde\rho\Grad v_c
 -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+\right.\\
+&\left.
 -\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
+-C_v\tilde\rho\tilde T\Grad v_e
+-R\tilde\rho\tilde T_\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+\right.\\
 &\left.
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
 -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T_\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 \right)\\
@@ -752,14 +804,17 @@ Then the graph norm would be defined by
 +&\left\|2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
 -\tilde\rho\Grad v_c
 -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+\right.\\
+&\left.
 -\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
+-C_v\tilde\rho\tilde T\Grad v_e
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+\right.\\
 &\left.
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
 -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 \right\|^2\\
@@ -807,13 +862,14 @@ This modified graph norm is then:
 -\tilde\rho\Grad v_c
 -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
 -\tilde\rho\frac{\partial\bfv_m}{\partial t}
--C_v\tilde\rho\tilde T\Grad v_e\right.\\
+-C_v\tilde\rho\tilde T\Grad v_e
+-R\tilde\rho\tilde T\Grad v_e
++\tilde{\mathbb{D}}\cdot\Grad v_e
+\right.\\
 &\left.
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
 -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
--R\tilde\rho\tilde T\Grad v_e
-+\tilde{\mathbb{D}}\cdot\Grad v_e
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
 \right\|^2\\
@@ -858,7 +914,7 @@ viscosity: $\mu=10^{-5}$.
 Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler.
 We mentioned previously that the test norm we are using is not entirely robust, and in fact these viscosity values were on the lower end of what we
 could simulate with this preliminary norm.
-Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
+We solve with second order polynomial representation of field and flux variables, third order for traces, and fifth for test functions.
 
 \paragraph{Sod Shock Tube}
 The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 

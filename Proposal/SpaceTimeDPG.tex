@@ -46,13 +46,13 @@ simply defined from the adjoint of the system supplemented with $L^2$ terms to u
 %  
 \section{Heat Equation}
 The simplest space-time problem we can consider where the the spatial and temporal dimensions are treated differently is the heat equation.
-We start with a general $n$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
+We start with a general $d$-dimensional spatial derivation and later simplify to spatially 1D with a few numerical experiments.
 
 \subsection{Derivation}
 Let $\Omega(t)\subset\mathbb{R}^d$ be the spatial domain with boundary $\partial\Omega$.
 The heat equation is
 \begin{equation}
-	\frac{\partial u}{\partial t}-\mu\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
+	\frac{\partial u}{\partial t}-\epsilon\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
 \end{equation}
 where $u$ is unknown heat, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
 Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then tessellated into space-time elements $K$.
@@ -92,7 +92,7 @@ where
 \end{align*}
 are new unknowns that live on the mesh skeleton introduced by the integration by parts.
 Note that the constitutive law was only integrated by parts over spatial dimensions, which means 
-that ``spatial trace'' $\hat u$ only exists on mesh boundaries with a nonzero spatial normal component.
+that \emph{spatial trace} $\hat u$ only exists on mesh boundaries with a nonzero spatial normal component.
 On the other hand, flux $\hat t$ exists on all mesh boundaries, but changes nature between pure spatial and temporal edges while taking on 
 a mixed nature on slanted boundaries. We illustrate the support of these skeleton variables in Figure~\ref{fig:heatMesh}.
 

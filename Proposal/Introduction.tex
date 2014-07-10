@@ -351,7 +351,7 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
 \end{equation*}
 We might call this an \emph{optimal Petrov-Galerkin}.
-We arrive at the same method by realizing the supremum in inf-sup condition, motivating the \emph{optimal} nomenclature.
+We arrive at the same method by realizing the supremum in the inf-sup condition, motivating the \emph{optimal} nomenclature.
 These optimal Petrov-Galerkin methods produce Hermitian, positive-definite stiffness matrices since
 \[
 b(u_h,\vdeltau)=(v_{u_h},\vdeltau)_V=\overline{(\vdeltau,v_{u_h})}=\overline{b(\delta u_h,v_{u_h})}\,.
@@ -387,7 +387,7 @@ When the equations are integrated by parts over each element, the jump in test f
 that would have gone away with continuous test functions.
 Moro \etal\cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG method, but the standard DPG method treats
 these as new unknowns to be solved for.
-We still haven't specified our trial space $U$, but the rule is that for ever integration by parts, a new skeleton unknown is introduced.
+We still haven't specified our trial space $U$, but the rule is that for every integration by parts, a new skeleton unknown is introduced.
 Most DPG considerations break a second order PDE into a system of first order PDEs which introduces a trace unknown (from the constitutive law) 
 and a flux unknown (from the conservation law), but Demkowicz and Gopalakrishnan also formulated a \emph{primal DPG} method for second order equations
 that does not introduce a trace unknown.
