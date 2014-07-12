@@ -1,0 +1,314 @@
+% -----PACKAGES
+%\usepackage[shortend,titlenumbered]{algorithm2e}
+%\usepackage{algorithmic}
+%\usepackage[plain]{algorithm}
+\usepackage{multicol}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{fancybox}
+%\usepackage{index}
+\usepackage{varioref}
+\usepackage{psfrag}
+\usepackage{epsfig}
+\usepackage{boxedminipage}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{amsmath}
+\usepackage{amssymb}
+%\usepackage{amsfont}
+\usepackage{latexsym}
+\usepackage{alltt}
+%\usepackage[small,bf]{caption}
+\usepackage{url}
+%\usepackage{citesort}
+%\usepackage{crop}
+\usepackage{array}
+\usepackage{subfigure}
+\usepackage{dcolumn}
+
+% -----SETLENGTH
+%\setlength{\captionmargin}{20pt} 
+
+% -----NEWCOMMANDS
+\newcommand{\nc}{\newcommand}
+\nc{\mathsm}[1]{\text{\small{$#1$}}}
+\nc{\ubar}[1]{\underset{-}{#1}}
+\nc{\optype}{\textrm}
+\nc{\EQ}[1]{(\ref{eq:#1})}
+\nc{\TAB}[1]{\ref{tab:#1}}
+\nc{\FIG}[1]{\ref{fig:#1}}
+\nc{\SEC}[1]{\ref{sec:#1}}
+\nc{\ALG}[1]{\ref{alg:#1}}
+\nc{\CHAP}[1]{\ref{chap:#1}}
+\nc{\mtrx}[1]{\boldsymbol{\mathbf{#1}}}
+\nc{\vctr}[1]{\boldsymbol{\mathbf{#1}}}
+\nc{\grad}{\mbox{\boldmath$\nabla$}}
+\nc{\gradient}{\textsl{grad}\,}
+\nc{\hessian}{\textsl{grad\,}^2}
+\nc{\ii}{\iota}
+\nc{\dd}{d}
+\nc{\ee}{\mathrm{e}}
+\nc{\pdiv}[2]{\partial{#1}/\partial{#2}}
+\nc{\dpdiv}[2]{\displaystyle{\frac{\partial{#1}}{\partial{#2}}}}
+\nc{\ddiv}[2]{\displaystyle{\frac{\dd{#1}}{\dd{#2}}}}
+\nc{\inpr}{\hspace{-1pt}\cdot\hspace{-1pt}}
+\nc{\IR}{\mathbb{R}}
+\nc{\IN}{\mathbb{N}}
+\nc{\IZ}{\mathbb{Z}}
+\nc{\IC}{\mathbb{C}}
+\nc{\half}{\frac{1}{2}}
+\nc{\shalf}{\scriptstyle{\half}} 
+\nc{\ds}[1]{\displaystyle{#1}}
+\nc{\ts}[1]{\textstyle{#1}}
+\nc{\sign}{\optype{sign}}
+\nc{\spr}{\optype{spr}}
+\nc{\dist}{\optype{dist}}
+\nc{\rank}{\optype{rank}}
+\nc{\codim}{\optype{codim}}
+\nc{\supp}{\optype{supp}}
+\nc{\diag}{\optype{diag}}
+\nc{\meas}{\optype{meas}}
+\nc{\cond}{\optype{cond}}
+\nc{\kernel}{\optype{kernel}}
+\nc{\spa}{\optype{span}}
+\nc{\order}{\mathcal{O}}
+\nc{\Fr}{\mathrm{Fr}}
+\nc{\Rey}{\mathrm{Re}}
+\nc{\Ord}{O}
+\nc{\ord}{o}
+\nc{\st}{\:{:}\:}
+\nc{\closure}[1]{\overline{#1}}
+\nc{\emin}[1]{\emph{#1}\index{#1}\/}
+\nc{\rmin}[1]{#1\index{{}@{#1}}}
+\nc{\Laplace}{\Delta}
+\nc{\ie}{i.e.}
+\nc{\eg}{e.g.}
+%\nc{\union}{\cup}
+\nc{\Union}{\bigcup}
+\nc{\lf}[1]{\mathsf{#1}}
+\nc{\dbar}[1]{\bar{\bar{#1}}}
+\nc{\ul}[1]{\underline{#1}}
+\nc{\hpt}{\hspace{0.5pt}}
+\nc{\E}[1]{\times{}10^{#1}}
+\nc{\inp}[2]{\langle{#1},{#2}\rangle}
+\nc{\tmpcommand}{}
+
+% -----RENEWCOMMANDS
+\renewcommand{\baselinestretch}{1}
+\renewcommand{\exp}{\optype{exp}\,}
+\renewcommand{\cosh}{\optype{cosh}\,}
+\renewcommand{\tanh}{\optype{tanh}\,}
+\renewcommand{\sinh}{\optype{sinh}\,}
+\renewcommand{\div}[1]{\optype{div}\,{#1}}
+\renewcommand{\half}{\mbox{$\frac{1}{2}$}}
+%\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\emph{#1}}
+
+% -----ETC
+\raggedbottom
+
+
+\DeclareMathOperator{\curl}{\bf curl}
+\DeclareMathOperator{\rot}{\rm curl}
+\DeclareMathOperator{\divv}{\rm div}
+\newcommand{\tro}{\gamma_0}
+\newcommand{\trt}{\gamma_{\sft}}
+\newcommand{\trn}{\gamma_{\sfn}}
+
+\newcommand{\PT}{{\partial T}}
+\newcommand{\bbN}{{\mathbb{N}}}
+\newcommand{\bbP}{{\mathbb{P}}}
+
+\newcommand{\scC}{{\mathscr{C}}}
+\newcommand{\caD}{{\mathcal{D}}}
+\newcommand{\caL}{{\mathcal{L}}}
+
+\newcommand{\sfe}{{\mathsf{e}}}
+\newcommand{\sff}{{\mathsf{f}}}
+\newcommand{\sft}{{\boldsymbol{\mathsf{t}}}}
+\newcommand{\sfn}{{\boldsymbol{\mathsf{n}}}}
+
+%   Common caligraphic abbrevs
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\EE}{\mathcal{E}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\GG}{\mathcal{G}}
+\newcommand{\II}{\mathcal{I}}
+\newcommand{\JJ}{\mathcal{J}}
+\newcommand{\KK}{\mathcal{K}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\QQ}{\mathcal{Q}}
+\newcommand{\RR}{\mathcal{R}}
+\newcommand{\TT}{\mathcal{T}}
+
+
+ %% JAY'S PREAMBLE
+ %%========================
+
+%   Math symbol definitions
+\def\d{\partial}
+%\newsymbol\lee 132E
+\newcommand{\union}{\mathop{\bigcup}}
+\newcommand{\intersect}{\mathop{\bigcap}}
+\newcommand{\binomial}[2]{\ensuremath{
+		\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}}
+\newcommand{\smallbinomial}[2]{\ensuremath{
+		(\begin{smallmatrix}{#1}\\{#2}\end{smallmatrix})}}
+\newcommand{\tang}[1]{\ensuremath{{#1}_{\intercal}}} % can use \top
+						     % also
+\newcommand{\hypergeom}[2]{\ensuremath{\sideset{_{#1}}{_{#2}}{\mathop{F}}}}
+%   Difficult names
+\newcommand{\Babuska}{Babu{\v{s}}ka}       % Remember: Usage is \Babuska\
+\newcommand{\Cea}{C{\'e}a}                 % with trailing `\' to give space
+\newcommand{\Poincare}{Poincar{\'{e}}}     % when needed, but when ending
+\newcommand{\Nedelec}{N{\'{e}}d{\'{e}}lec} % sentence use \Babuska.
+\newcommand{\Frechet}{Fr{\'{e}}chet}
+\newcommand{\Muller}{M{\"u}ller}
+\newcommand{\LHospital}{L'H{\^{o}}spital}
+%   Bold and beautiful
+\newcommand{\ba}{{\boldsymbol{a}}}
+\newcommand{\bA}{\boldsymbol{A}}
+\newcommand{\balpha}{{\boldsymbol{\alpha}}}
+\newcommand{\bB}{{\boldsymbol{B}}}
+\newcommand{\bb}{{\boldsymbol{b}}}
+\newcommand{\bbeta}{{\boldsymbol{\beta}}}
+\newcommand{\etab}{{\boldsymbol{\eta}}}
+\newcommand{\bC}{{\boldsymbol{C}}}
+\newcommand{\bc}{{\boldsymbol{c}}}
+\newcommand{\bD}{{\boldsymbol{D}}}
+\newcommand{\bd}{{\boldsymbol{d}}}
+\newcommand{\db}{{\boldsymbol{\d}}}
+\newcommand{\bdelta}{{\boldsymbol{\delta}}}
+\newcommand{\bDelta}{{\boldsymbol{\Delta}}}
+\newcommand{\beps}{{\boldsymbol{\varepsilon}}}
+\newcommand{\be}{{\boldsymbol{e}}}
+\newcommand{\bg}{{\boldsymbol{g}}}
+\newcommand{\bm}{{\boldsymbol{m}}}
+\newcommand{\bn}{{\boldsymbol{n}}}
+\newcommand{\bN}{{\boldsymbol{N}}}
+\newcommand{\bp}{{\boldsymbol{p}}}
+\newcommand{\bpsi}{{\boldsymbol{\psi}}}
+\newcommand{\bq}{{\boldsymbol{q}}}
+\newcommand{\bxi}{{\boldsymbol{\xi}}}
+\newcommand{\bE}{{\boldsymbol{E}}}
+\newcommand{\bF}{{\boldsymbol{F}}}
+\newcommand{\bh}{{\boldsymbol{h}}}
+\newcommand{\bH}{{\boldsymbol{H}}}
+\newcommand{\bI}{{\boldsymbol{I}}}
+\newcommand{\bj}{{\boldsymbol{j}}}
+\newcommand{\bJ}{{\boldsymbol{J}}}
+\newcommand{\bK}{{\boldsymbol{K}}}
+\newcommand{\bk}{{\boldsymbol{k}}}
+\newcommand{\bll}{{\boldsymbol{\ell}}}
+\newcommand{\bL}{{\boldsymbol{L}}}
+\newcommand{\blambda}{{\boldsymbol{\lambda}}}
+\newcommand{\bmu}{{\boldsymbol{\mu}}}
+\newcommand{\bM}{{\boldsymbol{M}}}
+\newcommand{\bomega}{{\boldsymbol{\omega}}}
+\newcommand{\bP}{{\boldsymbol{P}}}
+\newcommand{\bphi}{{\boldsymbol{\phi}}}
+\newcommand{\bQ}{{\boldsymbol{Q}}}
+\newcommand{\bG}{{\boldsymbol{G}}}
+\newcommand{\bu}{{\boldsymbol{u}}}
+\newcommand{\bU}{{\boldsymbol{U}}}
+\newcommand{\bV}{{\boldsymbol{V}}}
+\newcommand{\bX}{{\boldsymbol{X}}}
+\newcommand{\bv}{{\boldsymbol{v}}}
+\newcommand{\bw}{{\boldsymbol{w}}}
+\newcommand{\bW}{{\boldsymbol{W}}}
+\newcommand{\bR}{{\boldsymbol{R}}}
+\newcommand{\br}{{\boldsymbol{r}}}
+\newcommand{\bS}{{\boldsymbol{S}}}
+\newcommand{\bT}{{\boldsymbol{T}}}
+\newcommand{\btau}{{\boldsymbol{\tau}}}
+\newcommand{\bt}{{\boldsymbol{t}}}
+\newcommand{\bx}{{\boldsymbol{x}}}
+\newcommand{\by}{{\boldsymbol{y}}}
+\newcommand{\bz}{{\boldsymbol{z}}}
+\newcommand{\bzero}{{\boldsymbol{0}}}
+\newcommand{\bZ}{{\boldsymbol{Z}}}
+%   Common scalar fields
+\newcommand{\RRR}{\mathbb{R}}
+\newcommand{\CCC}{\mathbb{C}}
+\newcommand{\ZZZ}{\mathbb{Z}}
+\newcommand{\NNN}{\mathbb{N}}
+%   Differential operators
+\newcommand{\dive}{\mathop\mathrm{div}}
+%\newcommand{\grad}{\ensuremath{\mathop{{\bf{grad}}}}}
+%\newcommand{\curl}{{\ensuremath\mathop{\mathbf{curl}\,}}}
+\newcommand{\Curl}{ {\bf Curl}}
+\newcommand{\dx}{\ensuremath{\mathrm{d}x}}
+\newcommand{\dy}{\ensuremath{\mathrm{d}y}}
+\newcommand{\dr}{\ensuremath{\mathrm{d}r}}
+\newcommand{\dR}{\ensuremath{\mathrm{d}R}}
+\newcommand{\drho}{\ensuremath{\mathrm{d}\rho}}
+\newcommand{\dz}{\ensuremath{\mathrm{d}z}}
+\newcommand{\dzeta}{\ensuremath{\mathrm{d}\zeta}}
+%   Wordy math symbols
+\newcommand{\card}{\ensuremath{\mathop\mathrm{card}}}
+%\newcommand{\diag}{\ensuremath{\mathop\mathrm{diag}}}
+\newcommand{\diam}{\ensuremath{\mathop\mathrm{diam}}}
+%\newcommand{\dist}{\mathop\mathrm{dist}}
+\newcommand{\Ker}{\mathop\mathrm{Ker}}
+\newcommand{\Range}{\mathop\mathrm{Range}}
+%\newcommand{\rank}{\mathop\mathrm{rank}}
+%\newcommand{\meas}{\mathop\mathrm{meas}}
+\newcommand{\Forall}{\quad\text{for all }}
+%\newcommand{\supp}{\mathop\mathrm{supp}}
+\newcommand{\Span}{\mathop\mathrm{Span}}
+\newcommand{\Hdiv}[1]{\bH(\dive,#1)}
+%\newcommand{\Hcurl}[1]{\bH(\curl,#1)}
+%   Common caligraphic abbrevs
+%\newcommand{\BB}{\mathcal{B}}
+%\newcommand{\CC}{\mathcal{C}}
+%\newcommand{\DD}{\mathcal{D}}
+%\newcommand{\EE}{\mathcal{E}}
+%\newcommand{\FF}{\mathcal{F}}
+%\newcommand{\GG}{\mathcal{G}}
+%\newcommand{\II}{\mathcal{I}}
+%\newcommand{\JJ}{\mathcal{J}}
+%\newcommand{\KK}{\mathcal{K}}
+%\newcommand{\LL}{\mathcal{L}}
+%\newcommand{\OO}{\mathcal{O}}
+%\newcommand{\QQ}{\mathcal{Q}}
+%\newcommand{\RR}{\mathcal{R}}
+%\newcommand{\TT}{\mathcal{T}}
+%   Variations on standard symbols
+\newcommand{\veps}{\varepsilon}
+\newcommand{\vlam}{\varLambda}
+\newcommand{\vpi}{\varPi}
+\newcommand{\vPi}{\boldsymbol{\varPi}}
+\newcommand{\vsig}{\varSigma}
+\newcommand{\vbt}{\boldsymbol{\varTheta}}
+\newcommand{\vPsi}{\boldsymbol{\varPsi}}
+%\newcommand{\ii}{\hat{\imath}}
+%   Innerproducts, norms, etc
+\newcommand{\ntrip}[1]{|\!|\!| {#1} |\!|\!|}
+\newcommand{\ip}[1]{\langle {#1} \rangle}
+%   Utilities
+\newcommand{\blnk}{\underline{\hspace{3cm}}\;}
+\newcommand{\marg}[1]{\marginpar{\tiny{\framebox{\parbox{1.7cm}{#1}}}}}
+\newcommand{\degreeC}[1]{\ensuremath{{#1\,}^\circ\!\text{C}}}
+                        % try also  \textcelsius of textcomp package
+%   Trademarked names \texttrademark, \textregistered
+\newcommand{\matlab}{MATLAB\textregistered\renewcommand{\matlab}{MATLAB}}
+\newcommand{\femlab}{FEMLAB\textregistered\renewcommand{\femlab}{FEMLAB}}
+
+%   Style preferences
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % Use symbols instead of
+						 % numbers for footnotes
+						 
+
+\newcommand{\Eg}{\EE^\mathrm{grad}}
+\newcommand{\Ec}{\boldsymbol{\EE}^\mathrm{curl}}
+\newcommand{\Ed}{\boldsymbol{\EE}^\mathrm{div}}
+
+
+\newcommand{\bfdu}{\mbox{\boldmath $\delta u$}}
+\newcommand{\bfdv}{\mbox{\boldmath $\delta v$}}
+\newcommand{\du}{{\delta u}}
+\newcommand{\dv}{{\delta v}}
+\newcommand{\bfnabt}{\widetilde{\bfnab}}
+\newcommand{\bfepst}{\widetilde{\bfeps}}
