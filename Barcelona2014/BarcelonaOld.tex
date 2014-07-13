@@ -1,107 +1,8 @@
-\documentclass[10pt,xcolor=table]{beamer}
+\documentclass[10pt,c]{beamer}
+%\documentclass[11pt,c,draft]{beamer}
+\usefonttheme[onlymath]{serif}
 
-\usepackage{bbm}
-\usepackage{textpos}
-\usepackage{pgf,tikz}
-\usepackage{graphicx}
-% \usepackage{subfig}
-\usepackage{forloop}
-\usepackage[backend=bibtex]{biblatex}
-\usepackage{animate}
-
-\AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \framesubtitle{\hspace{1ex}}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
-\AtBeginSubsection[] {
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \framesubtitle{\hspace{1ex}}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
-
-\definecolor{utorange}{RGB}{203,96,21}
-\definecolor{utblack}{RGB}{99,102,106}
-\definecolor{utbrown}{RGB}{110,98,89}
-\definecolor{utsecbrown}{RGB}{217,200,158}
-\definecolor{utsecgreen}{RGB}{208,222,187}
-\definecolor{utsecblue}{RGB}{127,169,174}
-
-\mode<presentation>
-{
-  % \usetheme{Pittsburgh}
-  \usetheme{Boadilla}
-  \usefonttheme[onlymath]{serif}
-
-  \setbeamercovered{invisible}
-  \setbeamertemplate{navigation symbols}{}
-
-  % Color Theme
-    \setbeamercolor{normal text}{bg=white,fg=utblack}
-  \setbeamercolor{structure}{fg=utorange}
-
-  \setbeamercolor{alerted text}{fg=red!85!black}
-
-  \setbeamercolor{item projected}{use=item,fg=black,bg=item.fg!35}
-
-  \setbeamercolor*{palette primary}{use=structure,fg=white, bg=utorange}
-  \setbeamercolor*{palette secondary}{use=structure,bg=utsecbrown}
-  \setbeamercolor*{palette tertiary}{use=structure,bg=utsecgreen}
-  \setbeamercolor*{palette quaternary}{use=structure,fg=structure.fg,bg=utsecblue}
-
-  % \setbeamercolor*{frametitle}{use=structure,fg=utorange, bg=utsecbrown}
-  \setbeamercolor*{framesubtitle}{fg=utbrown}
-
-  \setbeamercolor*{block title}{parent=structure,fg=black,bg=utsecgreen}
-  \setbeamercolor*{block body}{fg=black,bg=utblack!10}
-  \setbeamercolor*{block title alerted}{parent=alerted text,bg=black!15}
-  \setbeamercolor*{block title example}{parent=example text,bg=black!15}
-
-  \setbeamerfont{framesubtitle}{size=\small}
-}
-
-\makeatletter
-\setbeamertemplate{footline}
-{
-  \leavevmode%
-    \hbox{%
-      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
-        \usebeamerfont{author in head/foot}\insertshortauthor%~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
-      \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-        \usebeamerfont{title in head/foot}\insertshorttitle
-        \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
-        \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
-        \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
-      \end{beamercolorbox}}%
-        \vskip0pt%
-}
-\makeatother
-
-\usepackage{kerkis}
-\usepackage[T1]{fontenc}
-\usepackage[protrusion=true,expansion=true]{microtype}
-\usepackage{amsmath}
-
-
-\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
-
-\let\oldfootnotesize\footnotesize
-\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
-
-
-\pgfdeclareimage[height=1.2cm]{utbig}{logos/UTWordmark}
-\pgfdeclareimage[height=0.6cm]{ut}{logos/UTWordmark}
-
-\input{preamble}
-\input{LeszeksPreamble}
-
+\usepackage{beamerthemeMyself}
 \usepackage{float}
 \usepackage{epsfig}
 \usepackage{graphics}
@@ -109,65 +10,109 @@
 %\usepackage{pdfpages}
 \usepackage{pgf}
 \usepackage{multimedia}
-\usepackage[latin1]{inputenc} % for Ã¤, Ã¶, Ã¼ etc.
+\usepackage[latin1]{inputenc} % for ä, ö, ü etc.
 \usepackage{amsmath,amssymb,mathrsfs,color,fleqn}
 \usepackage{url}
 
+%\usepackage[plainpages=false]{hyperref}
+%\hypersetup{pdfpagemode=FullScreen}
+
+\usecolortheme{orchid}
+\setbeamercolor{fgwh}{fg=white}
+\setbeamercolor{yell}{fg=yellow}
+\setbeamertemplate{itemize subitem}[circle] 
+\setbeamertemplate{itemize subsubitem}[circle] 
+
+\definecolor{Gray70}{rgb}{0.7,0.7,0.7}
+
 \newcommand{\red}[1]{\textcolor{red}{#1}}
-\newcommand{\vect}[1]{\ensuremath\boldsymbol{#1}}
-\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
-\newcommand{\NVRcurl}{\nabla \times}
-\newcommand{\NVRHcurl}{H(\text{curl})}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\redbulletS}{\includegraphics[width=.3cm]{red-bullet-on-white.ps}}
+\newcommand{\greenbulletS}{\includegraphics[width=.3cm]{green-bullet-on-white.ps}}
+\newcommand{\fin}{\end{document}}
 \newcommand{\bit}{\begin{itemize}}
 \newcommand{\eit}{\end{itemize}}
 \newcommand{\ben}{\begin{enumerate}}
 \newcommand{\een}{\end{enumerate}}
 
-% \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
-% % \subtitle{If you have one}
-% \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
-% {\oldfootnotesize Advisors: Leszek Demkowicz, Robert Moser}
-% }
+
+
+\newcommand{\vect}[1]{\ensuremath\boldsymbol{#1}}
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+\newcommand{\NVRcurl}{\nabla \times}
+\newcommand{\NVRHcurl}{H(\text{curl})}
+
+
+
+
+
+
+
+\input{preamble}
+\input{LeszeksPreamble}
+
+
+
 \title[DPG Method]{   
-Discontinuous Petrov-Galerkin (DPG) Method\\ With Optimal Test Functions\\
-\small{Progress Report}\\
+DISCONTINUOUS PETROV-GALERKIN (DPG)\\ METHOD\\ WITH OPTIMAL TEST FUNCTIONS\\
+Progress Report\\
 }
-\author[Leszek Demkowicz]{\underline{Leszek Demkowicz}\\
+\author{Leszek Demkowicz\\
+ICES, The University of Texas at Austin \\
+}
+
+
+
+
+\subtitle{Three DPG Punchlines}
+
+
+
+%\date[Xiangtan University, Jun 30 - Jul 6, 2014]{
+%Hunan Key Laboratory\\ for Computation and Simulation 
+%in Science and Engineering \\
+%Xiangtan University, Changsha, June 30 - July 6, 2014
+%}
+
+%\date[Durham, Jul 7 - Jul 16, 2014]{
+%London Mathematical Society - EPSRC Durham Symposium:\\
+%Building bridges: connections and challenges \\
+%in modern approaches to partial differential equations\\
+%Durham, July 7 - July 16, 2014
+%}
+\date[Barceloma, Jul 20 - Jul 25, 2014]{
 World Congress on Computational Mechanics\\
 Barcelona, July 20 - July 25, 2014
 }
 
-% \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
-\institute{
-\pgfuseimage{utbig}
-\\ \vspace{2ex}
-\includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
-}
-\date[Barceloma, Jul 20 - Jul 25, 2014]%{\pgfuseimage{iceslogo} }
 
+
+
+%\date[Beijing, June 2014]{
+%Peking University, Beijing, June 26, 2014
+%}
+
+
+
+
+
+%======================================================================
+% images
+% \pgfdeclareimage[width=0.2\textwidth]{cover}{FIGS/cover.jpg}
+%######################################################################
 \begin{document}
-\def\thefootnote{\arabic{footnote}}
 
-\tikzstyle{block} = [rectangle, draw, rounded corners, shade, top color=white, text width=5em,
-  bottom color=blue!50!black!20, draw=blue!40!black!60, very thick, text centered, minimum height=4em]
-  \tikzstyle{line} = [draw, -latex']
-  \tikzstyle{cloud} = [draw, ellipse,top color=white, bottom color=red!20, node distance=2cm, minimum height=2em]
+%beamernavigation
+\setbeamertemplate{navigation symbols}{}
 
-
-  \beamertemplateballitem
-  %\beamertemplatetransparentcoveredhigh
-
-  \frame{\titlepage}
-
-  \addtobeamertemplate{frametitle}{}{%
-      \begin{textblock*}{100mm}(0.87\textwidth,-0.75cm)
-    \pgfuseimage{ut}
-    \end{textblock*}
-  }
+\setbeamercolor{frametitle}{fg=white}   % font color
+\setbeamercolor{frametitle}{parent=palette primary} % bg color
+%======================================================================
+\frame[plain]{\titlepage}
 
 %======================================================================
 \frame{\frametitle{Collaboration:}
-\framesubtitle{~~}
 \begin{description}
   \item[Portland State:] \textcolor{red}{J. Gopalakrishnan}
   \item[ICES:]  \textcolor{red}{T. Bui-Thanh,  O. Ghattas, B. Moser, T. Ellis},  
@@ -186,11 +131,11 @@ Barcelona, July 20 - July 25, 2014
   \item[U. Nevada:] J. Li
   \item[U. Tel-Aviv] \textcolor{red}{I. Harari}
 \end{description}
+
 }
 
 %======================================================================
 \frame{\frametitle{Three DPG Punchlines}
-\framesubtitle{~~}
 \begin{description}
   \item[1:] DPG Method is a Ritz method.
 It supports adaptivity with no
@@ -198,25 +143,31 @@ preasymptotic behavior.
   \item[2:] You can control the norm in which you want to converge.
   \item[3:] DPG is easy to code.
 \end{description}
+
 }
 
 
 
 %======================================================================
 \frame{\frametitle{Punchline 1}
-\framesubtitle{~~}
+
 \begin{center}
 {\Large DPG Method is a Ritz method. It supports adaptivity with no
 preasymptotic behavior.
+
+
+
 }
+
 \end{center}
+
 }
+
 
 
 
 %======================================================================
 \frame{\frametitle{Primal DPG Method for Maxwell equations.}
-\framesubtitle{~~}
 
 {\small
 Assume
@@ -240,11 +191,12 @@ E \in H(\text{curl},\Omega),\, n \times E = n \times E^{\text{imp}} \text{ on } 
 \right.
 $$
 }
+
+
 }
 
 %======================================================================
 \frame{\frametitle{FE discretization for curl-curl problem}
-\framesubtitle{~~}
 
 Hexahedral meshes\\
 $H(\text{curl})$ element for electric field $E$: 
@@ -265,7 +217,6 @@ In reported experiments: $p=2,\, \Delta p = 2$.
 
 %======================================================================
 \frame{\frametitle{A 3D Maxwell example}
-\framesubtitle{~~}
 
 
 
@@ -279,7 +230,6 @@ Take a cube $(0,2)^3$
 
 %======================================================================
 \frame{\frametitle{Fichera corner}
-\framesubtitle{~~}
 
 Divide it into eight smaller cubes and remove one:
 \begin{center}   
@@ -290,7 +240,6 @@ Divide it into eight smaller cubes and remove one:
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave}
-\framesubtitle{~~}
 
 Attach a waveguide:
 
@@ -314,7 +263,6 @@ Cut the waveguide and use the lowest propagating mode for BC along the cut.
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave, $p=2$.}
-\framesubtitle{~~}
 
 
 
@@ -332,7 +280,6 @@ Initial mesh and real part of $E_1$
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave, $p=2$.}
-\framesubtitle{~~}
 
 
 
@@ -349,7 +296,6 @@ Mesh and real part of $E_1$ after two refinements
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave, $p=2$.}
-\framesubtitle{~~}
 
 
 
@@ -366,7 +312,6 @@ Mesh and real part of $E_1$ after four refinements
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave, $p=2$.}
-\framesubtitle{~~}
 
 
 
@@ -383,7 +328,6 @@ Mesh and real part of $E_1$ after six refinements
 
 %======================================================================
 \frame{\frametitle{Fichera corner microwave, $p=2$.}
-\framesubtitle{~~}
 
 
 
@@ -399,9 +343,11 @@ Mesh and real part of $E_1$ after eight refinements
 }
 
 
+
+
+
 %======================================================================
 \frame{\frametitle{}
-\framesubtitle{~~}
 
 \begin{center}
 {\Large  \bf
@@ -434,7 +380,6 @@ $\text{M}_\infty = 3, \text{Re}_L = 1000, \text{Pr} = 0.72, \gamma = 1.4, \theta
 
 
 \frame{\frametitle{Extrapolation to Compressible NS Equations}
-\framesubtitle{~~}
 
 \onslide*<1>{
 Initial Mesh ($p=2$):
@@ -582,8 +527,7 @@ Horizontal velocity and temperature\\
 }
 
 
-\frame{\frametitle{Extrapolation to Compressible NS Equations}
-\framesubtitle{~~}
+\frame{\frametitle{Extrapolation to Compresible NS Equations}
 
 \begin{center}
 \begin{figure}
@@ -595,40 +539,8 @@ Heat flux along the plate
 
 }
 
-% ------------------------------------------------------------
-\frame{\frametitle{Compressible Navier-Stokes}
-\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
-\foreach \n in {1,...,15}
-{
-\only<\n>
-{
-\vspace{-2ex}
-
-% \begin{minipage}[c]{0.45\linewidth}
-\begin{figure}[ht]
-\centering
-\includegraphics[height=0.4\textwidth]{figures_spacetime/den\n.pdf}
-\end{figure}
-% \end{minipage}
-% \begin{minipage}[c]{0.45\linewidth}
-% \includegraphics[height=0.3\textwidth]{figures_spacetime/vel\n.pdf}\\
-% \end{minipage}
-% \begin{minipage}[c]{0.45\linewidth}
-% \includegraphics[height=0.3\textwidth]{figures_spacetime/pres\n.pdf}
-% \end{minipage}
-% \begin{minipage}[c]{0.45\linewidth}
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.6\textwidth]{figures_spacetime/mesh\n.png}
-\end{figure}
-% \end{minipage}
-}
-}
-}
-
 %======================================================================
 \frame{\frametitle{Punchline 2}
-\framesubtitle{~~}
 
 \begin{center}
 {\Large You can control the norm in which you want to converge.
@@ -640,11 +552,8 @@ Heat flux along the plate
 
 }
 
-
-
 %======================================================================
 \frame{\frametitle{}
-\framesubtitle{~~}
 \begin{center}
 
 {\Large \bf The simplest singular perturbation problem:\\[8pt]
@@ -665,7 +574,6 @@ reaction-dominated diffusion
 
 %======================================================================
 \frame{\frametitle{The simplest singular perturbation problem: Reaction-dominated diffusion}
-\framesubtitle{~~}
 $$
 \left\{
 \begin{array}{rll}
@@ -695,7 +603,6 @@ $$
 
 %======================================================================
 \frame{\frametitle{Convergence in ``balanced'' norm}
-\framesubtitle{~~}
 
 {\bf Fact:} Under favorable regularity conditions, the solution is {\em uniformly}
 bounded in data $f$ in a ``balanced'' norm
@@ -723,7 +630,6 @@ $$
 
 %======================================================================
 \frame{\frametitle{A bit of history: Optimal test functions of Barret and Morton
-\framesubtitle{~~}
 \footnote{
 \tiny 
 \begin{itemize}
@@ -771,7 +677,6 @@ desired norm.
 
 %======================================================================
 \frame{\frametitle{Constructing optimal test norm
-\framesubtitle{~~}
 \footnote{\tiny L. D., M. Heuer,
 ``Robust  DPG  Method for Convection-Dominated Diffusion Problems,''
 {\em SIAM J. Num. Anal}, {\bf 51:} 2514--2537, 2013. }
@@ -807,7 +712,6 @@ $$
 
 %======================================================================
 \frame{\frametitle{Constructing optimal test norm}
-\framesubtitle{~~}
 {\bf The point:} Construction of the optimal test norm is reduced to the stability
 (robustness) 
 analysis for the Barret-Morton test functions.
@@ -834,7 +738,6 @@ $$
 
 %======================================================================
 \frame{\frametitle{Manufactured solution of Lin and Stynes, $\epsilon = 10^{-1}$}
-\framesubtitle{~~}
 
 
 \begin{center}   
@@ -850,7 +753,6 @@ Range: (-0.6,0.6)
 
 %======================================================================
 \frame{\frametitle{Manufactured solution of Lin and Stynes, $\epsilon = 10^{-1}$}
-\framesubtitle{~~}
 
 
 \begin{center}   
@@ -864,7 +766,6 @@ Zoom on the north boundary layer.
 
 %======================================================================
 \frame{\frametitle{Optimal mesh for $\epsilon = 10^{-1}$}
-\framesubtitle{~~}
 
 
 \begin{center}   
@@ -880,7 +781,6 @@ Optimal $h$-adaptive mesh and numerical solution for $\epsilon = 10^{-1}$
 
 %======================================================================
 \frame{\frametitle{Lin/Stynes example, $\epsilon = 1$}
-\framesubtitle{~~}
 
 
 
@@ -894,7 +794,6 @@ Residual and ``balanced'' error of $u$ for $h$-adaptive solution, $p=2$
 }
 %======================================================================
 \frame{\frametitle{Lin/Stynes example, $\epsilon = 10^0, 10^{-1}$}
-\framesubtitle{~~}
 
 
 
@@ -907,7 +806,6 @@ Residual and ``balanced'' error of $u$ for $h$-adaptive solution, $p=2$
 }
 %======================================================================
 \frame{\frametitle{Lin/Stynes example, $\epsilon = 10^0, 10^{-1}, 10^{-2}$.}
-\framesubtitle{~~}
 
 
 
@@ -920,7 +818,6 @@ Residual and ``balanced''  error of $u$ for $h$-adaptive solution, $p=2$
 }
 %======================================================================
 \frame{\frametitle{Lin/Stynes example, $\epsilon = 10^0, 10^{-1}, 10^{-2}, 10^{-3}$.}
-\framesubtitle{~~}
 
 
 \begin{center}   
@@ -932,7 +829,6 @@ Residual and ``balanced'' error of $u$ for $h$-adaptive solution, $p=2$
 }
 %======================================================================
 \frame{\frametitle{Lin/Stynes example, $\epsilon = 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}$.}
-\framesubtitle{~~}
 
 
 \begin{center}   
@@ -946,7 +842,6 @@ Residual and ``balanced''   error of $u$ for $h$-adaptive solution, $p=2$
 
 %======================================================================
 \frame{\frametitle{Other tricks we can play: zooming on the solution}
-\framesubtitle{~~}
 
 
 {\bf Question:} Can we select the test norm in such a way that the DPG method
@@ -966,7 +861,6 @@ Optimal mesh and the corresponding pointwise error (range $(-0.001 - 0.001)$.
 
 %======================================================================
 \frame{\frametitle{Punchline 3}
-\framesubtitle{~~}
 
 \begin{center}
 {\Large DPG is easy to code.
@@ -984,7 +878,6 @@ Optimal mesh and the corresponding pointwise error (range $(-0.001 - 0.001)$.
 
 %======================================================================
 \frame{\frametitle{Other Applications
-\framesubtitle{~~}
 }
 \bit
   \item<1->  Wave propagation problems (sonars, full wave form inversion in geomechanics, cloaking)
@@ -994,4 +887,15 @@ Optimal mesh and the corresponding pointwise error (range $(-0.001 - 0.001)$.
 
 }
 
+
+
+
+
+
+\input{thanks}
+\input{acknowledgments}
+
+
 \end{document}
+
+
