@@ -143,7 +143,7 @@ Barcelona, July 20 - July 25, 2014
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Barceloma, Jul 20 - Jul 25, 2014]%{\pgfuseimage{iceslogo} }
+\date[Barcelona, Jul 20 - Jul 25, 2014]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -407,7 +407,6 @@ Mesh and real part of $E_1$ after eight refinements
 
 }
 
-
 %======================================================================
 \frame{\frametitle{}
 \framesubtitle{~~}
@@ -633,6 +632,132 @@ Heat flux along the plate
 % \end{minipage}
 }
 }
+}
+
+\frame{\frametitle{}
+\framesubtitle{~~}
+
+\begin{center}
+{\Large  \bf
+From Ph.D. Dissertation of Nathan V. Roberts:\\
+Incompressible Navier-Stokes:\\
+Flow Past a Cylinder\footnote{\tiny
+L.S.G. Kovasznay. ``Hot-wire investigation of the wake behind cylinders at low Reynolds numbers.'' {\em Proceedings of the Royal Society of London. Series A, Mathematical and Physical Sciences}, {\bf 198}(1053):174-190, 1949.
+}
+
+}
+\end{center}
+
+\begin{figure}
+\includegraphics[scale=.3]{./figures_cylinder/Hemker_geometry_schematic.pdf}\\
+$[\text{Re}_D = 40]$
+\end{figure}
+}
+
+\frame{\frametitle{Incompressible Navier-Stokes}
+\framesubtitle{~~}
+
+\onslide*<1>{
+Initial Mesh ($p=3$), and horizontal velocity solution:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_0.png} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_u0_ref_0.png}
+\end{figure}
+
+Mesh detail, and horizontal velocity solution\\
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_detail_ref_0.png} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_detail_u0_ref_0.png}
+\end{figure}
+
+Relative energy error of solution: $9.76 \times 10^{-2}.$
+}
+
+\onslide*<2>{
+Mesh after 1 $h$-refinement, and horizontal velocity solution:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_1.png} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_u0_ref_1.png}
+\end{figure}
+
+Mesh detail, and horizontal velocity solution\\
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_detail_ref_1.png} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_detail_u0_ref_1.png}
+\end{figure}
+Relative energy error of solution: $1.81 \times 10^{-2}.$
+}
+
+\onslide*<3>{
+Mesh after 2 $h$-refinements, and horizontal velocity solution:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_2.png} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_u0_ref_2.png}
+\end{figure}
+
+Mesh detail, and horizontal velocity solution\\
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_detail_ref_2.png} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_detail_u0_ref_2.png}
+\end{figure}
+Relative energy error of solution: $3.26 \times 10^{-3}.$
+}
+
+\onslide*<4>{
+Mesh after 3 $h$-refinements, and horizontal velocity solution:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_3.png} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_u0_ref_3.png}
+\end{figure}
+
+Mesh detail, and horizontal velocity solution\\
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_detail_ref_3.png} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_detail_u0_ref_3.png}
+\end{figure}
+Relative energy error of solution: $1.29 \times 10^{-3}.$
+}
+
+\onslide*<5>{
+Mesh after 4 $h$-refinements, and horizontal velocity solution:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_4.png} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_u0_ref_4.png}
+\end{figure}
+
+Mesh detail, and horizontal velocity solution\\
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_detail_ref_4.png} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_detail_u0_ref_4.png}
+\end{figure}
+Relative energy error of solution: $5.74 \times 10^{-4}.$
+}
+
+}
+
+\frame{\frametitle{}
+\framesubtitle{~~}
+
+Chan, Ellis, and Roberts results were computed using
+\begin{center}
+{\Large  \bf
+Camellia:\\
+A Software Framework for DPG\footnote{\tiny
+Nathan V. Roberts. ``Camellia: A software framework for discontinuous Petrov-Galerkin methods.'' {\em Computers \& Mathematics with Applications}, 2014 (in review).
+}
+}
+\end{center}
+
+
+Camellia:
+\begin{itemize}
+\item is easy to use (Stokes cavity flow $h$-adaptive driver takes $\approx$ 130 lines of code)
+\item supports MPI, $h$- and $p$- adaptivity
+\item built atop Trilinos
+\item supports 1-3D spatial meshes (1D and 3D just added)
+\item space-time meshes coming soon
+\item open source release planned for 2015 
+\end{itemize}
 }
 
 %======================================================================
