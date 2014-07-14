@@ -35,6 +35,10 @@ This embeds the zero divergence condition. If we take the trace of both sides, w
 \begin{align*}
   \Div\bfu=\varepsilon_{ii}=\frac{1}{2\mu}\LRs{\sigma_{ii}-\sigma_{ii}}=0\,.
 \end{align*}
+Pressure, though not explicitly used in this formulation, is defined as
+\begin{equation*}
+p=\lambda\Div\bfu-\frac{1}{N}\sigma_{ii}=\frac{1}{N}\sigma_{ii}\,.
+\end{equation*}
 The space-time form of the Cauchy momentum equation is
 \begin{equation*}
 \Divxt\vecttwo{\rho\bfu\otimes\bfu-\bfsigma}{\rho\bfu}=\bff\,.
@@ -53,7 +57,7 @@ where
 \begin{equation*}
 \begin{aligned}
 \hat\bfu&=\trace(\bfu)\\
-\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu-\bfsigma}\cdot\bfn_x
+\hat\bft&=\trace\LRp{\rho\bfu\otimes\bfu-\bfsigma}\cdot\bfn_x
 +\trace\LRp{\rho\bfu} n_t\,.
 \end{aligned}
 \end{equation*}
@@ -101,11 +105,150 @@ Grouping terms:
 +\norm{\bftau}^2\,.
 \end{equation*}
 
-\section*{Compressible}
-These ideas probably won't work for compressible flow, but this is retained for reference.
-Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
-\begin{align*}
-  \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(N-3)}\sigma_{kk}\delta_{ij}\,.
-\end{align*}
+\subsection*{Boundary Conditions}
+On spatial boundaries, we have access to the following terms for setting boundary conditions:
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat\bft&=\trace\LRp{\rho\bfu\otimes\bfu-\bfsigma}\cdot\bfn_x\,.
+\end{aligned}
+\end{equation*}
+For 2D flow, we can expand the flux:
+\begin{equation*}
+\hat\bft=\LRs{
+\begin{array}{c}
+(\rho u_1u_1-\sigma_{11})n_1 + (\rho u_1u_2-\sigma_{12})n_2 \\
+(\rho u_1u_2-\sigma_{12})n_1 + (\rho u_2u_2-\sigma_{22})n_2 \\
+\end{array}
+}
+\end{equation*}
+The constitutive law gives the following relations:
+\begin{equation*}
+\LRs{
+\begin{array}{cc}
+\frac{1}{2}(\sigma_{11}-\sigma_{22}) & \sigma_{12} \\
+\sigma_{12} & \frac{1}{2}(\sigma_{22}-\sigma_{11}) \\
+\end{array}
+}
+=\mu
+\LRs{
+\begin{array}{cc}
+2\pd{u_1}{x} & \pd{u_2}{x}+\pd{u_1}{y} \\
+\pd{u_2}{x}+\pd{u_1}{y} & 2\pd{u_2}{y} \\
+\end{array}
+}
+\end{equation*}
+Alternatively we can write this in terms of the implicitly present pressure,
+\begin{equation*}
+\LRs{
+\begin{array}{cc}
+\sigma_{11} & \sigma_{12} \\
+\sigma_{12} & \sigma_{22} \\
+\end{array}
+}
+=
+-\LRs{
+\begin{array}{cc}
+p & 0 \\
+0 & p \\
+\end{array}
+}
++
+\mu
+\LRs{
+\begin{array}{cc}
+2\pd{u_1}{x} & \pd{u_2}{x}+\pd{u_1}{y} \\
+\pd{u_2}{x}+\pd{u_1}{y} & 2\pd{u_2}{y} \\
+\end{array}
+}
+\end{equation*}
+This gives the following implications:
+\begin{equation*}
+\begin{aligned}
+\sigma_{11}=0 & \Rightarrow \pd{u_1}{x}+\pd{u_2}{y}=0 \\
+\sigma_{22}=0 & \Rightarrow \pd{u_1}{x}+\pd{u_2}{y}=0 \\
+\sigma_{12}=0 & \Rightarrow \pd{u_2}{x}+\pd{u_1}{y}=0 \\
+\sigma_{11}=\sigma_{22} & \Rightarrow \pd{u_1}{x}=0   \\ 
+& \Rightarrow \pd{u_2}{y}=0 \\
+\end{aligned}
+\end{equation*}
+But the first two are already satisfied by continuity.
+In the other direction, we get the following implications:
+\begin{equation*}
+\begin{aligned}
+\pd{u_1}{x}=0 & \Rightarrow \sigma_{11}=\sigma_{22} \\
+\pd{u_2}{y}=0 & \Rightarrow \sigma_{11}=\sigma_{22} \\
+\pd{u_1}{y}=\pd{u_2}{x}=0 & \Rightarrow \sigma_{12}=0 \\
+\end{aligned}
+\end{equation*}
+
+\subsubsection*{Special Cases}
+Now let's consider application of boundary conditions on specific parts of the domain. First we will consider the right boundary where $\bfn=[1,0]$.
+Here,
+\begin{equation*}
+\hat\bft=\LRs{
+\begin{array}{c}
+\rho u_1u_1-\sigma_{11} \\
+\rho u_1u_2-\sigma_{12} \\
+\end{array}
+}
+\end{equation*}
+\begin{itemize}
+  \item If $u_1=0$, then we have control over $-\sigma_{11}$ and $-\sigma_{12}$.
+  \item If $u_2=0$, then we have control over $\rho u_1u_1-\sigma_{11}$ and $-\sigma_{12}$.
+  \item If $\sigma_{11}=0$, then we have control over $\rho u_1u_1$ and $\rho u_1u_2-\sigma_{12}$.
+  \item If $\sigma_{12}=0$, then we have control over $\rho u_1u_1-\sigma_{11}$ and $\rho u_1u_2$.
+\end{itemize}
+
+On the other hand, if $\bfn=[0,1]$ on the top boundary,
+\begin{equation*}
+\hat\bft=\LRs{
+\begin{array}{c}
+\rho u_1u_2-\sigma_{12} \\
+\rho u_2u_2-\sigma_{22} \\
+\end{array}
+}
+\end{equation*}
+\begin{itemize}
+  \item If $u_1=0$, then we have control over $-\sigma_{12}$ and $\rho u_2u_2-\sigma_{22}$.
+  \item If $u_2=0$, then we have control over $-\sigma_{12}$ and $\rho u_2u_2-\sigma_{22}$.
+  \item If $\sigma_{12}=0$, then we have control over $\rho u_1u_2$ and $\rho u_2u_2-\sigma_{22}$.
+  \item If $\sigma_{22}=0$, then we have control over $\rho u_1u_2-\sigma_{12}$ and $\rho u_2u_2$.
+\end{itemize}
+
+\subsubsection*{Boundary Layer Problem}
+Consider the common setup for a flat plate boundary layer problem: an \emph{inflow} boundary, a \emph{top} boundary, an \emph{upstream} boundary just upstream of the \emph{plate} boundary and an \emph{outflow} boundary. Flow is oriented left to right with the \emph{inflow} to the left and the \emph{outflow} to the right.
+
+\paragraph*{Inflow}
+We have four options for setting \emph{inflow} boundary conditions: $\hat u_1$, $\hat u_2$,
+$\hat t_1=\trace(-\rho u_1u_1+\sigma_{11})$, and $\hat t_2=\trace(-\rho u_1u_2+\sigma_{12})$.
+Past experience suggests assuming that $\sigma_{11}$ and $\sigma_{12}$ are negligible and setting $\hat t_1=-1$ and $\hat t_2=0$.
+
+\paragraph*{Top and Upstream}
+A symmetry condition seems appropriate here. We have access to $\hat u_1$, $\hat u_2$,
+$\hat t_1=\trace(\pm\rho u_1u_2\mp\sigma_{12})$, and $\hat t_2=\trace(\pm\rho u_2u_2\mp\sigma_{22})$.
+Symmetry implies that we should set $u_2=0$ which simplifies $\hat t_1=\trace(\mp\sigma_{12})$ and $\hat t_2=\trace(\mp\sigma_{22})$.
+The second symmetry condition should then probably be $\hat t_1=0$.
+
+\paragraph*{Plate}
+We have access to the same variables as the \emph{upstream} boundary, but previous experience suggests setting $\hat u_1=\hat u_2=0$ to be correct.
+
+\paragraph*{Outflow}
+We have four options for setting \emph{inflow} boundary conditions: $\hat u_1$, $\hat u_2$,
+$\hat t_1=\trace(\rho u_1u_1-\sigma_{11})$, and $\hat t_2=\trace(\rho u_1u_2-\sigma_{12})$.
+Previously we have just set no outflow boundary condition and achieved decent results.
+
+\paragraph*{\textcolor{red}{Problem}}
+Unfortunately, the above boundary conditions seem to allow the trivial solution for all trace a field variables. 
+The fluxes will alternate between -1, 0, and 1 depending on cell normals in a way consistent with local conservation. 
+So clearly there is something deficient with the above boundary conditions, but the solution is not immediately obvious.
+The first guess would be that we need to set an outflow condition, but the correct one is not obvious.
+
+% \section*{Compressible}
+% These ideas probably won't work for compressible flow, but this is retained for reference.
+% Alternatively, if we assume the Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$, we instead get
+% \begin{align*}
+%   \varepsilon_{ij}&=\frac{1}{2\mu}\sigma_{ij}-\frac{1}{2\mu(N-3)}\sigma_{kk}\delta_{ij}\,.
+% \end{align*}
 
 \end{document}
