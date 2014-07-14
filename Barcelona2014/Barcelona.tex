@@ -12,18 +12,18 @@
 \AtBeginSection[]
 {
   \begin{frame}
-    \frametitle{Table of Contents}
+    \frametitle{Three DPG Punchlines}
     \framesubtitle{\hspace{1ex}}
     \tableofcontents[currentsection,currentsubsection]
   \end{frame}
 }
-\AtBeginSubsection[] {
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \framesubtitle{\hspace{1ex}}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
+% \AtBeginSubsection[] {
+%   \begin{frame}
+%     \frametitle{Table of Contents}
+%     \framesubtitle{\hspace{1ex}}
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+% }
 
 \definecolor{utorange}{RGB}{203,96,21}
 \definecolor{utblack}{RGB}{99,102,106}
@@ -189,28 +189,37 @@ Barcelona, July 20 - July 25, 2014
 }
 
 %======================================================================
-\frame{\frametitle{Three DPG Punchlines}
-\framesubtitle{~~}
-\begin{description}
-  \item[1:] DPG Method is a Ritz method.
-It supports adaptivity with no
-preasymptotic behavior.
-  \item[2:] You can control the norm in which you want to converge.
-  \item[3:] DPG is easy to code.
-\end{description}
-}
+% \frame{\frametitle{Three DPG Punchlines}
+% \framesubtitle{~~}
+% \begin{description}
+%   \item[1:] DPG Method is a Ritz method.
+% It supports adaptivity with no
+% preasymptotic behavior.
+%   \item[2:] You can control the norm in which you want to converge.
+%   \item[3:] DPG is easy to code.
+% \end{description}
+% }
 
 
 
 %======================================================================
-\frame{\frametitle{Punchline 1}
+% \frame{\frametitle{Punchline 1}
+% \framesubtitle{~~}
+% \begin{center}
+% {\Large DPG Method is a Ritz method. It supports adaptivity with no
+% preasymptotic behavior.
+% }
+% \end{center}
+% }
+
+\frame{\frametitle{Three DPG Punchlines}
 \framesubtitle{~~}
-\begin{center}
-{\Large DPG Method is a Ritz method. It supports adaptivity with no
-preasymptotic behavior.
+\tableofcontents
 }
-\end{center}
-}
+
+\section{DPG Method is a Ritz method. It supports adaptivity with no
+preasymptotic behavior.}
+
 
 
 
@@ -627,18 +636,22 @@ Heat flux along the plate
 }
 
 %======================================================================
-\frame{\frametitle{Punchline 2}
-\framesubtitle{~~}
+% \frame{\frametitle{Punchline 2}
+% \framesubtitle{~~}
 
-\begin{center}
-{\Large You can control the norm in which you want to converge.
+% \begin{center}
+% {\Large You can control the norm in which you want to converge.
 
 
-}
+% }
 
-\end{center}
+% \end{center}
 
-}
+% }
+
+
+\section{You can control the norm in which you want to converge.}
+
 
 
 
@@ -722,8 +735,8 @@ $$
 
 
 %======================================================================
-\frame{\frametitle{A bit of history: Optimal test functions of Barret and Morton
-\framesubtitle{~~}
+\frame{\frametitle{A bit of history: 
+\framesubtitle{Optimal test functions of Barret and Morton
 \footnote{
 \tiny 
 \begin{itemize}
@@ -739,6 +752,7 @@ Diffusion-Convection Problems'',
 {\em Journal of Computational Physics}, {\bf 68(1):} 188--273, 1986.
 \end{itemize}
 }}
+}
 
 For each $w \in U_h$, determine the corresponding $v_w$ that solves the
 auxiliary variational problem:
@@ -965,20 +979,23 @@ Optimal mesh and the corresponding pointwise error (range $(-0.001 - 0.001)$.
 
 
 %======================================================================
-\frame{\frametitle{Punchline 3}
-\framesubtitle{~~}
+% \frame{\frametitle{Punchline 3}
+% \framesubtitle{~~}
 
-\begin{center}
-{\Large DPG is easy to code.
+% \begin{center}
+% {\Large DPG is easy to code.
 
 
 
-}
+% }
 
-\end{center}
+% \end{center}
 
-}
+% }
 
+
+
+\section{DPG is easy to code.}
 
 
 
