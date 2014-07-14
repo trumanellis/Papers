@@ -533,171 +533,36 @@ J. Chan, L.D., R. Moser, ``A DPG method for steady viscous compressible flow,''
 }
 }
 
-%
-%\frame{\frametitle{Extrapolation to Compressible NS Equations}
-%\framesubtitle{~~}
-%
-%\onslide*<1>{
-%Initial Mesh ($p=2$):
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh0.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u0.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T0.png}
-%\end{figure}
-%}
-%\onslide*<2>{
-%
-%Mesh 1:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh1.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u1.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T1.png}
-%\end{figure}
-%}
-%
-%\onslide*<3>{
-%
-%Mesh 2:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh2.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u2.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T2.png}
-%\end{figure}
-%}
-%
-%
-%\onslide*<4>{
-%
-%Mesh 3:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh3.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u3.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T3.png}
-%\end{figure}
-%}
-%
-%\onslide*<5>{
-%
-%Mesh 4:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh4.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u4.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T4.png}
-%\end{figure}
-%}
-%
-%\onslide*<6>{
-%
-%Mesh 5:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh5.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u5.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T5.png}
-%\end{figure}
-%}
-%
-%
-%\onslide*<7>{
-%
-%Mesh 7:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh7.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u7.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T7.png}
-%\end{figure}
-%}
-%
-%\onslide*<8>{
-%
-%Mesh 8:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh8.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u8.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T8.png}
-%\end{figure}
-%}
-%
-%\onslide*<9>{
-%
-%Mesh 9:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh9.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u9.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T9.png}
-%\end{figure}
-%}
-%
-%\onslide*<10>{
-%
-%Mesh 10:
-%\begin{figure}
-%\includegraphics[width=0.2\textwidth]{./figures_flat_plate/mesh10.png}
-%\end{figure}
-%
-%Horizontal velocity and temperature\\
-%\begin{figure}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/u10.png}
-%\includegraphics[width=0.45\textwidth]{./figures_flat_plate/T10.png}
-%\end{figure}
-%}
-%
-%
-%
-%
-%}
-%
-%
-%\frame{\frametitle{Extrapolation to Compressible NS Equations}
-%\framesubtitle{~~}
-%
-%\begin{center}
-%\begin{figure}
-%\includegraphics[width=0.6\textwidth]{./figures_flat_plate/heatflux.png}
-%\end{figure}
-%Heat flux along the plate
-%\end{center}
-%
-%
-%}
+
+%======================================================================
+\frame{\frametitle{}
+\framesubtitle{~~}
+
+\begin{center}
+{\Large  \bf
+From Ph.D. Proposal of Truman Ellis:\\
+Space-Time Compressible Navier-Stokes Equations:\\
+Sod Shock Tube Problem
+\footnote{\tiny
+G.A. Sod, ``A Survey of Several Finite Difference Methods for Systems of Nonlinear Hyperbolic Conservation Laws'',
+{\em J. Comp. Methods Phys.}, {\bf 27}, 1-31, 1978.
+}
+
+}
+
+\end{center}
+
+% \begin{figure}
+% \includegraphics[scale=.3]{./figures_flat_plate/plate.png}\\
+% $\text{M}_\infty = 3, \text{Re}_L = 1000, \text{Pr} = 0.72, \gamma = 1.4, \theta_\infty = 390^o[\text{R}]$
+% \end{figure}
+
+
+}
+
 
 % ------------------------------------------------------------
-\frame{\frametitle{Compressible Navier-Stokes}
+\frame{\frametitle{Transient Compressible Navier-Stokes}
 \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
 \foreach \n in {1,...,15}
 {
@@ -906,8 +771,8 @@ reaction-dominated diffusion
 
 
 %======================================================================
-\frame{\frametitle{The simplest singular perturbation problem: Reaction-dominated diffusion}
-\framesubtitle{~~}
+\frame{\frametitle{The simplest singular perturbation problem: }
+\framesubtitle{Reaction-dominated diffusion}
 $$
 \left\{
 \begin{array}{rll}
