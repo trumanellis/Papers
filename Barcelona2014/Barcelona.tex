@@ -423,7 +423,10 @@ Navier-Stokes
 Equations Based on an Operator Splitting Method and $hp$ Adaptivity,'',
 {\em Comput. Methods Appl. Mech. Engrg.}, {\bf 84}, 275-326, 1990.
 }
-
+\footnote{\tiny
+J. Chan, L.D., R. Moser, ``A DPG method for steady viscous compressible flow,''
+{\em Computers and Fluids}, to appear.
+}
 }
 
 \end{center}
@@ -482,13 +485,36 @@ $\text{M}_\infty = 3, \text{Re}_L = 1000, \text{Pr} = 0.72, \gamma = 1.4, \theta
 }
 
 % Ramp movie 
+\frame{\frametitle{}
+\framesubtitle{~~}
+\begin{center}
+{\Large  \bf
+From Ph.D. Dissertation of Jesse Chan:\\
+Compressible Navier-Stokes Equations:\\
+Holden ramp problem
+\footnote{\tiny
+L.D., J.T. Oden, W. Rachowicz, ``A New Finite Element Method for Solving Compressible Navier-Stokes
+Equations Based on an Operator Splitting Method and $hp$ Adaptivity,'',
+{\em Comput. Methods Appl. Mech. Engrg.}, {\bf 84}, 275-326, 1990.
+}
+\footnote{\tiny
+J. Chan, L.D., R. Moser, ``A DPG method for steady viscous compressible flow,''
+{\em Computers and Fluids}, to appear.
+}
+}
+\end{center}
+\begin{figure}
+\includegraphics[width=.4\textwidth]{./figures_flat_plate/holden.pdf}\\
+\caption{${M}_\infty = 6, {\rm Re}_{\rm plate} = 33,936, {\rm Pr} = 0.72, \gamma = 1.4, \theta_\infty = 390^o[{\rm R}]$}
+\end{figure}
+}
 \frame{\frametitle{Compressible Navier-Stokes}
 \framesubtitle{Extrapolation to Compressible NS Equations}  %% needed for proper positioning of the logo ...
 \begin{figure}[ht]
 \centering
 \subfigure{\includegraphics[width=0.75\textwidth]{figures_CNS/RampMa6Re4/mesh000.png}}
 \subfigure{\includegraphics[width=0.75\textwidth]{figures_CNS/RampMa6Re4/T000.png}}
-\caption{Mach 6, ${\rm Re \approx 50,000}$, $p = 2$, initial mesh.}
+\caption{Mach 6, ${\rm Re \approx 34,000}$, $p = 2$, initial mesh.}
 \end{figure}
 }
 \frame{\frametitle{Compressible Navier-Stokes}
@@ -501,7 +527,7 @@ $\text{M}_\infty = 3, \text{Re}_L = 1000, \text{Pr} = 0.72, \gamma = 1.4, \theta
 \centering
 \subfigure{\includegraphics[width=0.75\textwidth]{figures_CNS/RampMa6Re4/mesh00\n.png}}
 \subfigure{\includegraphics[width=0.75\textwidth]{figures_CNS/RampMa6Re4/T00\n.png}}
-\caption{Mach 6, ${\rm Re \approx 50,000}$, $p = 2$, refinement number \n.}
+\caption{Mach 6, ${\rm Re \approx 34,000}$, $p = 2$, refinement number \n.}
 \end{figure}
 }
 }
