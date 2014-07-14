@@ -654,10 +654,25 @@ $[\text{Re}_D = 40]$
 \end{figure}
 }
 
+
 \frame{\frametitle{Incompressible Navier-Stokes}
 \framesubtitle{~~}
 
 \onslide*<1>{
+Domain: $240 \times 120$ cylinder diameters. Begin with a $p=3$ preliminary mesh that simply captures geometry (detail):
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/preliminaryHemkerMesh.pdf} \hspace{0.04 \textwidth} 
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/preliminaryHemkerMeshDetail.pdf}
+\end{figure}
+
+Perform initial anisotropic refinements to get aspect ratios below 2:
+\begin{figure}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/initialHemkerMesh.pdf} \hspace{0.04 \textwidth}
+\includegraphics[width=0.35\textwidth]{./figures_cylinder/initialHemkerMeshDetail.pdf}
+\end{figure}
+}
+
+\onslide*<2>{
 Initial Mesh ($p=3$), and horizontal velocity solution:
 \begin{figure}
 \includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_0.png} \hspace{0.04 \textwidth} 
@@ -673,7 +688,7 @@ Mesh detail, and horizontal velocity solution\\
 Relative energy error of solution: $9.76 \times 10^{-2}.$
 }
 
-\onslide*<2>{
+\onslide*<3>{
 Mesh after 1 $h$-refinement, and horizontal velocity solution:
 \begin{figure}
 \includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_1.png} \hspace{0.04 \textwidth} 
@@ -688,7 +703,7 @@ Mesh detail, and horizontal velocity solution\\
 Relative energy error of solution: $1.81 \times 10^{-2}.$
 }
 
-\onslide*<3>{
+\onslide*<4>{
 Mesh after 2 $h$-refinements, and horizontal velocity solution:
 \begin{figure}
 \includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_2.png} \hspace{0.04 \textwidth} 
@@ -703,7 +718,7 @@ Mesh detail, and horizontal velocity solution\\
 Relative energy error of solution: $3.26 \times 10^{-3}.$
 }
 
-\onslide*<4>{
+\onslide*<5>{
 Mesh after 3 $h$-refinements, and horizontal velocity solution:
 \begin{figure}
 \includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_3.png} \hspace{0.04 \textwidth} 
@@ -718,7 +733,7 @@ Mesh detail, and horizontal velocity solution\\
 Relative energy error of solution: $1.29 \times 10^{-3}.$
 }
 
-\onslide*<5>{
+\onslide*<6>{
 Mesh after 4 $h$-refinements, and horizontal velocity solution:
 \begin{figure}
 \includegraphics[width=0.35\textwidth]{./figures_cylinder/cylinder_flow_k_3_mesh_ref_4.png} \hspace{0.04 \textwidth} 
