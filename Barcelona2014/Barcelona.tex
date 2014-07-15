@@ -177,7 +177,7 @@ Barcelona, July 20 - July 25, 2014
   \item[Basque U:] D. Pardo
   \item[C.U. of Hong-Kong:] W. Qiu
   \item[KAUST:] V. Calo
-  \item[Livermoore:] J. Bramwell
+  \item[Livermore:] J. Bramwell
   \item[Los Alamos:] M. Shaskov
   \item[Rice:] \textcolor{red}{J. Chan}
   \item[Sandia:] P.N. Bochev, K.J. Peterson, D. Ridzal and Ch. M. Siefert
@@ -1099,11 +1099,93 @@ Optimal mesh and the corresponding pointwise error (range $(-0.001 - 0.001)$.
 \framesubtitle{~~}
 }
 \bit
-  \item<1->  Wave propagation problems (sonars, full wave form inversion in geomechanics, cloaking)
-  \item<2->  Elasticity, shells (volumetric, shear, membrane locking)
-  \item<3->  Metamaterials
+  \item<1->  Elasticity, shells (volumetric, shear, membrane locking)
+  \item<2->  Metamaterials
+  \item<3->  Wave propagation problems (sonars, cloaking, full wave form inversion in geomechanics)
 \eit
 
+}
+
+%======================================================================
+\frame{\frametitle{Seismic Inversion
+\framesubtitle{Tomography Setting}
+}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{./figures_inversion/lamb.pdf}
+\end{center}
+}
+
+%======================================================================
+\frame{\frametitle{Seismic Inversion
+\framesubtitle{Inverse Algorithm}
+}
+\begin{itemize}
+\item Solve state at current guess $m$ using DPG at each frequency for each source
+\begin{align*}
+\left\{ \begin{array}{ll}
+-\Delta u_{\omega, n} - \omega^2 m u_{\omega, n} = 0 &\mbox{ in } \Omega \\
+\nabla u_{\omega,n} \cdot \hat{n} = f_n &\mbox{ on } \Gamma_1 \\
+u_{\omega, n} = 0 &\mbox{ on } \Gamma_2
+\end{array} \right.
+\end{align*}
+\item Solve adjoint at current guess $m$ and solution $u$ using DPG at each frequency for each source
+\begin{align*}
+\left\{ \begin{array}{ll}
+-\Delta p_{\omega, n} - \omega^2 m p_{\omega, n} = \overline{u_{\omega, n}^{\mbox{obs}} - u_{\omega,n}} &\mbox{ in } \Omega \\
+\nabla p_{\omega,n} \cdot \hat{n} = 0 &\mbox{ on } \Gamma_1 \\
+p_{\omega, n} = 0 &\mbox{ on } \Gamma_2
+\end{array} \right.
+\end{align*}
+\item Calculate derivative in direction $\tilde{m}$ for use in numerical inversion algorithms
+\begin{align*}
+(g, \tilde{m})_{L^2(\Omega)} &= \gamma (\nabla m, \nabla \tilde{m})_{L^2(\Omega)} - \sum_\omega \sum_n \omega^2 \Re (\tilde{m} u_{\omega,n},p_{\omega,n})_{L^2(\Omega)}
+\end{align*}
+\item DPG can invert over higher frequencies resulting in better resolution
+\end{itemize}
+}
+
+%======================================================================
+\frame{\frametitle{Seismic Inversion
+\framesubtitle{Elastic Marmousi Problem}
+}
+\begin{figure}
+\begin{center}
+  \subfigure[Exact $\mu$]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/exact_mu.png}
+  }
+  \subfigure[Initial $\mu$]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/initial_mu.png}
+  }
+  \subfigure[Exact $\lambda$]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/exact_lambda.png}
+  }
+  \subfigure[Initial $\lambda$]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/initial_lambda.png}
+  }
+\end{center}
+\end{figure}
+}
+
+%======================================================================
+\frame{\frametitle{Seismic Inversion
+\framesubtitle{Elastic Marmousi Problem}
+}
+\begin{figure}
+\begin{center}
+  \subfigure[CG $\mu$, low frequency]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/CG_elas_marm_mu.png}
+  }
+  \subfigure[DPG $\mu$, high frequency]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/DPG_elas_marm_mu.png}
+  }
+  \subfigure[CG $\lambda$, low frequency]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/CG_elas_marm_lambda.png}
+  }
+  \subfigure[DPG $\lambda$, high frequency]{
+    \includegraphics[width=0.46\textwidth]{./figures_inversion/DPG_elas_marm_lambda.png}
+  }
+\end{center}
+\end{figure}
 }
 
 \end{document}
