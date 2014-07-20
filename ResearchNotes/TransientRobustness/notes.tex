@@ -228,4 +228,26 @@ and thus the DPG energy norm robustly bounds the $L^2$ norm from above
 \section{Convection-diffusion}
 
 Truman, your turn :).
+
+\section{Robustness for transient problems given spatial robustness}
+
+Suppose we have the transient problem
+\[
+\pd{u}{t} + Au = f
+\]
+with initial condition $u(x,0) = u_0$.  Suppose that DPG is robust under the ultra-weak variational formulation for the steady problem
+\[
+\LRp{u,A^*_h v}_{\L} + \LRa{\uh, \jump{v}}_{\Gamma_h\setminus \Gamma_0} = \LRp{f,v}
+\]
+with test norm $\nor{v}_{V}$.  Then, can we show that 
+\[
+\nor{v}_{V,t} \coloneqq \nor{v}_V + \nor{\pd{v}{t}}_{\L}
+\]
+also leads to a robust upper bound of the $L^2$ norm by the DPG energy norm?  I believe this may be possible.  The adjoint equation for robustness for the transient problem gives
+\[
+-\pd{v}{t} + A^*v = u
+\]
+with $v = 0$ at $t=T$...  
+
+
 \end{document}
