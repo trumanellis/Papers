@@ -1,7 +1,7 @@
 \documentclass{article}
 \input{../../preamble.tex}
 
-\title{Robustness for transient problems}
+\title{Robustness for Transient Problems}
 \author{Truman E. Ellis and Jesse L. Chan}
 
 \begin{document}
@@ -102,7 +102,82 @@ and thus the DPG energy norm robustly bounds the $L^2$ norm from above
 
 \section{Convection-diffusion}
 
-Truman, your turn :).
+Consider convection-diffusion
+\begin{align*}
+\pd{u}{t} + \bfbeta\cdot\Grad u - \epsilon \Delta u &= f\\
+u &= 0 \text{ on } \Gamma_{out}\\
+\pd{u}{n} &= 0 \text{ on } \Gamma_{in}\\
+u(t=0) &= u_0.
+\end{align*}
+Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$ and $\Gradxt:=\vecttwo{\Grad}{\pd{}{t}}$, then we can rewrite this as
+\begin{align*}
+\tilde\bfbeta\cdot\Gradxt u - \epsilon \Delta u &= f\\
+u &= 0 \text{ on } \Gamma_{out}\\
+\pd{u}{n} &= 0 \text{ on } \Gamma_{in}\\
+u(t=0) &= u_0.
+\end{align*}
+The adjoint equation satisfies
+\begin{align*}
+-\tilde\bfbeta\cdot\Gradxt v - \epsilon \Delta v &= u\\
+v &= 0 \text{ on } \Gamma_{in}\\
+\pd{v}{n} &= 0 \text{ on } \Gamma_{out}\\
+v(t=T) &= 0.
+\end{align*}
+(The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_{out}}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_{in}}$ are zero.)
+The $t=0$ and $t=T$ boundaries can be considered as an inflow and outflow boundary respectively in space-time 
+and we denote $\partial Q_{in}:=\Gamma_{in}\cup t=0$ while $\partial Q_{out}:=\Gamma_{out}\cup t=T$.
+
+We can then derive that the test norm
+\[
+\norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \epsilon\norm{\Grad v}^2 
+\]
+provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
+
+To see this, we multiply the adjoint equation by two terms as follows:
+\begin{enumerate}
+\item Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
+\begin{equation}
+\label{eq:adj1}
+\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q u\tilde\bfbeta\cdot\Gradxt v-\epsilon\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v\,.
+\end{equation}
+Note that
+\begin{align*}
+-\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v&=-\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\Grad v \\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\int_Q\Grad(\tilde\bfbeta\cdot\Gradxt v)\cdot\Grad v \\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\int_Q(\Grad\tilde\bfbeta\cdot\Gradxt v)\cdot\Grad v\\
+&\quad+\int_Q\tilde\bfbeta\cdot\Grad\Gradxt v\cdot\Grad v\\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\int_Q(\Grad\bfbeta\cdot\Grad v)\cdot\Grad v\\
+&\quad+\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(\Grad v\cdot\Grad v)\\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\int_Q(\Grad\bfbeta\cdot\Grad v)\cdot\Grad v\\
+&\quad+\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)
+-\frac{1}{2}\int_Q\Divxt\tilde\bfbeta(\Grad v\cdot\Grad v)\\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\int_Q(\Grad\bfbeta\cdot\Grad v)\cdot\Grad v\\
+&\quad+\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)
+-\frac{1}{2}\int_Q\Div\bfbeta(\Grad v\cdot\Grad v)\\
+%
+&=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)\\
+&\quad+\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+\end{align*}
+Plugging this into \eqref{eq:adj1}, we get
+\begin{align*}
+\norm{\tilde\bfbeta\cdot\Gradxt v}&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+&\quad-\epsilon\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
++\epsilon\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)
+\end{align*}
+\end{enumerate}
+
 
 \section{Robustness for transient problems given spatial robustness}
 
