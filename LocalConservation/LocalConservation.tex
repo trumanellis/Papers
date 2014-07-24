@@ -206,7 +206,7 @@ squares methods seek to minimize the residual of the solution in the $L^2$
 norm, DPG seeks the minimization in a dual norm realized through the
 inverse Riesz map. Exact mass conservation has been an issue that has long plagued
 least squares finite elements. Several approaches have been
-used to try to adress this. Bochev \etal\cite{Bochev2010} accomplish local
+used to try to address this. Bochev \etal\cite{Bochev2010} accomplish local
 conservation by using a pointwise divergence free velocity space in the Stokes
 formulation.  Chang and Nelson\cite{ChangNelson1997} developed the
 \emph{restricted LSFEM}\cite{ChangNelson1997} by augmenting the least squares
@@ -221,8 +221,8 @@ It is worth mentioning that enforcing element conservation is possible within mo
 standard DG schemes, e.g. see the first two discretization schemes presented in \cite{AyusoMarini}.
 
 \subsection{DPG is a Minimum Residual Method}
-Roberts \etal presents a brief history and derivation of DPG with optimal test functions in
-\cite{DPGStokes}. We follow his derivation of the standard DPG method as a
+Roberts \etal present a brief history and derivation of DPG with optimal test functions in
+\cite{DPGStokes}. We follow their derivation of the standard DPG method as a
 minimum residual method. Let $U$ be the trial Hilbert space and $V$ the test
 Hilbert space for a well-posed variational problem $b(u,v)=l(v)$. In operator
 form this is $Bu=l$, where $B:U\rightarrow V'$ and $\LRa{Bu,v}=b(u,v)$. We seek to minimize the
@@ -277,13 +277,13 @@ solve element-local and much more computationally tractable.
 Of course, even on the element level, \eqnref{optimaltestproblem} still requires the inversion of the infinite-dimensional 
 Riesz map. In practice, the inversion is approximated using standard Galerkin and an ``enriched test
 space''. The effect of approximating the optimal test functions has been analyzed in \cite{practicalDPG}.
-In this contribution, we assume that error resulting from the approximation of test functions
+In this contribution, we assume that the error resulting from the approximation of test functions
 is of higher order and can be neglected.
 
 No assumptions have been made so far on the definition of the inner product on
 $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
 between a solid DPG method and one that suffers from robustness issues 
-(a robust technique remain stable as the singularly perturbed parameter approaches ``extreme'' values).
+(a robust technique remains stable as the singularly perturbed parameter approaches ``extreme'' values).
 
 \section{Element Conservative Convection-Diffusion}
 We now proceed to develop a locally conservative formulation of DPG for
@@ -354,7 +354,7 @@ discontinuous optimal test functions that come from a space differing from the
 trial space. It does not specify our choice of trial space. Nevertheless, many
 versions of DPG in the literature (convection-diffusion \cite{DPG6},
 linear elasticity \cite{BramwellDemkowiczGopalakrishnanQiu11}, linear
-acoustics \cite{DemkowiczGopalakrishnanMugaZitelli12}, Stokes
+acoustics \cite{DemkowiczGopalakrishnanMugaZitelli12}, and Stokes
 \cite{DPGStokes}) associate DPG with the so-called ``ultra-weak formulation.''
 We will follow the same derivation for the convection-diffusion equation, but
 we emphasize that other formulations are available (in particular, the
@@ -457,7 +457,7 @@ of the source,
 $$
 \int_{\ptl K} \hat{t} = \int_K f
 $$
-In context of the DPG method, this translates in a simple condition that test function
+In the context of the DPG method, this translates in a simple condition that test function
 $(1_K,\bs0)$ should belong to the element test space where $1_K$ denotes the element
 indicator function, i.e. $(1_K , \bs0)$ is the test function in which $v = 1$ on element $K$
 and $0$ elsewhere and $\bftau = \bs0$ everywhere. We note that this property is nowhere
@@ -518,7 +518,7 @@ convection-diffusion, we get:
 
 In the following analysis we neglect the error due to the approximation of optimal test functions.
 See \cite{practicalDPG} for a defense of this assumption.
-We follow the classical Brezzi's theory \cite{Brezzi1974,DBB05} for an abstract
+We follow the classical Brezzi theory \cite{Brezzi1974,DBB05} for an abstract
 mixed problem:
 \begin{equation}
 \left\{
@@ -558,7 +558,7 @@ where $\mu(K)$ stands for the area (measure) of element $K$.
 We proceed now with the discussion of the discrete inf-sup stability constants. We skip
 index $h$ in the notation.
 
-\paragraph{Inf Sup Condition} relating spaces $\bfU$ and $Q$ reads as follows:
+\paragraph{Inf-Sup Condition} relating spaces $\bfU$ and $Q$ reads as follows:
 \begin{equation}
    \sup_{\bfw \in \bfU} \frac{| c(p,\bfw) |}{|| \bfw ||_{\bfU}} \geq \beta ||
    p ||_Q\,.
@@ -578,7 +578,7 @@ the function
 \end{equation}
 Note that $\text{div} \bfpsi_h = \text{div} \bfpsi = \lambda_K$ in element $K$.
 
-Classical $h$-interpolation interpolation error estimates for the lowest error
+Classical $h$-interpolation error estimates for the lowest error
 Raviart-Thomas elements and continuity of operator $R$ imply the stability estimate:
 \begin{equation}
 \begin{array}{lll}
@@ -588,7 +588,7 @@ Raviart-Thomas elements and continuity of operator $R$ imply the stability estim
 \end{array}
 \label{eq:stab}
 \end{equation}
-Above, $C$ is a generic, mesh independent constant incorporating constant from
+Above, $C$ is a generic, mesh independent constant incorporating the constant from
 the interpolation error estimate and the continuity constant of $R$.
 Let $\hat{t}$ be the trace of $\bfpsi_h$. We have then,
 \begin{equation}
@@ -600,7 +600,7 @@ Let $\hat{t}$ be the trace of $\bfpsi_h$. We have then,
 \end{equation}
 where $C$ is the constant from stability estimate~\eqref{eq:stab}.
 
-Notice that we have considered traces of lowest order Raviart-Thomas elements
+Notice that we have considered traces of the lowest order Raviart-Thomas elements
 for the discretization of flux $\hat{t}$. The inf-sup condition for the lowest
 order RT spaces implies automatically the analogous condition for elements of
 arbitrary order; increasing the dimension of space $U$ only makes the discrete
@@ -609,7 +609,7 @@ inf-sup constant bigger.
 
 
 
-\paragraph{Inf Sup in Kernel Condition} is satisfied automatically due to the use of optimal
+\paragraph{Inf-Sup in Kernel Condition} is satisfied automatically due to the use of optimal
 test functions. First of all, we characterize the ``kernel'' space:
 \begin{equation}
 \begin{array}{rl}
@@ -650,9 +650,9 @@ energy error, \eqref{eq:robustBound}. With robust test norms, we have
 \begin{equation}
 \begin{array}{ll}
    \LRp{|| u - u_h ||^2+ || \bfsig - \bfsig_h ||^2}^{\frac{1}{2}}
-& \lesssim || (u - u_h, \bfsig - \bfsig_h, \hat{u} - \hat{u}_h, \hat{t} - \hat{t}_h ||_E \\[8pt]
+& \lesssim || (u - u_h, \bfsig - \bfsig_h, \hat{u} - \hat{u}_h, \hat{t} - \hat{t}_h) ||_E \\[8pt]
 &= \inf_{(w_h,\bfvarsigma_h,\hat{w}_h,\hat{r}_h)}
-|| (u - w_h, \bfsig - \bfvarsigma_h, \hat{u} - \hat{w}_h, \hat{t} - \hat{r}_h ||_E\,.
+|| (u - w_h, \bfsig - \bfvarsigma_h, \hat{u} - \hat{w}_h, \hat{t} - \hat{r}_h) ||_E\,.
 \end{array}
 \end{equation}
 The last equality follows from the fact that the DPG method delivers the best approximation
@@ -812,7 +812,7 @@ where $||\cdot||_K$ signifies the $L^2$ norm over element $K$.\
 \subsubsection{Adaptation for a Locally Conservative Formulation}
 With this choice of test norm, our local problem now becomes:
 
-Find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
+find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
 \begin{align}
 \min&\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}(\taudeltau,\delta\btau)_K
 +(\nabla\cdot\taudeltau-\bbeta\cdot\nabla
@@ -921,7 +921,7 @@ For the following problems, we just use the graph norm for the local problems.
 We include the inviscid Burgers' equation in our suite of tests because, being
 a nonlinear hyperbolic conservation law, it
 falls under the scope of the Lax-Wendroff theorem. %replaced purvue with purview, but I think scope might be more easily understood -JC
-The inviscid Burger's equation is
+The inviscid Burgers' equation is
 \[
 \frac{\partial u}{\partial t}+u\frac{\partial u}{\partial x}=f\,.
 \]
@@ -1048,7 +1048,7 @@ $\bbeta=(-y,x)^T$. Note that $\bbeta=\mathbf{0}$ at the domain center. We have a
 inflow boundary condition when $\bbeta\cdot\mathbf{n}<0$, in which case we set
 $\hat t=\bbeta\cdot\mathbf{n}\cdot u_0$ where
 $u_0=\frac{\sqrt{x^2+y^2}-1}{\sqrt{2}-1}$ which will vary from 0 at the center
-of boundary edges to 1 at corners. We don't enforce an outflow boundary.
+of boundary edges to 1 at corners. We do not enforce an outflow boundary.
 
 \begin{figure}[p]
 \centering
@@ -1081,7 +1081,7 @@ such that $f=1$ when $y\ge2x$ and $f=-1$ when $y<2x$. We apply boundary
 conditions of $\hat t=0$ on the inflow and $\hat u=0$ on the outflow. Contrary
 to the other problems discussed, the solution for this problem does not range
 from zero to one. Rather, the colorbar in Figure \ref{fig:discontinuous} is
-scaled to  $[-1.110,0.889]$.
+scaled to  $[-1.1,0.9]$.
 
 \begin{figure}[p]
 \centering
