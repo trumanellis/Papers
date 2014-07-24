@@ -171,10 +171,49 @@ Note that
 \end{align*}
 Plugging this into \eqref{eq:adj1}, we get
 \begin{align*}
-\norm{\tilde\bfbeta\cdot\Gradxt v}&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+\norm{\tilde\bfbeta\cdot\Gradxt v}
+&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad-\epsilon\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
-+\epsilon\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)
++\epsilon\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)\\
+%
+&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+&\quad
+-\int_{\Gamma_-}\tilde\bfbeta\cdot\Gradxt v\underbrace{\Grad v\cdot\bfn_x}_{=0}
+-\int_{\Gamma_+}\LRp{\underbrace{\pd{v}{t}}_{=0}+\bfbeta\cdot\Grad v}\Grad v\cdot\bfn_x\\
+&\quad
++\frac{1}{2}\int_{\Gamma_-}\underbrace{\bfbeta\cdot\bfn_x}_{<0}(\Grad v\cdot\Grad v)
++\frac{1}{2}\int_{\Gamma_+}\bfbeta\cdot\bfn_x(\Grad v\cdot\Grad v)\\
+&\quad
++\frac{1}{2}\int_{\Gamma_0}\underbrace{n_t}_{<0}(\Grad v\cdot\Grad v)
++\frac{1}{2}\int_{\Gamma_T}n_t\underbrace{(\Grad v\cdot\Grad v)}_{=0}\\
+%
+&\leq-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+&\quad
++\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
++\frac{1}{2}\bfbeta\cdot\bfn_x\Grad v}\cdot\Grad v\\
+%
+&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+&\quad
++\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
++\frac{1}{2}\bfbeta\cdot\bfn_x\pd{v}{\bfn_x}\bfn_x}\cdot\pd{v}{\bfn_x}\bfn_x\\
+%
+&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+&\quad
+\underbrace{-\frac{1}{2}\int_{\Gamma_+}\LRp{\pd{v}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}\\
+%
+&\leq-\int_Q u\tilde\bfbeta\cdot\Gradxt v
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+%
+&\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
++\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
+%
+&\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
++\epsilon C\norm{\Grad v}^2
 \end{align*}
 \end{enumerate}
 
