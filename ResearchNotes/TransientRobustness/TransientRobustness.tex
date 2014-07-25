@@ -215,6 +215,60 @@ Plugging this into \eqref{eq:adj1}, we get
 &\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
 +\epsilon C\norm{\Grad v}^2
 \end{align*}
+
+\item Define $w=e^{-t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}-v}e^{-t}$ while $\Grad w=\cancelto{0}{\Grad e^{-t}} v+e^{-t}\Grad v$ and
+$\Div(\bfbeta w)=\Div(\bfbeta)e^{-t} v+\bfbeta\cdot e^{-t}\Grad v$ and $\Delta w=e^{-t}\Delta v$. 
+Also, $\Gradxt w=\pd{e^{-t} v}{t}+\Grad{e^{-t} v}=e^{-t}(\Gradxt v-v)$.
+Plugging this into the adjoint equation, we get
+\begin{equation*}
+-\tilde\bfbeta\cdot\Gradxt(w)-\epsilon\Delta w=u
+\end{equation*}
+or 
+\begin{equation*}
+\tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=-e^{t}u
+\end{equation*}
+Multiply by $-v$ and integrate to get
+\begin{align*}
+\int_Q-\tilde\bfbeta\cdot\Gradxt vv+v^2-\epsilon\Delta vv=\int_Qe^{t}uv
+\end{align*}
+Then
+\begin{align*}
+\norm{v}^2&=\int_Qe^{t}uv
++\int_Q\tilde\bfbeta\cdot\Gradxt vv
++\epsilon\int_Q\Delta vv\\
+%
+&=\int_Qe^{t}uv
++\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(v)^2
+-\epsilon\int_Q\Grad v\Grad v
++\epsilon\int_\Gamma v\Grad v\cdot\bfn
+\\
+\end{align*}
+Or
+\begin{align*}
+\norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t}uv
+-\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
++\frac{1}{2}\int_\Gamma v^2\tilde\bfbeta\cdot\bfn
++\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
+\\
+&=\int_Qe^{t}uv\\
+&\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
++\frac{1}{2}\int_{\Gamma_+} \underbrace{v^2}_{=0}\bfbeta\cdot\bfn_x\\
+&\quad+\frac{1}{2}\int_{\Gamma_0} \underbrace{v^2 (-n_t)}_{<0}
++\frac{1}{2}\int_{\Gamma_T} \underbrace{v^2}_{=0} n_t\\
+&\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
++\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
+\\
+&\leq\int_Qe^{t}\int_Quv
+\\
+&\leq\int_Qe^{t}\LRp{\frac{\norm{u}^2}{2}+\frac{\norm{v}^2}{2}}
+\\
+\end{align*}
+% \item Since $\Curl\bfbeta=0$ and $\Omega$ is simply connected, there exists a scalar potential $\psi$, $\Grad\psi=\bfbeta$.
+% The potential is non-unique up to a constant, and we choose the constant such that $\exp{\psi}=O(1)$. 
+% Take the transformed function $w=\exp{\psi}v$ and substitute it into the left hand side of the adjoint equation.
+% \[
+% -\tilde\bfbeta\cdot\Gradxt w
+% \]
 \end{enumerate}
 
 
