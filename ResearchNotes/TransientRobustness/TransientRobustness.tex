@@ -216,28 +216,30 @@ Plugging this into \eqref{eq:adj1}, we get
 +\epsilon C\norm{\Grad v}^2
 \end{align*}
 
-\item Define $w=e^{-t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}-v}e^{-t}$ while $\Grad w=\cancelto{0}{\Grad e^{-t}} v+e^{-t}\Grad v$ and
-$\Div(\bfbeta w)=\Div(\bfbeta)e^{-t} v+\bfbeta\cdot e^{-t}\Grad v$ and $\Delta w=e^{-t}\Delta v$. 
-Also, $\Gradxt w=\pd{e^{-t} v}{t}+\Grad{e^{-t} v}=e^{-t}(\Gradxt v-v)$.
+\item Define $w=e^{T-t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}-v}e^{T-t}$ while $\Grad w=\cancelto{0}{\Grad e^{T-t}} v+e^{T-t}\Grad v$ and
+$\Div(\bfbeta w)=\Div(\bfbeta)e^{T-t} v+\bfbeta\cdot e^{T-t}\Grad v$ and $\Delta w=e^{T-t}\Delta v$. 
+Also, $\Gradxt w=\pd{e^{T-t} v}{t}+\Grad{e^{T-t} v}=e^{T-t}(\Gradxt v-v)$.
 Plugging this into the adjoint equation, we get
 \begin{equation*}
--\tilde\bfbeta\cdot\Gradxt(w)-\epsilon\Delta w=u
+-\tilde\bfbeta\cdot\Gradxt(w)-\epsilon\Delta w=u-\epsilon\Div\bfsigma
 \end{equation*}
 or 
 \begin{equation*}
-\tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=-e^{t}u
+\tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=e^{t-T}(-u+\epsilon\Div\bfsigma)
 \end{equation*}
 Multiply by $-v$ and integrate to get
 \begin{align*}
-\int_Q-\tilde\bfbeta\cdot\Gradxt vv+v^2-\epsilon\Delta vv=\int_Qe^{t}uv
+\int_Q-\tilde\bfbeta\cdot\Gradxt vv+v^2-\epsilon\Delta vv=\int_Qe^{t-T}uv-\epsilon\int_Qe^{t-T}\Div\bfsigma v
 \end{align*}
 Then
 \begin{align*}
-\norm{v}^2&=\int_Qe^{t}uv
+\norm{v}^2&=\int_Qe^{t-T}uv
+-\epsilon\int_Qe^{t-T}\Div\bfsigma v
 +\int_Q\tilde\bfbeta\cdot\Gradxt vv
 +\epsilon\int_Q\Delta vv\\
 %
-&=\int_Qe^{t}uv
+&=\int_Qe^{t-T}uv
+-\epsilon\int_Qe^{t-T}\Div\bfsigma v
 +\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(v)^2
 -\epsilon\int_Q\Grad v\Grad v
 +\epsilon\int_\Gamma v\Grad v\cdot\bfn
@@ -245,12 +247,16 @@ Then
 \end{align*}
 Or
 \begin{align*}
-\norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t}uv
--\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
+\norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t-T}uv
+-\epsilon\int_Qe^{t-T}\Div\bfsigma v\\
+&\quad-\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
 +\frac{1}{2}\int_\Gamma v^2\tilde\bfbeta\cdot\bfn
 +\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
 \\
-&=\int_Qe^{t}uv\\
+&=\int_Qe^{t-T}uv
++\epsilon\int_Qe^{t-T}\bfsigma\Grad v
+-\int_{\Gamma_-}v\underbrace{\epsilon\bfsigma\cdot\bfn_x}_{=\pd{v}{n}=0}
+-\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bfsigma\cdot\bfn_x\\
 &\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
 +\frac{1}{2}\int_{\Gamma_+} \underbrace{v^2}_{=0}\bfbeta\cdot\bfn_x\\
 &\quad+\frac{1}{2}\int_{\Gamma_0} \underbrace{v^2 (-n_t)}_{<0}
@@ -258,17 +264,11 @@ Or
 &\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
 +\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
 \\
-&\leq\int_Qe^{t}\int_Quv
+&\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Quv+\epsilon\int_Qu\Grad v}
 \\
-&\leq\int_Qe^{t}\LRp{\frac{\norm{u}^2}{2}+\frac{\norm{v}^2}{2}}
+&\leq \LRp{(1+\epsilon)\frac{\norm{u}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 \\
 \end{align*}
-% \item Since $\Curl\bfbeta=0$ and $\Omega$ is simply connected, there exists a scalar potential $\psi$, $\Grad\psi=\bfbeta$.
-% The potential is non-unique up to a constant, and we choose the constant such that $\exp{\psi}=O(1)$. 
-% Take the transformed function $w=\exp{\psi}v$ and substitute it into the left hand side of the adjoint equation.
-% \[
-% -\tilde\bfbeta\cdot\Gradxt w
-% \]
 \end{enumerate}
 
 
