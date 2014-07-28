@@ -7,13 +7,17 @@
 \begin{document}
 \maketitle
 
+Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
+where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
+and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
+
 Assume that boundary conditions are applied on the boundary $\Gamma_0\subset \Gamma$.  Recall that, for the ultra-weak variational formulation
 \[
 b\LRp{\LRp{u,\uh},v} = \LRp{u,A^*_h v}_{\L} + \LRa{\uh, \jump{v}}_{\Gh\setminus \Gamma_0}
 \]
 we can recover
 \[
-\norm{u}_{\L}^2 = b(u,v^*)
+\norm{u}_{\LQ}^2 = b(u,v^*)
 \]
 for conforming $v^*$ satisfying the adjoint equation
 \begin{align*}
@@ -22,26 +26,26 @@ v^* &= 0 \text{ on } \Gh\setminus\Gamma_0.
 \end{align*}
 Together, these give necessary conditions on the test norm $\norm{\cdot}_V$ such that we have $L^2$ robustness (this gives robustness in the variable $u$; for the first order formulation, conditions for $\sigma$ must also be shown).  
 \[
-\norm{u}_{\L}^2 = b(u,v^*) \leq \frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V \leq \norm{u}_E \norm{v^*}_V
+\norm{u}_{\LQ}^2 = b(u,v^*) \leq \frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V \leq \norm{u}_E \norm{v^*}_V
 \]
-Thus, showing $\norm{v^*}_V \lesssim \norm{u}_{\L}$ gives the result that $\norm{u}_{\L} \lesssim \norm{u}_E$.  
+Thus, showing $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$ gives the result that $\norm{u}_{\LQ} \lesssim \norm{u}_E$.  
 
 
-\section{Reaction-diffusion}
+\section{Reaction-Diffusion}
 
 Consider reaction diffusion
 \begin{align*}
 \pd{u}{t} + u - \epsilon \Delta u &= f\\
 u &= 0 \text{ on } \Gamma_1\\
 \pd{u}{n} &= 0 \text{ on } \Gamma_2\\
-u(t=0) &= u_0.
+u &= u_0 \text{ on } \Gamma_0.
 \end{align*}
 The adjoint equation satisfies
 \begin{align*}
 -\pd{v}{t} + v - \epsilon \Delta v &= u\\
 v &= 0 \text{ on } \Gamma_1\\
 \pd{v}{n} &= 0 \text{ on } \Gamma_2\\
-v(t=T) &= 0.
+v &= 0 \text{ on } \Gamma_T.
 \end{align*}
 (The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_1}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_2}$ are zero.)
 
@@ -53,7 +57,7 @@ provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\L}$.
 
 To see, this we multiply the adjoint equation by two terms as follows:
 \begin{enumerate}
-\item Multiply by $v$ and integrate over $\Omega \times [0,T] = Q$ to get
+\item Multiply by $v$ and integrate over $Q$ to get
 \[
 -\int_Q \pd{v}{t}v + \int_Q v^2 + \epsilon \int_Q \LRb{\Grad v}^2 - \epsilon \int_0^T\int_{\Gamma} \pd{v}{n}v = \int_Q uv.
 \]
@@ -100,37 +104,45 @@ and thus the DPG energy norm robustly bounds the $L^2$ norm from above
 \norm{u}_{\L} \lesssim \norm{u}_E.
 \]
 
-\section{Convection-diffusion}
+\section{Convection-Diffusion}
 
 Consider convection-diffusion
 \begin{align*}
-\pd{u}{t} + \bfbeta\cdot\Grad u - \epsilon \Delta u &= f\\
-u &= 0 \text{ on } \Gamma_{out}\\
-\pd{u}{n} &= 0 \text{ on } \Gamma_{in}\\
-u(t=0) &= u_0.
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\pd{u}{t} + \bfbeta\cdot\Grad u - \Div\bfsigma &= f\\
+\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+u &= 0 \text{ on } \Gamma_+\\
+u &= u_0 \text{ on } \Gamma_0.
 \end{align*}
 Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$ and $\Gradxt:=\vecttwo{\Grad}{\pd{}{t}}$, then we can rewrite this as
 \begin{align*}
-\tilde\bfbeta\cdot\Gradxt u - \epsilon \Delta u &= f\\
-u &= 0 \text{ on } \Gamma_{out}\\
-\pd{u}{n} &= 0 \text{ on } \Gamma_{in}\\
-u(t=0) &= u_0.
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
+\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+u &= 0 \text{ on } \Gamma_+\\
+u &= u_0 \text{ on } \Gamma_0.
 \end{align*}
 The adjoint equation satisfies
 \begin{align*}
 -\tilde\bfbeta\cdot\Gradxt v - \epsilon \Delta v &= u\\
-v &= 0 \text{ on } \Gamma_{in}\\
-\pd{v}{n} &= 0 \text{ on } \Gamma_{out}\\
-v(t=T) &= 0.
+\pd{v}{n} &= 0 \text{ on } \Gamma_-\\
+v &= 0 \text{ on } \Gamma_+\\
+v &= 0 \text{ on } \Gamma_T.
 \end{align*}
 (The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_{out}}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_{in}}$ are zero.)
-The $t=0$ and $t=T$ boundaries can be considered as an inflow and outflow boundary respectively in space-time 
-and we denote $\partial Q_{in}:=\Gamma_{in}\cup t=0$ while $\partial Q_{out}:=\Gamma_{out}\cup t=T$.
 
 We can then derive that the test norm
-\[
-\norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \epsilon\norm{\Grad v}^2 
-\]
+\begin{align}
+\norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
+\min\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}\norm{\bftau}_K^2
++ \norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v}_K^2 \nonumber\\
+&+\norm{\tilde\bfbeta\cdot \Gradxt v}_K^2
++ \epsilon\norm{\Grad v}_K^2
++ \norm{v}^2_K\,,
+\end{align}
+% \[
+% \norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
+% \]
 provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
 
 To see this, we multiply the adjoint equation by two terms as follows:
@@ -269,6 +281,9 @@ Or
 &\leq \LRp{\frac{\norm{u}^2}{2}+\frac{\epsilon\norm{\bfsigma}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 \\
 \end{align*}
+
+\item Note that $\bftau=\epsilon\Grad v$, so we already have control of $\norm{\bftau}$.
+\item We also have that 
 \end{enumerate}
 
 

@@ -590,7 +590,7 @@ results in the presence of singularities;
 for more details and motivation, see \cite{JesseDissertation}.
 \begin{align}
 \norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
-\min\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}\norm{\bftau}_K^2,
+\min\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}\norm{\bftau}_K^2
 + \norm{\Div \bftau - \bfbeta\cdot\Grad v}_K^2 \nonumber\\
 &+\norm{\bfbeta\cdot \Grad v}_K^2
 + \epsilon\norm{\Grad v}_K^2
@@ -678,7 +678,7 @@ Now we need to perform the same analysis for the modified inner product in
 \eqref{eq:localSolveMod}. In this case,
 condition~\eqref{eq:robustEst1} follows even more naturally as
 \begin{equation}
-   \int_K v\cdot1\leq\mu(K)^{1/2}\frac{1}{\mu(K)^{1/2}}\LRl{\int_Kv}
+   \int_K v\cdot1\leq\mu(K)^{1/2}\frac{1}{\mu(K)^{1/2}}\LRb{\int_Kv}
    \leq\norm{(v,\bftau)}_K\,,
    \label{eq:robustProof2}
 \end{equation}
