@@ -254,8 +254,8 @@ Or
 +\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
 \\
 &=\int_Qe^{t-T}uv
-+\epsilon\int_Qe^{t-T}\bfsigma\Grad v
--\int_{\Gamma_-}v\underbrace{\epsilon\bfsigma\cdot\bfn_x}_{=\pd{v}{n}=0}
++\epsilon\int_Qe^{t-T}\bfsigma\cdot\Grad v
+-\epsilon\int_{\Gamma_-}v\underbrace{\bfsigma\cdot\bfn_x}_{=\epsilon\pd{v}{n}=0}
 -\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bfsigma\cdot\bfn_x\\
 &\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
 +\frac{1}{2}\int_{\Gamma_+} \underbrace{v^2}_{=0}\bfbeta\cdot\bfn_x\\
@@ -264,9 +264,9 @@ Or
 &\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
 +\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
 \\
-&\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Quv+\epsilon\int_Qu\Grad v}
+&\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Quv+\epsilon\int_Q\bfsigma\cdot\Grad v}
 \\
-&\leq \LRp{(1+\epsilon)\frac{\norm{u}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
+&\leq \LRp{\frac{\norm{u}^2}{2}+\frac{\epsilon\norm{\bfsigma}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 \\
 \end{align*}
 \end{enumerate}
