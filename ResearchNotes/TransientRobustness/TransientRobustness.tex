@@ -31,78 +31,78 @@ Together, these give necessary conditions on the test norm $\norm{\cdot}_V$ such
 Thus, showing $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$ gives the result that $\norm{u}_{\LQ} \lesssim \norm{u}_E$.  
 
 
-\section{Reaction-Diffusion}
+% \section{Reaction-Diffusion}
 
-Consider reaction diffusion
-\begin{align*}
-\pd{u}{t} + u - \epsilon \Delta u &= f\\
-u &= 0 \text{ on } \Gamma_1\\
-\pd{u}{n} &= 0 \text{ on } \Gamma_2\\
-u &= u_0 \text{ on } \Gamma_0.
-\end{align*}
-The adjoint equation satisfies
-\begin{align*}
--\pd{v}{t} + v - \epsilon \Delta v &= u\\
-v &= 0 \text{ on } \Gamma_1\\
-\pd{v}{n} &= 0 \text{ on } \Gamma_2\\
-v &= 0 \text{ on } \Gamma_T.
-\end{align*}
-(The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_1}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_2}$ are zero.)
+% Consider reaction diffusion
+% \begin{align*}
+% \pd{u}{t} + u - \epsilon \Delta u &= f\\
+% u &= 0 \text{ on } \Gamma_1\\
+% \pd{u}{n} &= 0 \text{ on } \Gamma_2\\
+% u &= u_0 \text{ on } \Gamma_0.
+% \end{align*}
+% The adjoint equation satisfies
+% \begin{align*}
+% -\pd{v}{t} + v - \epsilon \Delta v &= u\\
+% v &= 0 \text{ on } \Gamma_1\\
+% \pd{v}{n} &= 0 \text{ on } \Gamma_2\\
+% v &= 0 \text{ on } \Gamma_T.
+% \end{align*}
+% (The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_1}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_2}$ are zero.)
 
-We can then derive that the test norm
-\[
-\norm{v}_V^2 = \norm{\pd{v}{t}}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
-\]
-provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\L}$.
+% We can then derive that the test norm
+% \[
+% \norm{v}_V^2 = \norm{\pd{v}{t}}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
+% \]
+% provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\L}$.
 
-To see, this we multiply the adjoint equation by two terms as follows:
-\begin{enumerate}
-\item Multiply by $v$ and integrate over $Q$ to get
-\[
--\int_Q \pd{v}{t}v + \int_Q v^2 + \epsilon \int_Q \LRb{\Grad v}^2 - \epsilon \int_0^T\int_{\Gamma} \pd{v}{n}v = \int_Q uv.
-\]
-Noting that either $v = 0$ or $\pd{v}{n} = 0$ on the boundary removes the integral over $\Gamma$.  Next, we can factor the first term and use Young's inequality to get
-\[
--\int_0^T  \pd{}{t}\int_{\Omega} v^2 + \norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q + \frac{1}{2}\norm{v}^2_Q
-\]
-Integrating by parts the first term gives
-\[
--\left.\int_{\Omega} v^2\right|_0^T + \frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q
-\]
-Using boundary condition $v=0$ at $t= T$ gives
-\[
-\frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \int_{\Omega} v(t=0)^2 + \frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q.
-\]
+% To see, this we multiply the adjoint equation by two terms as follows:
+% \begin{enumerate}
+% \item Multiply by $v$ and integrate over $Q$ to get
+% \[
+% -\int_Q \pd{v}{t}v + \int_Q v^2 + \epsilon \int_Q \LRb{\Grad v}^2 - \epsilon \int_0^T\int_{\Gamma} \pd{v}{n}v = \int_Q uv.
+% \]
+% Noting that either $v = 0$ or $\pd{v}{n} = 0$ on the boundary removes the integral over $\Gamma$.  Next, we can factor the first term and use Young's inequality to get
+% \[
+% -\int_0^T  \pd{}{t}\int_{\Omega} v^2 + \norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q + \frac{1}{2}\norm{v}^2_Q
+% \]
+% Integrating by parts the first term gives
+% \[
+% -\left.\int_{\Omega} v^2\right|_0^T + \frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q
+% \]
+% Using boundary condition $v=0$ at $t= T$ gives
+% \[
+% \frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \int_{\Omega} v(t=0)^2 + \frac{1}{2}\norm{v}^2_Q + \epsilon \norm{\Grad v}^2_Q \leq \frac{1}{2}\norm{u}^2_Q.
+% \]
 
-\item Multiply by $-\pd{v}{t}$ and integrate over $Q$.  Young's inequality changes the right hand side to 
-\[
-\int_Q\pd{v}{t}^2 - \int_Q v\pd{v}{t} + \epsilon\int_Q \Delta v \pd{v}{t} = \int_Q -u \pd{v}{t} \leq \frac{1}{2}\norm{u}_Q^2 + \frac{1}{2}\norm{\pd{v}{t}}_Q^2 .
-\]
-The term $\int_Q v\pd{v}{t}$ can be reduced to the positive contribution $\int_{\Omega}{v(t=0)}^2  $ as above.  We can then take the Laplacian term, integrate by parts in space to get
-\[
-\int_Q \Delta v \pd{v}{t} = \int_0^T \int_{\Omega} \Delta v \pd{v}{t} =  \int_0^T \int_{\Gamma} \pd{v}{t}\pd{v}{n} - \int_0^T \int_{\Omega}\Grad\LRp{\pd{v}{t}}\Grad v.
-\]
-Since either $v = 0$ or $\pd{v}{n} = 0$ on $\Gamma$, the first term disappears.  The second term can be bounded by noting
-\[
-- \int_0^T \int_{\Omega}\Grad\LRp{\pd{v}{t}}\Grad v = - \int_0^T \pd{}{t}\int_{\Omega}\LRb{\Grad v} ^2 = - \left.\int_{\Omega}\LRb{\Grad v}^2 \right|_0^T.
-\]
-Since $v = 0$ at $t=T$, $\Grad v = 0$ at $t=T$ as well, and we are left with the positive contribution $\int_{\Omega}\LRb{\Grad v(t=0)}^2$.  Then,
-\[
-\frac{1}{2}\norm{\pd{v}{t}}_Q^2 \leq \frac{1}{2}\norm{u}_Q.
-\]
-\end{enumerate}
-Together, these two show that, under test norm
-\[
-\norm{v}_V^2 = \norm{\pd{v}{t}}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2,
-\]
-the adjoint equation $v^*$ satisfies
-\[
-\norm{v^*}_V \lesssim \norm{u}_{\L}
-\]
-and thus the DPG energy norm robustly bounds the $L^2$ norm from above
-\[
-\norm{u}_{\L} \lesssim \norm{u}_E.
-\]
+% \item Multiply by $-\pd{v}{t}$ and integrate over $Q$.  Young's inequality changes the right hand side to 
+% \[
+% \int_Q\pd{v}{t}^2 - \int_Q v\pd{v}{t} + \epsilon\int_Q \Delta v \pd{v}{t} = \int_Q -u \pd{v}{t} \leq \frac{1}{2}\norm{u}_Q^2 + \frac{1}{2}\norm{\pd{v}{t}}_Q^2 .
+% \]
+% The term $\int_Q v\pd{v}{t}$ can be reduced to the positive contribution $\int_{\Omega}{v(t=0)}^2  $ as above.  We can then take the Laplacian term, integrate by parts in space to get
+% \[
+% \int_Q \Delta v \pd{v}{t} = \int_0^T \int_{\Omega} \Delta v \pd{v}{t} =  \int_0^T \int_{\Gamma} \pd{v}{t}\pd{v}{n} - \int_0^T \int_{\Omega}\Grad\LRp{\pd{v}{t}}\Grad v.
+% \]
+% Since either $v = 0$ or $\pd{v}{n} = 0$ on $\Gamma$, the first term disappears.  The second term can be bounded by noting
+% \[
+% - \int_0^T \int_{\Omega}\Grad\LRp{\pd{v}{t}}\Grad v = - \int_0^T \pd{}{t}\int_{\Omega}\LRb{\Grad v} ^2 = - \left.\int_{\Omega}\LRb{\Grad v}^2 \right|_0^T.
+% \]
+% Since $v = 0$ at $t=T$, $\Grad v = 0$ at $t=T$ as well, and we are left with the positive contribution $\int_{\Omega}\LRb{\Grad v(t=0)}^2$.  Then,
+% \[
+% \frac{1}{2}\norm{\pd{v}{t}}_Q^2 \leq \frac{1}{2}\norm{u}_Q.
+% \]
+% \end{enumerate}
+% Together, these two show that, under test norm
+% \[
+% \norm{v}_V^2 = \norm{\pd{v}{t}}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2,
+% \]
+% the adjoint equation $v^*$ satisfies
+% \[
+% \norm{v^*}_V \lesssim \norm{u}_{\L}
+% \]
+% and thus the DPG energy norm robustly bounds the $L^2$ norm from above
+% \[
+% \norm{u}_{\L} \lesssim \norm{u}_E.
+% \]
 
 \section{Convection-Diffusion}
 
@@ -118,16 +118,37 @@ Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$ and $\Gradxt:=\vecttwo{\Grad}{\pd{}{t}
 \begin{align*}
 \frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
 \tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
+% \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\\
 \pd{u}{n} &= 0 \text{ on } \Gamma_-\\
 u &= 0 \text{ on } \Gamma_+\\
 u &= u_0 \text{ on } \Gamma_0.
 \end{align*}
-The adjoint equation satisfies
+We decompose the adjoint into three parts:
+a discontinuous part
 \begin{align*}
--\tilde\bfbeta\cdot\Gradxt v - \epsilon \Delta v &= u\\
-\pd{v}{n} &= 0 \text{ on } \Gamma_-\\
-v &= 0 \text{ on } \Gamma_+\\
-v &= 0 \text{ on } \Gamma_T.
+\frac{1}{\epsilon}\bftau_0+\Grad v_0 &=0\\
+-\tilde\bfbeta\cdot\Gradxt v_0 + \Div\bftau_0 &= 0\\
+\bftau_0\cdot\bfn_x &= \bftau\cdot\bfn_x \text{ on } \Gamma_-\cup\Gamma_0\\
+v_0 &= v \text{ on } \Gamma_+\\
+v_0 &= v \text{ on } \Gamma_T\\
+\jump{v_0}&=\jump{v} \text{ on } \Gamma_h^0\\
+\jump{\bftau_0\cdot\bfn_x}&=\jump{\bftau_0\cdot\bfn_x} \text{ on } \Gamma_{hx}^0\,,
+\end{align*}
+a continuous part with forcing term $g$
+\begin{align*}
+\frac{1}{\epsilon}\bftau_1+\Grad v_1 &=0\\
+-\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= g\\
+\bftau_1\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_1 &= 0 \text{ on } \Gamma_+\\
+v_1 &= 0 \text{ on } \Gamma_T\,,
+\end{align*}
+and a continuous part with forcing $f$
+\begin{align*}
+\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=f\\
+-\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
+\bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_2 &= 0 \text{ on } \Gamma_+\\
+v_2 &= 0 \text{ on } \Gamma_T\,.
 \end{align*}
 (The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_{out}}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_{in}}$ are zero.)
 
@@ -140,14 +161,27 @@ We can then derive that the test norm
 + \epsilon\norm{\Grad v}_K^2
 + \norm{v}^2_K\,,
 \end{align}
+
+Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
+$\norm{(v_1,\bftau_1)}_V\leq\norm{g}_\LQ$ and $\norm{(v_2,\bftau_2)}_V\leq\norm{f}_\LQ$.
 % \[
 % \norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
 % \]
 provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
 
-To see this, we multiply the adjoint equation by two terms as follows:
-\begin{enumerate}
-\item Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
+\textcolor{red}{Insert conditions on $\bfbeta$}
+\begin{lemma}
+For the above conditions on $\bfbeta$,
+\[
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq \norm{g}
+\]
+and since $-\tilde\bfbeta\cdot\Gradxt v_1+\Div\bftau_1=g$,
+\[
+\norm{\Div\bftau_1}\leq\norm{g}\,.
+\]
+\end{lemma}
+\begin{proof}
+Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
 \begin{equation}
 \label{eq:adj1}
 \norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q u\tilde\bfbeta\cdot\Gradxt v-\epsilon\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v\,.
@@ -227,8 +261,17 @@ Plugging this into \eqref{eq:adj1}, we get
 &\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
 +\epsilon C\norm{\Grad v}^2
 \end{align*}
+\end{proof}
 
-\item Define $w=e^{T-t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}-v}e^{T-t}$ while $\Grad w=\cancelto{0}{\Grad e^{T-t}} v+e^{T-t}\Grad v$ and
+\begin{lemma}
+For the above conditions on $\bfbeta$,
+\[
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{f}^2\,.
+\]
+Note that $\bftau=\epsilon\Grad v$, so we already have control of $\norm{\bftau}$.
+\end{lemma}
+\begin{proof}
+Define $w=e^{T-t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}-v}e^{T-t}$ while $\Grad w=\cancelto{0}{\Grad e^{T-t}} v+e^{T-t}\Grad v$ and
 $\Div(\bfbeta w)=\Div(\bfbeta)e^{T-t} v+\bfbeta\cdot e^{T-t}\Grad v$ and $\Delta w=e^{T-t}\Delta v$. 
 Also, $\Gradxt w=\pd{e^{T-t} v}{t}+\Grad{e^{T-t} v}=e^{T-t}(\Gradxt v-v)$.
 Plugging this into the adjoint equation, we get
@@ -281,10 +324,7 @@ Or
 &\leq \LRp{\frac{\norm{u}^2}{2}+\frac{\epsilon\norm{\bfsigma}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 \\
 \end{align*}
-
-\item Note that $\bftau=\epsilon\Grad v$, so we already have control of $\norm{\bftau}$.
-\item We also have that 
-\end{enumerate}
+\end{proof}
 
 
 \section{Robustness for transient problems given spatial robustness}
