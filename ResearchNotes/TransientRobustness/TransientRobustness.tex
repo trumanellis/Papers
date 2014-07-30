@@ -142,15 +142,15 @@ a continuous part with forcing term $g$
 v_1 &= 0 \text{ on } \Gamma_+\\
 v_1 &= 0 \text{ on } \Gamma_T\,,
 \end{align*}
-and a continuous part with forcing $f$
+and a continuous part with forcing $\bff$
 \begin{align*}
-\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=f\\
+\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
 -\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
 \bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
 v_2 &= 0 \text{ on } \Gamma_+\\
 v_2 &= 0 \text{ on } \Gamma_T\,.
 \end{align*}
-(The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_{out}}$ and $\LRa{\fnh,\jump{v}}_{\Gamma_{in}}$ are zero.)
+(The boundary conditions can be derived by taking the ultra-weak formulation and choosing boundary conditions such that the temporal flux and spatial flux terms $\LRa{\uh, \jump{\tau_n}}_{\Gamma_{out}}$ and $\LRa{\hat t_n,\jump{v}}_{\Gamma_{in}}$ are zero.)
 
 We can then derive that the test norm
 \begin{align}
@@ -161,13 +161,13 @@ We can then derive that the test norm
 + \epsilon\norm{\Grad v}_K^2
 + \norm{v}^2_K\,,
 \end{align}
-
-Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
-$\norm{(v_1,\bftau_1)}_V\leq\norm{g}_\LQ$ and $\norm{(v_2,\bftau_2)}_V\leq\norm{f}_\LQ$.
 % \[
 % \norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
 % \]
 provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
+
+Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
+$\norm{(v_1,\bftau_1)}_V\leq\norm{g}_\LQ$ and $\norm{(v_2,\bftau_2)}_V\leq\norm{f}_\LQ$.
 
 \textcolor{red}{Insert conditions on $\bfbeta$}
 \begin{lemma}
@@ -184,7 +184,7 @@ and since $-\tilde\bfbeta\cdot\Gradxt v_1+\Div\bftau_1=g$,
 Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
 \begin{equation}
 \label{eq:adj1}
-\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q u\tilde\bfbeta\cdot\Gradxt v-\epsilon\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v\,.
+\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\epsilon\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v\,.
 \end{equation}
 Note that
 \begin{align*}
@@ -218,12 +218,12 @@ Note that
 Plugging this into \eqref{eq:adj1}, we get
 \begin{align*}
 \norm{\tilde\bfbeta\cdot\Gradxt v}
-&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad-\epsilon\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
 +\epsilon\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)\\
 %
-&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
 -\int_{\Gamma_-}\tilde\bfbeta\cdot\Gradxt v\underbrace{\Grad v\cdot\bfn_x}_{=0}
@@ -235,30 +235,30 @@ Plugging this into \eqref{eq:adj1}, we get
 +\frac{1}{2}\int_{\Gamma_0}\underbrace{n_t}_{<0}(\Grad v\cdot\Grad v)
 +\frac{1}{2}\int_{\Gamma_T}n_t\underbrace{(\Grad v\cdot\Grad v)}_{=0}\\
 %
-&\leq-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
 +\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\Grad v}\cdot\Grad v\\
 %
-&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
 +\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\pd{v}{\bfn_x}\bfn_x}\cdot\pd{v}{\bfn_x}\bfn_x\\
 %
-&=-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
 \underbrace{-\frac{1}{2}\int_{\Gamma_+}\LRp{\pd{v}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}\\
 %
-&\leq-\int_Q u\tilde\bfbeta\cdot\Gradxt v
+&\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 %
-&\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
+&\leq-\frac{\norm{g}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 %
-&\leq-\frac{\norm{u}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
+&\leq-\frac{\norm{g}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
 +\epsilon C\norm{\Grad v}^2
 \end{align*}
 \end{proof}
@@ -276,25 +276,25 @@ $\Div(\bfbeta w)=\Div(\bfbeta)e^{T-t} v+\bfbeta\cdot e^{T-t}\Grad v$ and $\Delta
 Also, $\Gradxt w=\pd{e^{T-t} v}{t}+\Grad{e^{T-t} v}=e^{T-t}(\Gradxt v-v)$.
 Plugging this into the adjoint equation, we get
 \begin{equation*}
--\tilde\bfbeta\cdot\Gradxt(w)-\epsilon\Delta w=u-\epsilon\Div\bfsigma
+-\tilde\bfbeta\cdot\Gradxt(w)-\epsilon\Delta w=g-\epsilon\Div\bff
 \end{equation*}
 or 
 \begin{equation*}
-\tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=e^{t-T}(-u+\epsilon\Div\bfsigma)
+\tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=e^{t-T}(-g+\epsilon\Div\bff)
 \end{equation*}
 Multiply by $-v$ and integrate to get
 \begin{align*}
-\int_Q-\tilde\bfbeta\cdot\Gradxt vv+v^2-\epsilon\Delta vv=\int_Qe^{t-T}uv-\epsilon\int_Qe^{t-T}\Div\bfsigma v
+\int_Q-\tilde\bfbeta\cdot\Gradxt vv+v^2-\epsilon\Delta vv=\int_Qe^{t-T}gv-\epsilon\int_Qe^{t-T}\Div\bff v
 \end{align*}
 Then
 \begin{align*}
-\norm{v}^2&=\int_Qe^{t-T}uv
--\epsilon\int_Qe^{t-T}\Div\bfsigma v
+\norm{v}^2&=\int_Qe^{t-T}gv
+-\epsilon\int_Qe^{t-T}\Div\bff v
 +\int_Q\tilde\bfbeta\cdot\Gradxt vv
 +\epsilon\int_Q\Delta vv\\
 %
-&=\int_Qe^{t-T}uv
--\epsilon\int_Qe^{t-T}\Div\bfsigma v
+&=\int_Qe^{t-T}gv
+-\epsilon\int_Qe^{t-T}\Div\bff v
 +\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(v)^2
 -\epsilon\int_Q\Grad v\Grad v
 +\epsilon\int_\Gamma v\Grad v\cdot\bfn
@@ -302,16 +302,16 @@ Then
 \end{align*}
 Or
 \begin{align*}
-\norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t-T}uv
--\epsilon\int_Qe^{t-T}\Div\bfsigma v\\
+\norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t-T}gv
+-\epsilon\int_Qe^{t-T}\Div\bff v\\
 &\quad-\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
 +\frac{1}{2}\int_\Gamma v^2\tilde\bfbeta\cdot\bfn
 +\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
 \\
-&=\int_Qe^{t-T}uv
-+\epsilon\int_Qe^{t-T}\bfsigma\cdot\Grad v
--\epsilon\int_{\Gamma_-}v\underbrace{\bfsigma\cdot\bfn_x}_{=\epsilon\pd{v}{n}=0}
--\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bfsigma\cdot\bfn_x\\
+&=\int_Qe^{t-T}gv
++\epsilon\int_Qe^{t-T}\bff\cdot\Grad v
+-\epsilon\int_{\Gamma_-}v\underbrace{\bff\cdot\bfn_x}_{=\epsilon\pd{v}{n}=0}
+-\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bff\cdot\bfn_x\\
 &\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
 +\frac{1}{2}\int_{\Gamma_+} \underbrace{v^2}_{=0}\bfbeta\cdot\bfn_x\\
 &\quad+\frac{1}{2}\int_{\Gamma_0} \underbrace{v^2 (-n_t)}_{<0}
@@ -319,9 +319,9 @@ Or
 &\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
 +\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
 \\
-&\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Quv+\epsilon\int_Q\bfsigma\cdot\Grad v}
+&\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Qgv+\epsilon\int_Q\bff\cdot\Grad v}
 \\
-&\leq \LRp{\frac{\norm{u}^2}{2}+\frac{\epsilon\norm{\bfsigma}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
+&\leq \LRp{\frac{\norm{g}^2}{2}+\frac{\epsilon\norm{\bff}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 \\
 \end{align*}
 \end{proof}
