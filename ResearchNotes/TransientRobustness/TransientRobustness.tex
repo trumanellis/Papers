@@ -184,11 +184,11 @@ and since $-\tilde\bfbeta\cdot\Gradxt v_1+\Div\bftau_1=g$,
 Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
 \begin{equation}
 \label{eq:adj1}
-\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\epsilon\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v\,.
+\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\bftau\,.
 \end{equation}
 Note that
 \begin{align*}
--\int_Q\tilde\bfbeta\cdot\Gradxt v\Delta v&=-\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\Grad v \\
+\frac{1}{\epsilon}\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\bftau&=-\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\Grad v \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
 +\int_Q\Grad(\tilde\bfbeta\cdot\Gradxt v)\cdot\Grad v \\
