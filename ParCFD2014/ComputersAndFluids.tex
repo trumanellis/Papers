@@ -860,21 +860,34 @@ where $\alpha_c$, $\alpha_m$, $\alpha_e$, $\alpha_s$, and $\alpha_f$ are scaling
 
 Unfortunately, the graph norm develops unresolvable internal boundary layers in the optimal test functions leading to a non-robust
 local solve for steady convection-diffusion or Navier-Stokes,
-% is known to not be robust for steady convection-diffusion or Navier-Stokes,
-and we saw that non-robustness manifest when we tried to use this norm for transient simulations as well.
+and we saw that non-robustness manifests when we tried to use this norm for transient simulations as well.
 For steady state DPG, we developed a robust test norm for convection-diffusion and drew analogies to create 
 a robust norm for Navier-Stokes.
-A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
-so we are on shakier footing developing a robust norm for transient Navier-Stokes.
-Nevertheless, we can make some guesses about how to modify the test norm in order to obtain some preliminary results.
-The graph norm has proven to be sufficient for simulations of pure convection. 
-So an obvious first guess might be to take the graph norm on the convective quantities and decouple the viscous terms.
-Indeed, this selection proved to be more robust for the test problems considered in the next section.
-This modified graph norm is then:
+
+Our robust test norm for transient convection-diffusion is 
+\begin{align}
+\norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
+\frac{1}{\epsilon}\norm{\bftau}^2
++ \norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v}^2 \nonumber\\
+&+\norm{\tilde\bfbeta\cdot \Gradxt v}^2
++ \epsilon\norm{\Grad v}^2
++ \norm{v}^2\,,
+\end{align}
+where $\tilde\bfbeta=(\bfbeta,1)^T$.
+The analogous norm for transient Navier-Stokes is 
 \begin{equation}
 \begin{aligned}
-&\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
-+&\norm{-\Grad v_e}^2\\
+&
+\underbrace{
+\frac{1}{\mu}\norm{\mathbb{S}}^2
++\frac{Pr}{C_p\mu}\norm{\bftau}^2
+}_{\frac{1}{\epsilon}\norm{\bftau}^2}
+%
+\underbrace{
++\mu\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2
++\frac{C_p\mu}{Pr}\norm{\Grad v_e}^2
+}_{\epsilon\norm{\Grad v}^2}\\
+%
 +&\left\|
 -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
 -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
@@ -882,13 +895,45 @@ This modified graph norm is then:
 -R\tilde T\tilde\bfu\Grad v_e
 -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
 \right\|^2\\
-+&\left\|
++&\left\|2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}
 -\tilde\rho\Grad v_c
 -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+\right.\\
+&\left.
 -\tilde\rho\frac{\partial\bfv_m}{\partial t}
 -C_v\tilde\rho\tilde T\Grad v_e
 -R\tilde\rho\tilde T\Grad v_e
 +\tilde{\mathbb{D}}\cdot\Grad v_e
+\right.\\
+&\left.
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+-\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+-\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+-\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
++&\left\|-\Div\bftau
+-R\tilde\rho\Div\bfv_m
+-C_v\tilde\rho\tilde\bfu\Grad v_e
+-R\tilde\rho\tilde\bfu\Grad v_e
+-C_v\tilde\rho\frac{\partial v_e}{\partial t}
+\right\|^2\\
+%
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
++&\left\|
+-\tilde\rho\Grad v_c
+-\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+\right.\\
+&\left.
+-\tilde\rho\frac{\partial\bfv_m}{\partial t}
+-C_v\tilde\rho\tilde T\Grad v_e
+-R\tilde\rho\tilde T\Grad v_e
 \right.\\
 &\left.
 -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
@@ -903,18 +948,66 @@ This modified graph norm is then:
 -R\tilde\rho\tilde\bfu\Grad v_e
 -C_v\tilde\rho\frac{\partial v_e}{\partial t}
 \right\|^2\\
-+&\frac{1}{\mu}\norm{\mathbb{S}}^2
-+\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
-+\frac{Pr}{c_p\mu}\norm{\bftau}^2
-+\norm{\Div\bftau}^2\\
 +&\norm{v_c}^2
 +\norm{\bfv_m}^2
 +\norm{v_e}^2
-\,.
+% +\alpha_s\norm{\mathbb{S}}^2
+% +\alpha_f\norm{\bftau}^2
+\,,
 \end{aligned}
 \end{equation}
-From a number of numerical tests, it appears that this norm is not completely robust, but it does seem to perform somewhat better
-than the standard graph norm.
+
+% A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
+% so we are on shakier footing developing a robust norm for transient Navier-Stokes.
+% Nevertheless, we can make some guesses about how to modify the test norm in order to obtain some preliminary results.
+% The graph norm has proven to be sufficient for simulations of pure convection. 
+% So an obvious first guess might be to take the graph norm on the convective quantities and decouple the viscous terms.
+% Indeed, this selection proved to be more robust for the test problems considered in the next section.
+% This modified graph norm is then:
+% \begin{equation}
+% \begin{aligned}
+% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2\\
+% +&\norm{-\Grad v_e}^2\\
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e
+% -R\tilde\rho\tilde T\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% \right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\frac{1}{\mu}\norm{\mathbb{S}}^2
+% +\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
+% +\frac{Pr}{c_p\mu}\norm{\bftau}^2
+% +\norm{\Div\bftau}^2\\
+% +&\norm{v_c}^2
+% +\norm{\bfv_m}^2
+% +\norm{v_e}^2
+% \,.
+% \end{aligned}
+% \end{equation}
+% From a number of numerical tests, it appears that this norm is not completely robust, but it does seem to perform somewhat better
+% than the standard graph norm.
 
 %   /$$   /$$                                             /$$                     /$$
 %  | $$$ | $$                                            |__/                    | $$
