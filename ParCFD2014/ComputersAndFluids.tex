@@ -573,20 +573,21 @@ for the DPG method applied to steady convection-diffusion, but in this section w
 In the context of linear problems, DPG has been successfully applied to a wide range of physical applications.  
 Theoretical groundwork for DPG applied to the Poisson equation was laid in \cite{DPGPoisson}.  The time-harmonic Helmholtz equation was the focus of \cite{DPGHelmholtz, Gopalakrishnan2014} and \cite{DPG4}.  Linear elasticity and plate problems were addressed in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}, and Maxwell was addressed in \cite{DPGCloaking, WohlmuthReport}.  Linear fluid dynamics problems include convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC} and stationary Stokes flow\cite{DPGStokes,EllisLC}.
 
-In the following section, we extend the idea of DPG to nonlinear problems.  In an abstract sense, we consider the nonlinear variational problem
+In the following section, we extend the idea of DPG to nonlinear problems.  In an abstract sense, we consider the discrete nonlinear variational problem
 \[
-\LRa{B(u)-\ell,v}_{V^*\times V} \coloneqq \LRa{R(u),v}_{V^*\times V} = 0, \quad \forall v \in V.
+\LRa{B(u_h)-\ell,v}_{V^*\times V} \coloneqq \LRa{R(u_h),v}_{V^*\times V} = 0, \quad \forall v \in V.
 \]
 The linearization of this problem leads to the Newton iteration, defined by the step
 \[
-\LRa{J(\Delta u,u),v}_{V^*\times V} = \LRa{R(u),v}_{V^*\times V}.
+\LRa{B'(u_h)\Delta u,v}_{V^*\times V} = \LRa{R(u_h),v}_{V^*\times V},
 \]
+where $B'(u_h)$ is the Gateux derivative of $B$ given $u_h$.  It can be shown that DPG applied to this linearized problem leads to a Gauss-Newton iteration, where 
+\[
+\min_{\Delta u} \norm{B'(u_h)\Delta u - r(u_h)}_{V'}^2
+\]
+is solved at every iteration \cite{Chan2013dpg}.  
 
-Moro, Peraire and Nguyen observed \cite{MoroNguyenPeraire11, MoroMastersThesis} that on a single element, the HDPG method --- referring to DPG applied to a hybridized Discontinuous Galerkin (HDG) method --- converges, while HDG on its own does not.  Moreover, HDPG required an order of magnitude less artificial diffusion to converge to a nonlinear solution of the compressible Navier-Stokes, both of which indicate strong 
-
-In terms of comparing *competing* stabilized methods to DPG, the key here may be DPG's least-squares nature.  You might cite two references here:
-- Bob, Leszek's and my paper on compressible Navier Stokes shows that even at higher Reynolds number, we converge on a coarse mesh.  I think that can be argued to be evidence of solid nonlinear stability in the pre-asymptotic regime. Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation}, and compressible Navier-Stokes\cite{JesseDissertation, Chan2013dpg}.
-
+The robust stability properties of DPG appear to carry over into the nonlinear regime as well; Moro, Peraire and Nguyen observed \cite{MoroNguyenPeraire11, MoroMastersThesis} that on a single element, the HDPG method (referring to DPG applied to a hybridized Discontinuous Galerkin (HDG) method) converges, whereas HDG on its own does not.  Moreover, HDPG required an order of magnitude less artificial diffusion to converge to a nonlinear solution of the compressible Navier-Stokes.  Chan, Demkowicz, and Moser showed that, for both the viscous Burgers' equation and the compressible Navier Stokes equations at high Mach/Reynolds number, DPG converges on an extremely coarse mesh, allowing the use of an adaptive scheme to capture shock and boundary layer phenomena starting from an initial mesh of $O(1)$ elements.  Roberts reports similar results boasting similar stability for high Reynolds numbers for the incompressible Navier-Stokes equations \cite{NateDissertation}.  
 
 \subsection{Transient Compressible Navier-Stokes}
 We make a large jump from convection-diffusion to the compressible Navier-Stokes equations.
