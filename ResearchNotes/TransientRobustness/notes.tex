@@ -229,25 +229,41 @@ and thus the DPG energy norm robustly bounds the $L^2$ norm from above
 
 Truman, your turn :).
 
-\section{Robustness for transient problems given spatial robustness}
 
-Suppose we have the transient problem
+\subsection{A transient boundary-layer problem}
+
+For space-time convection-diffusion, we can construct a solution via separation of variables, similar to the Eriksson-Johnson problem.  Assuming $u(x,t) = X(x)T(t)$ and that 
+\begin{align*}
+\pd{u}{t} + \pd{u}{x} - \epsilon\pdd{u}{x} &= 0\\
+u(x,0) &= u_0(x)\\
+%u(0,t)-\left.\epsilon\pd{u}{n}\right|_{x=0} &= u_0(0) - \left.\epsilon\pd{u_0}{x}\right|_{x = 0}
+u(0,t) &= 1\\
+u(1,t) &= 0.
+\end{align*}
+we have that 
 \[
-\pd{u}{t} + Au = f
+T = e^{\lambda t}
 \]
-with initial condition $u(x,0) = u_0$.  Suppose that DPG is robust under the ultra-weak variational formulation for the steady problem
-\[
-\LRp{u,A^*_h v}_{\L} + \LRa{\uh, \jump{v}}_{\Gamma_h\setminus \Gamma_0} = \LRp{f,v}
-\]
-with test norm $\nor{v}_{V}$.  Then, can we show that 
-\[
-\nor{v}_{V,t} \coloneqq \nor{v}_V + \nor{\pd{v}{t}}_{\L}
-\]
-also leads to a robust upper bound of the $L^2$ norm by the DPG energy norm?  I believe this may be possible.  The adjoint equation for robustness for the transient problem gives
-\[
--\pd{v}{t} + A^*v = u
-\]
-with $v = 0$ at $t=T$.  
+
+%\section{Robustness for transient problems given spatial robustness}
+%
+%Suppose we have the transient problem
+%\[
+%\pd{u}{t} + Au = f
+%\]
+%with initial condition $u(x,0) = u_0$.  Suppose that DPG is robust under the ultra-weak variational formulation for the steady problem
+%\[
+%\LRp{u,A^*_h v}_{\L} + \LRa{\uh, \jump{v}}_{\Gamma_h\setminus \Gamma_0} = \LRp{f,v}
+%\]
+%with test norm $\nor{v}_{V}$.  Then, can we show that 
+%\[
+%\nor{v}_{V,t} \coloneqq \nor{v}_V + \nor{\pd{v}{t}}_{\L}
+%\]
+%also leads to a robust upper bound of the $L^2$ norm by the DPG energy norm?  I believe this may be possible.  The adjoint equation for robustness for the transient problem gives
+%\[
+%-\pd{v}{t} + A^*v = u
+%\]
+%with $v = 0$ at $t=T$.  
 
 
 \end{document}
