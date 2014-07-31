@@ -872,10 +872,20 @@ Our robust test norm for transient convection-diffusion is
 &+\norm{\tilde\bfbeta\cdot \Gradxt v}^2
 + \epsilon\norm{\Grad v}^2
 + \norm{v}^2\,,
+\label{eq:robustConfusion}
 \end{align}
 where $\tilde\bfbeta=(\bfbeta,1)^T$.
+The details are complicated and discussed in \cite{ChanHeuerThanhDemkowicz2012} and an upcoming paper on robust norms for transient convection-diffusion,
+but this norm is ultimately derived from the adjoint equation for convection-diffusion:
+\begin{align*}
+\frac{1}{\epsilon}\bftau+\Grad v &=\bff\\
+-\tilde\bfbeta\cdot\Gradxt v + \Div\bftau &= g\,,
+\end{align*}
+where the first equation corresponds to the constitutive equation and the second to the conservation law.
+
 The analogous norm for transient Navier-Stokes is 
 \begin{equation}
+\label{eq:robustNS}
 \begin{aligned}
 &
 \underbrace{
@@ -919,13 +929,13 @@ The analogous norm for transient Navier-Stokes is
 -C_v\tilde\rho\frac{\partial v_e}{\partial t}
 \right\|^2\\
 %
-% +&\left\|
-% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
-% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
-% -R\tilde T\tilde\bfu\Grad v_e
-% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-% \right\|^2\\
++&\left\|
+-\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+-R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+&\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+-R\tilde T\tilde\bfu\Grad v_e
+-C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+\right\|^2\\
 +&\left\|
 -\tilde\rho\Grad v_c
 -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
@@ -953,9 +963,27 @@ The analogous norm for transient Navier-Stokes is
 +\norm{v_e}^2
 % +\alpha_s\norm{\mathbb{S}}^2
 % +\alpha_f\norm{\bftau}^2
-\,,
+\,.
 \end{aligned}
 \end{equation}
+We now explain how we derived the analogous norm for Navier-Stokes. 
+The first term in \eqref{eq:robustConfusion}, $\frac{1}{\epsilon}\norm{\bftau}^2$, becomes 
+$\frac{1}{\mu}\norm{\mathbb{S}}^2
++\frac{Pr}{C_p\mu}\norm{\bftau}^2$.
+The fourth term in \eqref{eq:robustConfusion}, $\epsilon\norm{\Grad v}^2$ comes from rescaling the leftover part of the constitutive adjoint by viscosity
+with analogous terms 
+$
+\mu\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2
++\frac{C_p\mu}{Pr}\norm{\Grad v_e}^2
+$
+for Navier-Stokes.
+The second term in \eqref{eq:robustConfusion} corresponds to the entire adjoint for the conservation law in convection-diffusion, 
+thus we insert the analogous terms directly from the graph norm. These are the next three terms in the Navier-Stokes norm.
+The third term in \eqref{eq:robustConfusion} comes from the adjoint to the convective part of the equation. 
+By analogy, we take the adjoint to the Euler equations, producing the next three terms in \eqref{eq:robustNS}.
+The first of these three is identical to the first of the previous group since there are no viscous terms in the conservation of mass equation.
+The last three $L^2$ terms in \eqref{eq:robustNS} correspond to the final $L^2$ term in \eqref{eq:robustConfusion}.
+
 
 % A similar analysis for transient convection-diffusion has not been done (this is part of the proposed work), 
 % so we are on shakier footing developing a robust norm for transient Navier-Stokes.
