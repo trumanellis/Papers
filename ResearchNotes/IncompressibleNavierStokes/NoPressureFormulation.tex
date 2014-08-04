@@ -105,6 +105,26 @@ So our graph norm based on the first version is defined by
 +\norm{\bftau}^2\,.
 \end{equation*}
 
+Our robust test norm for transient convection-diffusion is 
+\begin{align}
+\norm{\LRp{v,\bftau}}_{V}^2 &\coloneqq
+\frac{1}{\epsilon}\norm{\bftau}^2
++ \norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v}^2 \nonumber\\
+&+\norm{\tilde\bfbeta\cdot \Gradxt v}^2
++ \epsilon\norm{\Grad v}^2
++ \norm{v}^2\,,
+\label{eq:robustConfusion}
+\end{align}
+where $\tilde\bfbeta=(\bfbeta,1)^T$.
+The analogous norm for incompressible Navier-Stokes is
+\begin{align*}
+\norm{\LRc{\bfv,\bftau}}^2&=\frac{1}{\nu}\norm{\bftau-\frac{1}{N}\trace(\bftau)\bfI}^2
++\norm{2\Div\bftau-\tilde\bfu\cdot\LRp{\Grad\bfv+(\Grad\bfv)^T}-\frac{\partial\bfv}{\partial t}}^2\\
+&\quad+\norm{\tilde\bfu\cdot\LRp{\Grad\bfv+(\Grad\bfv)^T}+\frac{\partial\bfv}{\partial t}}^2
++\nu\norm{\Grad\bfv}^2
++\norm{\bfv}^2\,.
+\end{align*}
+
 \subsection*{Boundary Conditions}
 On spatial boundaries, we have access to the following terms for setting boundary conditions:
 \begin{equation*}

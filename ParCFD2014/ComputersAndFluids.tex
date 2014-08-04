@@ -888,15 +888,15 @@ The analogous norm for transient Navier-Stokes is
 \label{eq:robustNS}
 \begin{aligned}
 &
-\underbrace{
+% \underbrace{
 \frac{1}{\mu}\norm{\mathbb{S}}^2
 +\frac{Pr}{C_p\mu}\norm{\bftau}^2
-}_{\frac{1}{\epsilon}\norm{\bftau}^2}
+% }_{\frac{1}{\epsilon}\norm{\bftau}^2}
 %
-\underbrace{
+% \underbrace{
 +\mu\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2
-+\frac{C_p\mu}{Pr}\norm{\Grad v_e}^2
-}_{\epsilon\norm{\Grad v}^2}\\
++\frac{C_p\mu}{Pr}\norm{\Grad v_e}^2\\
+% }_{\epsilon\norm{\Grad v}^2}\\
 %
 +&\left\|
 -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
