@@ -154,23 +154,40 @@ v_2 &= 0 \text{ on } \Gamma_T\,.
 
 We can then derive that the test norm
 \begin{align}
+\label{eq:robustnorm}
 \norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
-\min\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}\norm{\bftau}_K^2
+\frac{1}{\epsilon}\norm{\bftau}_K^2
 + \norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v}_K^2 \nonumber\\
 &+\norm{\tilde\bfbeta\cdot \Gradxt v}_K^2
 + \epsilon\norm{\Grad v}_K^2
 + \norm{v}^2_K\,,
 \end{align}
-% \[
-% \norm{v}_V^2 = \norm{\tilde\bfbeta\cdot\Gradxt v}^2 + \norm{v}^2 + \epsilon\norm{\Grad v}^2 
-% \]
 provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
+
+In the following lemmas we establish the following bounds:
+\begin{itemize}
+\item Bound on $\norm{\LRp{v_0,\bftau_0}}_V$.
+\item Bound on $\norm{\LRp{v_1,\bftau_1}}_V$. 
+Lemma~\ref{lem:convective} gives $\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq\norm{g}$.
+Since $\Div\bftau_1=g+\tilde\bfbeta\cdot\Gradxt v_1$, 
+\[
+\norm{\Div\bftau_1}\leq\norm{g}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq 2\norm{g}.
+\]
+Lemma~\ref{lem:l2} gives $\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2\leq\norm{g}^2$.
+Since $\epsilon^{1/2}\Grad v_1=\epsilon^{-1/2}\bftau_1$,
+\[
+\frac{1}{\epsilon}\norm{\bftau_1}^2\leq\norm{g}^2.
+\]
+Thus, all the terms in \eqref{eq:robustnorm} are accounted for.
+\item Bound on $\norm{\LRp{v_2,\bftau_2}}_V$.
+\end{itemize}
 
 Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
 $\norm{(v_1,\bftau_1)}_V\leq\norm{g}_\LQ$ and $\norm{(v_2,\bftau_2)}_V\leq\norm{f}_\LQ$.
 
 \textcolor{red}{Insert conditions on $\bfbeta$}
 \begin{lemma}
+\label{lem:convective}
 For the above conditions on $\bfbeta$,
 \[
 \norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq \norm{g}
@@ -264,6 +281,7 @@ Plugging this into \eqref{eq:adj1}, we get
 \end{proof}
 
 \begin{lemma}
+\label{lem:l2}
 For the above conditions on $\bfbeta$,
 \[
 \norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{f}^2\,.
