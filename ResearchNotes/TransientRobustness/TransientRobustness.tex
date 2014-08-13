@@ -158,7 +158,7 @@ We can then derive that the test norm
 \norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
 \frac{1}{\epsilon}\norm{\bftau}_K^2
 + \norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v}_K^2 \nonumber\\
-&+\norm{\tilde\bfbeta\cdot \Gradxt v}_K^2
+&+\norm{\bfbeta\cdot \Grad v}_K^2
 + \epsilon\norm{\Grad v}_K^2
 + \norm{v}^2_K\,,
 \end{align}
@@ -173,13 +173,35 @@ Since $\Div\bftau_1=g+\tilde\bfbeta\cdot\Gradxt v_1$,
 \[
 \norm{\Div\bftau_1}\leq\norm{g}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq 2\norm{g}.
 \]
+Or, the fact that $\Div\bftau-\tilde\bfbeta\cdot\Gradxt v_1=g$ clearly gives
+\[
+\norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v_1}=\norm{g}.
+\]
+Also, clearly
+\[
+\norm{\bfbeta\cdot\Grad v_1}\leq\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq\norm{g}.
+\]
 Lemma~\ref{lem:l2} gives $\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2\leq\norm{g}^2$.
-Since $\epsilon^{1/2}\Grad v_1=\epsilon^{-1/2}\bftau_1$,
+Since $\epsilon^{1/2}\Grad v_1=-\epsilon^{-1/2}\bftau_1$,
 \[
 \frac{1}{\epsilon}\norm{\bftau_1}^2\leq\norm{g}^2.
 \]
-Thus, all the terms in \eqref{eq:robustnorm} are accounted for.
-\item Bound on $\norm{\LRp{v_2,\bftau_2}}_V$.
+Thus, all $(v_1,\bftau_1)$ terms in \eqref{eq:robustnorm} are accounted for.
+\item Bound on $\norm{\LRp{v_2,\bftau_2}}_V$. 
+The fact that $\Div\bftau-\tilde\bfbeta\cdot\Gradxt v=0$ clearly gives
+\[
+\norm{\Div \bftau - \tilde\bfbeta\cdot\Gradxt v_2}=0\leq\norm{\bff}.
+\]
+Lemma~\ref{lem:l2} gives $\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2\leq\epsilon\norm{\bff}^2$.
+Since $\epsilon^{1/2}\Grad v_2=\bff-\epsilon^{-1/2}\bftau_2$,
+\[
+\frac{1}{\epsilon}\norm{\bftau_2}^2\leq(1+\epsilon)\norm{\bff}^2.
+\]
+Finally,
+\[
+\norm{\bfbeta\cdot\Grad v_2}\leq\norm{\bfbeta}_\infty\norm{\Grad v_2}\leq\norm{\bfbeta}_\infty\norm{\bff}.
+\]
+Thus, all $(v_2,\bftau_2)$ terms in \eqref{eq:robustnorm} are accounted for.
 \end{itemize}
 
 Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
