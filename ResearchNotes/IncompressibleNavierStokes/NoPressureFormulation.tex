@@ -244,10 +244,16 @@ We have four options for setting \emph{inflow} boundary conditions: $\hat u_1$, 
 $\hat t_1=\trace(-\rho u_1u_1+\sigma_{11})$, and $\hat t_2=\trace(-\rho u_1u_2+\sigma_{12})$.
 Past experience suggests assuming that $\sigma_{11}$ and $\sigma_{12}$ are negligible and setting $\hat t_1=-1$ and $\hat t_2=0$.
 
-\paragraph*{Top and Upstream}
+\paragraph*{Top}
+We should apply a zero vorticity condition and make sure that continuity is satisfied.
+Zero vorticity implies that $\pd{u_1}{y}=\pd{u_2}{x}$.
+We have access to $\hat u_1$, $\hat u_2$,
+$\hat t_1=\trace(\rho u_1u_2-\sigma_{12})$, and $\hat t_2=\trace(\rho u_2u_2-\sigma_{22})$.
+
+\paragraph*{Upstream}
 A symmetry condition seems appropriate here. We have access to $\hat u_1$, $\hat u_2$,
-$\hat t_1=\trace(\pm\rho u_1u_2\mp\sigma_{12})$, and $\hat t_2=\trace(\pm\rho u_2u_2\mp\sigma_{22})$.
-Symmetry implies that we should set $u_2=0$ which simplifies $\hat t_1=\trace(\mp\sigma_{12})$ and $\hat t_2=\trace(\mp\sigma_{22})$.
+$\hat t_1=\trace(-\rho u_1u_2+\sigma_{12})$, and $\hat t_2=\trace(-\rho u_2u_2+\sigma_{22})$.
+Symmetry implies that we should set $u_2=0$ which simplifies $\hat t_1=\trace(\sigma_{12})$ and $\hat t_2=\trace(\sigma_{22})$.
 The second symmetry condition should then probably be $\hat t_1=0$.
 
 \paragraph*{Plate}

@@ -300,17 +300,18 @@ Plugging this into \eqref{eq:adj1}, we get
 
 \begin{lemma}
 \label{lem:l2}
-For the above conditions on $\bfbeta$,
+For the duration of this lemma, let $v:=v_1+v_2$.
+Then, for the above conditions on $\bfbeta$,
 \[
-\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{f}^2\,.
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{\bff}^2\,.
 \]
 \end{lemma}
 \begin{proof}
-Define $w=e^{t-T}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}+v}e^{t-T}$ while
+Define $w=e^{t}v$ and note that $\pd{w}{t}=\LRp{\pd{v}{t}+v}e^{t}$ while
 all spatial derivatives go through.
-%  $\Grad w=\cancelto{0}{\Grad e^{t-T}} v+e^{t-T}\Grad v$ and
-% $\Div(\bfbeta w)=\Div(\bfbeta)e^{t-T} v+\bfbeta\cdot e^{t-T}\Grad v$ and $\Delta w=e^{t-T}\Delta v$. 
-% Also, $\Gradxt w=\pd{e^{t-T} v}{t}+\Grad{e^{t-T} v}=e^{t-T}(\Gradxt v-v)$.
+%  $\Grad w=\cancelto{0}{\Grad e^{t}} v+e^{t}\Grad v$ and
+% $\Div(\bfbeta w)=\Div(\bfbeta)e^{t} v+\bfbeta\cdot e^{t}\Grad v$ and $\Delta w=e^{t}\Delta v$. 
+% Also, $\Gradxt w=\pd{e^{t} v}{t}+\Grad{e^{t} v}=e^{t}(\Gradxt v-v)$.
 % Plugging this into the adjoint equation, we get
 Multiplying the adjoint by $w$ and integrating over $Q$ gives
 % \begin{equation*}
@@ -318,7 +319,7 @@ Multiplying the adjoint by $w$ and integrating over $Q$ gives
 % \end{equation*}
 % or 
 % \begin{equation*}
-% \tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=e^{t-T}(-g+\epsilon\Div\bff)
+% \tilde\bfbeta\cdot\Gradxt(v)-v+\epsilon\Delta v=e^{t}(-g+\epsilon\Div\bff)
 % \end{equation*}
 % Multiply by $-v$ and integrate to get
 \begin{align*}
@@ -326,22 +327,22 @@ Multiplying the adjoint by $w$ and integrating over $Q$ gives
 \end{align*}
 or
 \begin{align*}
--\int_Qe^{t-T}v\tilde\bfbeta\cdot\Gradxt v-\epsilon\int_Q e^{t-T}v\Delta v=\int_Qe^{t-T}gv-\epsilon\int_Qe^{t-T}v\Div\bff
+-\int_Qe^{t}v\tilde\bfbeta\cdot\Gradxt v-\epsilon\int_Q e^{t}v\Delta v=\int_Qe^{t}gv-\epsilon\int_Qe^{t}v\Div\bff
 \end{align*}
 Integrating by parts:
 \begin{align*}
-\int_Q\Divxt\LRp{e^{t-T}\tilde\bfbeta v}v&
--\int_\Gamma e^{t-T}\tilde\bfbeta\cdot\bfn v^2
-+\epsilon\int_Qe^{t-T}\Grad v\cdot\Grad v
--\epsilon\int_{\Gamma_x}e^{t-T}v\cdot\Grad v\cdot\bfn_x
+\int_Q\Divxt\LRp{e^{t}\tilde\bfbeta v}v&
+-\int_\Gamma e^{t}\tilde\bfbeta\cdot\bfn v^2
++\epsilon\int_Qe^{t}\Grad v\cdot\Grad v
+-\epsilon\int_{\Gamma_x}e^{t}v\cdot\Grad v\cdot\bfn_x
 \\
 &=
-\int_Qe^{t-T}gv
-+\epsilon\int_Qe^{t-T}\Grad v\cdot\bff
--\epsilon\int_{\Gamma_x}e^{t-T}v\bff\cdot\bfn_x
+\int_Qe^{t}gv
++\epsilon\int_Qe^{t}\Grad v\cdot\bff
+-\epsilon\int_{\Gamma_x}e^{t}v\bff\cdot\bfn_x
 \end{align*}
-Note that $\Divxt{e^{t-T}v\tilde\bfbeta}=e^{t-T}(\tilde\bfbeta\Gradxt v+v)$ if $\Div\bfbeta=0$.
-Dividing both sides by $e^{t-T}$ and moving some terms to the right hand side, we get
+Note that $\Divxt{e^{t}v\tilde\bfbeta}=e^{t}(\tilde\bfbeta\Gradxt v+v)$ if $\Div\bfbeta=0$.
+Dividing both sides by $e^{t}$ and moving some terms to the right hand side, we get
 \begin{align*}
 \int_Q v^2
 &+\int_Q\epsilon \Grad v\cdot\Grad v
@@ -398,17 +399,23 @@ or
 &\leq
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
+\\
+&\leq
+\frac{\norm{g}^2}{2}
++\epsilon\frac{\norm{\bff}^2}{2}
++\frac{\norm{v}^2}{2}
++\epsilon\frac{\norm{\Grad v}^2}{2}
 \end{align*}
 
 % \textcolor{red}{Then}
 % \begin{align*}
-% \norm{v}^2&=\int_Qe^{t-T}gv
-% -\epsilon\int_Qe^{t-T}\Div\bff v
+% \norm{v}^2&=\int_Qe^{t}gv
+% -\epsilon\int_Qe^{t}\Div\bff v
 % +\int_Q\tilde\bfbeta\cdot\Gradxt vv
 % +\epsilon\int_Q\Delta vv\\
 % %
-% &=\int_Qe^{t-T}gv
-% -\epsilon\int_Qe^{t-T}\Div\bff v
+% &=\int_Qe^{t}gv
+% -\epsilon\int_Qe^{t}\Div\bff v
 % +\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(v)^2
 % -\epsilon\int_Q\Grad v\Grad v
 % +\epsilon\int_\Gamma v\Grad v\cdot\bfn
@@ -416,14 +423,14 @@ or
 % \end{align*}
 % Or
 % \begin{align*}
-% \norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t-T}gv
-% -\epsilon\int_Qe^{t-T}\Div\bff v\\
+% \norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t}gv
+% -\epsilon\int_Qe^{t}\Div\bff v\\
 % &\quad-\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
 % +\frac{1}{2}\int_\Gamma v^2\tilde\bfbeta\cdot\bfn
 % +\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
 % \\
-% &=\int_Qe^{t-T}gv
-% +\epsilon\int_Qe^{t-T}\bff\cdot\Grad v
+% &=\int_Qe^{t}gv
+% +\epsilon\int_Qe^{t}\bff\cdot\Grad v
 % -\epsilon\int_{\Gamma_-}v\underbrace{\bff\cdot\bfn_x}_{=\epsilon\pd{v}{n}=0}
 % -\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bff\cdot\bfn_x\\
 % &\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
@@ -433,7 +440,7 @@ or
 % &\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
 % +\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
 % \\
-% &\leq \norm{e^{t-T}}_{L_\infty(Q)}\LRp{\int_Qgv+\epsilon\int_Q\bff\cdot\Grad v}
+% &\leq \norm{e^{t}}_{L_\infty(Q)}\LRp{\int_Qgv+\epsilon\int_Q\bff\cdot\Grad v}
 % \\
 % &\leq \LRp{\frac{\norm{g}^2}{2}+\frac{\epsilon\norm{\bff}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
 % \\
