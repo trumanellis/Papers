@@ -104,7 +104,7 @@ We develop a space-time discontinuous Petrov-Galerkin method (DPG) for transient
 with an ultimate goal of deployment on high performance computing systems.
 The space-time framework allows automatic adaptivity in both space and time.
 The heat equation serves as a model problem, but the ideas developed here are then immediately applicable to compressible Navier-Stokes.
-Preliminary spatially 1D results for the Sod shock tube and Noh implosion problems are extremely promising.
+Preliminary spatially 1D results for the Sod shock tube and Noh implosion problems are promising.
 % The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
 % Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
 % mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
@@ -487,6 +487,7 @@ a mixed nature on slanted boundaries. We illustrate the support of these skeleto
 \end{figure}
 
 \subsubsection{Numerical Experiments}
+All numerical results in this paper were generated with the Camellia DPG framework\cite{CamelliaDPG}.
 If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
 the exact solution is
 \begin{equation*}
