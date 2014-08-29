@@ -100,6 +100,11 @@ Rice University
 6100 Main MS-134, Houston, TX 77005}
 
 \begin{abstract}
+We develop a space-time discontinuous Petrov-Galerkin method (DPG) for transient parabolic partial differential equations
+with an ultimate goal of deployment on high performance computing systems.
+The space-time framework allows automatic adaptivity in both space and time.
+The heat equation serves as a model problem, but the ideas developed here are then immediately applicable to compressible Navier-Stokes.
+Preliminary spatially 1D results for the Sod shock tube and Noh implosion problems are extremely promising.
 % The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
 % Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
 % mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
@@ -1092,6 +1097,10 @@ The field variables are represented with quadratics.
 The results are plotted in Figure~\ref{fig:sod} for three different refinement levels: the initial coarse mesh, 7 adaptive refinements, and 14 refinements.
 The coarsest mesh is obviously not sufficient to resolve the features of the flow, but it is at least somewhat representative of the exact solution.
 We see significant overshoots and undershoots as we start to pick up on the shock, but these die away as we resolve to the viscous length scale.
+There are some unnecessary refinements in a sliver to the right of the shock, 
+but we believe that this may be due to the unoptimized test norm that we are using.
+The ability of the test norm to affect refinement patterns was observed in \cite{EllisLC}.
+
 
 \begin{figure}[p]
 \centering
@@ -1185,7 +1194,8 @@ We run the first slab to 8 adaptive refinements and set the initial conditions o
 Each of the slabs are put together into one long time solution in Figure~\ref{fig:noh}. 
 Again we plot the solution on the initial mesh, a halfway resolved mesh, and a final mesh after 8 refinement steps.
 We get some very odd behavior around the shock on the middle mesh, but this goes away by the final mesh.
-We see the same behavior with overshoots and undershoots that we saw with the Sod problem. 
+We observe the same behavior with overshoots and undershoots that we saw with the Sod problem. 
+Again, unnecessary refinements show up, but in this case, we believe they are more of a response to the odd shock behavior on mid-resolution meshes.
 
 \begin{figure}[p]
 \centering
@@ -1230,6 +1240,22 @@ We see the same behavior with overshoots and undershoots that we saw with the So
 \end{figure}
 
 \section{Conclusions and Future Work}
+We've presented the initial developments of a space-time DPG method for parabolic PDEs with automatic adaptivity in space and time.
+The features of the method appear to be promising for deployment on high performance computing systems.
+The key contrast to steady state DPG is fluxes appear from integration of parts of a conservation law over all of space-time while 
+traces only appear on the spatial skeleton of the mesh.
+Aside from this implementation detail, the other features DPG carry through to space-time completely intact.
+Preliminary results for spatially 1D flow are encouraging.
+As with steady state DPG, choice of test norm for convection-diffusion type problems can have a significant impact on the quality of the solution.
+
+The choice of test norm for transient convection-diffusion is currently under active research and will appear in an upcoming paper.
+Included in this paper will be a proof of robustness of the method in space-time.
+Our foremost priority currently is to extend these results to 2D and 3D flows.
+With a 2D capable code, we can then pursue transient incompressible problems.
+Finally, there is a lot to study as we scale the code up to larger compute systems.
+Already several bottlenecks have emerged in our current process and we are working on addressing these.
+One such bottleneck is our current use of a direct solver for the global solve. 
+An iterative solver should scale much better, and we are actively exploring preconditioners for DPG.
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
