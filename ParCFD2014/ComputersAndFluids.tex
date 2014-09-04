@@ -254,10 +254,9 @@ that would have disappeared with continuous test functions.
 Moro \etal\cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG (HDPG) method, but the standard DPG method treats
 these as new unknowns to be solved for.
 We still haven't specified our trial space $U$, but the rule is that for every integration by parts, a new skeleton unknown is introduced.
-\textcolor{red}{
 Most DPG considerations have used the ultra-weak variational formulation and break a second order PDE into 
 a system of first order PDEs. 
-This introduces a trace unknown (through the constitutive law) and a flux unknown (through the conservation law) with field variables that live in $L^2$.}
+This introduces a trace unknown (through the constitutive law) and a flux unknown (through the conservation law) with field variables that live in $L^2$.
 But Demkowicz and Gopalakrishnan also formulated 
 a \emph{primal DPG} method\cite{PrimalDPG} for second order equations that does not introduce a trace unknown.
 The overall number of interface unknowns in the primal DPG method is the same, however, since the solution is required to be $H^1$ conforming 
@@ -333,8 +332,8 @@ start a DPG simulation that automatically picks up solution features without the
 
 DPG is very compute intensive compared to the associated communication and memory costs.
 Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
-\textcolor{red}{Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
-high order methods tend to have a more attractive compute/memory/communication profile than low order methods.}
+Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
+high order methods tend to have a more attractive compute/communication profile than low order methods.
 In our codes, we use QR factorization for optimal test function solves, but this factorization is recyclable as we essentially have many right hand sides.
 The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
 a solve purely in terms of the skeleton degrees of freedom.
