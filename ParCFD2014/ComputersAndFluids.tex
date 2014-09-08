@@ -147,6 +147,11 @@ Navier-Stokes
 %% \linenumbers
 
 %% main text
+\section*{Acknowledgement}
+The authors would like to thank Nathan Roberts at Argonne National Laboratory. 
+His DPG research code, \emph{Camellia} \cite{CamelliaDPG}, enabled the simulations which appear in this paper.
+This research was supported in part by the Department of Energy's Predictive Science Academic Alliance Program, grant number DE-FC52-08NA28615.
+
 \section{Introduction}
 Initial mesh design for computational fluid dynamics can be a time-consuming and expensive process. 
 The stability properties and nonlinear convergence of most numerical methods rely on a minimum level of mesh resolution. 
@@ -488,7 +493,7 @@ Under mild mesh regularity assumptions, one can show that marching with slabs de
 see \cite{DPG2} for a related discussion for the convection problem.
 
 \subsubsection{Numerical Experiments}
-All numerical results in this paper were generated with the Camellia DPG framework \cite{CamelliaDPG}.
+% All numerical results in this paper were generated with the Camellia DPG framework \cite{CamelliaDPG}.
 If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
 the exact solution is
 \begin{equation*}
