@@ -229,7 +229,7 @@ We can calculate the energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of th
 where we designate $R_V^{-1}(Bu_h-l)$ the \emph{error representation function}.
 This has proven to be a very reliable \emph{a-posteriori} error estimator for driving adaptivity.
 
-Babu\v{s}ka's theorem\cite{Babuska70} says that discrete stability and approximability imply convergence.
+Babu\v{s}ka's theorem \cite{Babuska70} says that discrete stability and approximability imply convergence.
 That is, if $M$ is the continuity constant for $b(u,v)$ which satisfies the discrete inf-sup condition with constant $\gamma_h$,
 \[
 \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
@@ -243,27 +243,28 @@ the infinite-dimensional inf-sup constant.
 If we then use the energy norm for $\norm{\cdot}_U$, then $M=\gamma=1$ and Babu\v{s}ka's estimate implies that
 the optimal Petrov-Galerkin method is the most stable Petrov-Galerkin method possible.
 
-There are still many features of the method that are left to be decided, for example the $U$ and $V$ spaces.
+There are still many features of the method that are left to be decided, for example the choice of $U$ and $V$ spaces.
 If $V$ is taken to be a continuous space, then the auxiliary problem becomes global in scope, something that we would like to avoid.
 In order to ensure the auxiliary problem can be solved element-by-element, we take $V$ to be a space of functions that are discontinuous between elements.
 (Technically, $V$ should also be infinite dimensional, but we have found it to be sufficient to use an ``enriched'' space of higher
-polynomial dimension than the trial space\cite{PracticalDPG}.)
+polynomial dimension than the trial space \cite{PracticalDPG}.)
 The downside to using discontinuous test functions is that it introduces new interface unknowns.
 When the equations are integrated by parts over each element, the jump in test functions introduces new unknowns on the mesh skeleton
 that would have disappeared with continuous test functions.
-Moro \etal\cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG (HDPG) method, but the standard DPG method treats
+Moro \etal \cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG (HDPG) method, but the standard DPG method treats
 these as new unknowns to be solved for.
 We still haven't specified our trial space $U$, but the rule is that for every integration by parts, a new skeleton unknown is introduced.
 Most DPG considerations have used the ultra-weak variational formulation and break a second order PDE into 
 a system of first order PDEs. 
 This introduces a trace unknown (through the constitutive law) and a flux unknown (through the conservation law) with field variables that live in $L^2$.
 But Demkowicz and Gopalakrishnan also formulated 
-a \emph{primal DPG} method\cite{PrimalDPG} for second order equations that does not introduce a trace unknown.
+a \emph{primal DPG} method \cite{PrimalDPG} for second order equations that does not introduce a trace unknown.
 The overall number of interface unknowns in the primal DPG method is the same, however, since the solution is required to be $H^1$ conforming 
-and the trace unknowns are essentially hidden here.
+and the trace unknowns are essentially hidden there.
 
 The final unresolved choice is what norm to apply to the $V$ space.
-This is one of the most important factors in designing a robust DPG method as this norm needs to be inverted to solve for the optimal test functions.
+This is one of the most important factors in designing a robust DPG method as the corresponding Riesz operator 
+needs to be inverted to solve for the optimal test functions.
 If the norm produces unresolved boundary layers in the auxiliary problem, then many of the attractive features of DPG may fall apart.
 For a full discussion of robust test norms for convection-diffusion problems, see \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
 But elimination of boundary layers in the auxiliary solve is not the only requirement at play. 
@@ -274,22 +275,11 @@ is provably robust and equivalent to $L^2$ for convection-diffusion which
 serves as the most relevant model problem for our research.
 Norms for Navier-Stokes are derived by analogy to the convection-diffusion norm.
 
-% DPG has been successfully applied to a wide range of physical problems.
-% Early work on the Poisson equation was published in \cite{DPGPoisson}.
-% Demkowicz \etal\cite{DPGHelmholtz}, Gopalakrishnan \etal\cite{Gopalakrishnan2014}, and Zitelli \etal\cite{DPG4} 
-% analyzed and solved the Helmholtz equation with DPG.
-% DPG was applied to linear elasticity and plate problems in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}.
-% A 2D Maxwell cloaking problem was solved wit DPG in \cite{DPGCloaking} 
-% and a 3D DPG theory for Maxwell was developed by Wieners and Wohlmuth\cite{WohlmuthReport}.
-% DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC},
-% Stokes\cite{DPGStokes,EllisLC}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation}, 
-% and compressible Navier-Stokes\cite{JesseDissertation}.
-
 \subsection{DPG for Nonlinear Problems}
 In the context of linear problems, DPG has been successfully applied to a wide range of physical applications.  
-Theoretical groundwork for DPG applied to the Poisson equation was laid in \cite{DPGPoisson}.  The time-harmonic Helmholtz equation was the focus of \cite{DPGHelmholtz, Gopalakrishnan2014} and \cite{DPG4}.  Linear elasticity and plate problems were addressed in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}, and Maxwell was addressed in \cite{DPGCloaking, WohlmuthReport}.  Linear fluid dynamics problems include convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC} and stationary Stokes flow\cite{DPGStokes,EllisLC}.
+Theoretical groundwork for DPG applied to the Poisson equation was laid in \cite{DPGPoisson}.  The time-harmonic Helmholtz equation was the focus of \cite{DPGHelmholtz, Gopalakrishnan2014} and \cite{DPG4}.  Linear elasticity and plate problems were addressed in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}, and Maxwell was addressed in \cite{DPGCloaking, WohlmuthReport}.  Linear fluid dynamics problems include convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC} and stationary Stokes flow \cite{DPGStokes,EllisLC}.
 
-In the following section, we extend the idea of DPG to nonlinear problems.  In an abstract sense, we consider the discrete nonlinear variational problem
+In this section, following \cite{NateDissertation,JesseDissertation}, we extend the idea of DPG to nonlinear problems.  In an abstract sense, we consider the discrete nonlinear variational problem
 \[
 \LRa{B(u_h)-\ell,v}_{V^*\times V} \coloneqq \LRa{R(u_h),v}_{V^*\times V} = 0, \quad \forall v \in V.
 \]
@@ -303,7 +293,7 @@ where $B'(u_h)$ is the Gateux derivative of $B$ given $u_h$.  It can be shown th
 \]
 is solved at every iteration \cite{Chan2013dpg}.  
 
-The robust stability properties of DPG appear to carry over into the nonlinear regime as well; Moro, Peraire and Nguyen observed \cite{MoroNguyenPeraire11, MoroMastersThesis} that on a single element, the HDPG method (referring to DPG applied to a hybridized Discontinuous Galerkin (HDG) method) converges, whereas HDG on its own does not.  Moreover, HDPG required an order of magnitude less artificial diffusion to converge to a nonlinear solution of the compressible Navier-Stokes.  Chan \etal\cite{Chan2013dpg} showed that for both the viscous Burgers' equation and the compressible Navier Stokes equations at high Mach/Reynolds number, DPG converges on an extremely coarse mesh, allowing the use of an adaptive scheme to capture shock and boundary layer phenomena starting from an initial mesh of $O(1)$ elements.  Roberts reports similar results boasting similar stability for high Reynolds numbers for the incompressible Navier-Stokes equations \cite{NateDissertation}.  
+The robust stability properties of DPG appear to carry over into the nonlinear regime as well; Moro, Peraire and Nguyen observed \cite{MoroNguyenPeraire11, MoroMastersThesis} that on a single element, the HDPG method (referring to DPG applied to a hybridized Discontinuous Galerkin (HDG) method) converges, whereas HDG on its own does not.  Moreover, HDPG required an order of magnitude less artificial diffusion to converge to a nonlinear solution of the compressible Navier-Stokes.  Chan \etal \cite{Chan2013dpg} showed that for both the viscous Burgers' equation and the compressible Navier Stokes equations at high Mach/Reynolds number, DPG converges on an extremely coarse mesh, allowing the use of an adaptive scheme to capture shock and boundary layer phenomena starting from an initial mesh of $O(1)$ elements.  Roberts reports similar results boasting similar stability for high Reynolds numbers for the incompressible Navier-Stokes equations \cite{NateDissertation}.  
 
 
 %   /$$   /$$ /$$$$$$$   /$$$$$$ 
@@ -339,7 +329,7 @@ The division of degrees of freedom into internal vs skeleton unknowns produces a
 a solve purely in terms of the skeleton degrees of freedom.
 In addition to significantly cutting down on the size of the global solve, 
 this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
-This property was one of the motivations behind the development of the hybridized discontinuous Galerkin\cite{HDG} method.
+This property was one of the motivations behind the development of the hybridized discontinuous Galerkin \cite{HDG} method.
 No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
 positive definite stiffness matrix for the global solve.
 This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
@@ -399,7 +389,7 @@ The heat equation is
 \begin{equation}
 	\frac{\partial u}{\partial t}-\epsilon\Delta u=f\,,\quad\bfx\in\Omega\,,\;t\in(t_0,T)
 \end{equation}
-where $u$ is unknown heat, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
+where $u$ is unknown temperature, $\epsilon$ is the diffusion scale, $f$ is the source term, $t_0$ is the start time, and $T$ is the final time.
 Let $Q\subset\mathbb{R}^{d+1}$ denote the full space-time domain which is then tessellated into space-time elements $K$.
 
 The second order formulation of the heat equation is really just a composition of Fourier's law and conservation of energy:
@@ -494,9 +484,11 @@ It is worth noting that one technique used to control the cost of the extra dime
 a number of space-time slabs. Since information does not travel backwards in time, 
 we can march forward solving and adapting on each times slab before moving to the next one. 
 The flux on the final time boundary of one slab acts as the initial condition on the next.
+Under mild mesh regularity assumptions, one can show that marching with slabs delivers the same solution as the single slab DPG method,
+see \cite{DPG2} for a related discussion for the convection problem.
 
 \subsubsection{Numerical Experiments}
-All numerical results in this paper were generated with the Camellia DPG framework\cite{CamelliaDPG}.
+All numerical results in this paper were generated with the Camellia DPG framework \cite{CamelliaDPG}.
 If we consider a domain $\Omega=[0,1]^2$ with an initial condition of $u=\cos(2\pi x)$ with zero flux conditions at the boundaries,
 the exact solution is
 \begin{equation*}
@@ -691,8 +683,8 @@ where
 +\trace\LRp{\rho}n_t\\
 \hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
 +\trace\LRp{\rho\bfu} n_t\\
-\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x
-+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
+&\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
 \end{aligned}
 \end{equation*}
 Note that integrating $\mathbb{S}$ against the symmetric gradient only picks up the symmetric part.
@@ -1081,7 +1073,7 @@ Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for
 We solve with second order polynomial representation of field and flux variables, third order for traces, and fifth order for test functions.
 
 \subsubsection{Sod Shock Tube}
-The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 
+The Sod shock tube problem was developed by Gary Sod in 1978 \cite{Sod1978}, and has proven to be a popular problem for verification 
 of compressible Navier-Stokes and Euler solvers.
 It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
 all in one domain.
@@ -1193,7 +1185,7 @@ The ability of the test norm to affect refinement patterns was observed in \cite
 \end{figure}
 
 \subsubsection{Noh Implosion}
-The Noh implosion problem\cite{Noh1987} is another standard test for Euler solvers.
+The Noh implosion problem \cite{Noh1987} is another standard test for Euler solvers.
 The initial conditions are of an ideal gas with $\gamma=5/3$, zero pressure, uniform initial density of 1, 
 and uniform velocity toward the center of the domain.
 An infinitely strong shock propagates outward at a speed of 1/3.
