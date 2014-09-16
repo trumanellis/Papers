@@ -124,34 +124,43 @@ Van der Vegt and van der Ven \cite{vanderVegtEuler} note that that ``The space-t
 % - Objective of Research
 % - Expected Results
 The ultimate objective for this research is to refine and extend my work on space-time DPG for transient fluid dynamics.
-My dissertation research will be limited to 2D incompressible and compressible Navier-Stokes, 
-but from our experience with DPG's stability properties, we expect straightforward application of these ideas to problems outside of fluid dynamics.
+My dissertation research will focus on 2D compressible and incompressible flow, 
+but from our experience with DPG's stability properties, we expect that application of these ideas to problems outside of fluid dynamics to be straightforward.
 In particular, the field of magnetohydrodynamics (MHD) appears to be a promising target for space-time DPG.
 Initial investigations applying DPG the Maxwell's equations have been encouraging.
 Coupling Maxwell with my work on Navier-Stokes will not be trivial, but we expect this approach to be quite fruitful.
 Typically the techniques used to solve fluid dynamics and electromagnetics are very different, but within the DPG framework these can both be solved
-with the same method.
+with the same technology.
 Depending on the level of interest and collaborations I am able to foster at Sandia, 
-I could also see this research going in the direction of transient elastodynamics, wave propagation, heat transfer, or turbulence,
-but I am most interested in the MHD option.
-From my experience at Lawrence Livermore, I understand that multiphase flows are an important aspect of fluid 
+other research directions could include transient elastodynamics, wave propagation, heat transfer, or turbulence,
+but I believe the MHD option holds the most promise.
+From my experience at Lawrence Livermore, I understand that multiphase flows are an important aspect of 
 simulations at the DOE labs, thus
-I would also like to incorporate Ju Liu's (in collaboration with Tom Hughes) recent work on thermodynamically consistent multiphase flow models
+I would also like to incorporate Ju Liu's recent work (in collaboration with Tom Hughes) on thermodynamically consistent multiphase flow models
 into our DPG framework.
 
 % Note that Camellia is flexible and supports rapid application development - once support for a general class of problems is working, adding new variants is easy
 
 \paragraph{Benefits to Sandia.}
 % - Impact on Sandia's Science and Technology capabilities
-I am an active contributor to the \emph{Camellia} \cite{CamelliaDPG} DPG code which was started at Sandia and makes heavy use of \emph{Trilinos} \cite{Trilinos}.
-The primary developer, Nathan Roberts, whom I will be collaborating with on this research, works full time at Argonne National Lab on further developments of 
-\emph{Camellia}. In the next year, he plans on releasing \emph{Camellia} as an open source project, possibly as another module in \emph{Trilinos}.
-Additionally, I will be making inroads developing a numerical technology which has the potential to 
-contribute to Sandia's greater computational science efforts.
+In terms of computational technology, I am developing a new finite element method with significant promise for multiphysics simulations.
+In particular, the space-time approach caries substantial benefits over time stepping when dealing with adaptivity and solution features on multiple scales.
+The robustness of DPG on coarse meshes with automatic adaptivity promises an easier mesh design process for computational scientists.
+Scalability of the method is currently under very active development, but inherent features of DPG and early results are very encouraging.
+This research will advance development of the Camellia \cite{CamelliaDPG} DPG library which was initiated at Sandia 
+and is built exclusively on top of Trilinos \cite{Trilinos}, another major Sandia effort.
+Camellia supports rapid application development and is much simpler to use (interface inspired by the FEniCS project) 
+than most general finite element libraries available.
+In the next year, Camellia is expected to be released as an open source project, possibly as a module within Trilinos.
+% I am an active contributor to the Camellia \cite{CamelliaDPG} DPG library which was started at Sandia and makes heavy use of Trilinos \cite{Trilinos}.
+% The primary developer, Nathan Roberts, whom I will be collaborating with on this research, 
+% develops Camellia full time at Argonne National Lab.
+% In the next year, he plans on releasing Camellia as an open source project, possibly as another module in Trilinos.
+% Additionally, I will be making inroads developing a numerical technology which has the potential to 
+% contribute to Sandia's greater computational science efforts.
 Usage of Sandia's high performance computing systems will be critical to the success of this project, but this project should ultimately
-allow other Sandia researchers to leverage those compute resources to solve their own problems.
-% Bringing expertise on mathematically rigorous numerical methods.
-% Colloborating with other researchers.
+make it easier for other Sandia researchers to leverage those resources to solve their own computational problems,
+as DPG and Camellia provide a framework for scientific computation rather than simply a driver to accomplish a single class of problems.
 
 \paragraph{Expected schedule.}
 % - Schedule of Research
@@ -167,23 +176,33 @@ allow other Sandia researchers to leverage those compute resources to solve thei
 % 6 months - transient MHD
 % 6 months - explore other transient problems
 Predicting the pace of research is obviously an inexact science, but by my rough estimates, my work would progress as follows.
-Most of the interesting electromagnetics problems take place in 3D, so the priority for the first year will 
-be improving the performance and scaling of \emph{Camellia} for 3D problems and exploring iterative solvers and preconditioners.
+The majority of scientifically interesting electromagnetics problems take place in 3D, so the priority for the first year will 
+be improving the performance and scaling of Camellia for 3D problems and exploring iterative solvers and preconditioners.
 Scaling and performance improvements are likely to continue through the duration of the research as new bottlenecks and improvements come to light.
-I will also be working on adding support for complex values. The Helmholtz equation will serve as a model problem during this development.
+I will also be working on adding support for complex valued problems. The Helmholtz equation will serve as a model problem during this development.
 The second year will be devoted to solving Maxwell's equations in 3D starting with the steady state version and moving to space-time transient simulations.
-I will probably also begin initial 2D magnetohydrodynamics simulations at this point.
+I will likely begin initial 2D magnetohydrodynamics simulations at this point.
 In the third year, I will begin working on increasingly complex 3D magnetohydrodynamics problems and multiphase flows.
+If time permits, I would also like to develop a Python interface to Camellia.
 Throughout this process, I intend to build collaborations with Sandia researchers who are already working on these problems so I can 
 learn from their expertise and pursue problems in alignment with Sandia's greater goals.
 % Throughout this whole process I intend to build collaborations with other Sandia researchers and attempt to guide my simulations in directions of interest 
 % to the greater lab.
 
 \paragraph{Expected results.}
-The theory behind the DPG method has matured significantly over the last few years, and numerical experiments have confirmed it over and over.
-Thus, we expect that solving a new class of problems will not pose a problem.
-The challenges then lie on the computing side of things. 
-Making our code efficient and scalable for 3D problems will not be trivial, but we expect it to be doable.
+The mathematical understanding of the DPG method has matured significantly over the last few years, 
+and numerical experiments have confirmed the developed theory.
+Based on our previous experience with DPG for fluid flow and new results for DPG for electromagnetism, we are very confident
+that magnetohydrodynamics and multiphase flows are a reasonable objective for the Truman Fellowship.
+There are some difficult computing challenges to overcome, but they are by no means insurmountable.
+By the end of my postdoctoral experience, I believe that we will have a user friendly DPG library that we can present to the greater 
+computational community for straightforward computations of realistic scientific and engineering problems on high performance computing systems.
+% Magnetohydrodynamics falls into the class of problems that DPG promises stability for, so we don't see any insurmountable obstacles for this 
+% Thus, we expect that solving this new class of problems will not pose a problem.
+% The challenges then lie on the computing side of things. 
+% Making our code efficient and scalable for 3D problems will not be trivial, but we expect it to be doable.
+% From several years of experience now working on DPG and Camellia, I do believe that 3D magnetohydrodynamics simulations with multiple materials
+% on realistic geometries is a reasonable goal for this postdoc.
 
 
 \bibliographystyle{elsarticle-num} 
