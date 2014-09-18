@@ -32,6 +32,12 @@ DPG offers a fundamental framework for developing robust residual-minimizing fin
 for standard techniques, such as convection-dominated diffusion and Stokes flow.
 DPG methods have provably optimal convergence rates and often come very close to the best solution possible in the discrete space.
 
+In contrast to most other numerical methods, the discontinuous Petrov-Galerkin finite element method retains exceptional stability on extremely coarse meshes.
+DPG is also inherently very adaptive.
+It is possible to compute the residual error without knowledge of the exact solution, which can be used to robustly drive adaptivity.
+This results in a very automated technology, as the user can initialize a computation on the coarsest mesh which adequately represents the geometry 
+then step back and let the program solve and adapt iteratively until it resolves the solution features.
+
 Mesh design for computational mechanics can be a time-consuming and expensive process.
 The stability properties and nonlinear convergence of most numerical methods rely on a minimum level of mesh resolution. 
 This means that unless the initial computational mesh is fine enough, convergence can not be guaranteed. 
@@ -49,41 +55,7 @@ This process is repeated until the solver is satisfied and convergence can be re
 This iterative trial and error is undesirable while working on personal computers or modestly sized compute clusters, 
 but becomes increasing costly as the problem is scaled up to the tens or hundreds of thousands of processors common in high performance computing environments.
 
-In contrast to most other numerical methods, the discontinuous Petrov-Galerkin finite element method retains exceptional stability on extremely coarse meshes.
-DPG is also inherently very adaptive.
-It is possible to compute the residual error without knowledge of the exact solution, which can be used to robustly drive adaptivity.
-This results in a very automated technology, as the user can initialize a computation on the coarsest mesh which adequately represents the geometry 
-then step back and let the program solve and adapt iteratively until it resolves the solution features.
 
-\paragraph{DPG and HPC.}
-Many of the features inherent in the DPG method appear promising in the context of high performance computing.
-% Our goal is to design a method that eliminates human intervention as much as possible.
-% The superior stability of the method promises to prevent a simulation from crashing which could eliminate expensive restarts on large systems.
-% Preliminary studies on convection-diffusion suggest exceptional robustness of the method in terms of diminishing viscosity, 
-% promising successful application to a large class of flow problems.
-% The adaptivity lent by the \emph{error representation function} provides a reliable and automated way to start from a coarse mesh and only refine
-% toward solution features in need. 
-% This uses compute resources much more efficiently than uniform refinements, allowing larger simulations with fewer resources 
-% (we acknowledge that the issue of load balancing and adaptive mesh refinement is still a challenge).
-% These features combine to produce a high degree of automaticity.
-% Ultimately, it is desirable that an engineer could produce a rough mesh that just captures the geometry of the problem and
-% start a DPG simulation that automatically picks up solution features without the user needing to jump back in and fix things.
-DPG is very compute intensive compared to the associated communication and memory costs.
-Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
-Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
-high order methods tend to have a more attractive compute/communication profile than low order methods.
-In our codes, we use QR factorization for optimal test function solves, but this factorization is recyclable as we essentially have many right hand sides.
-The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
-a solve purely in terms of the skeleton degrees of freedom.
-In addition to significantly cutting down on the size of the global solve, 
-this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
-This property was one of the motivations behind the development of the hybridized discontinuous Galerkin (HDG) \cite{HDG} method.
-No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
-positive definite stiffness matrix for the global solve.
-This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
-anticipate it might be an attractive feature in the future.
-As compute resources scale up, many more HPC simulations are increasingly becoming coupled in multiphysics simulations.
-Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- no need to develop many different methods for each part of the simulation.
 
 In the context of linear problems, DPG has been successfully applied to a wide range of physical applications.  
 Theoretical groundwork for DPG applied to the Poisson equation was laid in \cite{DPGPoisson}.  The time-harmonic Helmholtz equation was the focus of \cite{DPGHelmholtz, Gopalakrishnan2014} and \cite{DPG4}.  Linear elasticity and plate problems were addressed in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}, and Maxwell was addressed in \cite{DPGCloaking, WohlmuthReport}.  Linear fluid dynamics problems include convection-diffusion \cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC} and stationary Stokes flow\cite{DPGStokes,EllisLC}.
@@ -125,7 +97,8 @@ Van der Vegt and van der Ven \cite{vanderVegtEuler} note that that ``The space-t
 % - Expected Results
 The ultimate objective for this research is to refine and extend my work on space-time DPG for transient fluid dynamics.
 My dissertation research will focus on 2D compressible and incompressible flow, 
-but from our experience with DPG's stability properties, we expect that application of these ideas to problems outside of fluid dynamics to be straightforward.
+but I am excited to explore the application of these ideas to problems outside of pure fluid dynamics.
+% but from our experience with DPG's stability properties, we expect that application of these ideas to problems outside of fluid dynamics to be straightforward.
 In particular, the field of magnetohydrodynamics (MHD) appears to be a promising target for space-time DPG.
 Initial investigations applying DPG the Maxwell's equations have been encouraging.
 Coupling Maxwell with my work on Navier-Stokes will not be trivial, but we expect this approach to be quite fruitful.
@@ -139,7 +112,30 @@ simulations at the DOE labs, thus
 I would also like to incorporate Ju Liu's recent work (in collaboration with Tom Hughes) on thermodynamically consistent multiphase flow models
 into our DPG framework.
 
-% Note that Camellia is flexible and supports rapid application development - once support for a general class of problems is working, adding new variants is easy
+% \paragraph{DPG and HPC.}
+Many of the features inherent in the DPG method appear promising in the context of high performance computing.
+DPG is very compute intensive compared to the associated communication and memory costs.
+Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
+Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
+high order methods tend to have a more attractive compute/communication profile than low order methods.
+In our codes, we use QR factorization for optimal test function solves, but this factorization is recyclable as we essentially have many right hand sides.
+The division of degrees of freedom into internal vs element interface unknowns produces a global system which can be statically condensed into 
+a solve purely in terms of the element interface degrees of freedom.
+In addition to significantly cutting down on the size of the global solve, 
+this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
+This property was one of the motivations behind the development of the hybridized discontinuous Galerkin (HDG) \cite{HDG} method.
+No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
+positive definite stiffness matrix for the global solve.
+This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
+anticipate it might be an attractive feature in the future.
+As compute resources scale up, many more HPC simulations are increasingly becoming coupled in multiphysics simulations.
+Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, 
+it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- 
+no need to develop many different methods for each part of the simulation.
+Thus, another research direction I am interested in pursuing is the development of DPG's potential 
+for modern and prospective high performance computing architectures.
+% Thus, another promising research direction I am interested in is developing and optimizing space-time DPG for modern and upcoming high performance computing architectures.
+
 
 \paragraph{Benefits to Sandia.}
 % - Impact on Sandia's Science and Technology capabilities
