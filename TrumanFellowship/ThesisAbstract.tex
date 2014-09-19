@@ -21,7 +21,7 @@ Please note that at the time of this application, I am still about a year out fr
 
 \section*{Background and Completed Work}
 \paragraph{DPG - a robust adaptive method for CFD.}
-The discontinuous Petrov-Galerkin method\cite{DPGOverview} is a novel adaptive finite element framework with exceptional stability properties.
+The discontinuous Petrov-Galerkin method \cite{DPGOverview} is a novel adaptive finite element framework with exceptional stability properties.
 Initial mesh design is a time-consuming and expensive part of CFD simulations, as a domain expert has to manually design the 
 mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
 DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
@@ -31,12 +31,12 @@ that indicates residual error.
 Automatic adaptivity and pre-asymptotic stability produce a powerful synthesis when combined with high performance computing.
 Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
 numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
-An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory transfer requirements\cite{BlastWebPage}.
+An ideal parallel algorithm should be locally compute intensive while maintaining minimal memory transfer requirements \cite{BlastWebPage}.
 These are all observed properties of the discontinuous Petrov-Galerkin finite element method.
 Locally computed \emph{optimal test functions} ensure stability on convection-dominated flows as well as resolved viscous flow.
 Element contributions to the global stiffness matrix can be computed independently due to the use of discontinuous test functions.
 Furthermore, static condensation allows the global solve to concern only the \emph{trace} degrees of freedom; 
-trace variables are defined on the mesh skeleton.  
+trace variables are defined on element interfaces.  
 This allows significant reduction of the cost of the global solve.  
 The internal degrees of freedom can then be resolved using a fully parallel post-processing step.
 
@@ -47,7 +47,7 @@ Many of the top numerical methods for CFD are automatically conservative by cons
 but DPG carried no such guarantee since the test space is constructed on the fly.
 I ran a number of test problems and found that indeed, standard DPG is not exactly conservative but converges to near exact local conservation 
 as it resolves the flow features under consideration.
-Leveraging Lagrange multipliers, I developed a new locally conservative DPG formulation\cite{EllisLC} 
+Leveraging Lagrange multipliers, I developed a new locally conservative DPG formulation \cite{EllisLC} 
 that maintains exact conservation even on coarse meshes.
 This was found to dramatically improve the coarse mesh quality on several Stokes flow test problems.
 We also proved stability and robustness estimates for this variant formulation.
@@ -56,7 +56,7 @@ We also proved stability and robustness estimates for this variant formulation.
 Most transient CFD simulation tools are usually a combination of some spatial solver coupled with a time stepping algorithm.
 Often every spatial element is advanced in lock-step -- requiring the time step to conform to the strictest element in the whole domain.
 This approach can be very ineffective for an adaptive simulation where element sizes can vary by several orders of magnitude.
-Technologies exist to address these inefficiencies (such as asynchronous variational integrators\cite{Lew2003}), but bolting on another technology
+Technologies exist to address these inefficiencies (such as asynchronous variational integrators \cite{Lew2003}), but bolting on another technology
 causes us to lose a lot of the desirable DPG properties such as automatic adaptivity and stability.
 
 The goal of this dissertation is to extend the current technology of adaptive steady state DPG to transient problems in space-time.
@@ -69,7 +69,7 @@ The application of DPG to massively parallel CFD is the ultimate goal of this re
 
 
 \section*{Current Work}
-\paragraph{Mathematical analysis of space-time DPG}
+\paragraph{Mathematical analysis of space-time DPG.}
 % \paragraph{Area A: Applicable mathematics.}
 DPG is a method built on rigorous mathematical theory.
 While rooted in the standard theory of finite elements, DPG is novel enough that many of the old analysis tools do not directly apply.
@@ -87,23 +87,24 @@ Unfortunately, positivity preservation is itself an incredibly difficult problem
 We have several ideas we want to try in the context of DPG, but solving the issue may not lie within the scope of this dissertation.
 
 % \paragraph{Area B: Numerical analysis and scientific computation.}
-\paragraph{Scientific code development and computation}
-I will support development of the DPG software framework \emph{Camellia}\cite{Roberts2011} including running verification on several test problems.
+\paragraph{Scientific code development and computation.}
+I will support development of the DPG software framework Camellia \cite{Roberts2011} including running verification on several test problems.
 This will include the development and verification of spatially 2D space-time simulations.
 I will also develop a means to perform time stepping via space-time slabs which should reduce the 
 overall run time and memory requirements for longer simulations.
-I've already contributed several auxiliary features to \emph{Camellia} including mesh readers and solution export, 
+I've already contributed several auxiliary features to Camellia including mesh readers and solution export, 
 but I also plan on looking into adding HDF5 support along with parallel solution output.
 
 A space-time implementation adds additional dimensionality to the problem under consideration increasing the problem size and memory requirements.
 This makes parallel simulation an increasingly important aspect of this work.
-The 16 core \emph{Nozomi} cluster is sufficient for early experimentation, but as we ramp up to larger problems, I plan to run on allocations at TACC and on Mira at Argonne National Laboratory.
+The 16 core \emph{Nozomi} cluster is sufficient for early experimentation, but as we ramp up to larger problems, 
+I plan to run on allocations at TACC and on \emph{Mira} at Argonne National Laboratory.
 
-The major bottleneck to parallel simulations at the moment is that \emph{Camellia} still relies on a serial direct solver for the global solve.
+The major bottleneck to parallel simulations at the moment is that Camellia still relies on a serial direct solver for the global solve.
 Time permitting, I would like to investigate the implementation of an effective iterative solver for DPG.
 
 % \paragraph{Area C: Mathematical modeling and applications.}
-\paragraph{Validation problems to consider}
+\paragraph{Validation problems to consider.}
 As we are exploring a method that is still very much in development, I will be running a number of standard test problems.
 I've already explored the conservation properties of DPG through a couple of simulations of Stokes flow around a cylinder and over
 a backward facing step.
@@ -113,7 +114,7 @@ One hypothesis is that this was due to transient effects on the unresolved mesh 
 The hope is that by using a space-time formulation with temporal adaptivity, we would be able to resolve these temporal oscillations
 and they would die away to the correct steady state solution.
 Another hypothesis is that the non-convergence was caused by Gibbs phenomenon near the unresolved leading edge driving the density negative.
-Our line search algorithm scales the Newton updates to prevent negative densities, but sometimes the lines search factor can be driven so small
+Our line search algorithm scales the Newton updates to prevent negative densities, but sometimes the line search factor can be driven so small
 as to effectively stall convergence.
 Therefore my first priority will be to investigate which factor is stalling convergence and attempt to solve it either via adaptive space-time
 refinements or some sort of positivity preserving technology yet to be decided upon.
