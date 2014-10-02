@@ -342,111 +342,113 @@ Integrating by parts:
 -\epsilon\int_{\Gamma_x}e^{t}v\bff\cdot\bfn_x
 \end{align*}
 Note that $\Divxt{e^{t}v\tilde\bfbeta}=e^{t}(\tilde\bfbeta\Gradxt v+v)$ if $\Div\bfbeta=0$.
-Dividing both sides by $e^{t}$ and moving some terms to the right hand side, we get
+% Dividing both sides by $e^{t}$ and moving some terms to the right hand side, we get
+Moving some terms to the right hand side, we get
 \begin{align*}
-\int_Q v^2
-&+\int_Q\epsilon \Grad v\cdot\Grad v
+\int_Q e^{t}v^2
+&+\int_Q\epsilon e^{t}\Grad v\cdot\Grad v
 \\
 &=
-\int_Qgv
-+\epsilon\int_Q\Grad v\cdot\bff
--\epsilon\int_{\Gamma_x}v\bff\cdot\bfn_x\\
-&\quad-\int_Q\tilde\bfbeta\cdot\Gradxt vv
-\quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
-\quad+\epsilon\int_{\Gamma_x}v\cdot\Grad v\cdot\bfn_x
+\int_Qe^{t}gv
++\epsilon\int_Qe^{t}\Grad v\cdot\bff
+-\epsilon\int_{\Gamma_x}e^{t}v\bff\cdot\bfn_x\\
+&\quad-\int_Qe^{t}\tilde\bfbeta\cdot\Gradxt vv
+\quad+\int_\Gamma e^{t}\tilde\bfbeta\cdot\bfn v^2
+\quad+\epsilon\int_{\Gamma_x}e^{t}v\cdot\Grad v\cdot\bfn_x
 \end{align*}
-or
+Note that $1\leq\norm{e^t}_\infty=e^T$, 
+then
 \begin{align*}
 \norm{v}^2
 &+\epsilon\norm{\Grad v}^2
 \\
-&=
+&\leq
+e^T\left(
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
 -\epsilon\int_{\Gamma_-}v\underbrace{\bff\cdot\bfn_x}_{=\cancelto{0}{\tau_n}+\pd{v}{\bfn_x}}
--\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bff\cdot\bfn_x\\
-&\quad-\int_Q\tilde\bfbeta\cdot\Gradxt vv
+-\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bff\cdot\bfn_x
+\right.\\
+&\left.
+\quad-\int_Q\tilde\bfbeta\cdot\Gradxt vv
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
 \quad+\epsilon\int_{\Gamma_-}v\cdot\Grad v\cdot\bfn_x
 \quad+\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\pd{v}{\bfn_x}
+\right)
 \\
 &=
+e^T\left(
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
 \cancel{
 -\epsilon\int_{\Gamma_-}v\pd{v}{\bfn_x}
 \quad+\epsilon\int_{\Gamma_x}v\pd{v}{\bfn_x}
-}\\
-&\quad-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2
+}
+\right.\\
+&\left.
+\quad-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
+\right)
 \\
 &=
+e^T\left(
 \int_Qgv
-+\epsilon\int_Q\Grad v\cdot\bff\\
-&\quad+\frac{1}{2}\int_Q\cancelto{0}{\Divxt\tilde\bfbeta} v^2
++\epsilon\int_Q\Grad v\cdot\bff
+\right)\\
+&\left.
+\quad+\frac{1}{2}\int_Q\cancelto{0}{\Divxt\tilde\bfbeta} v^2
 \quad-\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn v^2
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
+\right)
 \\
 &=
+e^T\left(
 \int_Qgv
-+\epsilon\int_Q\Grad v\cdot\bff\\
-&\quad+\frac{1}{2}\LRp{\int_{\Gamma_0} \underbrace{-v^2}_{\leq 0}
++\epsilon\int_Q\Grad v\cdot\bff
+\right.\\
+&\left.
+\quad+\frac{1}{2}\LRp{\int_{\Gamma_0} \underbrace{-v^2}_{\leq 0}
 \quad+\int_{\Gamma_T} \cancelto{0}{v^2}
 \quad+\int_{\Gamma_-} \underbrace{\bfbeta\cdot\bfn_x v^2}_{\leq 0}
 \quad+\int_{\Gamma_+} \bfbeta\cdot\bfn_x \cancelto{0}{v^2}
 }
+\right)
 \\
 &\leq
+e^T\left(
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
+\right)
 \\
 &\leq
+e^T\left(
 \frac{\norm{g}^2}{2}
 +\epsilon\frac{\norm{\bff}^2}{2}
 +\frac{\norm{v}^2}{2}
 +\epsilon\frac{\norm{\Grad v}^2}{2}
+\right)
 \end{align*}
-
-% \textcolor{red}{Then}
-% \begin{align*}
-% \norm{v}^2&=\int_Qe^{t}gv
-% -\epsilon\int_Qe^{t}\Div\bff v
-% +\int_Q\tilde\bfbeta\cdot\Gradxt vv
-% +\epsilon\int_Q\Delta vv\\
-% %
-% &=\int_Qe^{t}gv
-% -\epsilon\int_Qe^{t}\Div\bff v
-% +\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(v)^2
-% -\epsilon\int_Q\Grad v\Grad v
-% +\epsilon\int_\Gamma v\Grad v\cdot\bfn
-% \\
-% \end{align*}
-% Or
-% \begin{align*}
-% \norm{v}^2+\epsilon\norm{\Grad v}^2&=\int_Qe^{t}gv
-% -\epsilon\int_Qe^{t}\Div\bff v\\
-% &\quad-\frac{1}{2}\int_Q\underbrace{\Divxt\tilde\bfbeta}_{=0}(v)^2
-% +\frac{1}{2}\int_\Gamma v^2\tilde\bfbeta\cdot\bfn
-% +\epsilon\int_{\Gamma_x} v\Grad v\cdot\bfn_x
-% \\
-% &=\int_Qe^{t}gv
-% +\epsilon\int_Qe^{t}\bff\cdot\Grad v
-% -\epsilon\int_{\Gamma_-}v\underbrace{\bff\cdot\bfn_x}_{=\epsilon\pd{v}{n}=0}
-% -\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\bff\cdot\bfn_x\\
-% &\quad+\frac{1}{2}\int_{\Gamma_-} v^2\underbrace{\bfbeta\cdot\bfn_x}_{<0}
-% +\frac{1}{2}\int_{\Gamma_+} \underbrace{v^2}_{=0}\bfbeta\cdot\bfn_x\\
-% &\quad+\frac{1}{2}\int_{\Gamma_0} \underbrace{v^2 (-n_t)}_{<0}
-% +\frac{1}{2}\int_{\Gamma_T} \underbrace{v^2}_{=0} n_t\\
-% &\quad+\epsilon\int_{\Gamma_-} v\underbrace{\Grad v\cdot\bfn_x}_{=0}
-% +\epsilon\int_{\Gamma_+} \underbrace{v}_{=0}\Grad v\cdot\bfn_x
-% \\
-% &\leq \norm{e^{t}}_{L_\infty(Q)}\LRp{\int_Qgv+\epsilon\int_Q\bff\cdot\Grad v}
-% \\
-% &\leq \LRp{\frac{\norm{g}^2}{2}+\frac{\epsilon\norm{\bff}^2}{2}+\frac{\norm{v}^2}{2}+\frac{\epsilon\norm{\Grad v}^2}{2}}
-% \\
-% \end{align*}
 \end{proof}
 
+\section{Entropy Norm and Navier-Stokes}
+The adjoint for Navier-Stokes looks like
+\begin{align*}
+% \frac{1}{\mu}\bftau+\Grad v &=0\\
+-\pd{v}{t}-A\cdot\Grad v - (K_{ij}v_{,j})_{,i} &= A_0 U\\
+\bftau\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v &= 0 \text{ on } \Gamma_+\\
+v &= 0 \text{ on } \Gamma_T\,,
+\end{align*}
+We want to create a norm that is bounded by $(U,A_0U)=\norm{A_0^\frac{1}{2}U}^2$.
+\begin{lemma}
+\label{lem:convectiveNS}
+For the above conditions on $\bfbeta$,
+\[
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq \norm{g}.
+\]
+\end{lemma}
+\begin{proof}
+\end{proof}
 
 \section{Robustness for transient problems given spatial robustness}
 

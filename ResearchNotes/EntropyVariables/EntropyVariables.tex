@@ -1,0 +1,81 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\title{Space-Time Navier-Stokes with Entropy Variables}
+\author{Truman E. Ellis}
+
+\begin{document}
+\maketitle
+
+The Navier-Stokes equations are
+\begin{equation}
+\Divxt\vecttwo{\bfF}{\bfU}=\bs{\mathcal{F}}
+\end{equation}
+where
+\begin{equation*}
+\bfU=\vectthree{U_c}{\bfU_m}{U_e}=\rho\vectthree{1}{\bfu}{e_0}
+\end{equation*}
+and
+\begin{align*}
+\bfF
+&=\arrthreeone
+{\bfF_1-\sum_{j=1}^dK_{1j}\bfU_{,j}}
+{\bfF_2-\sum_{j=1}^dK_{2j}\bfU_{,j}}
+{\bfF_3-\sum_{j=1}^dK_{3j}\bfU_{,j}}
+% &=\vectthree{\rho\bfu}
+% {\rho\bfu\otimes\bfu+\frac{R}{C_v}(\rho e_0-\frac{1}{2}\rho\bfu\cdot\bfu)\bfI-\mathbb{D}}
+% {\rho\bfu e_0+\frac{R}{C_v}(\rho e_0-\frac{1}{2}\rho\bfu\cdot\bfu)\bfu+\bfq-\bfu\cdot\mathbb{D}}\\
+% &=\vectthree{\bfU_m}{\bfU_m\otimes\bfU_m/U_c+\frac{R}{C_v}(U_e-\frac{1}{2}\bfU_m\cdot\bfU_m/U_c)\bfI-\mathbb{D}}
+% {\bfU_mU_e/U_c+\frac{R}{C_v}(U_e-\frac{1}{2}\bfU_m\cdot\bfU_m/U_c)\bfU_m/U_c+\bfq-\bfU_m/U_c\cdot\mathbb{D}}
+\end{align*}
+
+Multiplying by test function $\bfW$ and integrating by parts, we get
+\begin{equation}
+-\LRp{\vecttwo{\bfF}{\bfU},\Gradxt \bfW}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
+\end{equation}
+Assuming summation on $i$, we can also write this
+\begin{equation}
+-\LRp{\bfU,\bfW_{,t}}-\LRp{\bfF_i-\sum_{j=1}^dK_{ij}\bfU_{,j},\bfW_{,i}}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
+\end{equation}
+
+Consider a change of variables: $\bfU=\bfU(\bfV)$ and linearization $\bfV\approx\tilde\bfV+\Delta\bfV$.
+Then
+\begin{align*}
+&-\LRp{\bfU(\tilde\bfV)+\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV,\bfW_{,t}}\\
+&-\LRp{\bfF_i(\bfU(\tilde\bfV))+\bfF_{i,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV, \bfW_{,i}}\\
+&-\sum_{j=1}^d\LRp{K_{ij}(\bfU(\tilde\bfV))\bfU_{,V}\tilde\bfV_{,j}
++K_{ij,\bfU}\bfU_{,\bfV}(\tilde\bfV)\bfU_{,\bfV}(\tilde\bfV)\tilde\bfV_{,j}\Delta\bfV+K_{ij}\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV_{,j},\bfW_{,i}}\\
+&+\LRa{\hat{\bfT}, \bfW_{,i}}=\LRp{\bs{\mathcal{F}},\bfW}
+\end{align*}
+% \begin{align*}
+% &\LRp{\vecttwo{\bfF(\bfU(\bfV))}{\bfU(\bfV)},\Gradxt \bfW}\\
+% &\approx\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))+\bfF_{,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}{\bfU(\tilde\bfV)
+% +\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}, \Gradxt \bfW}\\
+% \end{align*}
+% Our bilinear form then becomes
+% \begin{align*}
+% &-\LRp{\vecttwo{\bfF_{,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}{\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV},\Gradxt \bfW}
+% +\LRa{\hat{\bfT},\bfW}\\
+% &=\LRp{\bs{\mathcal{F}},\bfW}+\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))}{\bfU(\tilde\bfV)},\Gradxt \bfW}
+% \end{align*}
+% Or
+% \begin{align*}
+% &-\LRp{\vecttwo{
+% \LRp{\bfF_{i,\bfU}\bfU_{,\bfV}-\sum_{j=1}^dK_{ij}\bfU_{,j}}
+% \Delta\bfV}{\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV},\Gradxt \bfW}
+% +\LRa{\hat{\bfT},\bfW}\\
+% &=\LRp{\bs{\mathcal{F}},\bfW}+\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))}{\bfU(\tilde\bfV)},\Gradxt \bfW}
+% \end{align*}
+% In the notation of Hughes \etal, this is
+% Now we define
+% \begin{align*}
+% \bfF_{,\bfU}=\arrthree{0}{1}{0}
+% {-\bfU_m\otimes\bfU_m/U_c^2+\frac{R}{2C_v}\bfU_m\cdot\bfU_m/U_c^2\bfI}{e}{f}
+% {g}{h}{i}
+% \end{align*}
+% and
+% \begin{align*}
+% \bfU_{,\bfV}=
+% \end{align*}
+
+\end{document}
