@@ -1,5 +1,6 @@
 \documentclass{article}
 \input{../../preamble.tex}
+\usepackage[margin=1.25in]{geometry}
 
 \title{Space-Time Navier-Stokes with Entropy Variables}
 \author{Truman E. Ellis}
@@ -7,75 +8,128 @@
 \begin{document}
 \maketitle
 
-The Navier-Stokes equations are
-\begin{equation}
-\Divxt\vecttwo{\bfF}{\bfU}=\bs{\mathcal{F}}
-\end{equation}
-where
+Consider the DPG Navier-Stokes derivation from previously with primitive variables:
+\begin{subequations}
+\label{eq:compressibleNSBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+where 
 \begin{equation*}
-\bfU=\vectthree{U_c}{\bfU_m}{U_e}=\rho\vectthree{1}{\bfu}{e_0}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat T&=\trace(T)\\
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
+&\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
 \end{equation*}
-and
+Now define primitive fluxes for continuity, momentum, and energy equations:
 \begin{align*}
-\bfF
-&=\arrthreeone
-{\bfF_1-\sum_{j=1}^dK_{1j}\bfU_{,j}}
-{\bfF_2-\sum_{j=1}^dK_{2j}\bfU_{,j}}
-{\bfF_3-\sum_{j=1}^dK_{3j}\bfU_{,j}}
-% &=\vectthree{\rho\bfu}
-% {\rho\bfu\otimes\bfu+\frac{R}{C_v}(\rho e_0-\frac{1}{2}\rho\bfu\cdot\bfu)\bfI-\mathbb{D}}
-% {\rho\bfu e_0+\frac{R}{C_v}(\rho e_0-\frac{1}{2}\rho\bfu\cdot\bfu)\bfu+\bfq-\bfu\cdot\mathbb{D}}\\
-% &=\vectthree{\bfU_m}{\bfU_m\otimes\bfU_m/U_c+\frac{R}{C_v}(U_e-\frac{1}{2}\bfU_m\cdot\bfU_m/U_c)\bfI-\mathbb{D}}
-% {\bfU_mU_e/U_c+\frac{R}{C_v}(U_e-\frac{1}{2}\bfU_m\cdot\bfU_m/U_c)\bfU_m/U_c+\bfq-\bfU_m/U_c\cdot\mathbb{D}}
+\bfF^p_c&:=\rho\bfu\\
+\mathbb{F}^p_m&:=\rho\bfu\otimes\bfu+\rho RT\bfI\\
+\bfF^p_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT
+\end{align*}
+Our bilinear form is then simplified:
+\begin{subequations}
+\label{eq:primitiveBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\bfF^p_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^p_m-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^p_e+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+
+Now we wish to do a change of variables to conservation variables: 
+\begin{align*}
+\rho&=\rho\\
+\bfm&=\rho\bfu\\
+E&=\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}
+\end{align*}
+We can define new fluxes in conservation variables:
+\begin{align*}
+\bfF^c_c&=\bfm\\
+\mathbb{F}^c_m&=\frac{\bfm\otimes\bfm}{\rho}+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\bfI\\
+\bfF^c_e&=\frac{\bfm}{\rho}E+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\frac{\bfm}{\rho}\\
+\end{align*}
+and our new bilinear form is
+\begin{subequations}
+\label{eq:conservationBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\frac{\bfm}{\rho},\Div\mathbb{S}}-\LRp{\frac{2}{3}\frac{\bfm}{\rho},\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\frac{E-\frac{1}{2\rho}\bfm\cdot\bfm}{C_v\rho},\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\bfF^c_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^c_m-\mathbb{D}}{\bfm},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^c_e+\bfq-\frac{\bfm}{\rho}\cdot\mathbb{D}}{E},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+
+Now we wish to do a change of variables to entropy variables:
+\begin{align*}
+V_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
+{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+\bfV_m&=\frac{\bfm}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+\end{align*}
+with reverse mapping:
+\begin{align*}
+\rho&=-\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}V_e\\
+\bfm&=\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}\bfV_m\\
+E&=\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
+% rho i is wrong here
 \end{align*}
 
-Multiplying by test function $\bfW$ and integrating by parts, we get
-\begin{equation}
--\LRp{\vecttwo{\bfF}{\bfU},\Gradxt \bfW}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
-\end{equation}
-Assuming summation on $i$, we can also write this
-\begin{equation}
--\LRp{\bfU,\bfW_{,t}}-\LRp{\bfF_i-\sum_{j=1}^dK_{ij}\bfU_{,j},\bfW_{,i}}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
-\end{equation}
-
-Consider a change of variables: $\bfU=\bfU(\bfV)$ and linearization $\bfV\approx\tilde\bfV+\Delta\bfV$.
-Then
-\begin{align*}
-&-\LRp{\bfU(\tilde\bfV)+\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV,\bfW_{,t}}\\
-&-\LRp{\bfF_i(\bfU(\tilde\bfV))+\bfF_{i,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV, \bfW_{,i}}\\
-&-\sum_{j=1}^d\LRp{K_{ij}(\bfU(\tilde\bfV))\bfU_{,V}\tilde\bfV_{,j}
-+K_{ij,\bfU}\bfU_{,\bfV}(\tilde\bfV)\bfU_{,\bfV}(\tilde\bfV)\tilde\bfV_{,j}\Delta\bfV+K_{ij}\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV_{,j},\bfW_{,i}}\\
-&+\LRa{\hat{\bfT}, \bfW_{,i}}=\LRp{\bs{\mathcal{F}},\bfW}
-\end{align*}
-% \begin{align*}
-% &\LRp{\vecttwo{\bfF(\bfU(\bfV))}{\bfU(\bfV)},\Gradxt \bfW}\\
-% &\approx\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))+\bfF_{,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}{\bfU(\tilde\bfV)
-% +\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}, \Gradxt \bfW}\\
-% \end{align*}
-% Our bilinear form then becomes
-% \begin{align*}
-% &-\LRp{\vecttwo{\bfF_{,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV}{\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV},\Gradxt \bfW}
-% +\LRa{\hat{\bfT},\bfW}\\
-% &=\LRp{\bs{\mathcal{F}},\bfW}+\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))}{\bfU(\tilde\bfV)},\Gradxt \bfW}
-% \end{align*}
-% Or
-% \begin{align*}
-% &-\LRp{\vecttwo{
-% \LRp{\bfF_{i,\bfU}\bfU_{,\bfV}-\sum_{j=1}^dK_{ij}\bfU_{,j}}
-% \Delta\bfV}{\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV},\Gradxt \bfW}
-% +\LRa{\hat{\bfT},\bfW}\\
-% &=\LRp{\bs{\mathcal{F}},\bfW}+\LRp{\vecttwo{\bfF(\bfU(\tilde\bfV))}{\bfU(\tilde\bfV)},\Gradxt \bfW}
-% \end{align*}
-% In the notation of Hughes \etal, this is
-% Now we define
-% \begin{align*}
-% \bfF_{,\bfU}=\arrthree{0}{1}{0}
-% {-\bfU_m\otimes\bfU_m/U_c^2+\frac{R}{2C_v}\bfU_m\cdot\bfU_m/U_c^2\bfI}{e}{f}
-% {g}{h}{i}
-% \end{align*}
+% Old stuff
+% The Navier-Stokes equations are
+% \begin{equation}
+% \Divxt\vecttwo{\bfF}{\bfU}=\bs{\mathcal{F}}
+% \end{equation}
+% where
+% \begin{equation*}
+% \bfU=\vectthree{U_c}{\bfU_m}{U_e}=\rho\vectthree{1}{\bfu}{e_0}
+% \end{equation*}
 % and
 % \begin{align*}
-% \bfU_{,\bfV}=
+% \bfF
+% &=\arrthreeone
+% {\bfF_1-\sum_{j=1}^dK_{1j}\bfU_{,j}}
+% {\bfF_2-\sum_{j=1}^dK_{2j}\bfU_{,j}}
+% {\bfF_3-\sum_{j=1}^dK_{3j}\bfU_{,j}}
+% \end{align*}
+
+% Multiplying by test function $\bfW$ and integrating by parts, we get
+% \begin{equation}
+% -\LRp{\vecttwo{\bfF}{\bfU},\Gradxt \bfW}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
+% \end{equation}
+% Assuming summation on $i$, we can also write this
+% \begin{equation}
+% -\LRp{\bfU,\bfW_{,t}}-\LRp{\bfF_i-\sum_{j=1}^dK_{ij}\bfU_{,j},\bfW_{,i}}+\LRa{\hat{\bfT}, \bfW}=\LRp{\bs{\mathcal{F}},\bfW}
+% \end{equation}
+
+% Consider a change of variables: $\bfU=\bfU(\bfV)$ and linearization $\bfV\approx\tilde\bfV+\Delta\bfV$.
+% Then
+% \begin{align*}
+% &-\LRp{\bfU(\tilde\bfV)+\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV,\bfW_{,t}}\\
+% &-\LRp{\bfF_i(\bfU(\tilde\bfV))+\bfF_{i,\bfU}(\bfU(\tilde\bfV))\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV, \bfW_{,i}}\\
+% &-\sum_{j=1}^d\LRp{K_{ij}(\bfU(\tilde\bfV))\bfU_{,V}\tilde\bfV_{,j}
+% +K_{ij,\bfU}\bfU_{,\bfV}(\tilde\bfV)\bfU_{,\bfV}(\tilde\bfV)\tilde\bfV_{,j}\Delta\bfV+K_{ij}\bfU_{,\bfV}(\tilde\bfV)\Delta\bfV_{,j},\bfW_{,i}}\\
+% &+\LRa{\hat{\bfT}, \bfW_{,i}}=\LRp{\bs{\mathcal{F}},\bfW}
 % \end{align*}
 
 \end{document}
