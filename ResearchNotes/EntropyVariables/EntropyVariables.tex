@@ -8,6 +8,7 @@
 \begin{document}
 \maketitle
 
+\section*{Primitive Variables}
 Consider the DPG Navier-Stokes derivation from previously with primitive variables:
 \begin{subequations}
 \label{eq:compressibleNSBF}
@@ -54,6 +55,7 @@ Our bilinear form is then simplified:
 \end{align}
 \end{subequations}
 
+\section*{Conservation Variables}
 Now we wish to do a change of variables to conservation variables: 
 \begin{align*}
 \rho&=\rho\\
@@ -80,6 +82,7 @@ and our new bilinear form is
 \end{align}
 \end{subequations}
 
+\section*{Entropy Variables}
 Now we wish to do a change of variables to entropy variables:
 \begin{align*}
 V_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
@@ -89,11 +92,33 @@ V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
 \end{align*}
 with reverse mapping:
 \begin{align*}
-\rho&=-\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}V_e\\
-\bfm&=\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}\bfV_m\\
-E&=\LRp{E-\frac{1}{2\rho}\bfm\cdot\bfm}\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
-% rho i is wrong here
+\rho&=-\alpha V_e\\
+\bfm&=\alpha\bfV_m\\
+E&=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
 \end{align*}
+where 
+\[
+\alpha(V_c,\bfV_m,V_e)=\LRs{\frac{\gamma-1}{-(V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}
+\]
+We can define new fluxes in entropy variables:
+\begin{align*}
+\bfF^e_c&=\alpha\bfV_m\\
+\mathbb{F}^e_m&=-\alpha\frac{\bfV_m\otimes\bfV_m}{V_e}+\alpha(\gamma-1)\bfI\\
+\bfF^e_e&=-\alpha\frac{\bfV_m}{V_e}\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}-\alpha(\gamma-1)\frac{\bfV_m}{V_e}\\
+\end{align*}
+and our new bilinear form is
+\begin{subequations}
+\label{eq:entropyBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}-\LRp{2\frac{\bfV_m}{V_e},\Div\mathbb{S}}+\LRp{\frac{2}{3}\frac{\bfV_m}{V_e},\Grad\trace{\mathbb{S}}}
+	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}+\LRp{\frac{1}{C_vV_e},\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\bfF^e_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^e_m-\mathbb{D}}{\bfm},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^e_e+\bfq+\frac{\bfV_m}{V_e}\cdot\mathbb{D}}{E},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
 
 % Old stuff
 % The Navier-Stokes equations are
