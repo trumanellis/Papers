@@ -179,4 +179,57 @@ and $R(\tilde U^p)$ is
 	-\LRp{\vecttwo{\bfF^p_e(\tilde U^p)-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},\Gradxt v_e}
 \end{align*}
 
+\subsection*{Conservation Variables}
+The set of nonlinear variables is $U^c:=\LRc{\rho,\bfm,E,\mathbb{D}}$.
+Then $R_{,U^c}(\tilde U^c)\Delta U^c$ is
+\label{eq:conservationJacobian}
+\begin{align*}
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Div\mathbb{S}}
+	-\LRp{\frac{2}{3}\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Grad\trace{\mathbb{S}}}\\
+	-\LRp{\frac{\Delta E-\frac{1}{2\tilde\rho}\Delta\bfm\cdot\tilde\bfm-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\Delta\bfm
+	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
+	-\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^2}\Delta\rho,\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^c_{c,U^c}\Delta U^c}{\Delta\rho},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^c_{m,U^c}\Delta U^c-\Delta\mathbb{D}}{\Delta\bfm},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^c_{e,U^c}\Delta U^c-\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde{\mathbb{D}}
+	+\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho\cdot\tilde{\mathbb{D}}-\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\mathbb{D}}
+	{\Delta E},\Gradxt v_e}
+\end{align*}
+where
+\begin{align*}
+\bfF^c_{c,U^c}\Delta U^c&=\Delta\bfm\\
+\mathbb{F}^c_{m,U^c}\Delta U^c&=
+\frac{\Delta\bfm\otimes\tilde\bfm}{\tilde\rho}
++\frac{\tilde\bfm\otimes\Delta\bfm}{\tilde\rho}
+-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}\Delta\rho\\
+&+(\gamma-1)\LRp{\Delta E
+-\frac{\Delta\bfm\cdot\tilde\bfm}{2\tilde\rho}
+-\frac{\tilde\bfm\cdot\Delta\bfm}{2\tilde\rho}
++\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Delta\rho
+}\bfI\\
+\bfF^c_{e,U^c}\Delta U^c&=
+\frac{\Delta\bfm}{\tilde\rho}\tilde E
++\frac{\tilde\bfm}{\tilde\rho}\Delta E
+-\frac{\tilde\bfm}{\tilde\rho^2}\tilde E\Delta\rho\\
+&+(\gamma-1)\LRp{
+\Delta E\frac{\tilde\bfm}{\tilde\rho}
++\tilde E\frac{\Delta\bfm}{\tilde\rho}
+-\tilde E\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
+&+(\gamma-1)\LRp{
+-\frac{\Delta\bfm\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}
+-\frac{\tilde\bfm\Delta\bfm\cdot\tilde\bfm}{2\tilde\rho^2}
+-\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{2\tilde\rho^2}
++\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho
+}\\
+\end{align*}
+and $R(\tilde U^p)$ is
+\begin{align*}
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\frac{\tilde\bfm}{\tilde\rho},\Div\mathbb{S}}
+	-\LRp{\frac{2}{3}\frac{\tilde\bfm}{\tilde\rho},\Grad\trace{\mathbb{S}}}\\
+	-\LRp{\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho},\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^c_c}{\tilde\rho},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^c_m-\tilde{\mathbb{D}}}{\tilde\bfm},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^c_e-\frac{\tilde\bfm}{\tilde\rho}\cdot\tilde{\mathbb{D}}}{\tilde E},\Gradxt v_e}
+\end{align*}
+
 \end{document}
