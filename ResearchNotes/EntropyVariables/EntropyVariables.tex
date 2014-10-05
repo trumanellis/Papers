@@ -104,8 +104,8 @@ where
 We can define new fluxes in entropy variables:
 \begin{align*}
 \bfF^e_c&=\alpha\bfV_m\\
-\mathbb{F}^e_m&=-\alpha\frac{\bfV_m\otimes\bfV_m}{V_e}+\alpha(\gamma-1)\bfI\\
-\bfF^e_e&=-\alpha\frac{\bfV_m}{V_e}\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}-\alpha(\gamma-1)\frac{\bfV_m}{V_e}\\
+\mathbb{F}^e_m&=\alpha\LRp{-\frac{\bfV_m\otimes\bfV_m}{V_e}+(\gamma-1)\bfI}\\
+\bfF^e_e&=\alpha\frac{\bfV_m}{V_e}\LRp{\frac{1}{2V_e}\bfV_m\cdot\bfV_m-\gamma}\\
 \end{align*}
 and our new bilinear form is
 \begin{subequations}
@@ -146,7 +146,6 @@ R(L)&=
 \subsection*{Primitive Variables}
 The set of nonlinear variables is $U^p:=\LRc{\rho,\bfu,T,\mathbb{D}}$.
 Then $R_{,U^p}(\tilde U^p)\Delta U^p$ is
-\label{eq:primitiveJacobian}
 \begin{align*}
 	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}\\
 	-\LRp{\Delta T,\Div\bftau}\\
@@ -182,7 +181,6 @@ and $R(\tilde U^p)$ is
 \subsection*{Conservation Variables}
 The set of nonlinear variables is $U^c:=\LRc{\rho,\bfm,E,\mathbb{D}}$.
 Then $R_{,U^c}(\tilde U^c)\Delta U^c$ is
-\label{eq:conservationJacobian}
 \begin{align*}
 	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Div\mathbb{S}}
 	-\LRp{\frac{2}{3}\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Grad\trace{\mathbb{S}}}\\
@@ -224,12 +222,83 @@ where
 \end{align*}
 and $R(\tilde U^p)$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\frac{\tilde\bfm}{\tilde\rho},\Div\mathbb{S}}
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\frac{\tilde\bfm}{\tilde\rho},\Div\mathbb{S}}
 	-\LRp{\frac{2}{3}\frac{\tilde\bfm}{\tilde\rho},\Grad\trace{\mathbb{S}}}\\
 	-\LRp{\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho},\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^c_c}{\tilde\rho},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^c_m-\tilde{\mathbb{D}}}{\tilde\bfm},\Gradxt\bfv_m}\\
 	-\LRp{\vecttwo{\bfF^c_e-\frac{\tilde\bfm}{\tilde\rho}\cdot\tilde{\mathbb{D}}}{\tilde E},\Gradxt v_e}
+\end{align*}
+
+\subsection*{Entropy Variables}
+The set of nonlinear variables is $U^e:=\LRc{V_c,\bfV_m,V_e,\mathbb{D}}$.
+Then $R_{,U^e}(\tilde U^e)\Delta U^e$ is
+\begin{align*}
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}
+	-\LRp{2\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e},\Div\mathbb{S}}
+	+\LRp{\frac{2}{3}\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e},\Grad\trace{\mathbb{S}}}\\
+	+\LRp{\frac{1}{C_vV_e},\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^e_{c,U^e}\Delta U^e}{-\alpha_{,U^e}\Delta U^e \tilde V_e-\alpha\Delta V_e},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^e_{m,U^e}\Delta U^e-\Delta\mathbb{D}}{\alpha_{,U^e}\Delta U^e\tilde\bfV_m+\alpha\Delta\bfV_m},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^e_{e,U^e}\Delta U^e
+	+\frac{\Delta\bfV_m}{\tilde V_e}\cdot\tilde{\mathbb{D}}
+	+\frac{\tilde\bfV_m}{\tilde V_e}\cdot\Delta{\mathbb{D}}
+	-\frac{\tilde\bfV_m}{\tilde V_e^2}\cdot\tilde{\mathbb{D}}\Delta V_e
+	}
+	{\alpha_{,U^e}\Delta U^e\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}
+	-\alpha\frac{1}{2\tilde V_e}\Delta\bfV_m\cdot\tilde\bfV_m
+	-\alpha\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+	+\alpha\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+	},\Gradxt v_e}
+\end{align*}
+
+where
+\begin{align*}
+\bfF^e_{c,U^e}\Delta U^e&=\alpha_{,U^e}\Delta U^e\tilde\bfV_m+\alpha\Delta\bfV_m\\
+\mathbb{F}^e_{m,U^e}\Delta U^e&=
+\alpha_{,U^e}\Delta U^e\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bfI}\\
+&+\alpha\LRp{
+-\frac{\Delta\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}
+-\frac{\tilde\bfV_m\otimes\Delta\bfV_m}{\tilde V_e}
++\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e^2}\Delta V_e
+}\\
+\bfF^e_{e,U^e}\Delta U^e&=
+\alpha_{,U^e}\Delta U^e\frac{\tilde\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\\
+&+\alpha\LRp{
+\frac{\Delta\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}
+-\frac{\tilde\bfV_m}{V_e^2}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\Delta V_e\right.\\
+&\left.
++\frac{\tilde\bfV_m}{\tilde V_e}\LRp{
+\frac{1}{2\tilde V_e}\Delta\bfV_m\cdot\tilde\bfV_m
++\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+-\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+}
+}\\
+\end{align*}
+\begin{align*}
+\alpha_{,U^e}\Delta U^e&=
+\frac{1}{\gamma-1}\LRs{\frac{\gamma-1}{-(\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+(\gamma-1)\gamma(-\tilde V_e)^{-(\gamma+1)}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\Delta V_e\\
+&+\LRs{\frac{\gamma-1}{-(\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\frac{1}{\gamma-1}\\
+&\LRp{\Delta V_c
+-\frac{1}{2\tilde V_e}\Delta\bfV_m\cdot\tilde\bfV_m
+-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
++\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+}
+\end{align*}
+and $R(\tilde U^p)$ is
+\begin{align*}
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}-\LRp{2\frac{\tilde\bfV_m}{\tilde V_e},\Div\mathbb{S}}
+	+\LRp{\frac{2}{3}\frac{\tilde\bfV_m}{V_e},\Grad\trace{\mathbb{S}}}\\
+	+\LRp{\frac{1}{C_v\tilde V_e},\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^e_c}{-\alpha\tilde V_e},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^e_m-\tilde{\mathbb{D}}}{\alpha\tilde\bfV_m},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^e_e+\frac{\tilde\bfV_m}{\tilde V_e}\cdot\tilde{\mathbb{D}}}
+	{\alpha\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}},\Gradxt v_e}
 \end{align*}
 
 \end{document}
