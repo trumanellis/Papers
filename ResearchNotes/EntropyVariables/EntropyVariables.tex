@@ -298,4 +298,73 @@ and $R(\tilde U^p)$ is
 	{\alpha\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}},\Gradxt v_e}
 \end{align*}
 
+\section*{Entropy Norms}
+Denote primitive, conservation, and entropy variables as $W$, $U$, and $V$ respectively.
+Consider entropy function $H(U)$.
+The entropy metric we want to control is 
+\[
+\LRp{\delta U,H_{,UU}\delta U}=\LRp{\delta U,V_{,U}\delta U}=\LRp{\delta U,A_0\delta U}=\norm{A_0^{\frac{1}{2}}\delta U^c}^2
+\]
+Consider a change of variables to primitive variables: $\delta W=U_{,W}\delta W$.
+Our entropy metric is then
+\[
+\LRp{U_{,W}\delta W,V_{,U}U_{,W}\delta W}=\LRp{\delta W,U_{,W}^TV_{,U}U_{,W}\delta W}
+\]
+Then
+\[
+U_{,W}=\arrthree{1}{0}{0}{\bfu}{\rho}{0}{C_vT+\frac{1}{2}\bfu\cdot\bfu}{\rho\bfu}{C_v\rho}
+\]
+and
+\[
+V_{,U}(U)=\arrthree
+{\frac{4\gamma\rho^2E^2-4\gamma\rho E\bfm\cdot\bfm+(1+\gamma)(\bfm\cdot\bfm)^2}{\rho(\bfm\cdot\bfm-2\rho E)^2}}
+{-\frac{2\bfm\bfm\cdot\bfm}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
+{-\frac{4\rho(\rho E-\bfm\cdot\bfm)}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
+{}
+{\frac{2\rho(2\rho E+\bfm\cdot\bfm)}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
+{-\frac{4\rho^2\bfm}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
+{Symm.}
+{}
+{\frac{4\rho^3}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
+\]
+In primitive variables, this is
+\[
+V_{,U}(W)=\arrthree
+{\frac{\gamma}{\rho}+\frac{(\bfu\cdot\bfu)^2}{4\rho C_v^2 T^2}}
+{-\frac{\bfu\bfu\cdot\bfu}{2\rho C_v^2 T^2}}
+{-\frac{(C_v T-\frac{1}{2}\bfu\cdot\bfu)}{\rho C_v^2 T^2}}
+{}
+{\frac{C_v T+2\bfu\cdot\bfu}{2\rho C_v^2 T^2}}
+{-\frac{\bfu}{\rho C_v^2 T^2}}
+{Symm.}
+{}
+{\frac{1}{\rho C_v^2 T^2}}
+\]
+and
+\[
+U_{,W}^TV_{,U}U_{,W}=\arrthree
+{\frac{\gamma}{\rho}+\frac{\LRp{\bfu\cdot\bfu}^2}{4\rho C_v^2 T^2}}
+{0}
+{0}
+{0}
+{\frac{\rho(Cv T+2\bfu\cdot\bfu)}{2C_v^2 T^2}}
+{0}
+{0}
+{0}
+{\frac{\rho}{T^2}}
+\]
+
+Consider a change of variables to entropy variables: $\delta V=U_{,V}\delta V$.
+Our entropy metric is then
+\[
+\LRp{U_{,V}\delta V,V_{,U}U_{,V}\delta V}=\LRp{\delta V,U_{,V}^T\delta V}=\LRp{\delta V, A_0^{-1}\delta V}
+\]
+
+\subsection*{Primitive Variables}
+
+\subsection*{Conservation Variables}
+
+\subsection*{Entropy Variables}
+
+
 \end{document}
