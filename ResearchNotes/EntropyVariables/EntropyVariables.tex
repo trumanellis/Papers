@@ -2,7 +2,8 @@
 \input{../../preamble.tex}
 \usepackage[margin=1.25in]{geometry}
 
-\title{Space-Time Navier-Stokes with Entropy Variables}
+\title{A Unified Treatment of Primitive, Conservation, and Entropy Variable Formulations 
+of Navier-Stokes with Discontinuous Petrov-Galerkin Finite Elements}
 \author{Truman E. Ellis}
 
 \begin{document}
@@ -300,21 +301,16 @@ and $R(\tilde U^p)$ is
 
 \section*{Entropy Norms}
 Denote primitive, conservation, and entropy variables as $W$, $U$, and $V$ respectively.
+
+\subsection*{Entropy Metrics and Symmetrizers}
+\subsubsection*{Conservation Variables}
 Consider entropy function $H(U)$.
 The entropy metric we want to control is 
 \[
-\LRp{\delta U,H_{,UU}\delta U}=\LRp{\delta U,V_{,U}\delta U}=\LRp{\delta U,A_0\delta U}=\norm{A_0^{\frac{1}{2}}\delta U^c}^2
+\LRp{\delta U,H_{,UU}\delta U}=\LRp{\delta U,V_{,U}\delta U}
+% =\LRp{\delta U,A_0\delta U}=\norm{A_0^{\frac{1}{2}}\delta U^c}^2
 \]
-Consider a change of variables to primitive variables: $\delta W=U_{,W}\delta W$.
-Our entropy metric is then
-\[
-\LRp{U_{,W}\delta W,V_{,U}U_{,W}\delta W}=\LRp{\delta W,U_{,W}^TV_{,U}U_{,W}\delta W}
-\]
-Then
-\[
-U_{,W}=\arrthree{1}{0}{0}{\bfu}{\rho}{0}{C_vT+\frac{1}{2}\bfu\cdot\bfu}{\rho\bfu}{C_v\rho}
-\]
-and
+where
 \[
 V_{,U}(U)=\arrthree
 {\frac{4\gamma\rho^2E^2-4\gamma\rho E\bfm\cdot\bfm+(1+\gamma)(\bfm\cdot\bfm)^2}{\rho(\bfm\cdot\bfm-2\rho E)^2}}
@@ -327,7 +323,19 @@ V_{,U}(U)=\arrthree
 {}
 {\frac{4\rho^3}{\LRp{\bfm\cdot\bfm-2\rho E}^2}}
 \]
-In primitive variables, this is
+Let $A_0^c=V_{,U}(U)$ denote the symmetrizer for conservation variables.
+
+\subsubsection*{Primitive Variables}
+Consider a change of variables to primitive variables: $\delta W=U_{,W}\delta W$.
+Our entropy metric is then
+\[
+\LRp{U_{,W}\delta W,V_{,U}U_{,W}\delta W}=\LRp{\delta W,U_{,W}^TV_{,U}U_{,W}\delta W}
+\]
+Then
+\[
+U_{,W}=\arrthree{1}{0}{0}{\bfu}{\rho}{0}{C_vT+\frac{1}{2}\bfu\cdot\bfu}{\rho\bfu}{C_v\rho}
+\]
+where $V_{,U}$ in primitive variables is
 \[
 V_{,U}(W)=\arrthree
 {\frac{\gamma}{\rho}+\frac{(\bfu\cdot\bfu)^2}{4\rho C_v^2 T^2}}
@@ -353,18 +361,83 @@ U_{,W}^TV_{,U}U_{,W}=\arrthree
 {0}
 {\frac{\rho}{T^2}}
 \]
+Let $A_0^p=U_{,W}^TV_{,U}U_{,W}$ denote the symmetrizer for primitive variables.
 
+\subsubsection*{Entropy Variables}
 Consider a change of variables to entropy variables: $\delta V=U_{,V}\delta V$.
 Our entropy metric is then
 \[
 \LRp{U_{,V}\delta V,V_{,U}U_{,V}\delta V}=\LRp{\delta V,U_{,V}^T\delta V}=\LRp{\delta V, A_0^{-1}\delta V}
 \]
+with 
+\[
+U_{,V}=\frac{\alpha}{\gamma-1}\arrthree
+{-V_e}
+{\bfV_m}
+{1-\frac{\bfV_m\cdot\bfV_m}{2V_e}}
+{}
+{\gamma-1-\frac{\bfV_m\cdot\bfV_m}{2V_e}}
+{\LRp{\gamma-\frac{\bfV_m\cdot\bfV_m}{2V_e}}\frac{\bfV_m}{V_e}}
+{Symm.}
+{}
+{\frac{4\gamma V_e^2-4\gamma V_e\bfV_m\cdot\bfV_m+\LRp{\bfV_m\cdot\bfV_m}^2}{4V_e^3}}
+\]
+Let $A_0^e=U_{,V}(V)$ denote the symmetrizer for entropy variables.
 
-\subsection*{Primitive Variables}
+\subsection*{Robust Norm}
+Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
+where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
+and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
 
-\subsection*{Conservation Variables}
+Assume that boundary conditions are applied on the boundary $\Gamma_0\subset \Gamma$.  Recall that, for the ultra-weak variational formulation
+\[
+b\LRp{\LRp{u,\uh},v} = \LRp{u,A^*_h v}_{\L} + \LRa{\uh, \jump{v}}_{\Gh\setminus \Gamma_0}
+\]
+If we have conforming $v^*$ such that
+\begin{align*}
+A^* v^* &= A_0u\\
+v^* &= 0 \text{ on } \Gh\setminus\Gamma_0.
+\end{align*}
+then
+\[
+\norm{A_0^{\frac{1}{2}}u}^2=\LRp{u,A_0u}=\LRp{u,A^* v^*}=b(u,v^*)=\frac{b(u,v^*)}{\norm{v^*}_V}\norm{v^*}_V\leq\norm{u}_E\norm{v^*}_V\,.
+\]
+Thus, we need to develop an adjoint norm such that $A^* v^*=A_0u$ and $\norm{A_0^{\frac{1}{2}}u}_V\leq\norm{v^*}_V$.
 
-\subsection*{Entropy Variables}
+We start by rewriting our linearized bilinear form as
+\begin{align*}
+\LRp{M\Sigma,\Psi}+\LRp{G U,\Grad\Psi}+\LRa{H\hat U,\Psi}&=-R_\Sigma((\tilde U,\tilde\Sigma),\Psi)\\
+-\LRp{\vecttwo{\mathcal{F}U-K\Sigma}{CU},\Gradxt V}+\LRa{\hat T,V}&=\LRp{f,V}-R_U((\tilde U,\tilde\Sigma),V)
+\end{align*}
+where $U$ denotes the primary variables, $\hat U$ represents the trace variables, $\hat T$ represents the flux variables,
+$\Sigma$ represents the viscous (and heat) stress variables,
+$\Psi$ represents the test functions applied to the constitutive laws, $V$ represents the test functions applied to the conservation laws,
+$\mathcal{F}U$ are the Euler fluxes, $K\Sigma$ is the viscous (and heat) contribution to the conservation laws, $C(U)$ represents the 
+conserved quantity for each conservation law, $(M\Sigma,\Psi)$, $(GU,\Grad\Psi)$, and $(H\hat U,\Psi)$ are bilinear forms representing 
+the $\Sigma$, $U$, and $\hat U$ contributions to the constitutive laws, $R_\Sigma$ is the constitutive residual, $R_U$ is the conservative residual,
+and $f$ represents any source terms.
+The exact form of each of these depends on whether we are considering primitive variables, conservation variables, or entropy variables.
 
+We define our adjoint equations by grouping terms by $\Sigma$ and $U$ and weighting the second equation by $A_0U$:
+\begin{align*}
+M^*\Psi+K^*\Grad V&=0\\
+-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi&=A_0U
+\end{align*}
+we use the similarity in form between this and our convection-diffusion adjoint equation to define a (hopefully) robust norm
+for Navier-Stokes.
+For convection-diffusion, we derived a bound $\tilde\bfbeta\cdot\Gradxt v\leq\norm{u}$ by multiplying both sides by $-\tilde\bfbeta\cdot\Gradxt v$
+and integrating over $Q$ to get something like
+\[
+\norm{\tilde\bfbeta\cdot\Gradxt v}^2\leq\frac{\norm{u}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}^2}{2}+\epsilon C\norm{\Grad v}^2\,.
+\]
+Without proof, we postulate that we would get a similar bound for Navier-Stokes if we multiply both sides of the 
+second equation by $-A_0^{-1}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V$ and integrate over $Q$.
+By analogy, we would hope to get a bound like
+\begin{align*}
+\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2
+&\leq\int_QA_0UA_0^{-1}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+\epsilon C\norm{\Grad V}^2\\
+&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2}{2}+\epsilon C\norm{\Grad V}^2\\
+\end{align*}
+indicating that including a term such as $\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}$ in our norm will produce a robust bound.
 
 \end{document}

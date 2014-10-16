@@ -219,7 +219,7 @@ For the above conditions on $\bfbeta$,
 Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
 \begin{equation}
 \label{eq:adj1}
-\norm{\tilde\bfbeta\cdot\Gradxt v}=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\bftau\,.
+\norm{\tilde\bfbeta\cdot\Gradxt v}^2=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\bftau\,.
 \end{equation}
 Note that
 \begin{align*}
@@ -252,7 +252,7 @@ Note that
 \end{align*}
 Plugging this into \eqref{eq:adj1}, we get
 \begin{align*}
-\norm{\tilde\bfbeta\cdot\Gradxt v}
+\norm{\tilde\bfbeta\cdot\Gradxt v}^2
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad-\epsilon\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
@@ -290,10 +290,10 @@ Plugging this into \eqref{eq:adj1}, we get
 &\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 %
-&\leq-\frac{\norm{g}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
+&\leq\frac{\norm{g}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}^2}{2}
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 %
-&\leq-\frac{\norm{g}}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}}{2}
+&\leq\frac{\norm{g}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}^2}{2}
 +\epsilon C\norm{\Grad v}^2
 \end{align*}
 \end{proof}
