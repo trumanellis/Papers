@@ -4,6 +4,7 @@
 
 \title{A Unified Treatment of Primitive, Conservation, and Entropy Variable Formulations 
 of Navier-Stokes with Discontinuous Petrov-Galerkin Finite Elements}
+% Physically relevant residuals
 \author{Truman E. Ellis}
 
 \begin{document}
@@ -384,7 +385,7 @@ U_{,V}=\frac{\alpha}{\gamma-1}\arrthree
 \]
 Let $A_0^e=U_{,V}(V)$ denote the symmetrizer for entropy variables.
 
-\subsection*{Robust Norm}
+\subsection*{Entropy Scaled Graph Norm}
 Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
 where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
 and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
@@ -423,7 +424,37 @@ We define our adjoint equations by grouping terms by $\Sigma$ and $U$ and weight
 M^*\Psi+K^*\Grad V&=0\\
 -\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi&=A_0U
 \end{align*}
-we use the similarity in form between this and our convection-diffusion adjoint equation to define a (hopefully) robust norm
+
+The simplest norm we could use that would produce the right bound would probably be
+\begin{align*}
+\norm{M^*\Psi+K^*\Grad V}^2+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2
+\end{align*}
+The first term is simple to see since it is equal to zero in the adjoint.
+If we multiply the second adjoint equation by $-A_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}$
+and integrate over $Q$, we would see that 
+\begin{align*}
+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2
+&=\int_QA_0UA_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}\\
+&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2}{2}\\
+\end{align*}
+
+\subsubsection*{Primitive Variables}
+For the sake of simplifying notation, we drop the $\Delta$ notation from before. 
+Any values from the previous solution are denoted with a $\tilde{}$ notation while current values lack this.
+In the primitive variable formulation, $\Sigma=\LRc{\mathbb{D},\bfq}$, $U=\LRc{\rho,\bfu,T}$, $\Psi=\LRc{\mathbb{S},\bftau}$, and $V=\LRc{v_c,\bfv_m,v_e}$.
+We have the following definitions:
+\begin{align*}
+M^*\Psi&=\frac{1}{\mu}\mathbb{S}+\frac{Pr}{C_p\mu}\bftau\\
+K^*\Grad V&=\frac{1}{\mu}\mathbb{S}+\frac{Pr}{C_p\mu}\bftau\\
+G^*\cdot\Grad\Psi&=2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}\\
+\end{align*}
+
+\subsubsection*{Conservation Variables}
+
+\subsubsection*{Entropy Variables}
+
+\subsection*{Entropy Scaled Robust Norm}
+We use the similarity in form between this and our convection-diffusion adjoint equation to define a (hopefully) robust norm
 for Navier-Stokes.
 For convection-diffusion, we derived a bound $\tilde\bfbeta\cdot\Gradxt v\leq\norm{u}$ by multiplying both sides by $-\tilde\bfbeta\cdot\Gradxt v$
 and integrating over $Q$ to get something like
@@ -436,8 +467,30 @@ By analogy, we would hope to get a bound like
 \begin{align*}
 \norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2
 &\leq\int_QA_0UA_0^{-1}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+\epsilon C\norm{\Grad V}^2\\
-&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2}{2}+\epsilon C\norm{\Grad V}^2\\
+&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2}{2}
++\epsilon C\norm{A_0^{-\frac{1}{2}}\Grad V}^2\\
 \end{align*}
-indicating that including a term such as $\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}$ in our norm will produce a robust bound.
+% indicating that including a term such as $\norm{A_0^{-\frac{1}{2}}\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}^2$ in our norm will produce a robust bound.
+
+By multiplying the convection-diffusion adjoint by $e^tv$ and integrating over $Q$, we were able to establish a bound
+\[
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{u}^2
+\]
+We again proceed by analogy and propose that by multiplying the Navier-Stokes adjoint by $A_0^{-1}e^tV$ and integrating over $Q$, we could obtain
+a bound on 
+\[
+\norm{A_0^{-\frac{1}{2}}V}^2+\norm{A_0^{-\frac{1}{2}}M^{-\frac{1}{2}}G^*\cdot K^*\Grad V}^2\leq\norm{A_0^{\frac{1}{2}}U}^2
+\]
+% which gives permission to use $\norm{A_0^{-\frac{1}{2}}v}^2+\norm{A_0^{-\frac{1}{2}}M^{-\frac{1}{2}}\Grad v}^2$ in our robust norm.
+
+From the adjoint equation, we can also establish bounds on a few more terms. Since 
+\[
+A_0^{-\frac{1}{2}}G^*\cdot\Grad V=A_0^{-\frac{1}{2}}\LRp{A_0U+\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V}
+\]
+we can establish a bound on 
+\[
+\norm{A_0^{-\frac{1}{2}}G^*\cdot\Grad V}^2
+\]
+\textcolor{red}{Finish this section.}
 
 \end{document}
