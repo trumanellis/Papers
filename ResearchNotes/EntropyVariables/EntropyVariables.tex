@@ -428,6 +428,7 @@ M^*\Psi+K^*\Grad V&=0\\
 The simplest norm we could use that would produce the right bound would probably be
 \begin{align*}
 \norm{M^*\Psi+K^*\Grad V}^2+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2
++\norm{\Psi}^2+\norm{V}^2
 \end{align*}
 The first term is simple to see since it is equal to zero in the adjoint.
 If we multiply the second adjoint equation by $-A_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}$
@@ -441,12 +442,45 @@ and integrate over $Q$, we would see that
 \subsubsection*{Primitive Variables}
 For the sake of simplifying notation, we drop the $\Delta$ notation from before. 
 Any values from the previous solution are denoted with a $\tilde{}$ notation while current values lack this.
-In the primitive variable formulation, $\Sigma=\LRc{\mathbb{D},\bfq}$, $U=\LRc{\rho,\bfu,T}$, $\Psi=\LRc{\mathbb{S},\bftau}$, and $V=\LRc{v_c,\bfv_m,v_e}$.
+In the primitive variable formulation, $\Sigma=\LRc{\mathbb{D},\bfq}$, $U=\LRc{\rho,u_x,u_y,T}$, $\Psi=\LRc{\mathbb{S},\bftau}$, and $V=\LRc{v_c,v_x,v_y,v_e}$.
 We have the following definitions:
 \begin{align*}
-M^*\Psi&=\frac{1}{\mu}\mathbb{S}+\frac{Pr}{C_p\mu}\bftau\\
-K^*\Grad V&=\frac{1}{\mu}\mathbb{S}+\frac{Pr}{C_p\mu}\bftau\\
-G^*\cdot\Grad\Psi&=2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}\\
+M^*\Psi+K^*\Grad V&=\vecttwo{M_{\mathbb{D}}^*\mathbb{S}}{M_{\bfq}^*\bftau}
++\vecttwo{K_{\mathbb{D}}^*\Grad V}{K_{\bfq}^*\Grad V}\\
+-\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi&=-\vectthree
+{\bfF_\rho^*\cdot\Grad V+\bfC_\rho^*\cdot V_{,t}}
+{\mathbb{F}_{\bfu}^*\cdot\Grad V+\mathbb{C}_{\bfu}^*\cdot V_{,t}}
+{\bfF_T^*\cdot\Grad V+\bfC_T^*\cdot V_{,t}}
++\vectthree
+{0}
+{\bfG_{\bfu}^*\cdot\Grad\mathbf{S}}
+{\bfG_T^*\cdot\Grad\bftau}
+\\
+\end{align*}
+\begin{align*}
+M_\mathbb{D}^*\mathbb{S}&=\frac{1}{\mu}\mathbb{S}\\
+M_{\bfq}^*\bftau&=\frac{Pr}{C_p\mu}\bftau\\
+K_\mathbb{D}^*\Grad V&=\Grad\bfv_m+\tilde\bfu\otimes\Grad v_e\\
+K_{\bfq}^*\Grad V&=-\Grad v_e\\
+\end{align*}
+\begin{align*}
+\bfF_\rho^*\cdot\Grad V&=
+\tilde\bfu\cdot\Grad v_c
++\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m+R\tilde T\Div\bfv_m
++C_v\tilde T\tilde\bfu\cdot\Grad v_e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde T\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_\rho^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
+%
+\mathbb{F}_{\bfu}\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
++\tilde\rho\Grad\bfv_m\tilde\bfu+\tilde\rho\tilde\bfu^T\Grad\bfv_m
++C_v\tilde T\tilde\rho\Grad v_e+\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e
++R\tilde T\tilde\rho\Grad v_e\\
+%
+\mathbb{C}_{\bfu}^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+%
+\bfF_T^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_T^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}
 \end{align*}
 
 \subsubsection*{Conservation Variables}
