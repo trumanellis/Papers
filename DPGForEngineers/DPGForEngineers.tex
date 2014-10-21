@@ -3,12 +3,18 @@
 \usepackage[margin=1.25in]{geometry}
 
 \title{DPG for Engineers}
-\author{Truman E. Ellis, Leszek F. Demkowicz, Jesse L. Chan}
+\author{Truman E. Ellis, Jesse L. Chan, Leszek F. Demkowicz, Jay Gopalakrishnan}
 
 \begin{document}
 \maketitle
 
+\begin{abstract}
+We discuss and explain the discontinuous Petrov-Galerkin finite element method with an engineering audience in mind.
+\end{abstract}
+
 \section{Motivation and Introductory Concepts}
+The discontinuous Petrov-Galerkin finite element method is a promising new framework 
+for automated computing of a broad class of partial differential equations.
 
 \subsection{A Framework for Automated Computing}
 % Stability => Multiphysics
@@ -16,14 +22,55 @@
 
 \subsection{Mathematical Fundamentals}
 
-\subsubsection{Dual Spaces and Riesz Maps}
-% Quick definition of a Hilbert space
+\subsubsection{Banach, Hilbert, and Sobolev Spaces}
+% Basic explanation with examples
+Consider a bounded domain, $\Omega\in\mathbb{R}^d$ and a vector space of functions defined on $\Omega$.
+A Banach space is a complete normed vector space.
+An example of which is $L_1(\Omega)$ which is the set of all functions defined on $\Omega$ such that the $L_1$ norm
+$\norm{u}_{L_1(\Omega)}:=\int_\Omega|u|$ is finite.
+A Hilbert space is a Banach space where the norm is defined through an inner product.
+An example of which is $L_2(\Omega)$ for which the norm is
+$\norm{u}_{L_2(\Omega)}:=\LRp{u,u}_{L_2(\Omega)}^{\frac{1}{2}}:=\LRp{\int_\Omega u^2}^{\frac{1}{2}}$.
+Finally, a Sobolev space is a Hilbert space where the inner product contains derivatives of the function.
+A common Sobolev space is $H^1(\Omega)$ where $\norm{u}_{H^1(\Omega)}^2:=\norm{u}_{L_2(\Omega)}^2+\norm{\Grad u}_{L_2(\Omega)}^2$.
 
-\subsubsection{Broken Sobolev Spaces}
+\subsubsection{Variational Formulations, Dual Spaces, and Riesz Maps}
+Consider a Banach space $U$. The dual space, $U'$ is the set of all linear functionals on $U$ such that the pairing $\LRa{u,w}_{U\times U'}\in\mathbb{R}$ 
+for all $u\in U$ and $w\in U'$.
+Any PDE problem can abstractly be written as: find solution $u\in U$ such that
+\[
+Bu=l
+\]
+where $B:U\rightarrow V'$ maps functions to some dual space and $l\in U'$.
+By the calculus of variations, this is equivalent to the problem: find solution $u\in U$ such that
+\[
+\LRa{Bu,v}=\LRa{l,v}
+\]
+for all functions $v\in V$ and $v$ is called a test function.
+This defines a bilinear form $b(u,v)=f(v)$ where $u$ is often called the trial function.
+Now let $U$ and $V$ be Hilbert rather than merely Banach.
+The Riesz representation theorem defines a bijective, isometric mapping from every member in $V$ to a corresponding member in the dual space $V'$.
+We denote this mapping $R_V:V\rightarrow V'$.
+Thus, we can take our operator equation representing the strong form of our PDE
+\[
+Bu-l=0\quad\in V'
+\]
+and map it back to $V$ via the inverse Riesz map:
+\[
+R_V^{-1}(Bu-l)=0\quad\in V.
+\]
+
+% \subsubsection{Broken Sobolev Spaces}
 % Quick definition of Sobolev spaces
 
 \subsection{Ritz Methods and Least Squares}
 
 \subsection{SUPG -- Or Stability Through the Appropriate Test Space}
+
+\section{Development of a DPG Method for the Poisson Equation}
+% Start with a specific example then generalize
+% Alternatively do convection-diffusion or reaction-diffusion
+
+\section{DPG for Well Posed PDEs}
 
 \end{document}
