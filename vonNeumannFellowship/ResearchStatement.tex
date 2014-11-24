@@ -33,7 +33,8 @@ for solving partial differential equations.
 
 \section*{Scientific Importance}
 \paragraph{DPG -- a robust framework for computational mechanics.}
-The primary strength of the method lies in its suitability to a very broad class of well-posed problems.
+The primary strength of the method lies in its suitability to any well-posed variational problem.
+% very broad class of well-posed problems.
 DPG offers a fundamental framework for developing robust residual-minimizing finite element methods, even for equations that usually cause problems
 for standard techniques, such as convection-dominated diffusion and Stokes flow.
 DPG methods have provably optimal convergence rates and often come very close to the best solution possible in the discrete space.
@@ -51,13 +52,14 @@ The robust stability properties of DPG appear to carry over into the nonlinear r
 % I recently addressed the issue of local conservation within the DPG framework in \cite{EllisLC}.
 
 \section*{Current Research}
-\paragraph{The development of DPG for fluid dynamics applications.}
+\paragraph{DPG for fluid dynamics applications.}
 Local conservation is considered by many fluid dynamics practitioners to be an extremely important feature in a CFD code. 
 Thus, my initial work on DPG included the development of a variant formulation that explicitly enforced conservation element-by-element 
-via Lagrange multipliers\cite{EllisLC}.
+via Lagrange multipliers \cite{EllisLC}.
 
 Past explorations of the DPG method focused exclusively on steady state problems.
-High Reynolds number flows (and many other realistic engineering simulations) often require highly adaptive meshes for efficient computation,
+% High Reynolds number flows (and many other realistic engineering simulations) often require highly adaptive meshes for efficient computation,
+Most simulations of realistic engineering applications require highly adaptive meshes for efficient computation,
 but traditional time stepping algorithms are horribly inefficient in such cases as the entire simulation needs to move forward 
 at the pace of the most restrictive element, which may be orders of magnitude smaller than other elements in the domain.
 % Traditional time stepping algorithms do not lend themselves very well to highly adaptive meshes, such as those produced by adaptively solving 
@@ -75,7 +77,7 @@ at the pace of the most restrictive element, which may be orders of magnitude sm
 % So if we are interested in temporally accurate solutions, we are limited by the fact that our smallest mesh elements 
 % (which may be orders of magnitude smaller than the largest elements) are constrained to proceed at a much smaller time step than the mesh as a whole. 
 % We can either restrict the whole mesh to the smallest time step, or we can attempt some sort of local time stepping.
-A space-time DPG formulation presents an attractive alternative as we will be able to preserve our natural adaptivity 
+A space-time DPG formulation presents an attractive alternative as we will be able to preserve our natural stability and adaptivity 
 from the steady problems while extending it in time.
 Thus we achieve an adaptive solution technique for transient problems in a unified framework.
 % Space-time methods have also been found superior in their satisfaction of geometric conservation laws for problems with moving boundaries \cite{GCL}.
@@ -89,7 +91,7 @@ A related capability that we have been developing is the ability to use entropy 
 
 \section*{Future Research}
 \paragraph{DPG for multiphysics and magnetohydrodynamics.}
-In particular, the field of magnetohydrodynamics (MHD) appears to be a promising target for space-time DPG.
+The field of magnetohydrodynamics (MHD) appears to be a promising target for space-time DPG.
 Initial investigations applying DPG the Maxwell's equations have been encouraging.
 Coupling Maxwell with my work on Navier-Stokes will not be trivial, but we expect this approach to be quite fruitful.
 Typically the techniques used to solve fluid dynamics and electromagnetics are very different, but within the DPG framework these can both be solved
@@ -102,7 +104,8 @@ simulations at the DOE labs, thus
 I would also like to incorporate Ju Liu's recent work (in collaboration with Tom Hughes) on thermodynamically consistent multiphase flow models
 into our DPG framework.
 
-Many of the features inherent in the DPG method appear promising in the context of high performance computing.
+I would also like to further develop the marriage of DPG and high performance computing.
+Many of the features inherent to the DPG method appear promising in the context of massively parallel simulations.
 DPG is very compute intensive compared to the associated communication and memory costs.
 Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
 Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
@@ -113,11 +116,12 @@ a solve purely in terms of the element interface degrees of freedom.
 In addition to significantly cutting down on the size of the global solve, 
 this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
 This property was one of the motivations behind the development of the hybridized discontinuous Galerkin (HDG) \cite{HDG} method.
-No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
+No matter what system of equations is being considered, DPG always produces a Hermitian 
 positive definite stiffness matrix for the global solve.
 This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
 anticipate it might be an attractive feature in the future.
-As compute resources scale up, HPC simulations are increasingly becoming coupled in multiphysics simulations.
+% As compute resources scale up, HPC simulations are increasingly becoming coupled in multiphysics simulations.
+Multiphysics simulations are becoming increasingly accessible and desirable as compute resources scale up.
 Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, 
 it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- 
 no need to develop many different methods for each part of the simulation.
@@ -131,14 +135,14 @@ In particular, the space-time approach caries substantial benefits over time ste
 The robustness of DPG on coarse meshes with automatic adaptivity promises an easier mesh design process for computational scientists.
 Scalability of the method is currently under very active development, but inherent features of DPG and early results are very encouraging.
 This research will advance development of the Camellia \cite{CamelliaDPG} DPG library which was initiated at Sandia 
-and is built exclusively on top of Trilinos \cite{Trilinos}, another major Sandia effort.
-Camellia supports rapid application development and is much simpler to use (interface inspired by the FEniCS project) 
-than most general finite element libraries available.
+and is built exclusively on top of Trilinos \cite{Trilinos}. %, another major Sandia effort.
+Camellia supports rapid application development and is much simpler to use
+than most general finite element libraries available, with an interface inspired by the FEniCS project.
 In the next year, Camellia is expected to be released as an open source project, possibly as a module within Trilinos.
 % Usage of Sandia's high performance computing systems will be critical to the success of this project, but 
 This project should ultimately
-make it easier for other Sandia researchers to leverage those resources to solve their own computational problems,
-as DPG and Camellia provide a framework for scientific computation rather than simply a driver to accomplish a single class of problems.
+make it easier for other Sandia researchers to leverage HPC resources to solve their own computational problems,
+as DPG and Camellia provide a framework for scientific computation rather than simply a driver to solve a single class of problems.
 
 Based on our previous experience with DPG for fluid flow and new results for DPG for electromagnetism, we are very confident
 that magnetohydrodynamics and multiphase flows are a reasonable objective for the von Neumann Fellowship.
