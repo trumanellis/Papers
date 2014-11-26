@@ -842,6 +842,9 @@ Therefore we split these terms up into a value for the previous guess (denoted w
 &-\LRp{\vecttwo{\tilde F-\tilde K}{\tilde C},\Gradxt V} - \LRp{\vecttwo{\Delta F-\Delta K}{\Delta C},\Gradxt V}\\
 &+\LRa{\hat t,V}-\LRp{f,V}=0\,.
 \end{align*}
+Note that we use the $\Delta$ notation as a shortcut to indicate the Jacobian of the residual evaluated at the previous solution value, e.g.
+$\Delta F=\pd{F}{U}(\tilde U)\Delta U$ where $U$ is a placeholder for the set of solution variables for each respective formulation 
+(primitive, conservation, or entropy).
 Moving known quantities to the right hand side, we get our bilinear form
 \begin{align*}
 &\LRp{\Delta M,\Psi}
@@ -908,7 +911,7 @@ With conservation variables, we have
 \Delta K&=\LRc{0\,,\,
 \Delta\bbD\,,\,
 \frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
--\frac{\tilde\bfu}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
+-\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
 +\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\bbD}\\
 \Delta C&=\LRc{\Delta\rho\,,\,\Delta\bfm\,,\,\Delta E}\\
 \Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
@@ -919,68 +922,58 @@ With conservation variables, we have
 \end{align*}
 
 Finally, the linearized terms for entropy variables are
+\begin{align*}
+\Delta\bfF_c&=\Delta\alpha\tilde\bfV_m+\tilde\alpha\Delta\bfV_m\\
+\Delta\bbF_m&=
+\Delta\alpha\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bfI}\\
+&+\tilde\alpha\LRp{
+-\frac{\Delta\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}
+-\frac{\tilde\bfV_m\otimes\Delta\bfV_m}{\tilde V_e}
++\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e^2}\Delta V_e
+}\\
+\Delta\bfF_e&=
+\Delta\alpha\frac{\tilde\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\\
+&+\tilde\alpha\LRp{
+\frac{\Delta\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}
+-\frac{\tilde\bfV_m}{V_e^2}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\Delta V_e\right.\\
+&\left.
++\frac{\tilde\bfV_m}{\tilde V_e}\LRp{
+\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+-\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+}
+}\\
+\end{align*}
+\begin{align*}
+\Delta K&=\LRc{0\,,\,
+\Delta\bbD\,,\,
+-\frac{\Delta\bfV_m}{\tilde V_e}\cdot\tilde\bbD
++\frac{\tilde\bfV_m}{\tilde V_e^2}\cdot\tilde\bbD\Delta V_e
+-\frac{\tilde\bfV_m}{\tilde V_e}\cdot\Delta\bbD}\\
+\Delta C_c&=-\Delta\alpha\tilde V_e-\tilde\alpha\Delta V_e\\
+\Delta\bfC_m&=\Delta\alpha\tilde\bfV_m+\tilde\alpha\Delta\bfV_m\\
+\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}
+	-\tilde\alpha\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+	+\tilde\alpha\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e\\
+\Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
+\Delta G&=\LRc{-2\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}\,,\,
+-\frac{1}{C_vV_e^2}\Delta V_e}\,,
+\end{align*}
+where
+\begin{align*}
+\Delta\alpha&=
+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+\gamma(-\tilde V_e)^{-(\gamma+1)}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\Delta V_e\\
+&+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\frac{1}{\gamma-1}\\
+&\LRp{\Delta V_c
+-\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
++\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+}\,.
+\end{align*}
 
-% We follow a standard residual-Jacobian linearization procedure.
-% If $R(U)$ is the nonlinear residual
-% We approximate
-
-% Let $U=\LRc{\rho,\bfu,T,\mathbb{D},\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ be a group solution variable which we can decompose into two parts:
-% $U:=\tilde U+\Delta U$, where\\
-% $\tilde U = \LRc{\tilde\rho,\tilde\bfu,\tilde T,\tilde{\mathbb{D}},\tilde\bfq,\bs0,0,0,\bs0,0}$ is the previous iteration approximation, 
-% and $\Delta U=\LRc{\Delta\rho,\Delta\bfu,\Delta T,\Delta\mathbb{D},\Delta\bfq,\hat\bfu,\hat e,\hat t_c,\hat\bft_m,\hat t_e}$ is the update.
-% Note that $\tilde U$ only contains terms which participate in nonlinearities in \eqref{eq:compressibleNSBF} 
-% while $\Delta U$ contains the full linear terms and the updates to the nonlinear terms.
-% Also, we drop the $\Delta$ and $\tilde\cdot$ notation for linear terms.
-% Define residual $R(U)$ as the left hand side of \eqref{eq:compressibleNSBF} minus the right hand side.
-% Approximating $R(U)=0$ by $R(\tilde U)+R'(\tilde U)\Delta U=0$, where $R'(\tilde U)$ is the Jacobian of $R$ evaluated at $\tilde U$, we get a linear system:
-% \begin{equation}
-% 	R'(\tilde U)\Delta U=-R(\tilde U)\,.
-% \end{equation}
-% This is an instance of a Gauss-Newton nonlinear solve.
-% We only need to define our Jacobian and residual for each component of \eqref{eq:compressibleNSBF}. 
-% The Jacobian of our compressible Navier-Stokes system, $R'(\tilde U)\Delta U$ is
-% \scriptsize
-% \begin{equation}
-% \label{eq:compressibleJacobian}
-% \begin{aligned}
-% 	&\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}
-% 	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}\\
-% 	%
-% 	&+\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\Delta T,\Div\bftau}+\LRa{\hat T,\tau_n}\\
-% 	%
-% 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu}
-% 	{\Delta\rho},\Gradxt v_c}
-% 	+\LRa{\hat t_c,v_c}\\
-% 	%
-% 	&-\LRp{\vecttwo{\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-% 	+\LRp{\Delta\rho R\tilde T+\tilde\rho R\Delta T}\bfI-\Delta\mathbb{D}}
-% 	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}
-% 	+\LRa{\hat\bft_m,\bfv_m}\\
-% 	%
-% 	&-\LRp{\vectthree{[C_v\Delta\rho\tilde T\tilde\bfu+C_v\tilde\rho\Delta T\tilde\bfu+C_v\tilde\rho\tilde T\Delta\bfu
-% 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu\tilde\bfu
-% 	+\tilde\rho\tilde\bfu\cdot\Delta\bfu\tilde\bfu+\tilde\rho\tilde\bfu\cdot\tilde\bfu\Delta\bfu}}
-% 	{+R\LRp{\Delta\rho\tilde T\tilde\bfu+\tilde\rho\Delta T\tilde\bfu+\tilde\rho\tilde T\Delta\bfu}
-% 	+\bfq-\Delta\bfu\cdot\tilde{\mathbb{D}}-\tilde\bfu\cdot\Delta\mathbb{D}]}
-% 	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
-% 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}\\
-% 	&+\LRa{\hat t_e,v_e}\,.
-% \end{aligned}
-% \end{equation}
-% \normalsize
-% The residual, $R(\tilde U)$, is then
-% \begin{equation}
-% \begin{aligned}
-% 	&\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
-% 	&-\LRp{\tilde T,\Div\bftau}\\
-% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu}{\tilde\rho},\Gradxt v_c}-\LRp{f_c,v_c}\\
-% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho R\tilde T\bfI-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},
-% 	\Gradxt\bfv_m}-\LRp{\bff_m,\bfv_m}\\
-% 	&-\LRp{\vecttwo{\tilde\rho\tilde\bfu\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}+\tilde\bfu\tilde\rho R\tilde T
-% 	-\tilde\bfu\cdot\tilde{\mathbb{D}}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},
-% 	\Gradxt v_e}-\LRp{f_e,v_e}\,.
-% \end{aligned}
-% \end{equation}
 
 %   /$$$$$$$$                       /$$           /$$   /$$                                  
 %  |__  $$__/                      | $$          | $$$ | $$                                  
