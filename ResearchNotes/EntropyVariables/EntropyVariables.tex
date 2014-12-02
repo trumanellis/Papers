@@ -12,13 +12,13 @@ of Navier-Stokes with Discontinuous Petrov-Galerkin Finite Elements}
 
 \section*{Nonlinear Forms}
 \subsection*{Primitive Variables}
-Consider the DPG Navier-Stokes derivation from previously with primitive variables:
+Consider the DPG Navier-Stokes derivation from previously with primitive variables (and power law viscosity: $\mu=\mu_0\LRp{\frac{T}{T_0}}^{\frac{2}{3}}$):
 \begin{subequations}
 \label{eq:compressibleNSBF}
 \begin{align}
-	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
-	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	\LRp{\frac{1}{\mu_0}\mathbb{D},\mathbb{S}}+\LRp{2\LRp{\frac{T}{T_0}}^{\frac{2}{3}}\bfu,\Div\mathbb{S}}
+	-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\LRp{\frac{T}{T_0}}^{\frac{2}{3}}T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
 	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
@@ -48,8 +48,8 @@ Our bilinear form is then simplified:
 \begin{subequations}
 \label{eq:primitiveBF}
 \begin{align}
-	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\bfu,\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\bfu,\Div\mathbb{S}}
+	-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\bfF^p_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^p_m-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
@@ -69,14 +69,14 @@ We can define new fluxes in conservation variables:
 \begin{align*}
 \bfF^c_c&=\bfm\\
 \mathbb{F}^c_m&=\frac{\bfm\otimes\bfm}{\rho}+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\bfI\\
-\bfF^c_e&=\frac{\bfm}{\rho}E+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\frac{\bfm}{\rho}\\
+\bfF^c_e&=\gamma E\frac{\bfm}{\rho}-(\gamma-1)\frac{\bfm\cdot\bfm}{2\rho^2}\bfm\\
 \end{align*}
 and our new bilinear form is
 \begin{subequations}
 \label{eq:conservationBF}
 \begin{align}
-	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\frac{\bfm}{\rho},\Div\mathbb{S}}-\LRp{\frac{2}{3}\frac{\bfm}{\rho},\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{2\frac{\bfm}{\rho},\Div\mathbb{S}}
+	-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{\frac{E-\frac{1}{2\rho}\bfm\cdot\bfm}{C_v\rho},\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\bfF^c_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^c_m-\mathbb{D}}{\bfm},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
@@ -113,8 +113,8 @@ and our new bilinear form is
 \begin{subequations}
 \label{eq:entropyBF}
 \begin{align}
-	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}-\LRp{2\frac{\bfV_m}{V_e},\Div\mathbb{S}}+\LRp{\frac{2}{3}\frac{\bfV_m}{V_e},\Grad\trace{\mathbb{S}}}
-	-\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}-\LRp{2\frac{\bfV_m}{V_e},\Div\mathbb{S}}
+	-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}+\LRp{\frac{1}{C_vV_e},\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\bfF^e_c}{-\alpha V_e},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^e_m-\mathbb{D}}{\alpha\bfV_m},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
@@ -135,7 +135,7 @@ where
 R(L)&=
 \LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}
 -\LRp{\bfq,\Grad v_e}
--\LRa{\frac{4}{3}\hat\bfu,\mathbb{S}\bfn_x}
+-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}
 +\LRa{\hat T,\tau_n}
 +\LRa{\hat t_c,v_c}
 +\LRa{\hat \bft_m,v_m}
@@ -149,7 +149,7 @@ R(L)&=
 The set of nonlinear variables is $U^p:=\LRc{\rho,\bfu,T,\mathbb{D}}$.
 Then $R_{,U^p}(\tilde U^p)\Delta U^p$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\Delta\bfu,\Grad\trace{\mathbb{S}}}\\
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\Delta\bfu,\Div\mathbb{S}}\\
 	-\LRp{\Delta T,\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^p_{c,U^p}\Delta U^p}{\Delta\rho},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^p_{m,U^p}\Delta U^p-\Delta\mathbb{D}}{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}\\
@@ -173,7 +173,7 @@ where
 \end{align*}
 and $R(\tilde U^p)$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}-\LRp{\frac{2}{3}\tilde\bfu,\Grad\trace{\mathbb{S}}}\\
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\tilde\bfu,\Div\mathbb{S}}\\
 	-\LRp{\tilde T,\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^p_c(\tilde U^p)}{\tilde\rho},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^p_m(\tilde U^p)-\tilde{\mathbb{D}}}{\tilde\rho\tilde\bfu},\Gradxt\bfv_m}\\
@@ -184,8 +184,7 @@ and $R(\tilde U^p)$ is
 The set of nonlinear variables is $U^c:=\LRc{\rho,\bfm,E,\mathbb{D}}$.
 Then $R_{,U^c}(\tilde U^c)\Delta U^c$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Div\mathbb{S}}
-	-\LRp{\frac{2}{3}\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Grad\trace{\mathbb{S}}}\\
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho},\Div\mathbb{S}}\\
 	-\LRp{\frac{\Delta E-\frac{1}{2\tilde\rho}\Delta\bfm\cdot\tilde\bfm-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\Delta\bfm
 	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
 	-\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^2}\Delta\rho,\Div\bftau}\\
@@ -208,10 +207,10 @@ where
 +\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Delta\rho
 }\bfI\\
 \bfF^c_{e,U^c}\Delta U^c&=
-\frac{\Delta\bfm}{\tilde\rho}\tilde E
-+\frac{\tilde\bfm}{\tilde\rho}\Delta E
--\frac{\tilde\bfm}{\tilde\rho^2}\tilde E\Delta\rho\\
-&+(\gamma-1)\LRp{
+% \frac{\Delta\bfm}{\tilde\rho}\tilde E
+% +\frac{\tilde\bfm}{\tilde\rho}\Delta E
+% -\frac{\tilde\bfm}{\tilde\rho^2}\tilde E\Delta\rho\\
+\gamma\LRp{
 \Delta E\frac{\tilde\bfm}{\tilde\rho}
 +\tilde E\frac{\Delta\bfm}{\tilde\rho}
 -\tilde E\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
@@ -224,8 +223,7 @@ where
 \end{align*}
 and $R(\tilde U^p)$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\frac{\tilde\bfm}{\tilde\rho},\Div\mathbb{S}}
-	-\LRp{\frac{2}{3}\frac{\tilde\bfm}{\tilde\rho},\Grad\trace{\mathbb{S}}}\\
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{2\frac{\tilde\bfm}{\tilde\rho},\Div\mathbb{S}}\\
 	-\LRp{\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho},\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^c_c}{\tilde\rho},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^c_m-\tilde{\mathbb{D}}}{\tilde\bfm},\Gradxt\bfv_m}\\
@@ -237,8 +235,7 @@ The set of nonlinear variables is $U^e:=\LRc{V_c,\bfV_m,V_e,\mathbb{D}}$.
 Then $R_{,U^e}(\tilde U^e)\Delta U^e$ is
 \begin{align*}
 	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}
-	-\LRp{2\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e},\Div\mathbb{S}}
-	+\LRp{\frac{2}{3}\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e},\Grad\trace{\mathbb{S}}}\\
+	-\LRp{2\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e},\Div\mathbb{S}}\\
 	-\LRp{\frac{1}{C_vV_e^2}\Delta V_e,\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^e_{c,U^e}\Delta U^e}{-\alpha_{,U^e}\Delta U^e \tilde V_e-\alpha\Delta V_e},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^e_{m,U^e}\Delta U^e-\Delta\mathbb{D}}{\alpha_{,U^e}\Delta U^e\tilde\bfV_m+\alpha\Delta\bfV_m},\Gradxt\bfv_m}\\
@@ -291,8 +288,7 @@ where
 \end{align*}
 and $R(\tilde U^p)$ is
 \begin{align*}
-	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}-\LRp{2\frac{\tilde\bfV_m}{\tilde V_e},\Div\mathbb{S}}
-	+\LRp{\frac{2}{3}\frac{\tilde\bfV_m}{V_e},\Grad\trace{\mathbb{S}}}\\
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}-\LRp{2\frac{\tilde\bfV_m}{\tilde V_e},\Div\mathbb{S}}\\
 	+\LRp{\frac{1}{C_v\tilde V_e},\Div\bftau}\\
 	-\LRp{\vecttwo{\bfF^e_c}{-\alpha\tilde V_e},\Gradxt v_c}\\
 	-\LRp{\vecttwo{\mathbb{F}^e_m-\tilde{\mathbb{D}}}{\alpha\tilde\bfV_m},\Gradxt\bfv_m}\\
@@ -340,10 +336,10 @@ where $V_{,U}$ in primitive variables is
 \[
 V_{,U}(W)=\arrthree
 {\frac{\gamma}{\rho}+\frac{(\bfu\cdot\bfu)^2}{4\rho C_v^2 T^2}}
-{-\frac{\bfu\bfu\cdot\bfu}{2\rho C_v^2 T^2}}
+{-\frac{\frac{1}{2}\bfu\cdot\bfu\bfu}{\rho C_v^2 T^2}}
 {-\frac{(C_v T-\frac{1}{2}\bfu\cdot\bfu)}{\rho C_v^2 T^2}}
 {}
-{\frac{C_v T+2\bfu\cdot\bfu}{2\rho C_v^2 T^2}}
+{\frac{C_v T+\bfu\cdot\bfu}{\rho C_v^2 T^2}}
 {-\frac{\bfu}{\rho C_v^2 T^2}}
 {Symm.}
 {}
@@ -352,11 +348,11 @@ V_{,U}(W)=\arrthree
 and
 \[
 U_{,W}^TV_{,U}U_{,W}=\arrthree
-{\frac{\gamma}{\rho}+\frac{\LRp{\bfu\cdot\bfu}^2}{4\rho C_v^2 T^2}}
+{\frac{\gamma-1}{\rho}}
 {0}
 {0}
 {0}
-{\frac{\rho(Cv T+2\bfu\cdot\bfu)}{2C_v^2 T^2}}
+{\frac{\rho}{C_v T}}
 {0}
 {0}
 {0}
@@ -386,9 +382,9 @@ U_{,V}=\frac{\alpha}{\gamma-1}\arrthree
 Let $A_0^e=U_{,V}(V)$ denote the symmetrizer for entropy variables.
 
 \subsection*{Entropy Scaled Graph Norm}
-Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
+Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_e$ 
 where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
-and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
+and $\Gamma_e$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
 
 Assume that boundary conditions are applied on the boundary $\Gamma_0\subset \Gamma$.  Recall that, for the ultra-weak variational formulation
 \[
@@ -422,21 +418,21 @@ The exact form of each of these depends on whether we are considering primitive 
 We define our adjoint equations by grouping terms by $\Sigma$ and $U$ and weighting the second equation by $A_0U$:
 \begin{align*}
 M^*\Psi+K^*\Grad V&=0\\
--\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi&=A_0U
+-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi&=A_0U
 \end{align*}
 
 The simplest norm we could use that would produce the right bound would probably be
 \begin{align*}
-\norm{M^*\Psi+K^*\Grad V}^2+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2
+\norm{M^*\Psi+K^*\Grad V}^2+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi}}^2
 +\norm{\Psi}^2+\norm{V}^2
 \end{align*}
 The first term is simple to see since it is equal to zero in the adjoint.
-If we multiply the second adjoint equation by $-A_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}$
+If we multiply the second adjoint equation by $-A_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi}$
 and integrate over $Q$, we would see that 
 \begin{align*}
-\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2
-&=\int_QA_0UA_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}\\
-&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi}}^2}{2}\\
+\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi}}^2
+&=\int_QA_0UA_0^{-1}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi}\\
+&\leq\frac{\norm{A_0^{\frac{1}{2}}U}^2}{2}+\frac{\norm{A_0^{-\frac{1}{2}}\LRp{-\vecttwo{\mathcal{F^*}}{C^*}\cdot\Gradxt V+G^*\Grad\Psi}}^2}{2}\\
 \end{align*}
 
 \subsubsection*{Primitive Variables}
@@ -447,43 +443,96 @@ We have the following definitions:
 \begin{align*}
 M^*\Psi+K^*\Grad V&=\vecttwo{M_{\mathbb{D}}^*\mathbb{S}}{M_{\bfq}^*\bftau}
 +\vecttwo{K_{\mathbb{D}}^*\Grad V}{K_{\bfq}^*\Grad V}\\
--\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+G^*\cdot\Grad\Psi&=-\vectthree
-{\bfF_\rho^*\cdot\Grad V+\bfC_\rho^*\cdot V_{,t}}
-{\mathbb{F}_{\bfu}^*\cdot\Grad V+\mathbb{C}_{\bfu}^*\cdot V_{,t}}
-{\bfF_T^*\cdot\Grad V+\bfC_T^*\cdot V_{,t}}
+-\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+G^*\Grad\Psi&=-\vectthree
+{\bfF_c^*\cdot\Grad V+\bfC_c^*\cdot V_{,t}}
+{\bfF_m^*\cdot\Grad V+\bfC_m^*\cdot V_{,t}}
+{\bfF_e^*\cdot\Grad V+\bfC_e^*\cdot V_{,t}}
 +\vectthree
-{0}
-{\bfG_{\bfu}^*\cdot\Grad\mathbf{S}}
-{\bfG_T^*\cdot\Grad\bftau}
-\\
+{\bfG_c^*\Grad\Psi}
+{\bfG_m^*\Grad\Psi}
+{\bfG_e^*\Grad\Psi}
 \end{align*}
 \begin{align*}
 M_\mathbb{D}^*\mathbb{S}&=\frac{1}{\mu}\mathbb{S}\\
 M_{\bfq}^*\bftau&=\frac{Pr}{C_p\mu}\bftau\\
 K_\mathbb{D}^*\Grad V&=\Grad\bfv_m+\tilde\bfu\otimes\Grad v_e\\
 K_{\bfq}^*\Grad V&=-\Grad v_e\\
-\end{align*}
-\begin{align*}
-\bfF_\rho^*\cdot\Grad V&=
+\bfF_c^*\cdot\Grad V&=
 \tilde\bfu\cdot\Grad v_c
 +\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m+R\tilde T\Div\bfv_m
 +C_v\tilde T\tilde\bfu\cdot\Grad v_e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde T\tilde\bfu\cdot\Grad v_e\\
 %
-\bfC_\rho^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
+\bfC_c^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
 %
-\mathbb{F}_{\bfu}\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
-+\tilde\rho\Grad\bfv_m\tilde\bfu+\tilde\rho\tilde\bfu^T\Grad\bfv_m
+\bfF_m\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
++(\Grad\bfv_m+(\Grad\bfv_m)^T)\tilde\rho\tilde\bfu
 +C_v\tilde T\tilde\rho\Grad v_e+\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e
-+R\tilde T\tilde\rho\Grad v_e\\
++R\tilde T\tilde\rho\Grad v_e-\tilde{\mathbb{D}}\Grad v_e
+\\
 %
-\mathbb{C}_{\bfu}^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+\bfC_m^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
 %
-\bfF_T^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
+\bfF_e^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
 %
-\bfC_T^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}
+\bfC_e^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}\\
+%
+\bfG_c^*\Grad\Psi&=0\\
+%
+\bfG_m^*\Grad\Psi&=2\Div\mathbb{S}\\
+%
+\bfG_e^*\Grad\Psi&=-\Div\bftau
 \end{align*}
 
+% The symmetrizer for primitive variables is especially easy, being symmetric.
+% Thus
+% \[
+% A_0^{-\frac{1}{2}}=\arrthree
+% {\frac{2\sqrt{\rho}C_vT}{\LRp{4\gamma C_v^2T^2+(\bfu\cdot\bfu)^2}^{\frac{1}{2}}}}
+% {0}
+% {0}
+% {0}
+% {\frac{\sqrt{2}C_vT}{\LRp{\rho C_vT+2\rho\bfu\cdot\bfu}^{\frac{1}{2}}}}
+% {0}
+% {0}
+% {0}
+% {\frac{T}{\sqrt{\rho}}}
+% \]
+
 \subsubsection*{Conservation Variables}
+The format of the equation is the same, we just have different definitions for the details.
+Any omitted terms are assumed to be the same as the primitive case.
+\begin{align*}
+K_\mathbb{D}^*\Grad V&=\Grad\bfv_m+\frac{\tilde\bfu}{\tilde\rho}\otimes\Grad v_e\\
+\bfF_c^*\cdot\Grad V&=
+-\frac{\tilde\bfu\otimes\tilde\bfu}{\tilde\rho^2}:\Grad\bfv_m+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Div\bfv_m
+-\gamma\tilde E\frac{\tilde\bfm}{\tilde\rho^2}\cdot\Grad v_e+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm\tilde\bfm}{\tilde\rho^3}\cdot\Grad v_e
+\\
+%
+\bfC_c^*\cdot V_{,t}&=v_{c,t}\\
+%
+\mathbb{F}_m\cdot\Grad\bfv_m&=\Grad v_c
++(\Grad\bfv_m+(\Grad\bfv_m)^T)\frac{\tilde\bfm}{\tilde\rho}-(\gamma-1)\frac{\tilde\bfm}{\tilde\rho}\Div\bfv_m\\
+&\quad+\gamma\frac{\tilde E}{\tilde\rho}\Grad v_e
+-(\gamma-1)\LRp{\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Grad v_e+\frac{\tilde\bfm\tilde\bfm\cdot\Grad v_e}{\tilde\rho^2}}
+\\
+%
+\mathbb{C}_m^*\cdot V_{,t}&=\bfv_{m,t}\\
+%
+\bfF_e^*\cdot\Grad V&=(\gamma-1)\Div\bfv_m+\gamma\frac{\tilde\bfm}{\tilde\rho}\cdot\Grad v_e
+\\
+%
+\bfC_e^*\cdot V_{,t}&=v_{e,t}\\
+%
+\bfG_c^*\Grad\Psi&=-2\frac{\tilde\bfm}{\tilde\rho^2}\cdot\Div\mathbb{S}
+-\frac{\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^3}\Div\bftau
+\\
+%
+\bfG_m^*\Grad\Psi&=2\frac{1}{\tilde\rho}\Div\mathbb{S}
++\frac{\tilde\bfm}{C_v\tilde\rho^2}\Div\bftau
+\\
+%
+\bfG_e^*\Grad\Psi&=-\frac{1}{C_v\tilde\rho}\Div\bftau
+\end{align*}
 
 \subsubsection*{Entropy Variables}
 

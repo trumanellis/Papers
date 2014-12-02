@@ -745,6 +745,7 @@ and group variables
 \begin{align*}
 W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
 \hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+\Sigma&:=\LRc{\bbD,\bfq}\\
 \hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
 \Psi&:=\LRc{\bbS\,,\,\bftau}\\
 V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
@@ -784,36 +785,36 @@ G&=\LRc{2\frac{\bfm}{\rho}\,,\,
 \subsection{Entropy Variables}
 We perform one more change of variables to entropy variables:
 \begin{align*}
-V_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
+z_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
 {E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
-\bfV_m&=\frac{\bfm}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
-V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+\bfz_m&=\frac{\bfm}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+z_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
 \end{align*}
 with reverse mapping:
 \begin{align*}
-\rho&=-\alpha V_e\\
-\bfm&=\alpha\bfV_m\\
-E&=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
+\rho&=-\alpha z_e\\
+\bfm&=\alpha\bfz_m\\
+E&=\alpha\LRp{1-\frac{1}{2z_e}\bfz_m\cdot\bfz_m}\\
 \end{align*}
 where 
 \[
-\alpha(V_c,\bfV_m,V_e)=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}
+\alpha(z_c,\bfz_m,z_e)=\LRs{\frac{\gamma-1}{(-z_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+z_c-\frac{1}{2z_e}\bfz_m\cdot\bfz_m}{\gamma-1}}
 \]
 The new definitions are
 \begin{align*}
-F&=\LRc{\alpha\bfV_m\,\,,
-\alpha\LRp{-\frac{\bfV_m\otimes\bfV_m}{V_e}+(\gamma-1)\bbI}\,,\,
-\alpha\frac{\bfV_m}{V_e}\LRp{\frac{1}{2V_e}\bfV_m\cdot\bfV_m-\gamma}}\\
+F&=\LRc{\alpha\bfz_m\,\,,
+\alpha\LRp{-\frac{\bfz_m\otimes\bfz_m}{z_e}+(\gamma-1)\bbI}\,,\,
+\alpha\frac{\bfz_m}{z_e}\LRp{\frac{1}{2z_e}\bfz_m\cdot\bfz_m-\gamma}}\\
 K&=\LRc{\boldsymbol 0\,,\,
 \bbD\,,\,
--\bfq-\frac{\bfV_m}{V_e}\cdot\bbD}\\
-C&=\LRc{-\alpha V_e\,,\,
-\alpha\bfV_m\,,\,
-\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}}\\
-G&=\LRc{-2\frac{\bfV_m}{V_e}\,,\,
-\frac{1}{C_vV_e}}\,.
+-\bfq-\frac{\bfz_m}{z_e}\cdot\bbD}\\
+C&=\LRc{-\alpha z_e\,,\,
+\alpha\bfz_m\,,\,
+\alpha\LRp{1-\frac{1}{2z_e}\bfz_m\cdot\bfz_m}}\\
+G&=\LRc{-2\frac{\bfz_m}{z_e}\,,\,
+\frac{1}{C_vz_e}}\,.
 \end{align*}
-We denote the set of primary conservation variables as $U=\LRc{\rho,\bfm,E}$ and entropy variables as $V=\LRc{V_c,\bfV_m,V_e}$.
+We denote the set of primary conservation variables as $U=\LRc{\rho,\bfm,E}$ and entropy variables as $Z=\LRc{z_c,\bfz_m,z_e}$.
 
 %   /$$       /$$                                         /$$                       /$$     /$$                    
 %  | $$      |__/                                        |__/                      | $$    |__/                    
@@ -846,7 +847,8 @@ Note that we use the $\Delta$ notation as a shortcut to indicate the Jacobian of
 $\Delta F=\pd{F}{U}(\tilde U)\Delta U$ where $U$ is a placeholder for the set of solution variables for each respective formulation 
 (primitive, conservation, or entropy).
 Moving known quantities to the right hand side, we get our bilinear form
-\begin{align*}
+\begin{align}
+\label{eq:AbstractBilinearForm}
 &\LRp{\Delta M,\Psi}
 +\LRp{\Delta G,\Div\Psi}
 -\LRa{\hat W,\Psi\cdot\bfn_x}\\
@@ -856,7 +858,7 @@ Moving known quantities to the right hand side, we get our bilinear form
 -\LRp{\tilde M,\Psi} 
 -\LRp{\tilde G,\Div\Psi} 
 +\LRp{\vecttwo{\tilde F-\tilde K}{\tilde C},\Gradxt V}\,.
-\end{align*}
+\end{align}
 
 % \subsubsection{Primitive Variables}
 All that remains is to define the linearized terms for each set of variables.
@@ -923,54 +925,54 @@ With conservation variables, we have
 
 Finally, the linearized terms for entropy variables are
 \begin{align*}
-\Delta\bfF_c&=\Delta\alpha\tilde\bfV_m+\tilde\alpha\Delta\bfV_m\\
+\Delta\bfF_c&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
 \Delta\bbF_m&=
-\Delta\alpha\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bfI}\\
+\Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bfI}\\
 &+\tilde\alpha\LRp{
--\frac{\Delta\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}
--\frac{\tilde\bfV_m\otimes\Delta\bfV_m}{\tilde V_e}
-+\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e^2}\Delta V_e
+-\frac{\Delta\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}
+-\frac{\tilde\bfz_m\otimes\Delta\bfz_m}{\tilde z_e}
++\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}\Delta z_e
 }\\
 \Delta\bfF_e&=
-\Delta\alpha\frac{\tilde\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\\
+\Delta\alpha\frac{\tilde\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\\
 &+\tilde\alpha\LRp{
-\frac{\Delta\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}
--\frac{\tilde\bfV_m}{V_e^2}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\Delta V_e\right.\\
+\frac{\Delta\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}
+-\frac{\tilde\bfz_m}{z_e^2}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\Delta z_e\right.\\
 &\left.
-+\frac{\tilde\bfV_m}{\tilde V_e}\LRp{
-\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
--\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
++\frac{\tilde\bfz_m}{\tilde z_e}\LRp{
+\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
+-\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
 }
 }\\
 \end{align*}
 \begin{align*}
 \Delta K&=\LRc{0\,,\,
 \Delta\bbD\,,\,
--\frac{\Delta\bfV_m}{\tilde V_e}\cdot\tilde\bbD
-+\frac{\tilde\bfV_m}{\tilde V_e^2}\cdot\tilde\bbD\Delta V_e
--\frac{\tilde\bfV_m}{\tilde V_e}\cdot\Delta\bbD}\\
-\Delta C_c&=-\Delta\alpha\tilde V_e-\tilde\alpha\Delta V_e\\
-\Delta\bfC_m&=\Delta\alpha\tilde\bfV_m+\tilde\alpha\Delta\bfV_m\\
-\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}
-	-\tilde\alpha\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
-	+\tilde\alpha\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e\\
+-\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
++\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\Delta z_e
+-\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Delta\bbD}\\
+\Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
+\Delta\bfC_m&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
+\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}
+	-\tilde\alpha\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
+	+\tilde\alpha\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e\\
 \Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
-\Delta G&=\LRc{-2\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}\,,\,
--\frac{1}{C_vV_e^2}\Delta V_e}\,,
+\Delta G&=\LRc{-2\LRp{\frac{\Delta\bfz_m}{\tilde z_e}-\frac{\tilde\bfz_m}{\tilde z_e^2}\Delta z_e}\,,\,
+-\frac{1}{C_vz_e^2}\Delta z_e}\,,
 \end{align*}
 where
 \begin{align*}
 \Delta\alpha&=
-\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
-\gamma(-\tilde V_e)^{-(\gamma+1)}
-\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
-\Delta V_e\\
-&+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
-\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+\gamma(-\tilde z_e)^{-(\gamma+1)}
+\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
+\Delta z_e\\
+&+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{1}{\gamma-1}}
+\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
 \frac{1}{\gamma-1}\\
-&\LRp{\Delta V_c
--\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
-+\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+&\LRp{\Delta z_c
+-\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
++\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
 }\,.
 \end{align*}
 
@@ -987,6 +989,59 @@ where
 %                                                                                            
 %      
 \subsection{Test Norm}
+The choice of test norm is seminal in the performance of a DPG method.
+The test norm determines exactly which norm the method will be optimal in. \textcolor{red}{Explain this.}
+With singularly perturbed problems, there is the risk that the optimal test functions coming from the auxiliary problem develop boundary layers
+element by element. 
+Such boundary layers may not be resolvable in the finite dimensional enriched space that we are solving in, in which case,
+much of the mathematical theory behind DPG is compromised.
+This behavior can be studied by analyzing the test norm terms and comparing their scalings, and boundary layers
+can be mitigated or eliminated by the correct combinations of test norm terms.
+We develop test norms for the compressible Navier-Stokes equations by intuition and analogy to studies of similar norms
+developed for transient convection-diffusion.
+
+The development of a DPG test norm begins with the adjoint equation.
+We start by rewriting the left hand side of \eqref{eq:AbstractBilinearForm} with a desire to isolate the trial unknowns
+\begin{align*}
+&\LRp{\Sigma,M^*\Psi}
++\LRp{Y,G^*\Div\Psi}
+-\LRa{\hat W,\Psi\cdot\bfn_x}\\
+&-\LRp{Y,\vecttwo{F^*}{C^*}\cdot\Gradxt V}
++\LRp{\Sigma,K^*\cdot\Grad V}
++\LRa{\hat t,V}\,,
+\end{align*}
+where $Y$ stands in for the set of variables we are considering, $W$ for primitive variables, $U$ for conservation, or $Z$ for entropy.
+We define $M^*Y$, $G^*\Div\Psi$, $F^*\cdot\Grad V$, $C^*V_{,t}$, and $K^*\cdot\Grad V$ in the \textcolor{red}{appendix} for the various variable types.
+
+In the following discussion, assume conforming (continuous) test functions. 
+\textcolor{red}{Make sure you explain this later.}
+In this case, the trace and flux terms drop out.
+If we then group the above terms by trial unknown, we get the following
+\begin{align*}
+b((Y,\Sigma,\hat W),(\Psi,V))=
+\LRp{\Sigma,M^*\Psi
++K^*\cdot\Grad V}
++\LRp{Y,-\vecttwo{F^*}{C^*}\cdot\Gradxt V
++G^*\Div\Psi}\,.
+\end{align*}
+Let $(\Psi^*,V^*)$ satisfy the adjoint equations
+\begin{align*}
+\label{eq:abstractAdjoint}
+M^*\Psi^*+K^*\cdot\Grad V^*&=\Sigma\\
+-\vecttwo{F^*}{C^*}\cdot\Gradxt V^*+G^*\Div\Psi^*&=Y\,.
+\end{align*}
+Then
+\begin{align*}
+\norm{(Y,\Sigma)}_{L^2}^2
+&=b((Y,\Sigma),(\Psi^*,V^*))
+=\frac{b((Y,\Sigma),(\Psi^*,V^*))}{\norm{(\Psi^*,V^*)}_V}\norm{(\Psi^*,V^*)}_V\\
+&\leq\norm{(Y,\Sigma)}_E\norm{(\Psi^*,V^*)}_V
+\end{align*}
+The final inequality follows by definition of the energy norm.
+If we can develop a test norm such that $\norm{(\Psi^*,V^*)}_V\lesssim\norm{(Y,\Sigma)}_{L^2}$,
+then we have the bound: $\norm{(Y,\Sigma)}_{L^2}\lesssim\norm{(Y,\Sigma)}_E$, and DPG already produces the best approximation 
+error in the energy norm.
+
 % Usually our first choice for a DPG test norm is the graph norm which comes from upgrading the seminorm derived from the 
 % adjoint to a full norm.
 % We start by grouping terms in \eqref{eq:compressibleJacobian} by trial variable to get
