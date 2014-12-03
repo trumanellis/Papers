@@ -859,122 +859,7 @@ Moving known quantities to the right hand side, we get our bilinear form
 -\LRp{\tilde G,\Div\Psi} 
 +\LRp{\vecttwo{\tilde F-\tilde K}{\tilde C},\Gradxt V}\,.
 \end{align}
-
-% \subsubsection{Primitive Variables}
-All that remains is to define the linearized terms for each set of variables.
-We start with primitive variables, for which
-\begin{align*}
-\Delta\bfF_c&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
-\Delta\bbF_m&=\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-+R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bbI\\
-\Delta\bfF_e&=C_v\Delta\rho\tilde\bfu\tilde T+C_v\tilde\rho\Delta\bfu\tilde T+C_v\tilde\rho\tilde\bfu\Delta T\\
-&+\frac{1}{2}\Delta\rho\tilde\bfu\tilde\bfu\cdot\tilde\bfu
-+\frac{1}{2}\tilde\rho\Delta\bfu\tilde\bfu\cdot\tilde\bfu
-+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Delta\bfu\\
-&+R\Delta\bfu\tilde\rho\tilde T
-+R\tilde\bfu\Delta\rho\tilde T
-+R\tilde\bfu\tilde\rho\Delta T\\
-\end{align*}
-\begin{align*}
-\Delta K&=\LRc{0\,,\,
-\Delta\bbD\,,\,
-\Delta\bfu\cdot\tilde\bbD+\tilde\bfu\cdot\Delta\bbD}\\
-\Delta C_c&=\Delta\rho\\
-\Delta\bfC_m&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
-\Delta C_e&=C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
-+\frac{1}{2}\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu\\
-\Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
-\Delta G&=\LRc{2\Delta\bfu\,,\,-\Delta T}\,.
-\end{align*}
-
-With conservation variables, we have
-\begin{align*}
-\Delta\bfF_c&=\Delta\bfm\\
-\Delta\mathbb{F}_m&=
-\frac{\Delta\bfm\otimes\tilde\bfm}{\tilde\rho}
-+\frac{\tilde\bfm\otimes\Delta\bfm}{\tilde\rho}
--\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}\Delta\rho\\
-&+(\gamma-1)\LRp{\Delta E
--\frac{\tilde\bfm\cdot\Delta\bfm}{\tilde\rho}
-+\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Delta\rho
-}\bbI\\
-\Delta\bfF_e&=
-\gamma\LRp{
-\Delta E\frac{\tilde\bfm}{\tilde\rho}
-+\tilde E\frac{\Delta\bfm}{\tilde\rho}
--\tilde E\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
-&+(\gamma-1)\LRp{
--\frac{\Delta\bfm\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}
--\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{\tilde\rho^2}
-+\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho
-}\\
-\end{align*}
-\begin{align*}
-\Delta K&=\LRc{0\,,\,
-\Delta\bbD\,,\,
-\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
--\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
-+\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\bbD}\\
-\Delta C&=\LRc{\Delta\rho\,,\,\Delta\bfm\,,\,\Delta E}\\
-\Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
-\Delta\bfG_{\bbD}&=2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
-\Delta G_{\bfq}&=-\frac{\Delta E-\frac{1}{\tilde\rho}\tilde\bfm\cdot\Delta\bfm
-	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
-	+\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^2}\Delta\rho\,.
-\end{align*}
-
-Finally, the linearized terms for entropy variables are
-\begin{align*}
-\Delta\bfF_c&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
-\Delta\bbF_m&=
-\Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bfI}\\
-&+\tilde\alpha\LRp{
--\frac{\Delta\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}
--\frac{\tilde\bfz_m\otimes\Delta\bfz_m}{\tilde z_e}
-+\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}\Delta z_e
-}\\
-\Delta\bfF_e&=
-\Delta\alpha\frac{\tilde\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\\
-&+\tilde\alpha\LRp{
-\frac{\Delta\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}
--\frac{\tilde\bfz_m}{z_e^2}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\Delta z_e\right.\\
-&\left.
-+\frac{\tilde\bfz_m}{\tilde z_e}\LRp{
-\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
--\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
-}
-}\\
-\end{align*}
-\begin{align*}
-\Delta K&=\LRc{0\,,\,
-\Delta\bbD\,,\,
--\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
-+\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\Delta z_e
--\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Delta\bbD}\\
-\Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
-\Delta\bfC_m&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
-\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}
-	-\tilde\alpha\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
-	+\tilde\alpha\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e\\
-\Delta M&=\LRc{\frac{1}{\mu}\Delta \bbD\,,\,\frac{Pr}{C_p\mu}\Delta\bfq}\\
-\Delta G&=\LRc{-2\LRp{\frac{\Delta\bfz_m}{\tilde z_e}-\frac{\tilde\bfz_m}{\tilde z_e^2}\Delta z_e}\,,\,
--\frac{1}{C_vz_e^2}\Delta z_e}\,,
-\end{align*}
-where
-\begin{align*}
-\Delta\alpha&=
-\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
-\gamma(-\tilde z_e)^{-(\gamma+1)}
-\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
-\Delta z_e\\
-&+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{1}{\gamma-1}}
-\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
-\frac{1}{\gamma-1}\\
-&\LRp{\Delta z_c
--\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
-+\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
-}\,.
-\end{align*}
+In order to avoid getting bogged down in the details, we relegate the full definitions of the linearized terms to \ref{ap:linearization}.
 
 
 %   /$$$$$$$$                       /$$           /$$   /$$                                  
@@ -1407,10 +1292,129 @@ error in the energy norm.
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
-%% \appendix
+\appendix
 
-%% \section{}
-%% \label{}
+\section{Definition of Linearized Terms}
+\label{ap:linearization}
+
+% \subsubsection{Primitive Variables}
+% All that remains is to define the linearized terms for each set of variables.
+We start with primitive variables, for which
+\begin{align*}
+\Delta\bfF_c&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
+\Delta\bbF_m&=\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
++R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bbI\\
+\Delta\bfF_e&=C_v\Delta\rho\tilde\bfu\tilde T+C_v\tilde\rho\Delta\bfu\tilde T+C_v\tilde\rho\tilde\bfu\Delta T\\
+&+\frac{1}{2}\Delta\rho\tilde\bfu\tilde\bfu\cdot\tilde\bfu
++\frac{1}{2}\tilde\rho\Delta\bfu\tilde\bfu\cdot\tilde\bfu
++\tilde\rho\tilde\bfu\tilde\bfu\cdot\Delta\bfu\\
+&+R\Delta\bfu\tilde\rho\tilde T
++R\tilde\bfu\Delta\rho\tilde T
++R\tilde\bfu\tilde\rho\Delta T\\
+\Delta\bfK_c&=0\\
+\Delta\bbK_m&=\Delta\bbD\\
+\Delta\bfK_e&=\Delta\bfu\cdot\tilde\bbD+\tilde\bfu\cdot\Delta\bbD\\
+\Delta C_c&=\Delta\rho\\
+\Delta\bfC_m&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
+\Delta C_e&=C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
++\frac{1}{2}\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu\\
+\Delta \bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
+\Delta \bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
+\Delta \bfG_\bbD&=2\Delta\bfu\\
+\Delta G_{\bfq}&=-\Delta T\,.
+\end{align*}
+
+With conservation variables, we have
+\begin{align*}
+\Delta\bfF_c&=\Delta\bfm\\
+\Delta\mathbb{F}_m&=
+\frac{\Delta\bfm\otimes\tilde\bfm}{\tilde\rho}
++\frac{\tilde\bfm\otimes\Delta\bfm}{\tilde\rho}
+-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}\Delta\rho\\
+&+(\gamma-1)\LRp{\Delta E
+-\frac{\tilde\bfm\cdot\Delta\bfm}{\tilde\rho}
++\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Delta\rho
+}\bbI\\
+\Delta\bfF_e&=
+\gamma\LRp{
+\Delta E\frac{\tilde\bfm}{\tilde\rho}
++\tilde E\frac{\Delta\bfm}{\tilde\rho}
+-\tilde E\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
+&+(\gamma-1)\LRp{
+-\frac{\Delta\bfm\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}
+-\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{\tilde\rho^2}
++\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho
+}\\
+\Delta\bfK_c&=0\\
+\Delta\bbK_m&=\Delta\bbD\\
+\Delta\bfK_e&=\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
+-\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
++\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\bbD\\
+\Delta C_c&=\Delta\rho\\
+\Delta\bfC_m&=\Delta\bfm\\
+\Delta C_e&=\Delta E\\
+\Delta\bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
+\Delta\bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
+\Delta\bfG_{\bbD}&=2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
+\Delta G_{\bfq}&=-\frac{\Delta E-\frac{1}{\tilde\rho}\tilde\bfm\cdot\Delta\bfm
+	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
+	+\frac{\tilde E-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^2}\Delta\rho\,.
+\end{align*}
+
+Finally, the linearized terms for entropy variables are
+\begin{align*}
+\Delta\bfF_c&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
+\Delta\bbF_m&=
+\Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bfI}\\
+&+\tilde\alpha\LRp{
+-\frac{\Delta\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}
+-\frac{\tilde\bfz_m\otimes\Delta\bfz_m}{\tilde z_e}
++\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}\Delta z_e
+}\\
+\Delta\bfF_e&=
+\Delta\alpha\frac{\tilde\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\\
+&+\tilde\alpha\LRp{
+\frac{\Delta\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}
+-\frac{\tilde\bfz_m}{z_e^2}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\Delta z_e\right.\\
+&\left.
++\frac{\tilde\bfz_m}{\tilde z_e}\LRp{
+\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
+-\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
+}
+}\\
+\Delta\bfK_c&=0\\
+\Delta\bbK_m&=\Delta\bbD\\
+\Delta\bfK_e&=-\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
++\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\Delta z_e
+-\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Delta\bbD\\
+\Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
+\Delta\bfC_m&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
+\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}
+	-\tilde\alpha\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
+	+\tilde\alpha\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e\\
+\Delta\bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
+\Delta\bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
+\Delta\bfG_{\bbD}&=-2\LRp{\frac{\Delta\bfz_m}{\tilde z_e}-\frac{\tilde\bfz_m}{\tilde z_e^2}\Delta z_e}\\
+\Delta G_{\bfq}&=-\frac{1}{C_vz_e^2}\Delta z_e\,,
+\end{align*}
+where
+\begin{align*}
+\Delta\alpha&=
+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+\gamma(-\tilde z_e)^{-(\gamma+1)}
+\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
+\Delta z_e\\
+&+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{1}{\gamma-1}}
+\exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
+\frac{1}{\gamma-1}\\
+&\LRp{\Delta z_c
+-\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
++\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
+}\,.
+\end{align*}
+
+\section{Definition of Adjoint Terms}
+\label{ap:adjoint}
 
 %% If you have bibdatabase file and want bibtex to generate the
 %% bibitems, please use
