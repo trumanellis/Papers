@@ -646,6 +646,9 @@ We can write our first order system of equations in space-time as follows:
 \end{align}
 \end{subequations}
 where our solution variables are $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$.
+Note that the constitutive laws are scaled by $\frac{1}{\mu}$ and $\frac{Pr}{C_p\mu}$, respectively compared to their standard form.
+This is inspired by previous experience with convection-diffusion and produces a stronger enforcement of boundary conditions on
+$\bfu$ and $T$.
 
 
 %   /$$$$$$$                      /$$                        /$$     /$$                    
@@ -1413,6 +1416,9 @@ where
 
 \section{Definition of Adjoint Terms}
 \label{ap:adjoint}
+
+Note that $F^*=\LRc{F^*_c,\bfF^*_m,F^*_e}$, $C^*=\LRc{C^*_c,\bfC^*_m,C^*_e}$, $G^*=\LRc{G^*_c,\bfG^*_m,G^*_e}$, $K^*=\LRc{\bbK^*_\bbD,\bfK^*_{\bfq}}$,
+and $M^*=\LRc{\bbM^*_\bbD,\bfM^*_{\bfq}}$.
 
 We begin by defining the elements of the adjoint for primitive variables:
 \begin{align*}
