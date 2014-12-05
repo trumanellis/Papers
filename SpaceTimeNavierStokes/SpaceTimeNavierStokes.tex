@@ -669,7 +669,7 @@ $v_c$, $\bfv_m$, $v_e$, then integrate by parts over each space-time element $K$
 	-\LRa{2\hat\bfu,\mathbb{S}\bfn_x}&=0\\
 	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
 	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
-	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
 	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
 	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
 \end{align}
@@ -681,7 +681,7 @@ where
 \hat T&=\trace(T)\\
 \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
 +\trace\LRp{\rho}n_t\\
-\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}\cdot\bfn_x
 +\trace\LRp{\rho\bfu} n_t\\
 \hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
 &\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
@@ -889,42 +889,42 @@ The development of a DPG test norm begins with the adjoint equation.
 We start by rewriting the left hand side of \eqref{eq:AbstractBilinearForm} with a desire to isolate the trial unknowns
 \begin{align*}
 &\LRp{\Sigma,M^*\Psi}
-+\LRp{Y,G^*\Div\Psi}
++\LRp{X,G^*\Div\Psi}
 -\LRa{\hat W,\Psi\cdot\bfn_x}\\
-&-\LRp{Y,\vecttwo{F^*}{C^*}\cdot\Gradxt V}
+&-\LRp{X,\vecttwo{F^*}{C^*}\cdot\Gradxt V}
 +\LRp{\Sigma,K^*\cdot\Grad V}
 +\LRa{\hat t,V}\,,
 \end{align*}
-where $Y$ stands in for the set of variables we are considering, $W$ for primitive variables, $U$ for conservation, or $Z$ for entropy.
-We define $M^*Y$, $G^*\Div\Psi$, $F^*\cdot\Grad V$, $C^*V_{,t}$, and $K^*\cdot\Grad V$ in the \textcolor{red}{appendix} for the various variable types.
+where $X$ stands in for the set of variables we are considering, $W$ for primitive variables, $U$ for conservation, or $Z$ for entropy.
+We define $M^*X$, $G^*\Div\Psi$, $F^*\cdot\Grad V$, $C^*V_{,t}$, and $K^*\cdot\Grad V$ in \ref{ap:adjoint} for the various variable types.
 
 In the following discussion, assume conforming (continuous) test functions. 
 \textcolor{red}{Make sure you explain this later.}
 In this case, the trace and flux terms drop out.
 If we then group the above terms by trial unknown, we get the following
 \begin{align*}
-b((Y,\Sigma,\hat W),(\Psi,V))=
+b((X,\Sigma,\hat W),(\Psi,V))=
 \LRp{\Sigma,M^*\Psi
 +K^*\cdot\Grad V}
-+\LRp{Y,-\vecttwo{F^*}{C^*}\cdot\Gradxt V
++\LRp{X,-\vecttwo{F^*}{C^*}\cdot\Gradxt V
 +G^*\Div\Psi}\,.
 \end{align*}
 Let $(\Psi^*,V^*)$ satisfy the adjoint equations
 \begin{align*}
 \label{eq:abstractAdjoint}
 M^*\Psi^*+K^*\cdot\Grad V^*&=\Sigma\\
--\vecttwo{F^*}{C^*}\cdot\Gradxt V^*+G^*\Div\Psi^*&=Y\,.
+-\vecttwo{F^*}{C^*}\cdot\Gradxt V^*+G^*\Div\Psi^*&=X\,.
 \end{align*}
 Then
 \begin{align*}
-\norm{(Y,\Sigma)}_{L^2}^2
-&=b((Y,\Sigma),(\Psi^*,V^*))
-=\frac{b((Y,\Sigma),(\Psi^*,V^*))}{\norm{(\Psi^*,V^*)}_V}\norm{(\Psi^*,V^*)}_V\\
-&\leq\norm{(Y,\Sigma)}_E\norm{(\Psi^*,V^*)}_V
+\norm{(X,\Sigma)}_{L^2}^2
+&=b((X,\Sigma),(\Psi^*,V^*))
+=\frac{b((X,\Sigma),(\Psi^*,V^*))}{\norm{(\Psi^*,V^*)}_V}\norm{(\Psi^*,V^*)}_V\\
+&\leq\norm{(X,\Sigma)}_E\norm{(\Psi^*,V^*)}_V
 \end{align*}
 The final inequality follows by definition of the energy norm.
-If we can develop a test norm such that $\norm{(\Psi^*,V^*)}_V\lesssim\norm{(Y,\Sigma)}_{L^2}$,
-then we have the bound: $\norm{(Y,\Sigma)}_{L^2}\lesssim\norm{(Y,\Sigma)}_E$, and DPG already produces the best approximation 
+If we can develop a test norm such that $\norm{(\Psi^*,V^*)}_V\lesssim\norm{(X,\Sigma)}_{L^2}$,
+then we have the bound: $\norm{(X,\Sigma)}_{L^2}\lesssim\norm{(X,\Sigma)}_E$, and DPG already produces the best approximation 
 error in the energy norm.
 
 % Usually our first choice for a DPG test norm is the graph norm which comes from upgrading the seminorm derived from the 
@@ -1311,9 +1311,9 @@ We start with primitive variables, for which
 &+R\Delta\bfu\tilde\rho\tilde T
 +R\tilde\bfu\Delta\rho\tilde T
 +R\tilde\bfu\tilde\rho\Delta T\\
-\Delta\bfK_c&=0\\
+\Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
-\Delta\bfK_e&=\Delta\bfu\cdot\tilde\bbD+\tilde\bfu\cdot\Delta\bbD\\
+\Delta\bfK_e&=-\bfq+\Delta\bfu\cdot\tilde\bbD+\tilde\bfu\cdot\Delta\bbD\\
 \Delta C_c&=\Delta\rho\\
 \Delta\bfC_m&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
 \Delta C_e&=C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
@@ -1345,9 +1345,9 @@ With conservation variables, we have
 -\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{\tilde\rho^2}
 +\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho
 }\\
-\Delta\bfK_c&=0\\
+\Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
-\Delta\bfK_e&=\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
+\Delta\bfK_e&=-\bfq+\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
 -\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
 +\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\bbD\\
 \Delta C_c&=\Delta\rho\\
@@ -1365,26 +1365,24 @@ Finally, the linearized terms for entropy variables are
 \begin{align*}
 \Delta\bfF_c&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
 \Delta\bbF_m&=
-\Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bfI}\\
+\Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}\\
 &+\tilde\alpha\LRp{
 -\frac{\Delta\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}
 -\frac{\tilde\bfz_m\otimes\Delta\bfz_m}{\tilde z_e}
 +\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}\Delta z_e
 }\\
 \Delta\bfF_e&=
-\Delta\alpha\frac{\tilde\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\\
+\Delta\alpha\frac{\tilde\bfz_m}{\tilde z_e}\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}-\gamma}\\
 &+\tilde\alpha\LRp{
-\frac{\Delta\bfz_m}{\tilde z_e}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}
--\frac{\tilde\bfz_m}{z_e^2}\LRp{\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m-\gamma}\Delta z_e\right.\\
+\frac{\Delta\bfz_m}{\tilde z_e}\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}-\gamma}
+-\frac{\tilde\bfz_m}{z_e^2}\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{\tilde z_e}-\gamma}\Delta z_e\right.\\
 &\left.
-+\frac{\tilde\bfz_m}{\tilde z_e}\LRp{
-\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
--\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e
-}
++\frac{\tilde\bfz_m}{\tilde z_e^2}
+\tilde\bfz_m\cdot\Delta\bfz_m
 }\\
-\Delta\bfK_c&=0\\
+\Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
-\Delta\bfK_e&=-\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
+\Delta\bfK_e&=-\bfq-\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
 +\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\Delta z_e
 -\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Delta\bbD\\
 \Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
@@ -1395,7 +1393,7 @@ Finally, the linearized terms for entropy variables are
 \Delta\bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
 \Delta\bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
 \Delta\bfG_{\bbD}&=-2\LRp{\frac{\Delta\bfz_m}{\tilde z_e}-\frac{\tilde\bfz_m}{\tilde z_e^2}\Delta z_e}\\
-\Delta G_{\bfq}&=-\frac{1}{C_vz_e^2}\Delta z_e\,,
+\Delta G_{\bfq}&=-\frac{1}{C_v\tilde z_e^2}\Delta z_e\,,
 \end{align*}
 where
 \begin{align*}
@@ -1415,6 +1413,140 @@ where
 
 \section{Definition of Adjoint Terms}
 \label{ap:adjoint}
+
+We begin by defining the elements of the adjoint for primitive variables:
+\begin{align*}
+F^*_c\cdot\Grad V&=\tilde\bfu\cdot\Grad v_c
++\LRp{\tilde\bfu\otimes\bfu+R\tilde T\bbI}:\Grad\bfv_m\\
+&+\LRp{C_v\tilde T\tilde\bfu+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu+R\tilde T\tilde\bfu}\cdot\Grad v_e\\
+\bfF^*_m\cdot\Grad V&=\tilde\Grad v_c
++\tilde\rho\LRp{\Grad\bfv_m+(\Grad\bfv_m)^T}\tilde\bfu\\
+&+\tilde\rho C_v\tilde T\Grad v_e+\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
++\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde T\Grad v_e
+-\tilde\bbD\Grad v_e\\
+F^*_e\cdot\Grad V&=R\tilde\rho\Div\bfv_m
++C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
+%
+C^*_cV_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+C_v\tilde T v_{e,t}+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu v_{e,t}\\
+\bfC^*_mV_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+C^*_eV_{,t}&=C_v\tilde\rho v_{e,t}\\
+%
+G^*_c\Div\Psi&=0\\
+\bfG^*_m\Div\Psi&=2\Div\bbS\\
+G^*_e\Div\Psi&=-\Div\bftau\\
+%
+\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\tilde\bfu\otimes\Grad v_e\\
+\bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
+%
+\bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+\end{align*}
+
+The corresponding terms for conservation variables are:
+\begin{align*}
+F^*_c\cdot\Grad V&=\LRp{-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\bbI}:\Grad\bfv_m\\
+&+\LRp{-\gamma\tilde E\frac{\tilde\bfm}{\tilde\rho^2}+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm\tilde\bfm}{\tilde\rho^3}}\cdot\Grad v_e
++\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\cdot\Grad v_e
+\\
+\bfF^*_m\cdot\Grad V&=\Grad v_c
++\frac{1}{\tilde\rho}\LRp{\Grad\bfv_m+(\Grad\bfv_m)^T}\tilde\bfm-(\gamma-1)\frac{\tilde\bfm}{\tilde\rho}\Div\bfv_m\\
+&+\gamma\frac{\tilde E}{\tilde\rho}\Grad v_e-(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho}\Grad v_e
+-\frac{\tilde\bbD}{\tilde\rho}\Grad v_e
+\\
+F^*_e\cdot\Grad V&=(\gamma-1)\Div\bfv_m
++\gamma\frac{\tilde\bfm}{\tilde\rho}\cdot\Grad v_e
+\\
+%
+C^*_cV_{,t}&=v_{c,t}\\
+\bfC^*_mV_{,t}&=\bfv_{m,t}\\
+C^*_eV_{,t}&=v_{e,t}\\
+%
+G^*_c\Div\Psi&=-2\frac{\tilde\bfm}{\tilde\rho^2}\cdot\Div\bbS
+-\frac{\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^3}\Div\bftau
+\\
+\bfG^*_m\Div\Psi&=\frac{2}{\tilde\rho}\Div\bbS+\frac{\tilde\bfm}{C_v\tilde\rho^2}\Div\bftau
+\\
+G^*_e\Div\Psi&=-\frac{1}{C_v\tilde\rho}\Div\bftau\\
+%
+\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\frac{\tilde\bfu}{\tilde\rho}\otimes\Grad v_e\\
+\bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
+%
+\bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+\end{align*}
+
+Lastly, the entropy formulation adjoint terms are:
+\begin{align*}
+F^*_c\cdot\Grad V&=\frac{\tilde\alpha}{\gamma-1}\left(
+\tilde\bfz_m\cdot\Grad v_c
++\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m\right.\\
+&+\left.
+\LRp{\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{2\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Grad v_e
+\right)
+\\
+\bfF^*_m\cdot\Grad V&=-\frac{\tilde\alpha}{\gamma-1}\frac{\tilde\bfz_m}{\tilde z_e}\left(
+\tilde\bfz_m\cdot\Grad v_c
++\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m
+\right.\\
+&+\left.
+\LRp{\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{2\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Grad v_e
+\right)
++\tilde\alpha\Grad v_c
+-\frac{\tilde\alpha}{\tilde z_e}\LRp{\Grad\bfv_m+(\Grad\bfv_m)^T}\tilde\bfz_m\\
+&+\tilde\alpha\LRp{\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}-\gamma}\frac{\Grad v_e}{\tilde z_e}
++\frac{\tilde\bfz_m}{\tilde z_e^2}\tilde\bfz_m\cdot\Grad v_e}
++\frac{\tilde\bbD}{\tilde z_e}\Grad v_e
+\\
+F^*_e\cdot\Grad V&=
+\LRp{\gamma(-\tilde z_e)^{-(\gamma+1)}\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{-1}
++\frac{1}{\gamma-1}\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}\tilde\alpha\\
+&\LRp{
+\tilde\bfz_m\cdot\Grad v_c
++\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m
+% \right.\\
+% &+\left.
++
+\LRp{\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{2\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Grad v_e
+}\\
+&+\tilde\alpha\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}:\Grad\bfv_m
+-\tilde\alpha\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\Grad v_e
+% \right)
+% \tilde\alpha\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}:\Grad\bfv_m
+-\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\cdot\Grad v_e
+\\
+%
+C^*_cV_{,t}&=
+\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}
+\\
+\bfC^*_mV_{,t}&=
+-\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}\frac{\tilde\bfz_m}{\tilde z_e}
++\tilde\alpha\bfv_{m,t}-\tilde\alpha\frac{\tilde\bfz_m}{\tilde z_e}v_{e,t}
+\\
+C^*_eV_{,t}&=
+\LRp{\gamma(-\tilde z_e)^{-(\gamma+1)}\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{-1}
++\frac{1}{\gamma-1}\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}\tilde\alpha\\
+&\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}
+-\tilde\alpha v_{c,t}
++\tilde\alpha\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2} v_{e,t}
+\\
+\end{align*}
+\begin{align*}
+%
+G^*_c\Div\Psi&=0
+\\
+\bfG^*_m\Div\Psi&=\frac{-2}{\tilde z_e}\Div\bbS
+\\
+G^*_e\Div\Psi&=2\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\Div\bbS-\frac{1}{C_v\tilde z_e^2}\Div\bftau\\
+%
+\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m-\frac{\tilde\bfz_m}{\tilde z_e}\otimes\Grad v_e\\
+\bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
+%
+\bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+\end{align*}
 
 %% If you have bibdatabase file and want bibtex to generate the
 %% bibitems, please use
