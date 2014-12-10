@@ -1457,6 +1457,7 @@ F^*_c\cdot\Grad V&=\LRp{-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}+(\gamm
 \bfF^*_m\cdot\Grad V&=\Grad v_c
 +\frac{1}{\tilde\rho}\LRp{\Grad\bfv_m+(\Grad\bfv_m)^T}\tilde\bfm-(\gamma-1)\frac{\tilde\bfm}{\tilde\rho}\Div\bfv_m\\
 &+\gamma\frac{\tilde E}{\tilde\rho}\Grad v_e-(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho}\Grad v_e
+-(\gamma-1)\frac{\tilde\bfm}{\tilde\rho}\tilde\bfm\cdot\Grad v_e
 -\frac{\tilde\bbD}{\tilde\rho}\Grad v_e
 \\
 F^*_e\cdot\Grad V&=(\gamma-1)\Div\bfv_m
@@ -1474,7 +1475,7 @@ G^*_c\Div\Psi&=-2\frac{\tilde\bfm}{\tilde\rho^2}\cdot\Div\bbS
 \\
 G^*_e\Div\Psi&=-\frac{1}{C_v\tilde\rho}\Div\bftau\\
 %
-\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\frac{\tilde\bfu}{\tilde\rho}\otimes\Grad v_e\\
+\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\frac{\tilde\bfm}{\tilde\rho}\otimes\Grad v_e\\
 \bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
 %
 \bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
@@ -1504,8 +1505,8 @@ F^*_c\cdot\Grad V&=\frac{\tilde\alpha}{\gamma-1}\left(
 +\frac{\tilde\bbD}{\tilde z_e}\Grad v_e
 \\
 F^*_e\cdot\Grad V&=
-\LRp{\gamma(-\tilde z_e)^{-(\gamma+1)}\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{-1}
-+\frac{1}{\gamma-1}\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}\tilde\alpha\\
+\frac{\tilde\alpha}{\gamma-1}\LRp{-\frac{\gamma}{\tilde z_e}
++\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}\\
 &\LRp{
 \tilde\bfz_m\cdot\Grad v_c
 +\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m
