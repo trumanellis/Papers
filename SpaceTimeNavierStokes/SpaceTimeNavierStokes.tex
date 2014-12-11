@@ -708,25 +708,25 @@ In 2D the symmetric trace-free condition produces a tensor with the following st
 
 In order to better see the structure in the following derivation, we introduce some terms to simplify things.
 % Since we eventually plan on stacking the terms from the various equations, we will take all terms 
-First we identify the Euler fluxes for the continuity, momentum, and energy equations:
+First we identify the conserved quantities for the continuity, momentum, and energy equations:
+\begin{align*}
+C_c&:=\rho\\
+\bfC_m&:=\rho\bfu\\
+C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\,.
+\end{align*}
+The Euler fluxes are
 \begin{align*}
 \bfF_c&:=\rho\bfu\\
 \bbF_m&:=\rho\bfu\otimes\bfu+\rho RT\bbI\\
-\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\,.
+\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\,,
 \end{align*}
 % where the vectors are taken to be horizontal, i.e. $\bfF_c$ and $\bfF_e$ have dimension $1\times d$ and $\bbF_m$ has dimension $d\times d$, 
 % where $d$ is the spatial dimension.
-The viscous fluxes are
+while the viscous fluxes are
 \begin{align*}
 \bfK_c&:=\boldsymbol 0\\
 \bbK_m&:=\bbD\\
 \bfK_e&:=-\bfq+\bfu\cdot\bbD\,,
-\end{align*}
-the conserved terms are
-\begin{align*}
-C_c&:=\rho\\
-\bfC_m&:=\rho\bfu\\
-C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\,,
 \end{align*}
 and 
 \begin{align*}
@@ -737,9 +737,9 @@ G_{\bfq}&:=-T\,.
 \end{align*}
 Finally, we define group terms
 \begin{align*}
+C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
 F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
 K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
-C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
 M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
 G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
 f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
@@ -770,17 +770,19 @@ We now wish to perform a change of variables to conservation variables (density,
 E&=\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}\,.
 \end{align*}
 We start be rewriting our Euler fluxes, viscous fluxes, and conserved quantities:
-The structure of the equations is identical, we just need to substitute new definitions for several terms (terms not enumerated are identical):
+The structure of the equations is identical, we just need to perform a simple change of variables:
 \begin{align*}
+C&=\LRc{\rho\,,\,
+\bfm\,\,
+E}\\
 F&=\LRc{\bfm\,,\,
 \frac{\bfm\otimes\bfm}{\rho}+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\bbI\,,\,
 \gamma E\frac{\bfm}{\rho}-(\gamma-1)\frac{\bfm\cdot\bfm}{2\rho^2}\bfm}\\
 K&=\LRc{\boldsymbol 0\,,\,
 \bbD\,,\,
 -\bfq+\frac{\bfm}{\rho}\cdot\bbD}\\
-C&=\LRc{\rho\,,\,
-\bfm\,\,
-E}\\
+M&=\LRc{\frac{1}{\mu}\bbS\,,\,
+\frac{Pr}{C_p\mu}\bfq}\\
 G&=\LRc{2\frac{\bfm}{\rho}\,,\,
 -\frac{E-\frac{1}{2\rho}\bfm\cdot\bfm}{C_v\rho}}\,.
 \end{align*}
@@ -805,15 +807,17 @@ where
 \]
 The new definitions are
 \begin{align*}
+C&=\LRc{-\alpha z_e\,,\,
+\alpha\bfz_m\,,\,
+\alpha\LRp{1-\frac{1}{2z_e}\bfz_m\cdot\bfz_m}}\\
 F&=\LRc{\alpha\bfz_m\,\,,
 \alpha\LRp{-\frac{\bfz_m\otimes\bfz_m}{z_e}+(\gamma-1)\bbI}\,,\,
 \alpha\frac{\bfz_m}{z_e}\LRp{\frac{1}{2z_e}\bfz_m\cdot\bfz_m-\gamma}}\\
 K&=\LRc{\boldsymbol 0\,,\,
 \bbD\,,\,
 -\bfq-\frac{\bfz_m}{z_e}\cdot\bbD}\\
-C&=\LRc{-\alpha z_e\,,\,
-\alpha\bfz_m\,,\,
-\alpha\LRp{1-\frac{1}{2z_e}\bfz_m\cdot\bfz_m}}\\
+M&=\LRc{\frac{1}{\mu}\bbS\,,\,
+\frac{Pr}{C_p\mu}\bfq}\\
 G&=\LRc{-2\frac{\bfz_m}{z_e}\,,\,
 \frac{1}{C_vz_e}}\,.
 \end{align*}
@@ -847,7 +851,7 @@ Therefore we split these terms up into a value for the previous guess (denoted w
 &+\LRa{\hat t,V}-\LRp{f,V}=0\,.
 \end{align*}
 Note that we use the $\Delta$ notation as a shortcut to indicate the Jacobian of the residual evaluated at the previous solution value, e.g.
-$\Delta F=\pd{F}{U}(\tilde U)\Delta U$ where $U$ is a placeholder for the set of solution variables for each respective formulation 
+$\Delta F=\pd{F}{X}(\tilde X)\Delta X$ where $X$ is a placeholder for the set of solution variables for each respective formulation 
 (primitive, conservation, or entropy).
 Moving known quantities to the right hand side, we get our bilinear form
 \begin{align}
@@ -1304,6 +1308,11 @@ error in the energy norm.
 % All that remains is to define the linearized terms for each set of variables.
 We start with primitive variables, for which
 \begin{align*}
+\Delta C_c&=\Delta\rho\\
+\Delta\bfC_m&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
+\Delta C_e&=C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
++\frac{1}{2}\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu\\
+%
 \Delta\bfF_c&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
 \Delta\bbF_m&=\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
 +R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bbI\\
@@ -1314,13 +1323,10 @@ We start with primitive variables, for which
 &+R\Delta\bfu\tilde\rho\tilde T
 +R\tilde\bfu\Delta\rho\tilde T
 +R\tilde\bfu\tilde\rho\Delta T\\
+%
 \Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
 \Delta\bfK_e&=-\bfq+\Delta\bfu\cdot\tilde\bbD+\tilde\bfu\cdot\Delta\bbD\\
-\Delta C_c&=\Delta\rho\\
-\Delta\bfC_m&=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
-\Delta C_e&=C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
-+\frac{1}{2}\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu\\
 \Delta \bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
 \Delta \bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
 \Delta \bfG_\bbD&=2\Delta\bfu\\
@@ -1329,6 +1335,10 @@ We start with primitive variables, for which
 
 With conservation variables, we have
 \begin{align*}
+\Delta C_c&=\Delta\rho\\
+\Delta\bfC_m&=\Delta\bfm\\
+\Delta C_e&=\Delta E\\
+%
 \Delta\bfF_c&=\Delta\bfm\\
 \Delta\mathbb{F}_m&=
 \frac{\Delta\bfm\otimes\tilde\bfm}{\tilde\rho}
@@ -1348,16 +1358,16 @@ With conservation variables, we have
 -\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{\tilde\rho^2}
 +\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho
 }\\
+%
 \Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
 \Delta\bfK_e&=-\bfq+\frac{\Delta\bfm}{\tilde\rho}\cdot\tilde\bbD
 -\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\Delta\rho
 +\frac{\tilde\bfm}{\tilde\rho}\cdot\Delta\bbD\\
-\Delta C_c&=\Delta\rho\\
-\Delta\bfC_m&=\Delta\bfm\\
-\Delta C_e&=\Delta E\\
+%
 \Delta\bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
 \Delta\bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
+%
 \Delta\bfG_{\bbD}&=2\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}\\
 \Delta G_{\bfq}&=-\frac{\Delta E-\frac{1}{\tilde\rho}\tilde\bfm\cdot\Delta\bfm
 	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
@@ -1366,6 +1376,12 @@ With conservation variables, we have
 
 Finally, the linearized terms for entropy variables are
 \begin{align*}
+\Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
+\Delta\bfC_m&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
+\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}
+-\tilde\alpha\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
++\tilde\alpha\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e\\
+%
 \Delta\bfF_c&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
 \Delta\bbF_m&=
 \Delta\alpha\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}\\
@@ -1383,16 +1399,13 @@ Finally, the linearized terms for entropy variables are
 +\frac{\tilde\bfz_m}{\tilde z_e^2}
 \tilde\bfz_m\cdot\Delta\bfz_m
 }\\
+%
 \Delta\bfK_c&=\bs0\\
 \Delta\bbK_m&=\Delta\bbD\\
 \Delta\bfK_e&=-\bfq-\frac{\Delta\bfz_m}{\tilde z_e}\cdot\tilde\bbD
 +\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\Delta z_e
 -\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Delta\bbD\\
-\Delta C_c&=-\Delta\alpha\tilde z_e-\tilde\alpha\Delta z_e\\
-\Delta\bfC_m&=\Delta\alpha\tilde\bfz_m+\tilde\alpha\Delta\bfz_m\\
-\Delta C_e&=\Delta\alpha\LRp{1-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}
-	-\tilde\alpha\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
-	+\tilde\alpha\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e\\
+%
 \Delta\bbM_\bbD&=\frac{1}{\mu}\Delta \bbD\\
 \Delta\bfM_{\bfq}&=\frac{Pr}{C_p\mu}\Delta\bfq\\
 \Delta\bfG_{\bbD}&=-2\LRp{\frac{\Delta\bfz_m}{\tilde z_e}-\frac{\tilde\bfz_m}{\tilde z_e^2}\Delta z_e}\\
@@ -1403,26 +1416,20 @@ where
 \Delta\alpha&=
 \frac{\tilde\alpha}{\gamma-1}\LRp{\Delta z_c-\frac{\tilde\bfz_m\cdot\Delta\bfz_m}{\tilde z_e}
 +\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}-\frac{\gamma}{\tilde z_e}}\Delta z_e}\,.
-% \LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
-% \gamma(-\tilde z_e)^{-(\gamma+1)}
-% \exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
-% \Delta z_e\\
-% &+\LRs{\frac{\gamma-1}{(-\tilde z_e)^\gamma}}^{\frac{1}{\gamma-1}}
-% \exp\LRs{\frac{-\gamma+\tilde z_c-\frac{1}{2\tilde z_e}\tilde\bfz_m\cdot\tilde\bfz_m}{\gamma-1}}
-% \frac{1}{\gamma-1}\\
-% &\LRp{\Delta z_c
-% -\frac{1}{\tilde z_e}\tilde\bfz_m\cdot\Delta\bfz_m
-% +\frac{1}{2\tilde z_e^2}\tilde\bfz_m\cdot\tilde\bfz_m\Delta z_e }\,.
 \end{align*}
 
 \section{Definition of Adjoint Terms}
 \label{ap:adjoint}
 
-Note that $F^*=\LRc{F^*_c,\bfF^*_m,F^*_e}$, $C^*=\LRc{C^*_c,\bfC^*_m,C^*_e}$, $G^*=\LRc{G^*_c,\bfG^*_m,G^*_e}$, $K^*=\LRc{\bbK^*_\bbD,\bfK^*_{\bfq}}$,
-and $M^*=\LRc{\bbM^*_\bbD,\bfM^*_{\bfq}}$.
+Note that $C^*=\LRc{C^*_c,\bfC^*_m,C^*_e}$, $F^*=\LRc{F^*_c,\bfF^*_m,F^*_e}$, $K^*=\LRc{\bbK^*_\bbD,\bfK^*_{\bfq}}$, $M^*=\LRc{\bbM^*_\bbD,\bfM^*_{\bfq}}$
+and $G^*=\LRc{G^*_c,\bfG^*_m,G^*_e}$.
 
 We begin by defining the elements of the adjoint for primitive variables:
 \begin{align*}
+C^*_cV_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+C_v\tilde T v_{e,t}+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu v_{e,t}\\
+\bfC^*_mV_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+C^*_eV_{,t}&=C_v\tilde\rho v_{e,t}\\
+%
 F^*_c\cdot\Grad V&=\tilde\bfu\cdot\Grad v_c
 +\LRp{\tilde\bfu\otimes\bfu+R\tilde T\bbI}:\Grad\bfv_m\\
 &+\LRp{C_v\tilde T\tilde\bfu+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu+R\tilde T\tilde\bfu}\cdot\Grad v_e\\
@@ -1434,23 +1441,23 @@ F^*_c\cdot\Grad V&=\tilde\bfu\cdot\Grad v_c
 F^*_e\cdot\Grad V&=R\tilde\rho\Div\bfv_m
 +C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
 %
-C^*_cV_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+C_v\tilde T v_{e,t}+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu v_{e,t}\\
-\bfC^*_mV_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
-C^*_eV_{,t}&=C_v\tilde\rho v_{e,t}\\
-%
-G^*_c\Div\Psi&=0\\
-\bfG^*_m\Div\Psi&=2\Div\bbS\\
-G^*_e\Div\Psi&=-\Div\bftau\\
-%
 \bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\tilde\bfu\otimes\Grad v_e\\
 \bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
 %
 \bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
-\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\\
+%
+G^*_c\Div\Psi&=0\\
+\bfG^*_m\Div\Psi&=2\Div\bbS\\
+G^*_e\Div\Psi&=-\Div\bftau\,.
 \end{align*}
 
 The corresponding terms for conservation variables are:
 \begin{align*}
+C^*_cV_{,t}&=v_{c,t}\\
+\bfC^*_mV_{,t}&=\bfv_{m,t}\\
+C^*_eV_{,t}&=v_{e,t}\\
+%
 F^*_c\cdot\Grad V&=\LRp{-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\bbI}:\Grad\bfv_m\\
 &+\LRp{-\gamma\tilde E\frac{\tilde\bfm}{\tilde\rho^2}+(\gamma-1)\frac{\tilde\bfm\cdot\tilde\bfm\tilde\bfm}{\tilde\rho^3}}\cdot\Grad v_e
 +\frac{\tilde\bfm}{\tilde\rho^2}\cdot\tilde\bbD\cdot\Grad v_e
@@ -1465,26 +1472,40 @@ F^*_e\cdot\Grad V&=(\gamma-1)\Div\bfv_m
 +\gamma\frac{\tilde\bfm}{\tilde\rho}\cdot\Grad v_e
 \\
 %
-C^*_cV_{,t}&=v_{c,t}\\
-\bfC^*_mV_{,t}&=\bfv_{m,t}\\
-C^*_eV_{,t}&=v_{e,t}\\
+\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\frac{\tilde\bfm}{\tilde\rho}\otimes\Grad v_e\\
+\bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
+%
+\bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\\
 %
 G^*_c\Div\Psi&=-2\frac{\tilde\bfm}{\tilde\rho^2}\cdot\Div\bbS
 -\frac{\tilde\bfm\cdot\tilde\bfm}{C_v\tilde\rho^3}\Div\bftau
 \\
 \bfG^*_m\Div\Psi&=\frac{2}{\tilde\rho}\Div\bbS+\frac{\tilde\bfm}{C_v\tilde\rho^2}\Div\bftau
 \\
-G^*_e\Div\Psi&=-\frac{1}{C_v\tilde\rho}\Div\bftau\\
-%
-\bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m+\frac{\tilde\bfm}{\tilde\rho}\otimes\Grad v_e\\
-\bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
-%
-\bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
-\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+G^*_e\Div\Psi&=-\frac{1}{C_v\tilde\rho}\Div\bftau\,.
 \end{align*}
 
 Lastly, the entropy formulation adjoint terms are:
 \begin{align*}
+C^*_cV_{,t}&=
+\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}
+\\
+\bfC^*_mV_{,t}&=
+-\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}\frac{\tilde\bfz_m}{\tilde z_e}
++\tilde\alpha\bfv_{m,t}-\tilde\alpha\frac{\tilde\bfz_m}{\tilde z_e}v_{e,t}
+\\
+C^*_eV_{,t}&=
+\frac{\tilde\alpha}{\gamma-1}\LRp{-\frac{\gamma}{\tilde z_e}
++\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}
+\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
++\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}\\
+&-\tilde\alpha v_{c,t}
++\tilde\alpha\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2} v_{e,t}
+\\
+%
 F^*_c\cdot\Grad V&=\frac{\tilde\alpha}{\gamma-1}\left(
 \tilde\bfz_m\cdot\Grad v_c
 +\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m\right.\\
@@ -1511,49 +1532,25 @@ F^*_e\cdot\Grad V&=
 &\LRp{
 \tilde\bfz_m\cdot\Grad v_c
 +\LRp{-\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e}+(\gamma-1)\bbI}:\Grad\bfv_m
-% \right.\\
-% &+\left.
 +
 \LRp{\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{2\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e}\cdot\Grad v_e
 }\\
 &+\tilde\alpha\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}:\Grad\bfv_m
 -\tilde\alpha\LRp{\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{\tilde z_e}-\gamma}\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\Grad v_e
-% \right)
-% \tilde\alpha\frac{\tilde\bfz_m\otimes\tilde\bfz_m}{\tilde z_e^2}:\Grad\bfv_m
 -\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\tilde\bbD\cdot\Grad v_e
 \\
 %
-C^*_cV_{,t}&=
-\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
-+\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}
-\\
-\bfC^*_mV_{,t}&=
--\frac{\tilde\alpha}{\gamma-1}\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
-+\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}\frac{\tilde\bfz_m}{\tilde z_e}
-+\tilde\alpha\bfv_{m,t}-\tilde\alpha\frac{\tilde\bfz_m}{\tilde z_e}v_{e,t}
-\\
-C^*_eV_{,t}&=
-\frac{\tilde\alpha}{\gamma-1}\LRp{-\frac{\gamma}{\tilde z_e}
-+\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2}}
-\LRp{-\tilde z_e v_{c,t}+\tilde\bfz_m\cdot\bfv_{m,t}
-+\LRp{1-\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e}}v_{e,t}}\\
-&-\tilde\alpha v_{c,t}
-+\tilde\alpha\frac{\tilde\bfz_m\cdot\tilde\bfz_m}{2\tilde z_e^2} v_{e,t}
-\\
 \end{align*}
 \begin{align*}
-%
-G^*_c\Div\Psi&=0
-\\
-\bfG^*_m\Div\Psi&=\frac{-2}{\tilde z_e}\Div\bbS
-\\
-G^*_e\Div\Psi&=2\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\Div\bbS-\frac{1}{C_v\tilde z_e^2}\Div\bftau\\
-%
 \bbK^*_\bbD\cdot\Grad V&=\Grad\bfv_m-\frac{\tilde\bfz_m}{\tilde z_e}\otimes\Grad v_e\\
 \bfK^*_{\bfq}\cdot\Grad V&=-\Grad v_e\\
 %
 \bbM^*_\bbD\Psi&=\frac{1}{\mu}\bbS\\
-\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\,.
+\bfM^*_{\bfq}\Psi&=\frac{Pr}{C_p\mu}\bftau\\
+%
+G^*_c\Div\Psi&=0\\
+\bfG^*_m\Div\Psi&=\frac{-2}{\tilde z_e}\Div\bbS\\
+G^*_e\Div\Psi&=2\frac{\tilde\bfz_m}{\tilde z_e^2}\cdot\Div\bbS-\frac{1}{C_v\tilde z_e^2}\Div\bftau\,.
 \end{align*}
 
 %% If you have bibdatabase file and want bibtex to generate the
