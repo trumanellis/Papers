@@ -130,7 +130,7 @@
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Student Forum]%{\pgfuseimage{iceslogo} }
+\date[Sandia National Laboratory]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -162,8 +162,7 @@
 %  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
 %                                                                                              
 %                                                                                              
-\section{Introduction}
-\subsection{Motivation}
+\section{Motivation}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Navier-Stokes Equations}
@@ -180,7 +179,7 @@ Robust simulation of unsteady fluid dynamics remains a challenging issue.
 \item{} Boundary layers - resolution needed for drag/load
 \item{} Turbulence (non-localized)
 \end{itemize}
-\item{} Nonlinear convergence and uniqueness of solutions
+% \item{} Nonlinear convergence and uniqueness of solutions
 \item{} Stability of numerical schemes
 \begin{itemize}
 \item{} Coarse/adaptive grids
@@ -212,9 +211,10 @@ Boundary layer
   \item Surface mesh must accurately represent geometry
   \item Volume mesh needs sufficient resolution for asymptotic regime
   % Before we accurately know the flow features
-  \item Boundary layer meshes must respect $y^+$ guidelines
+  % \item Boundary layer meshes must respect $y^+$ guidelines
   \item Engineers often forced to work by trial and error
   \item Bad in the context of HPC
+  \uncover<2>{\item \textcolor{utorange}{We desire an automated computational technology}}
 \end{itemize}
 \end{column}
 \begin{column}[c]{0.6\textwidth}
@@ -296,12 +296,14 @@ Boundary layer
 \frametitle{Lessons from Other Methods}
 \framesubtitle{~~}
 \begin{description}
-  \item[Streamline Upwind Petrov-Galerkin:] Changing your test space can produce a method with better stability.
+  \item[Streamline Upwind Petrov-Galerkin:] Adaptively changing the test space can produce a method with better stability.
   \item[Discontinuous Galerkin:] Discontinuous basis functions are a legitimate option for finite element methods.
   \item[Hybridized DG:] Mesh interface unknowns can facilitate static condensation -- reducing the number of DOFs in the global solve.
-  \item[Least-Squares FEM:] The finite element method is most powerful the a minimum residual context (i.e. as a Ritz method).
+  \item[Least-Squares FEM:] The finite element method is most powerful in a minimum residual context (i.e. as a Ritz method).
   \item[Space-Time FEM:] Highly adaptive methods should have adaptive time integration. 
-  Space-time is a very natural framework in which to do moving mesh simulations.
+  Superior framework for problems with moving boundaries.
+  Requires a method that is both temporally and spatially stable.
+  \item[Mixed FEM:] A first order formulation gives more flexibility.
 \end{description}
 % SUPG - changing your test space can produce better stability.
 
@@ -559,7 +561,16 @@ implies that the minimum residual method is the most stable Petrov-Galerkin meth
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Overview of DPG\footfullcite{DPGOverview2}}
+\frametitle{Overview of DPG}
+\framesubtitle{Optimal Test Functions}
+Plots of Poisson, Convection, Convection-Diffusion, etc
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+% \footfullcite{DPGOverview}}
 \framesubtitle{Other Features}
 \begin{block}{Discontinuous Petrov-Galerkin}
 \begin{itemize}
@@ -1062,184 +1073,305 @@ Eliminates human intervention
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time DPG}
-\framesubtitle{Motivation}
-Extends the capabilities of a DPG solver
+\framesubtitle{Extending DPG to Transient Problems}
 \begin{itemize}
-  \item Preserves stability and robustness of DPG method
-  \item Unified treatment of space and time
-  \item Local space-time adaptivity (local time stepping)
-  \begin{itemize}
-    \item Small solution features require small time step
-    \item Global time step not limited to smallest element
-  \end{itemize}
-  \item Natural framework for moving meshes
+  \item Time stepping techniques are not ideally suited to highly adaptive grids
+%   \item Unified treatment of space and time
+%   \item Local space-time adaptivity (local time stepping)
+%   \begin{itemize}
+%     \item Small solution features require small time step
+%     \item Global time step not limited to smallest element
+%   \end{itemize}
+%   \item Natural framework for moving meshes
 \end{itemize}
-\bigskip
+% \bigskip
 
-More computationally difficult
-\begin{itemize}
-  \item Solve requires $d+1$ dimensions
-  \item Mesh structure more difficult
-  \item Need to differentiate between spatial and temporal boundaries
-  \item Larger global solves than finite difference time stepping
-\end{itemize}
+% More computationally difficult
+% \begin{itemize}
+%   \item Solve requires $d+1$ dimensions
+%   \item Mesh structure more difficult
+%   \item Need to differentiate between spatial and temporal boundaries
+%   \item Larger global solves than finite difference time stepping
+% \end{itemize}
 \end{frame}
 
 
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG for Convection-Diffusion}
+\framesubtitle{Space-Time Divergence Form}
+Equation is parabolic in space-time.
+\[
+\pd{u}{t}+\bfbeta\cdot\Grad u-\epsilon\Delta u=f
+\]
+This is just a composition of a constitutive law and conservation of mass.
+\begin{align*}
+\bfsigma-\epsilon\Grad u&=0\\
+\pd{u}{t}+\Div\LRp{\bfbeta u-\bfsigma}&=f
+\end{align*}
 
-% %   /$$   /$$                       /$$    
-% %  | $$  | $$                      | $$    
-% %  | $$  | $$  /$$$$$$   /$$$$$$  /$$$$$$  
-% %  | $$$$$$$$ /$$__  $$ |____  $$|_  $$_/  
-% %  | $$__  $$| $$$$$$$$  /$$$$$$$  | $$    
-% %  | $$  | $$| $$_____/ /$$__  $$  | $$ /$$
-% %  | $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/
-% %  |__/  |__/ \_______/ \_______/   \___/  
-% %                                          
-% %                                          
-% %  
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Heat Equation}
-% \framesubtitle{Simplest Nontrivial Space-Time Problem}  %% needed for proper positioning of the logo ...
+We can rewrite this in terms of a space-time divergence.
+\begin{align*}
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\Gradxt\cdot\vecttwo{\bfbeta u-\bfsigma}{u}&=f
+\end{align*}
+\end{frame}
 
-% Equation is parabolic in space-time.
-% \begin{equation*}
-%   \frac{\partial u}{\partial t}-\epsilon\Delta u=f
-% \end{equation*}
 
-% This is really just a composite of Fourier's law and conservation of energy.
-% \begin{equation*}
-% \begin{aligned}
-% \bfsigma-\epsilon\Grad u&=0\\
-% \frac{\partial u}{\partial t}-\Div\bfsigma&=f
-% \end{aligned}
-% \end{equation*}
-
-% We can rewrite this in terms of a space-time divergence.
-% \begin{equation*}
-% \begin{aligned}
-% \frac{1}{\epsilon}\bfsigma-\Grad u&=0\\
-% \Divxt\vecttwo{-\bfsigma}{u}&=f
-% \end{aligned}
-% \end{equation*}
-% \end{frame}
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Heat Equation}
-% \framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
-% % \vspace{-2ex}
-% Multiply by test function and integrate by parts over space-time element K.
-% \begin{equation*}
-% \begin{aligned}
-% \LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\\
-% -\LRp{\vecttwo{-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f
-% \end{aligned}
-% \end{equation*}
-% \begin{columns}[t] % contents are top vertically aligned
-% \begin{column}[T]{0.4\textwidth} % each column can also be its own environment
-% where
-% \begin{align*}
-% \hat u&:=\trace(u)\\
-% \hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
-% \end{align*}
-% \vspace{-4ex}
-% \begin{itemize}
-%   \item Trace $\hat u$ defined on spatial boundaries
-%   \item Flux $\hat t$ defined on all boundaries
-% \end{itemize}
-% \end{column}
-% \begin{column}[T]{0.6\textwidth} % alternative top-align that's better for graphics
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG for Convection-Diffusion}
+\framesubtitle{Ultra-Weak Formulation with Discontinuous Test Functions}  %% needed for proper positioning of the logo ...
 % \vspace{-2ex}
-% \begin{block}{Support of Trace Variables}
-% \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm, scale=0.6, every node/.style={scale=0.6}]
-% \clip(-0.7,-0.6) rectangle (5.27,2.09);
-% \draw (0,2)-- (0,0);
-% \draw (0,0)-- (1,0);
-% \draw (1,0)-- (4,0);
-% \draw (4,0)-- (5,0);
-% \draw (5,0)-- (5,2);
-% \draw (5,2)-- (3,2);
-% \draw (3,2)-- (2,2);
-% \draw (2,2)-- (0,2);
-% \draw (1,0)-- (1.5,1);
-% \draw (1.5,1)-- (2,2);
-% \draw (1.5,1)-- (3.5,1);
-% \draw (3,2)-- (3.5,1);
-% \draw (3.5,1)-- (4,0);
-% \draw (-0.21,0.9) node[anchor=south west] {$\hat u$};
-% \draw (4.82,0.9) node[anchor=south west] {$\hat u$};
-% \draw (3.5,0.45) node[anchor=south west] {$\hat u$};
-% \draw (1.0,0.45) node[anchor=south west] {$\hat u$};
-% \draw (1.5,1.4) node[anchor=south west] {$\hat u$};
-% \draw (3.0,1.4) node[anchor=south west] {$\hat u$};
-% \draw (0.05,0.9) node[anchor=south west] {$\hat t$};
-% \draw (1.40,0.45) node[anchor=south west] {$\hat t$};
-% \draw (3.79,0.45) node[anchor=south west] {$\hat t$};
-% \draw (2.47,1.0) node[anchor=south west] {$\hat t$};
-% \draw (3.33,1.4) node[anchor=south west] {$\hat t$};
-% \draw (1.89,1.4) node[anchor=south west] {$\hat t$};
-% \draw (5.07,0.9) node[anchor=south west] {$\hat t$};
-% \draw (4.44,0.0) node[anchor=south west] {$\hat t$};
-% \draw (2.46,0.0) node[anchor=south west] {$\hat t$};
-% \draw (0.45,0.0) node[anchor=south west] {$\hat t$};
-% \draw (2.44,1.7) node[anchor=south west] {$\hat t$};
-% \draw (0.76,1.7) node[anchor=south west] {$\hat t$};
-% \draw (4.21,1.7) node[anchor=south west] {$\hat t$};
-% \draw [->] (-0.5,-0.5) -- (-0.5,0);
-% \draw [->] (-0.5,-0.5) -- (0,-0.5);
-% \draw (-0.54,0.29) node[anchor=north west] {$t$};
-% \draw (0.07,-0.35) node[anchor=north west] {$x$};
-% \end{tikzpicture}
-% \end{block}
-% \end{column}
-% \end{columns}
-% \end{frame}
+Multiply by test function and integrate by parts over space-time element K.
+\begin{equation*}
+\begin{aligned}
+\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}_K+\LRp{u,\Div\bftau}_K-\LRa{\hat u,\bftau\cdot\bfn_x}_{\partial K}&=0\\
+-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}_K+\LRa{\hat t,v}_{\partial K}&=f
+\end{aligned}
+\end{equation*}
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+where
+\begin{align*}
+\hat u&:=\trace(u)\\
+\hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
+\end{align*}
+\vspace{-4ex}
+\begin{itemize}
+  \item Trace $\hat u$ defined on spatial boundaries
+  \item Flux $\hat t$ defined on all boundaries
+\end{itemize}
+\end{column}
+\begin{column}[T]{0.6\textwidth} % alternative top-align that's better for graphics
+\vspace{-2ex}
+\begin{block}{Support of Trace Variables}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm, scale=0.6, every node/.style={scale=0.6}]
+\clip(-0.7,-0.6) rectangle (5.27,2.09);
+\draw (0,2)-- (0,0);
+\draw (0,0)-- (1,0);
+\draw (1,0)-- (4,0);
+\draw (4,0)-- (5,0);
+\draw (5,0)-- (5,2);
+\draw (5,2)-- (3,2);
+\draw (3,2)-- (2,2);
+\draw (2,2)-- (0,2);
+\draw (1,0)-- (1.5,1);
+\draw (1.5,1)-- (2,2);
+\draw (1.5,1)-- (3.5,1);
+\draw (3,2)-- (3.5,1);
+\draw (3.5,1)-- (4,0);
+\draw (-0.21,0.9) node[anchor=south west] {$\hat u$};
+\draw (4.82,0.9) node[anchor=south west] {$\hat u$};
+\draw (3.5,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.0,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.5,1.4) node[anchor=south west] {$\hat u$};
+\draw (3.0,1.4) node[anchor=south west] {$\hat u$};
+\draw (0.05,0.9) node[anchor=south west] {$\hat t$};
+\draw (1.40,0.45) node[anchor=south west] {$\hat t$};
+\draw (3.79,0.45) node[anchor=south west] {$\hat t$};
+\draw (2.47,1.0) node[anchor=south west] {$\hat t$};
+\draw (3.33,1.4) node[anchor=south west] {$\hat t$};
+\draw (1.89,1.4) node[anchor=south west] {$\hat t$};
+\draw (5.07,0.9) node[anchor=south west] {$\hat t$};
+\draw (4.44,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.46,0.0) node[anchor=south west] {$\hat t$};
+\draw (0.45,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.44,1.7) node[anchor=south west] {$\hat t$};
+\draw (0.76,1.7) node[anchor=south west] {$\hat t$};
+\draw (4.21,1.7) node[anchor=south west] {$\hat t$};
+\draw [->] (-0.5,-0.5) -- (-0.5,0);
+\draw [->] (-0.5,-0.5) -- (0,-0.5);
+\draw (-0.54,0.29) node[anchor=north west] {$t$};
+\draw (0.07,-0.35) node[anchor=north west] {$x$};
+\end{tikzpicture}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Heat equation}
-% \framesubtitle{Pulsed Source Problem}  %% needed for proper positioning of the logo ...
-% \vspace{-1ex}
-% \begin{columns}[t] % contents are top vertically aligned
-% \begin{column}[c]{0.3\textwidth} % each column can also be its own environment
-% % \vspace{3ex}
-% \begin{itemize}
-%   \item Initial condition $u=0$.
-%   \item Apply unit source $x\in[3/8,5/8]$,\\$t\in[1/4,1/2]$.
-%   \item Should not violate causality
-%   \item Space-time adaptivity picks up areas of rapid change.
-% \end{itemize}
-% \end{column}
-% \begin{column}[c]{0.7\textwidth} % each column can also be its own environment
-% \begin{figure}[ht]
-% \centering
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/u.png}
-% \\$u$\\\vspace{1ex}
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/sigma.png}
-% \\$\sigma$\\\vspace{1ex}
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/uhat.png}
-% \\$\hat u$
-% \end{subfigure}
-% \begin{subfigure}[t]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.8\textwidth]{SpaceTimeHeat/PulseSource/fhat.png}
-% \\$\hat t$
-% \end{subfigure}
-% % \caption{Pulsed space-time heat problem after 4 refinements}
-% \end{figure}
-% \end{column}
-% \end{columns}
-% \end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Robust Norms}
+\vspace{-5ex}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\centering
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalExact}
+\end{figure}
+\[
+u=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda2(x-1)})
+\]
+\[
+\lambda_{1,2}=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+\]
+where $l=3, \quad\epsilon = 10^{-2}$
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+\only<1>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalNorm0}
+\end{figure}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+&+\norm{\frac{1}{\epsilon}\bftau+\Grad v}^2
++\norm{v}^2
++\norm{\bftau}^2
+\end{align*}
+}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalNorm4}
+\end{figure}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+&+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+&+\epsilon\norm{\Grad v}^2
++\norm{\bfbeta\cdot\Grad v}^2
++\norm{v}^2
+\end{align*}
+}
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{First Order System}
+\begin{align*}
+  \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
+  \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
+  \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+  \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+  \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+\end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{~~}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Conserved quantities
+\vspace{-2ex}
+\begin{align*}
+C_c&:=\rho\\
+\bfC_m&:=\rho\bfu\\
+C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\\
+% C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.5\textwidth}
+Euler fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfF_c&:=\rho\bfu\\
+\bbF_m&:=\rho\bfu\otimes\bfu+\rho RT\bbI\\
+\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\\
+% F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+\end{align*}
+\end{column} 
+\end{columns}
+\begin{columns}[t]
+\begin{column}{0.3\textwidth}
+Viscous fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfK_c&:=\boldsymbol 0\\
+\bbK_m&:=\bbD\\
+\bfK_e&:=-\bfq+\bfu\cdot\bbD\\
+% K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous variables
+\vspace{-2ex}
+\begin{align*}
+\bbM_{\bbD}&:=\frac{1}{\mu}\bbD\\
+\bfM_{\bfq}&:=\frac{Pr}{C_p\mu}\bfq\\
+% M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous relations
+\vspace{-2ex}
+\begin{align*}
+\bfG_{\bbD}&:=2\bfu\\
+G_{\bfq}&:=-T\\
+% G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+\end{align*}
+\end{column} 
+\end{columns}
+% \begin{align*}
+% f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+% \end{align*}
+% and group variables
+% \begin{align*}
+% W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+% \hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+% \Sigma&:=\LRc{\bbD,\bfq}\\
+% \hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+% \Psi&:=\LRc{\bbS\,,\,\bftau}\\
+% V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+% \end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{Define Group Variables}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Group terms
+\vspace{-2ex}
+\begin{align*}
+C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+Group variables
+\vspace{-2ex}
+\begin{align*}
+W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+\hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+\Sigma&:=\LRc{\bbD,\bfq}\\
+\hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+\Psi&:=\LRc{\bbS\,,\,\bftau}\\
+V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+\end{align*}
+\end{column}
+\end{columns}
+Navier-Stokes variational formulation is
+\begin{align*}
+\LRp{M,\Psi}+\LRp{G,\Div\Psi}-\LRa{\hat W,\Psi\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{F-K}{C},\Gradxt V}+\LRa{\hat t,V}&=\LRp{f,V}\,.
+\end{align*}
+\end{frame}
+
+
 
 % %    /$$$$$$                                                                            /$$ /$$       /$$          
 % %   /$$__  $$                                                                          |__/| $$      | $$          
@@ -1485,7 +1617,7 @@ More computationally difficult
 \begin{block}{Design Goal}
 Make DPG research and experimentation as simple as possible, while maintaining computational efficiency and scalability.
 \end{block}
-\medskip
+% \smallskip
 Mature support for:
 \begin{itemize}
   \item Rapid specification of DPG variational forms, inner products, etc.
@@ -1499,7 +1631,7 @@ Mature support for:
 Experimental support for:
 \begin{itemize}
   \item Space-time computations
-  \item Iterative solvers
+  \item Iterative solvers (tested up to 32,768 cores)
 \end{itemize}
 \end{frame}
 
@@ -1731,7 +1863,8 @@ Note
     }
   \label{fig:Poisson1Dk1GMG}
   \end{figure}
-  Poisson 1D: number of CG iterations to reduce error by a factor of $10^{10}$ using $p$-multigrid preconditioners with the indicated type of Schwarz smoother for $k=16$.  The results for $k=1,2,4,$ and 8 are essentially identical.
+  Poisson 1D: number of CG iterations to reduce error by a factor of $10^{10}$ using $p$-multigrid preconditioners with Schwarz smoother with 0 overlap 
+  for $k=16$.  The results for $k=1,2,4,$ and 8 are essentially identical.
 \end{frame}
 
 %===============================================================================
