@@ -16,6 +16,7 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{animate}
 \usepackage{listings}
+\usepackage{bbding}
 \bibliography{../Papers}
 
 \newcounter{nn}
@@ -303,7 +304,7 @@ Boundary layer
   \item[Space-Time FEM:] Highly adaptive methods should have adaptive time integration. 
   Superior framework for problems with moving boundaries.
   Requires a method that is both temporally and spatially stable.
-  \item[Mixed FEM:] A first order formulation gives more flexibility.
+  % \item[Mixed FEM:] A first order formulation gives more flexibility.
 \end{description}
 % SUPG - changing your test space can produce better stability.
 
@@ -560,11 +561,11 @@ implies that the minimum residual method is the most stable Petrov-Galerkin meth
 
 
 % ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Overview of DPG}
-\framesubtitle{Optimal Test Functions}
-Plots of Poisson, Convection, Convection-Diffusion, etc
-\end{frame}
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{Optimal Test Functions}
+% Plots of Poisson, Convection, Convection-Diffusion, etc
+% \end{frame}
 
 
 % ------------------------------------------------------------
@@ -1076,6 +1077,11 @@ Eliminates human intervention
 \framesubtitle{Extending DPG to Transient Problems}
 \begin{itemize}
   \item Time stepping techniques are not ideally suited to highly adaptive grids
+  \item Space-time FEM proposed as a solution
+  \begin{itemize}
+    \item[\Checkmark] foo
+    \item[\XSolidBrush] bar
+  \end{itemize}
 %   \item Unified treatment of space and time
 %   \item Local space-time adaptivity (local time stepping)
 %   \begin{itemize}
@@ -1195,29 +1201,64 @@ where
 \begin{frame}[t]
 \frametitle{Space-Time Convection-Diffusion}
 \framesubtitle{Robust Norms}
-\vspace{-5ex}
+% \vspace{-5ex}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
+\vspace{-3ex}
+
+Bilinear form with group variables:
+\[
+b\LRp{\LRp{u,\hat u},v} = \LRp{u,A^*_h v}_{\LOmega} + \LRa{\uh, \jump{v}}_{\Gh}
+\]
+For conforming $v^*$ satisfying $A^* v^* = u$
+\begin{align*}
+&\norm{u}_{\LOmega}^2= b(u,v^*)
+=\frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V\\
+&\quad\leq\sup_{v^*\neq0}\frac{|b(u,v^*)|}{\norm{v^*}}
+=\norm{u}_E \norm{v^*}_V
+\end{align*}
+% If our test norm is bounded by $\norm{u}_{\LOmega}$,
+% we can quarantee that 
+% If $\norm{v^*}_V\lesssim\norm{u}_{L^2(\Omega_h)}$
+% then $\Rightarrow\norm{u}_{L^2(\Omega_h)}\lesssim\norm{u}_E$.
+Necessary robustness condition:
+\begin{align*}
+&\norm{v^*}_V\lesssim\norm{u}_{L^2(\Omega_h)}\\
+&\quad\Rightarrow\norm{u}_{L^2(\Omega_h)}\lesssim\norm{u}_E
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\vspace{-3ex}
 \centering
+
+Analytical Solution
+\begin{align*}
+u&=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda2(x-1)})\\
+\lambda_{1,2}&=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+\end{align*}
+where $l=3, \quad\epsilon = 10^{-2}$
+\vspace{-3ex}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalExact}
 \end{figure}
-\[
-u=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda2(x-1)})
-\]
-\[
-\lambda_{1,2}=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
-\]
-where $l=3, \quad\epsilon = 10^{-2}$
 \end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Robust Norms}
+A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not produce boundary layers in the optimal test function.
+\vspace{-5ex}
+\begin{columns}[t]
 \begin{column}{0.5\textwidth}
-\centering
-\only<1>{
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalNorm0}
 \end{figure}
+\vspace{-5ex}
 \small{
 \begin{align*}
 \norm{(v,\bftau)}^2&=
@@ -1227,12 +1268,13 @@ where $l=3, \quad\epsilon = 10^{-2}$
 +\norm{\bftau}^2
 \end{align*}
 }
-}
-\only<2>{
+\end{column}
+\begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/SpaceTimeAnalyticalNorm4}
 \end{figure}
+\vspace{-5ex}
 \small{
 \begin{align*}
 \norm{(v,\bftau)}^2&=
@@ -1243,7 +1285,56 @@ where $l=3, \quad\epsilon = 10^{-2}$
 +\norm{v}^2
 \end{align*}
 }
-}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Ideal Optimal Shape Functions}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Graph Norm
+\includegraphics[width=0.8\textwidth]{figs/Graph_v}\\
+\includegraphics[width=0.8\textwidth]{figs/Graph_tau}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Robust Norm
+\includegraphics[width=0.8\textwidth]{figs/Robust_v}\\
+\includegraphics[width=0.8\textwidth]{figs/Robust_tau}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Approximated ($p=3$) Optimal Shape Functions}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Graph Norm
+\includegraphics[width=0.8\textwidth]{figs/GraphApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{figs/GraphApprox3_tau}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Robust Norm
+\includegraphics[width=0.8\textwidth]{figs/RobustApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{figs/RobustApprox3_tau}
+\end{figure}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1253,6 +1344,7 @@ where $l=3, \quad\epsilon = 10^{-2}$
 \begin{frame}[t]
 \frametitle{Space-Time Navier-Stokes}
 \framesubtitle{First Order System}
+Assuming Stokes hypothesis and ideal gas law:
 \begin{align*}
   \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
   \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
@@ -1266,7 +1358,7 @@ where $l=3, \quad\epsilon = 10^{-2}$
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time Navier-Stokes}
-\framesubtitle{~~}
+\framesubtitle{Compact Notation}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
 Conserved quantities
