@@ -2,7 +2,7 @@
 \usepackage{etex}
 \reserveinserts{28}
 \input{../preamble.tex}
-\graphicspath{{../PD13/figs/}{../Proposal/figs/}}
+\graphicspath{{../PD13/figs/}{../Proposal/figs/}{../Figures/}}
 
 \usepackage{bbm}
 \usepackage{textpos}
@@ -17,6 +17,7 @@
 \usepackage{animate}
 \usepackage{listings}
 \usepackage{bbding}
+\usepackage{comment}
 \bibliography{../Papers}
 
 \newcounter{nn}
@@ -119,11 +120,36 @@
 % \pgfdeclareimage[height=1.5cm]{iceslogo}{logos/ICES-wordmark-teal.png}
 % \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
 
-\title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+% \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+\title[Space-Time DPG for Transient CFD]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
 {\oldfootnotesize Advisors: Leszek Demkowicz, Robert Moser}
 }
+
+\begin{comment}
+%  The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+% Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
+% mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
+% DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
+% \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
+% that indicates error in the energy norm.
+
+% Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
+% Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
+% numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
+% DPG is very compute intensive compared to the associated communication and memory costs.
+% Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
+% Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
+% The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
+% a solve purely in terms of the skeleton degrees of freedom.
+% In addition to significantly cutting down on the size of the global solve, 
+% this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
+
+% We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
+% in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
+% and a rewrite of Camellia for higher dimensions is currently in progress.
+\end{comment}
 
 % \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
 \institute{
@@ -163,7 +189,7 @@
 %  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
 %                                                                                              
 %                                                                                              
-\section{Motivation}
+\section{Motivation: Automating Scientific Computing}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Navier-Stokes Equations}
@@ -481,7 +507,7 @@ Boundary layer
 %                                                                                                                      
 %                                                                                                                      
 % 
-\section{DPG Overview}
+\section{DPG: A Framework for Computational Mechanics}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Overview of DPG}
@@ -1068,7 +1094,7 @@ Eliminates human intervention
 %            | $$                                                                                  
 %            | $$                                                                                  
 %            |__/  
-\section{Space-Time DPG}
+\section{Space-Time Model Problem}
 
 
 % ------------------------------------------------------------
@@ -1079,9 +1105,12 @@ Eliminates human intervention
   \item Time stepping techniques are not ideally suited to highly adaptive grids
   \item Space-time FEM proposed as a solution
   \begin{itemize}
-    \item[\Checkmark] foo
-    \item[\XSolidBrush] bar
+    \item[\textcolor{green}{\Checkmark}] Unified treatment of space and time
+    \item[\textcolor{green}{\Checkmark}] Local space-time adaptivity (local time stepping)
+    \item[\XSolidBrush] Spatially stable FEM methods may not be stable in space-time
+    \item[\XSolidBrush] Need to support higher dimensional problems
   \end{itemize}
+  \item DPG provides coarse mesh stability and powerful adaptivity
 %   \item Unified treatment of space and time
 %   \item Local space-time adaptivity (local time stepping)
 %   \begin{itemize}
@@ -1090,6 +1119,10 @@ Eliminates human intervention
 %   \end{itemize}
 %   \item Natural framework for moving meshes
 \end{itemize}
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.8\textwidth]{figs/SpaceTimeSchematic}
+\end{figure}
 % \bigskip
 
 % More computationally difficult
@@ -1214,7 +1247,7 @@ For conforming $v^*$ satisfying $A^* v^* = u$
 \begin{align*}
 &\norm{u}_{\LOmega}^2= b(u,v^*)
 =\frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V\\
-&\quad\leq\sup_{v^*\neq0}\frac{|b(u,v^*)|}{\norm{v^*}}
+&\quad\leq\sup_{v^*\neq0}\frac{|b(u,v^*)|}{\norm{v^*}}\norm{v^*}
 =\norm{u}_E \norm{v^*}_V
 \end{align*}
 % If our test norm is bounded by $\norm{u}_{\LOmega}$,
@@ -1299,16 +1332,16 @@ A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not p
 \begin{figure}[t]
 \centering
 Graph Norm
-\includegraphics[width=0.8\textwidth]{figs/Graph_v}\\
-\includegraphics[width=0.8\textwidth]{figs/Graph_tau}
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Graph_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Graph_tau}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
 Robust Norm
-\includegraphics[width=0.8\textwidth]{figs/Robust_v}\\
-\includegraphics[width=0.8\textwidth]{figs/Robust_tau}
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Robust_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Robust_tau}
 \end{figure}
 \end{column}
 \end{columns}
@@ -1324,383 +1357,21 @@ Robust Norm
 \begin{figure}[t]
 \centering
 Graph Norm
-\includegraphics[width=0.8\textwidth]{figs/GraphApprox3_v}\\
-\includegraphics[width=0.8\textwidth]{figs/GraphApprox3_tau}
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/GraphApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/GraphApprox3_tau}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
 Robust Norm
-\includegraphics[width=0.8\textwidth]{figs/RobustApprox3_v}\\
-\includegraphics[width=0.8\textwidth]{figs/RobustApprox3_tau}
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/RobustApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/RobustApprox3_tau}
 \end{figure}
 \end{column}
 \end{columns}
 \end{frame}
 
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
-\framesubtitle{First Order System}
-Assuming Stokes hypothesis and ideal gas law:
-\begin{align*}
-  \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
-  \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
-  \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
-  \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
-  \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
-\end{align*}
-\end{frame}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
-\framesubtitle{Compact Notation}
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-Conserved quantities
-\vspace{-2ex}
-\begin{align*}
-C_c&:=\rho\\
-\bfC_m&:=\rho\bfu\\
-C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\\
-% C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
-\end{align*}
-\end{column} 
-\begin{column}{0.5\textwidth}
-Euler fluxes 
-\vspace{-2ex}
-\begin{align*}
-\bfF_c&:=\rho\bfu\\
-\bbF_m&:=\rho\bfu\otimes\bfu+\rho RT\bbI\\
-\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\\
-% F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
-\end{align*}
-\end{column} 
-\end{columns}
-\begin{columns}[t]
-\begin{column}{0.3\textwidth}
-Viscous fluxes 
-\vspace{-2ex}
-\begin{align*}
-\bfK_c&:=\boldsymbol 0\\
-\bbK_m&:=\bbD\\
-\bfK_e&:=-\bfq+\bfu\cdot\bbD\\
-% K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
-\end{align*}
-\end{column} 
-\begin{column}{0.3\textwidth}
-Viscous variables
-\vspace{-2ex}
-\begin{align*}
-\bbM_{\bbD}&:=\frac{1}{\mu}\bbD\\
-\bfM_{\bfq}&:=\frac{Pr}{C_p\mu}\bfq\\
-% M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
-\end{align*}
-\end{column} 
-\begin{column}{0.3\textwidth}
-Viscous relations
-\vspace{-2ex}
-\begin{align*}
-\bfG_{\bbD}&:=2\bfu\\
-G_{\bfq}&:=-T\\
-% G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
-\end{align*}
-\end{column} 
-\end{columns}
-% \begin{align*}
-% f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
-% \end{align*}
-% and group variables
-% \begin{align*}
-% W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
-% \hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
-% \Sigma&:=\LRc{\bbD,\bfq}\\
-% \hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
-% \Psi&:=\LRc{\bbS\,,\,\bftau}\\
-% V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
-% \end{align*}
-\end{frame}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
-\framesubtitle{Define Group Variables}
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-Group terms
-\vspace{-2ex}
-\begin{align*}
-C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
-F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
-K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
-M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
-G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
-f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
-\end{align*}
-\end{column}
-\begin{column}{0.5\textwidth}
-Group variables
-\vspace{-2ex}
-\begin{align*}
-W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
-\hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
-\Sigma&:=\LRc{\bbD,\bfq}\\
-\hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
-\Psi&:=\LRc{\bbS\,,\,\bftau}\\
-V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
-\end{align*}
-\end{column}
-\end{columns}
-Navier-Stokes variational formulation is
-\begin{align*}
-\LRp{M,\Psi}+\LRp{G,\Div\Psi}-\LRa{\hat W,\Psi\cdot\bfn_x}&=0\\
--\LRp{\vecttwo{F-K}{C},\Gradxt V}+\LRa{\hat t,V}&=\LRp{f,V}\,.
-\end{align*}
-\end{frame}
-
-
-
-% %    /$$$$$$                                                                            /$$ /$$       /$$          
-% %   /$$__  $$                                                                          |__/| $$      | $$          
-% %  | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$ /$$| $$$$$$$ | $$  /$$$$$$ 
-% %  | $$       /$$__  $$| $$_  $$_  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/ /$$_____/| $$| $$__  $$| $$ /$$__  $$
-% %  | $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$  \__/| $$$$$$$$|  $$$$$$ |  $$$$$$ | $$| $$  \ $$| $$| $$$$$$$$
-% %  | $$    $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$_____/ \____  $$ \____  $$| $$| $$  | $$| $$| $$_____/
-% %  |  $$$$$$/|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$      |  $$$$$$$ /$$$$$$$/ /$$$$$$$/| $$| $$$$$$$/| $$|  $$$$$$$
-% %   \______/  \______/ |__/ |__/ |__/| $$____/ |__/       \_______/|_______/ |_______/ |__/|_______/ |__/ \_______/
-% %                                    | $$                                                                          
-% %                                    | $$                                                                          
-% %                                    |__/    
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Strong Form}  %% needed for proper positioning of the logo ...
-% The compressible Navier-Stokes equations are
-% \begin{align*}
-% \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
-% +\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{D}}
-% %TODO: Possible error above. cfd-online seems to have T^T
-% =\svectthree{f_c}{\bff_m}{f_e}\,,
-% \end{align*}
-% where
-% \begin{equation*}
-%   \mathbb{D}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
-% \end{equation*}
-% \begin{equation*}
-%   \bfq=-C_p\frac{\mu}{Pr}\Grad T\,,
-% \end{equation*}
-% and (assuming an ideal gas EOS)
-% \[
-% p=\rho R T\,.
-% \]
-% \end{frame}
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{First Order Space-Time Form}  %% needed for proper positioning of the logo ...
-% Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$:
-% \begin{align*}
-%   \mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
-%   \bfq+C_p\frac{\mu}{Pr}\Grad T&=0\\
-%   \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
-%   \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
-%   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
-% \end{align*}
-% \end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
-% Multiplying by test functions and integrating by parts:
-% % \scalebox{0.9}{
-% {
-% \small
-% \begin{align*}
-%   \LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\trace{\mathbb{S}}}
-%   -\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
-%   \LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{C_p\frac{\mu}{Pr}\hat T,\tau_n}&=0\\
-%   -\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
-%   -\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
-%   -\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
-%   +\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
-% \end{align*}
-% }
-% % }
-% where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
-% \end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Flux and Trace Variables}  %% needed for proper positioning of the logo ...
-% Spatial traces and fluxes are defined as follows:
-% \begin{equation*}
-% \begin{aligned}
-% \hat\bfu&=\trace(\bfu)\\
-% \hat T&=\trace(T)\\
-% \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
-% +\trace\LRp{\rho}n_t\\
-% \hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
-% +\trace\LRp{\rho\bfu} n_t\\
-% \hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
-% &\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
-% \end{aligned}
-% \end{equation*}
-% \begin{block}{Linearization}
-% Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to linearize in $\rho$, $\bfu$, $T$, and $\mathbb{D}$ 
-% (Jacobian and residual not shown here).
-% \end{block}
-% \end{frame}
-
-
-% %TODO: Fix test norm
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
-% \vspace{-3ex}
-% {
-% \small
-% \begin{align*}
-% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
-% +&\left\|
-% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
-% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
-% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
-% -R\tilde T\tilde\bfu\Grad v_e
-% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
-% \right\|^2\\
-% +&\left\|
-% -\tilde\rho\Grad v_c
-% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
-% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
-% -C_v\tilde\rho\tilde T\Grad v_e
-% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
-% \right.\\
-% &\left.
-% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
-% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
-% -R\tilde\rho\tilde T\Grad v_e
-% +\tilde{\mathbb{D}}\cdot\Grad v_e
-% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
-% \right\|^2\\
-% +&\left\|
-% -R\tilde\rho\Div\bfv_m
-% -C_v\tilde\rho\tilde\bfu\Grad v_e
-% -R\tilde\rho\tilde\bfu\Grad v_e
-% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
-% \right\|^2\\
-% +&\|\frac{1}{\mu}\mathbb{S}\|^2
-% +\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
-% +\|\frac{Pr}{C_p\mu}\bftau\|^2
-% +\norm{\Div\bftau}^2\\
-% +&\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
-% \,.
-% \end{align*}
-% }
-% \end{frame}
-
-
-% %    /$$$$$$                  /$$                     
-% %   /$$__  $$                | $$                     
-% %  | $$  \__/  /$$$$$$   /$$$$$$$  /$$$$$$  /$$    /$$
-% %  |  $$$$$$  /$$__  $$ /$$__  $$ /$$__  $$|  $$  /$$/
-% %   \____  $$| $$$$$$$$| $$  | $$| $$  \ $$ \  $$/$$/ 
-% %   /$$  \ $$| $$_____/| $$  | $$| $$  | $$  \  $$$/  
-% %  |  $$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$/   \  $/   
-% %   \______/  \_______/ \_______/ \______/     \_/    
-% %                                                     
-% %                                                     
-% % 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
-% \foreach \n in {1,...,15}
-% {
-% \only<\n>
-% {
-% \vspace{-2ex}
-% \begin{figure}[ht]
-% \centering
-
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
-% \end{subfigure}
-% \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
-% \end{subfigure}
-% \end{figure}
-% }
-% }
-% \end{frame}
-
-
-% %   /$$   /$$           /$$      
-% %  | $$$ | $$          | $$      
-% %  | $$$$| $$  /$$$$$$ | $$$$$$$ 
-% %  | $$ $$ $$ /$$__  $$| $$__  $$
-% %  | $$  $$$$| $$  \ $$| $$  \ $$
-% %  | $$\  $$$| $$  | $$| $$  | $$
-% %  | $$ \  $$|  $$$$$$/| $$  | $$
-% %  |__/  \__/ \______/ |__/  |__/
-% %                                
-% %                                
-% % 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Compressible Navier-Stokes}
-% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-% Infinitely strong shock propagation.
-% \foreach \n in {1,...,9}
-% {
-% \only<\n>
-% {
-% \vspace{4ex}
-% % \begin{figure}[ht]
-% % \centering
-
-% \begin{columns}[t] % contents are top vertically aligned
-% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% % \begin{subfigure}[c]{0.45\textwidth}
-% \centering
-% \includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
-% \end{column}
-% % \end{subfigure}
-% \hspace{8ex}
-% \begin{column}[T]{0.45\textwidth} % each column can also be its own environment
-% % \begin{subfigure}[c]{0.4\textwidth}
-% \centering
-% \vspace{2ex}
-% \includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
-% \end{column}
-% \end{columns}
-% % \end{subfigure}
-% % \end{figure}
-% }
-% }
-% \end{frame}
 
 \section{Camellia: DPG for the Masses}
 \begin{frame}[fragile]
@@ -2041,13 +1712,382 @@ Note
   Stokes 3D: number of CG iterations to reduce error by a factor of $10^{10}$ using statically condensed system matrix with $p$-multigrid, algebraic Schwarz smoother, using Incomplete Cholesky factorization (fill ratio 5) for the Schwarz blocks.
 \end{frame}
 
-\section{Other DPG Research}
+
+\section{Space-Time Compressible Navier-Stokes}
+% ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Other DPG Research}
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{First Order System}
+Assuming Stokes hypothesis and ideal gas law:
+\begin{align*}
+  \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
+  \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
+  \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+  \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+  \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+\end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{Compact Notation}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Conserved quantities
+\vspace{-2ex}
+\begin{align*}
+C_c&:=\rho\\
+\bfC_m&:=\rho\bfu\\
+C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\\
+% C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.5\textwidth}
+Euler fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfF_c&:=\rho\bfu\\
+\bbF_m&:=\rho\bfu\otimes\bfu+\rho RT\bbI\\
+\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\\
+% F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+\end{align*}
+\end{column} 
+\end{columns}
+\begin{columns}[t]
+\begin{column}{0.3\textwidth}
+Viscous fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfK_c&:=\boldsymbol 0\\
+\bbK_m&:=\bbD\\
+\bfK_e&:=-\bfq+\bfu\cdot\bbD\\
+% K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous variables
+\vspace{-2ex}
+\begin{align*}
+\bbM_{\bbD}&:=\frac{1}{\mu}\bbD\\
+\bfM_{\bfq}&:=\frac{Pr}{C_p\mu}\bfq\\
+% M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous relations
+\vspace{-2ex}
+\begin{align*}
+\bfG_{\bbD}&:=2\bfu\\
+G_{\bfq}&:=-T\\
+% G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+\end{align*}
+\end{column} 
+\end{columns}
+% \begin{align*}
+% f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+% \end{align*}
+% and group variables
+% \begin{align*}
+% W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+% \hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+% \Sigma&:=\LRc{\bbD,\bfq}\\
+% \hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+% \Psi&:=\LRc{\bbS\,,\,\bftau}\\
+% V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+% \end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{Define Group Variables}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Group terms
+\vspace{-2ex}
+\begin{align*}
+C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+Group variables
+\vspace{-2ex}
+\begin{align*}
+W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+\hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+\Sigma&:=\LRc{\bbD,\bfq}\\
+\hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+\Psi&:=\LRc{\bbS\,,\,\bftau}\\
+V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+\end{align*}
+\end{column}
+\end{columns}
+Navier-Stokes variational formulation is
+\begin{align*}
+\LRp{M,\Psi}+\LRp{G,\Div\Psi}-\LRa{\hat W,\Psi\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{F-K}{C},\Gradxt V}+\LRa{\hat t,V}&=\LRp{f,V}\,.
+\end{align*}
+\end{frame}
+
+
+
+% %    /$$$$$$                                                                            /$$ /$$       /$$          
+% %   /$$__  $$                                                                          |__/| $$      | $$          
+% %  | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$$ /$$| $$$$$$$ | $$  /$$$$$$ 
+% %  | $$       /$$__  $$| $$_  $$_  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/ /$$_____/| $$| $$__  $$| $$ /$$__  $$
+% %  | $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$  \__/| $$$$$$$$|  $$$$$$ |  $$$$$$ | $$| $$  \ $$| $$| $$$$$$$$
+% %  | $$    $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$      | $$_____/ \____  $$ \____  $$| $$| $$  | $$| $$| $$_____/
+% %  |  $$$$$$/|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$      |  $$$$$$$ /$$$$$$$/ /$$$$$$$/| $$| $$$$$$$/| $$|  $$$$$$$
+% %   \______/  \______/ |__/ |__/ |__/| $$____/ |__/       \_______/|_______/ |_______/ |__/|_______/ |__/ \_______/
+% %                                    | $$                                                                          
+% %                                    | $$                                                                          
+% %                                    |__/    
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Strong Form}  %% needed for proper positioning of the logo ...
+% The compressible Navier-Stokes equations are
+% \begin{align*}
+% \frac{\partial}{\partial t}\svectthree{\rho}{\rho\bfu}{\rho e_0}
+% +\Div\svectthree{\rho\bfu}{\rho\bfu\otimes\bfu+p\bfI-\mathbb{D}}{\rho\bfu e_0+\bfu p+\bfq-\bfu\cdot\mathbb{D}}
+% %TODO: Possible error above. cfd-online seems to have T^T
+% =\svectthree{f_c}{\bff_m}{f_e}\,,
+% \end{align*}
+% where
+% \begin{equation*}
+%   \mathbb{D}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bfI}\,,
+% \end{equation*}
+% \begin{equation*}
+%   \bfq=-C_p\frac{\mu}{Pr}\Grad T\,,
+% \end{equation*}
+% and (assuming an ideal gas EOS)
+% \[
+% p=\rho R T\,.
+% \]
+% \end{frame}
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{First Order Space-Time Form}  %% needed for proper positioning of the logo ...
+% Writing this in space-time in terms of $\rho$, $\bfu$, $T$, $\mathbb{D}$, and $\bfq$:
+% \begin{align*}
+%   \mathbb{D}-\mu\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2\mu}{3}\Div\bfu\bfI&=0\\
+%   \bfq+C_p\frac{\mu}{Pr}\Grad T&=0\\
+%   \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+%   \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+%   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,.
+% \end{align*}
+% \end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{DPG Formulation}  %% needed for proper positioning of the logo ...
+% Multiplying by test functions and integrating by parts:
+% % \scalebox{0.9}{
+% {
+% \small
+% \begin{align*}
+%   \LRp{\mathbb{D},\mathbb{S}}+\LRp{2\mu\bfu,\Div\mathbb{S}}-\LRp{\frac{2\mu}{3}\bfu,\Grad\trace{\mathbb{S}}}
+%   -\LRa{2\mu\hat\bfu,\mathbb{S}\bfn_x}+\LRa{\frac{2\mu}{3}\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+%   \LRp{\bfq,\bftau}-\LRp{C_p\frac{\mu}{Pr}T,\Div\bftau}+\LRa{C_p\frac{\mu}{Pr}\hat T,\tau_n}&=0\\
+%   -\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+%   -\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+%   -\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+%   +\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+% \end{align*}
+% }
+% % }
+% where $\hat u$ and $\hat T$ are spatial traces and $\hat t_c$, $\hat\bft_m$, and $\hat t_e$ are fluxes.
+% \end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Flux and Trace Variables}  %% needed for proper positioning of the logo ...
+% Spatial traces and fluxes are defined as follows:
+% \begin{equation*}
+% \begin{aligned}
+% \hat\bfu&=\trace(\bfu)\\
+% \hat T&=\trace(T)\\
+% \hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
+% +\trace\LRp{\rho}n_t\\
+% \hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\mathbb{D}}\cdot\bfn_x
+% +\trace\LRp{\rho\bfu} n_t\\
+% \hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\mathbb{D}}\cdot\bfn_x\\
+% &\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+% \end{aligned}
+% \end{equation*}
+% \begin{block}{Linearization}
+% Fluxes, traces, and $\bfq$ are linear in the above bilinear form, but we need to linearize in $\rho$, $\bfu$, $T$, and $\mathbb{D}$ 
+% (Jacobian and residual not shown here).
+% \end{block}
+% \end{frame}
+
+
+% %TODO: Fix test norm
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Test Norm}  %% needed for proper positioning of the logo ...
+% \vspace{-3ex}
+% {
+% \small
+% \begin{align*}
+% &\norm{\Grad\bfv_m+\Grad v_e\otimes\tilde\bfu}^2+\norm{\Grad v_e}^2\\
+% +&\left\|
+% -\tilde\bfu\cdot\Grad v_c-\frac{\partial v_c}{\partial t}-\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m
+% -R\tilde T\Div\bfv_m-\tilde\bfu\cdot\frac{\partial\bfv_m}{\partial t}\right.\\
+% &\left.-C_v\tilde T\tilde\bfu\cdot\Grad v_e-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e
+% -R\tilde T\tilde\bfu\Grad v_e
+% -C_v\tilde T\frac{\partial v_e}{\partial t}-\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -\tilde\rho\Grad v_c
+% -\tilde\rho\tilde\bfu\cdot\Grad\bfv_m-\tilde\rho\Grad\bfv_m\cdot\tilde\bfu
+% -\tilde\rho\frac{\partial\bfv_m}{\partial t}
+% -C_v\tilde\rho\tilde T\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e
+% \right.\\
+% &\left.
+% -\frac{1}{2}\tilde\rho\tilde\bfu\cdot\Grad v_e\tilde\bfu
+% -\frac{1}{2}\tilde\rho\Grad v_e\cdot\tilde\bfu\tilde\bfu
+% -R\tilde\rho\tilde T\Grad v_e
+% +\tilde{\mathbb{D}}\cdot\Grad v_e
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% -\frac{1}{2}\tilde\rho\tilde\bfu\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\left\|
+% -R\tilde\rho\Div\bfv_m
+% -C_v\tilde\rho\tilde\bfu\Grad v_e
+% -R\tilde\rho\tilde\bfu\Grad v_e
+% -C_v\tilde\rho\frac{\partial v_e}{\partial t}
+% \right\|^2\\
+% +&\|\frac{1}{\mu}\mathbb{S}\|^2
+% +\norm{2\Div\mathbb{S}-\frac{2}{3}\Grad\trace{\mathbb{S}}}^2
+% +\|\frac{Pr}{C_p\mu}\bftau\|^2
+% +\norm{\Div\bftau}^2\\
+% +&\norm{v_c}^2+\norm{\bfv_m}^2+\norm{v_e}^2
+% \,.
+% \end{align*}
+% }
+% \end{frame}
+
+
+%    /$$$$$$                  /$$                     
+%   /$$__  $$                | $$                     
+%  | $$  \__/  /$$$$$$   /$$$$$$$  /$$$$$$  /$$    /$$
+%  |  $$$$$$  /$$__  $$ /$$__  $$ /$$__  $$|  $$  /$$/
+%   \____  $$| $$$$$$$$| $$  | $$| $$  \ $$ \  $$/$$/ 
+%   /$$  \ $$| $$_____/| $$  | $$| $$  | $$  \  $$$/  
+%  |  $$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$/   \  $/   
+%   \______/  \_______/ \_______/ \______/     \_/    
+%                                                     
+%                                                     
+% 
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
+
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+
+
+%   /$$   /$$           /$$      
+%  | $$$ | $$          | $$      
+%  | $$$$| $$  /$$$$$$ | $$$$$$$ 
+%  | $$ $$ $$ /$$__  $$| $$__  $$
+%  | $$  $$$$| $$  \ $$| $$  \ $$
+%  | $$\  $$$| $$  | $$| $$  | $$
+%  | $$ \  $$|  $$$$$$/| $$  | $$
+%  |__/  \__/ \______/ |__/  |__/
+%                                
+%                                
+% 
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+Infinitely strong shock propagation.
+\foreach \n in {1,...,9}
+{
+\only<\n>
+{
+\vspace{4ex}
+% \begin{figure}[ht]
+% \centering
+
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+\end{column}
+% \end{subfigure}
+\hspace{8ex}
+\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.4\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+\end{column}
+\end{columns}
+% \end{subfigure}
+% \end{figure}
+}
+}
+\end{frame}
+
+
+\section{Current DPG Research}
+\begin{frame}[t]
+\frametitle{Current DPG Research}
 \framesubtitle{~~}  %% needed for proper positioning of the logo ...
 \begin{itemize}
+\item Locally conservative DPG
+\item Iterative solvers
 \item Entropy scaling for physically meaningful test norms
-\item DPG for non-Hilbert $L_p$ spaces
+\item DPG for non-Hilbert $L^p$ spaces
+\item Natively nonlinear DPG
+\item DPG for general polyhedral elements
 \end{itemize}
 \end{frame}
 
