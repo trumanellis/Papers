@@ -121,10 +121,10 @@
 % \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
 
 % \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
-\title[Space-Time DPG for Transient CFD]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
+\title[Automated Scientific Computing with DPG]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
-{\oldfootnotesize Advisors: Leszek Demkowicz, Robert Moser}
+{\oldfootnotesize \smallskip Collaborators: Leszek Demkowicz, Robert Moser, \\Nate Roberts (Argonne), Jesse Chan (Rice)}
 }
 
 \begin{comment}
@@ -1209,10 +1209,13 @@ Multiply by test function and integrate by parts over space-time element K.
 \end{equation*}
 \begin{columns}[t] % contents are top vertically aligned
 \begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+\vspace{-3ex}
 where
+\vspace{-1ex}
 \begin{align*}
 \hat u&:=\trace(u)\\
-\hat t&:=\trace(-\bfsigma)\cdot\bfn_x+\trace(u)\cdot n_t
+\hat t&:=\trace(\bfbeta u-\bfsigma)\cdot\bfn_x\\
+&+\trace(u)\cdot n_t
 \end{align*}
 \vspace{-4ex}
 \begin{itemize}
@@ -1597,6 +1600,20 @@ Note
 \end{column}
 \begin{column}{.35\textwidth}
 \small
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Convection-Diffusion in Three Slides}
+\framesubtitle{Computed Solution}  %% needed for proper positioning of the logo ...
+\begin{columns}[t]
+\begin{column}{.5\textwidth}
+\includegraphics[height=0.55\textheight]{Confusion/Tutorial/u_ref9.png}
+\end{column}
+\begin{column}{.5\textwidth}
+\includegraphics[height=0.55\textheight]{Confusion/Tutorial/uhat_ref9.png}
 \end{column}
 \end{columns}
 \end{frame}
