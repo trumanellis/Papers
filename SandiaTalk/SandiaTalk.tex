@@ -128,7 +128,22 @@
 }
 
 \begin{comment}
-%  The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+The DPG framework can be used to derive stable discretizations of any well-posed variational formulation 
+and has been successfully applied to problems such as heat conduction, time-harmonic Helmholtz, 
+Maxwell's equations, linear elasticity and plate problems, Stokes flow, and both incompressible and compressible Navier-Stokes.
+In contrast to many other numerical methods, DPG does not suffer from a pre-asymptotic regime (unstable behavior on coarse meshes).
+This means that a simulation can be initiated at the coarsest scale possible while automatic adaptivity resolves solution features 
+based on a robust, built-in measure of residual error.
+DPG is intensely locally compute intensive with significant embarrassingly parallel computations done both pre- and post-global solve.
+We present preliminary work on a space-time DPG formulation that enables automatic local time stepping and a kind of parallel-in-time integration.
+We also present the Camellia library, which is built on top of Trilinos and 
+supports rapid specification of DPG problems while maintaining computational efficiency and scalability.
+% Parallel to our efforts 
+% In our efforts to create an automatic computational methodology, we have also 
+
+% In addition to the automaticity of coarse-mesh stability and adaptivity, DPG is very locally compute intensive, making it ideal for HPC systems.
+
 % Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
 % mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
 % DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
@@ -537,7 +552,7 @@ u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Overview of DPG}
-\framesubtitle{DPG is a Minimum Residual Method}
+\framesubtitle{Petrov-Galerkin with Optimal Test Functions}
 % \framesubtitle{Optimal Petrov-Galerkin Methods}
 Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
 U_h$ gives,
@@ -560,6 +575,28 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
 \end{equation*}
 \end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+\framesubtitle{Mixed Formulation}
+Identifying the error representation function:
+\[
+\psi:=R_V^{-1}(Bu_h-l)
+\] 
+allows us to develop an alternative interpretation of DPG.
+\begin{block}{DPG as a Mixed Problem}
+Find $\psi\in V$, $u_h\in U_h$ such that
+\begin{equation*}
+\begin{aligned}
+\LRp{\psi,\delta v}_V-b(u_h,\delta v)&=-l(\delta v) \quad&\forall&\delta v&\in V\\
+b(\delta u_h,\psi)&=0 \quad&\forall&\delta u_h&\in U_h
+\end{aligned}
+\end{equation*}
+\end{block}
+In this unconventional saddle-saint problem, the approximate solution $u_h$ comes from a finite-dimensional
+trial space and plays the role of the Lagrange multiplier for the error representation function
 \end{frame}
 
 
@@ -1107,10 +1144,11 @@ Eliminates human intervention
   \begin{itemize}
     \item[\textcolor{green}{\Checkmark}] Unified treatment of space and time
     \item[\textcolor{green}{\Checkmark}] Local space-time adaptivity (local time stepping)
+    \item[\textcolor{green}{\Checkmark}] Parallel-in-time integration
     \item[\XSolidBrush] Spatially stable FEM methods may not be stable in space-time
     \item[\XSolidBrush] Need to support higher dimensional problems
   \end{itemize}
-  \item DPG provides coarse mesh stability and powerful adaptivity
+  \item DPG provides necessary stability and adaptivity
 %   \item Unified treatment of space and time
 %   \item Local space-time adaptivity (local time stepping)
 %   \begin{itemize}
@@ -1121,7 +1159,7 @@ Eliminates human intervention
 \end{itemize}
 \begin{figure}[b]
 \centering
-\includegraphics[width=0.8\textwidth]{figs/SpaceTimeSchematic}
+\includegraphics[width=0.8\textwidth]{Schematics/SpaceTimeSchematic}
 \end{figure}
 % \bigskip
 
@@ -1986,17 +2024,17 @@ Navier-Stokes variational formulation is
 % \end{frame}
 
 
-%    /$$$$$$                  /$$                     
-%   /$$__  $$                | $$                     
-%  | $$  \__/  /$$$$$$   /$$$$$$$  /$$$$$$  /$$    /$$
-%  |  $$$$$$  /$$__  $$ /$$__  $$ /$$__  $$|  $$  /$$/
-%   \____  $$| $$$$$$$$| $$  | $$| $$  \ $$ \  $$/$$/ 
-%   /$$  \ $$| $$_____/| $$  | $$| $$  | $$  \  $$$/  
-%  |  $$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$/   \  $/   
-%   \______/  \_______/ \_______/ \______/     \_/    
-%                                                     
-%                                                     
-% 
+%    /$$$$$$                  /$$
+%   /$$__  $$                | $$
+%  | $$  \__/  /$$$$$$   /$$$$$$$
+%  |  $$$$$$  /$$__  $$ /$$__  $$
+%   \____  $$| $$  \ $$| $$  | $$
+%   /$$  \ $$| $$  | $$| $$  | $$
+%  |  $$$$$$/|  $$$$$$/|  $$$$$$$
+%   \______/  \______/  \_______/
+%                                
+%                                
+%        
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
@@ -2011,19 +2049,19 @@ Navier-Stokes variational formulation is
 
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/den\n.pdf}
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/den\n.pdf}
 \end{subfigure}
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/vel\n.pdf}
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/vel\n.pdf}
 \end{subfigure}
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{SpaceTimeCNS/Sod1e-5/pres\n.pdf}
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/pres\n.pdf}
 \end{subfigure}
 \begin{subfigure}[c]{0.45\textwidth}
 \centering
-\includegraphics[width=1\textwidth]{SpaceTimeCNS/Sod1e-5/mesh\n.png}
+\includegraphics[width=1.0\textwidth]{Sod/MinNSDecoupled1e-5/mesh\n.png}
 \end{subfigure}
 \end{figure}
 }
@@ -2047,47 +2085,57 @@ Navier-Stokes variational formulation is
 \frametitle{Compressible Navier-Stokes}
 \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
 Infinitely strong shock propagation.
-\foreach \n in {1,...,9}
-{
-\only<\n>
-{
+% \foreach \n in {9,...,9}
+% {
+% \only<\n>
+% {
 \vspace{4ex}
 % \begin{figure}[ht]
 % \centering
 
 \begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
 \centering
-\includegraphics[height=1.0\textwidth]{SpaceTimeCNS/Noh1e-3/den\n.pdf}
+\includegraphics[height=1.0\textwidth]{Noh/MinNSDecoupled/den9.pdf}
 \end{column}
 % \end{subfigure}
 \hspace{8ex}
-\begin{column}[T]{0.45\textwidth} % each column can also be its own environment
+\begin{column}[T]{0.55\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.4\textwidth}
 \centering
 \vspace{2ex}
-\includegraphics[width=0.9\textwidth]{SpaceTimeCNS/Noh1e-3/mesh\n.png}
+\includegraphics[width=0.9\textwidth]{Noh/MinNSDecoupled/mesh9.png}\\
+\centering
+Sequence of 4 time slabs
 \end{column}
 \end{columns}
 % \end{subfigure}
 % \end{figure}
-}
-}
+% }
+% }
+
 \end{frame}
 
 
-\section{Current DPG Research}
+\section{Related DPG Research}
 \begin{frame}[t]
-\frametitle{Current DPG Research}
-\framesubtitle{~~}  %% needed for proper positioning of the logo ...
+\frametitle{Related Research}
+\framesubtitle{Past and Present Topics in DPG Research}  %% needed for proper positioning of the logo ...
 \begin{itemize}
-\item Locally conservative DPG
+\item Multiphysics
+\begin{itemize}
+  \item Heat conduction (Poisson and Heat equation)
+  \item Wave problems (Helmholtz and Maxwell)
+  \item Linear elasticity and plate problems
+  \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
+\end{itemize}
+\item Natively nonlinear DPG
+\item DPG for non-Hilbert $L^p$ spaces
+\item Local conservation
 \item Iterative solvers
 \item Entropy scaling for physically meaningful test norms
-\item DPG for non-Hilbert $L^p$ spaces
-\item Natively nonlinear DPG
-\item DPG for general polyhedral elements
+\item General polyhedral elements
 \end{itemize}
 \end{frame}
 
