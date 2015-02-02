@@ -13,7 +13,7 @@
 \usepackage{forloop}
 % \usepackage[aps,prb,citeautoscript]{revtex4-1}
 % \usepackage[super]{natbib}
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
 \usepackage{animate}
 \usepackage{listings}
 \usepackage{bbding}
@@ -224,6 +224,8 @@ Robust simulation of unsteady fluid dynamics remains a challenging issue.
 % \item{} Nonlinear convergence and uniqueness of solutions
 \item{} Stability of numerical schemes
 \begin{itemize}
+\item{} Nonlinearity
+\item{} Nature of PDE changes for different flow regimes
 \item{} Coarse/adaptive grids
 \item{} Higher order
 \end{itemize}
@@ -2154,6 +2156,7 @@ Sequence of 4 time slabs
 \item Entropy scaling for physically meaningful test norms
 \item General polyhedral elements
 \end{itemize}
+% \nocite{DPGOverview,EllisLC,CamelliaDPG}
 \end{frame}
 
 % \section{Current and Future Work}
@@ -2191,32 +2194,50 @@ Sequence of 4 time slabs
 % \end{frame}
 
 
-\begin{frame}[t]
+% \begin{frame}[t]
+% \frametitle{Thank You!}
+% \framesubtitle{Recommended References}
+% \small
+% \printbibliography
+% \vspace{-4ex}
+% \begin{figure}[ht]
+% \centering
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/vel}{1}{15}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/pres}{1}{15}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/mesh}{1}{15}
+% \end{subfigure}
+% \end{figure}
+% % \begin{center}
+% %   \animategraphics[autoplay,loop,width=0.6\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
+% % \end{center}
+% \end{frame}
+
+\begin{frame}[shrink=10]
 \frametitle{Thank You!}
-\framesubtitle{~~}
-\vspace{-4ex}
-\begin{figure}[ht]
-\centering
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/vel}{1}{15}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/pres}{1}{15}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\animategraphics[autoplay,loop,width=0.99\textwidth]{1}{SpaceTimeCNS/Sod1e-5/mesh}{1}{15}
-\end{subfigure}
-\end{figure}
-% \begin{center}
-%   \animategraphics[autoplay,loop,width=0.6\textwidth]{1}{SpaceTimeCNS/Sod1e-5/den}{1}{15}
-% \end{center}
+\framesubtitle{Recommended References}
+    \nocite{DPGOverview}
+    \nocite{EllisLC}
+    \nocite{CamelliaDPG}
+    \nocite{DemkowiczHeuer}
+    \nocite{ChanHeuerThanhDemkowicz2012}
+    \nocite{DPGStokes}
+    \renewcommand*{\bibfont}{\small}
+    \setbeamertemplate{bibliography item}[triangle]
+    \printbibliography[keyword=main]
+    % \bigskip
+    \printbibliography[notkeyword=main]
 \end{frame}
 
 
