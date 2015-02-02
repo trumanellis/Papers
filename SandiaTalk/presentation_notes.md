@@ -21,7 +21,7 @@ Basically what I want to say on this slide is that Navier-Stokes is hard. Despit
 This requirement can present additional challenges to the CFD practitioner designing a mesh. At the minimum level, the surface mesh needs to adequately represent the physical geometry of the problem under consideration. But the stability of the numerical methods presents additional requirements on the volume mesh surrounding the surface mesh. This often leads to a trial and error process for the CFD engineer. 
 
 ### DPG on Coarse Meshes
-My goal with this research is to remove one of those constraints on computational mechanics practitioners. In contrast to most other methods out there, the DGP method does not suffer convergence issues on coarse meshes. We are able to start on the coarsest mesh possible which sufficiently resolves the geometry and adaptively refine towards a resolves solution.
+My goal with this research is to remove one of those constraints on computational mechanics practitioners. In contrast to most other methods out there, the DGP method does not suffer convergence issues on coarse meshes. We are able to start on the coarsest mesh possible which sufficiently resolves the geometry and adaptively refine towards a resolved solution.
 These are results from Jesse Chan's thesis on supersonic flow over a flat plate. This is not a remarkably difficult problem, but what is notable is that we were able to start the simulation on a mesh of only two elements, sit back, and let the method take over as it solved, refined, and converged to a resolved solution after 11 adaptive steps.
 
 ## Lessons from Other Methods
@@ -171,6 +171,7 @@ Recently, we made some breakthroughs developing a non-Hilbert DPG theory. The mo
 One topic that has come up several times in the context of DPG for fluid problems is local conservation. For finite elements, local conservation is equivalent to having your test space span the set of constants. But we compute our test space on the fly, so it is not guaranteed that a linear combination of optimal test functions produces a constant. So a while back, I developed a theory for locally conservative DPG that uses Lagrange multipliers to explicitly enforce conservation element-by-element.
 I touched on some of the recent work on iterative solvers, but this is currently becoming a priority for DPG research and we expect to see a lot more in the next year or so.
 I've also been working on a way to use entropy to create physically meaningful test norms.
+We also think that DPG, especially in the ultra-weak formulation, would be ideal for solving on general polyhedral elements. Since we can statically condense the internal degrees of freedom out of the global solve, we don't have to worry about creating conforming spaces for weird polyhedra, only their boundaries, which could just be a combination of triangles and quads. The internal degrees of freedom only live in L2 and are computed as a post-processing stage, so it would be easy to define basis functions for these. This work is still in conceptual phases since it would require a significant investment to work on the new data structures, but mathematically, we don't expect any significant obstacles.
 
 ## Thanks
 List of references
