@@ -124,7 +124,7 @@
 \title[Automated Scientific Computing with DPG]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
-{\oldfootnotesize \smallskip Collaborators: Leszek Demkowicz, Robert Moser, \\Nate Roberts (Argonne), Jesse Chan (Rice)}
+{\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser, \\Collaborators: Nate Roberts (Argonne), Jesse Chan (Rice)}
 }
 
 \begin{comment}
@@ -541,12 +541,12 @@ Bu=l\quad\in V'\,.
 \]
 We wish to minimize the residual $Bu-l\in V'$:
 \[
-u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bu-l}^2_{V'}\,.
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bw_h-l}^2_{V'}\,.
 \]
 Dual norms are not computationally tractable. 
 Inverse Riesz map moves the residual to a more accessible space:
 \[
-u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bw_h-l)}^2_{V}\,.
 \]
 \end{frame}
 
@@ -1133,7 +1133,6 @@ Eliminates human intervention
 %            | $$                                                                                  
 %            | $$                                                                                  
 %            |__/  
-\section{Space-Time Model Problem}
 
 
 % ------------------------------------------------------------
@@ -1175,6 +1174,7 @@ Eliminates human intervention
 \end{frame}
 
 
+\section{Space-Time Model Problem}
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time DPG for Convection-Diffusion}
@@ -1309,7 +1309,7 @@ Necessary robustness condition:
 
 Analytical Solution
 \begin{align*}
-u&=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda2(x-1)})\\
+u&=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\\
 \lambda_{1,2}&=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
 \end{align*}
 where $l=3, \quad\epsilon = 10^{-2}$
@@ -1424,6 +1424,7 @@ Robust Norm
 Make DPG research and experimentation as simple as possible, while maintaining computational efficiency and scalability.
 \end{block}
 % \smallskip
+Built on Trilinos (Teuchos, Intrepid, Shards, Epetra, etc).\\
 Mature support for:
 \begin{itemize}
   \item Rapid specification of DPG variational forms, inner products, etc.
@@ -1431,8 +1432,8 @@ Mature support for:
   \item 1D - 3D geometries
   \item Curvilinear elements
   \item $h$- and $p$-refinements (anisotropic in $h$)
-  \item Arbitrarily irregular meshes
-  \item Modular refinement strategy interface
+  % \item Arbitrarily irregular meshes
+  % \item Modular refinement strategy interface
 \end{itemize}
 Experimental support for:
 \begin{itemize}
@@ -1775,7 +1776,7 @@ Note
 \begin{frame}[t]
 \frametitle{Space-Time Navier-Stokes}
 \framesubtitle{First Order System}
-Assuming Stokes hypothesis and ideal gas law:
+Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
 \begin{align*}
   \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
   \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\

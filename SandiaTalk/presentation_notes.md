@@ -1,5 +1,4 @@
 # Proposal Presentation Notes
-## TODO
 
 ## Title Slide
 Good afternoon, everyone. Thank you for coming to my talk. 
@@ -85,11 +84,11 @@ The goal is to design a method that eliminates human intervention as much as pos
 * As I mentioned earlier, an SPD stiffness matrix seems like a promising thing for iterative solvers, but we haven't really explored the benefits.
 * Many supercomputer simulations are increasingly coupling multiphysics. The only stability requirement for a DPG method is that the continuous problem is well-posed. As such, it has successfully been applied to a wide range of problems from Helmholtz to solid mechanics to Navier-Stokes and Maxwell's equations.
 
-## Space-Time Model Problem
-That's enough for the features of DPG in abstract, let's derive a DPG method for a simple model problem of transient fluid flow, the convection-diffusion equation.
-### Motivation
+### Space-Time DPG
 But before I put some equations down, let's briefly explore why we might want to work in a space-time framework rather than a traditional finite difference based time stepper. Adaptivity has been an integral part of DPG from day one, and we typically get refined elements which are several orders smaller magnitude than other elements in the mesh. Classical time stepping techniques propagate the entire solution forward in lockstep at the pace of the most restrictive element. Implicit techniques allow you to take larger steps but for the sake of temporal accuracy, you may not want to. Now, there are techniques out there that do allow different elements to proceed at different time steps, such as asynchronous variational integrators, but for us, this is not an ideal solution. Bolting on a different temporal integrator to a DPG spatial integrator produces a kind of Frankenstein of properties. We know we have great stability in space, but where does that leave us temporally? If we instead decide to just treat time as another dimension to be discretized with a DPG method, then we get a unified treatment and preserve all of our nice stability and adaptivity properties. We get automatic local time stepping and a kind of parallel-in-time integration as we can solve an entire time slab at once, distributing different space-time elements within the slab to different processors. I mentioned that space-time presents a challenge for classical finite elements as equations may have different spatial and temporal characteristics, but DPG addresses this concern. Is your space-time formulation well-posed? Yes, then we are in business. The big complication is on the computational and implementation side. Your code now has to support higher dimensional meshes or as we are implementing, a kind of tensor product of spatial and temporal elements.
 
+## Space-Time Model Problem
+That's enough for the features of DPG in abstract, let's derive a DPG method for a simple model problem of transient fluid flow, the convection-diffusion equation.
 ### Space-Time DPG for Convection-Diffusion
 The heat equation is the simplest transient fluid problem we can think of. As we will see later, it actually serves as a decent model problem for something as complicated as compressible Navier-Stokes. Just like Navier-Stokes, it is parabolic in space-time. 
 I am going to derive one variational problem for this equation, but there are other choices we could make. In particular, early in DPG's history, we decided to focus on the ultra-weak first order formulation because we believed it presented the most flexibility, but increasingly we have been working with the original second order problem.
