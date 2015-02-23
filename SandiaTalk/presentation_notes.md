@@ -23,7 +23,7 @@ This requirement can present additional challenges to the CFD practitioner desig
 My goal with this research is to remove one of those constraints on computational mechanics practitioners. In contrast to most other methods out there, the DGP method does not suffer convergence issues on coarse meshes. We are able to start on the coarsest mesh possible which sufficiently resolves the geometry and adaptively refine towards a resolved solution.
 These are results from Jesse Chan's thesis on supersonic flow over a flat plate. This is not a remarkably difficult problem, but what is notable is that we were able to start the simulation on a mesh of only two elements, sit back, and let the method take over as it solved, refined, and converged to a resolved solution after 11 adaptive steps.
 
-## Lessons from Other Methods
+### Lessons from Other Methods
 Before I jump into the particulars of DPG, I wanted to briefly touch on some of the methods that influenced our work and the lessons we learned from them. 
 * The streamline Upwind Petrov-Galerkin method was really the first finite element method to successfully solve fluid problems. Put simply, SUPG was able to solve convection-diffusion type problems by adaptively upwinding the test functions based on the elements Peclet number. This introduced the idea that you could improve the stability of a finite element method by modifying your test space.
 * Despite the similar name, DG methods only really have one significant influence on the DPG method. The realization that discontinuous basis functions or broken Sobolev spaces were fair game for finite element methods allowed the DPG method to progress from being an interesting trick to a practically computable method.
@@ -131,7 +131,7 @@ The last thing we need to specify is the test norm. I know I said that the graph
 After the loop, we've fully resolved the solution features, and we can see that the method automatically picks up the boundary layers. The initial mesh was a single element.
 We could also display the stress and flux, but you get the idea from these two plots.
 
-## Towards a Robust Iterative Solver
+### Towards a Robust Iterative Solver
 Iterative solvers are a fairly recent addition to the DPG fold, but some of the initial results are pretty encouraging. We recently started experimenting with a combination of conjugate gradient, p-multigrid preconditioners and Schwarz smoothers for Poisson and Stokes flow. The encourage fair comparisons, each element resides on its own MPI rank.
 
 ### Poisson 1D
@@ -172,5 +172,3 @@ I touched on some of the recent work on iterative solvers, but this is currently
 I've also been working on a way to use entropy to create physically meaningful test norms.
 We also think that DPG, especially in the ultra-weak formulation, would be ideal for solving on general polyhedral elements. Since we can statically condense the internal degrees of freedom out of the global solve, we don't have to worry about creating conforming spaces for weird polyhedra, only their boundaries, which could just be a combination of triangles and quads. The internal degrees of freedom only live in L2 and are computed as a post-processing stage, so it would be easy to define basis functions for these. This work is still in conceptual phases since it would require a significant investment to work on the new data structures, but mathematically, we don't expect any significant obstacles.
 
-## Thanks
-List of references
