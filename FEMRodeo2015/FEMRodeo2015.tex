@@ -121,7 +121,7 @@
 % \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
 
 % \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
-\title[Automated Scientific Computing with DPG]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
+\title[Space-Time DPG for Compressible Navier-Stokes]{Space-Time DPG for Compressible Navier-Stokes}
 % \subtitle{If you have one}
 \author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
 {\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser, \\Collaborators: Nate Roberts (Argonne), Jesse Chan (Rice)}
@@ -147,7 +147,7 @@ supports rapid specification of DPG problems while maintaining computational eff
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Sandia National Laboratory]%{\pgfuseimage{iceslogo} }
+\date[Finite Element Rodeo 2015]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -491,11 +491,14 @@ where
 \frametitle{Space-Time Convection-Diffusion}
 \framesubtitle{Robust Convergence to Analytical Solution}
 \vspace{-4ex}
+\small{
 \begin{align*}
 u=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\,,\quad
 \lambda_{1,2}=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
 \end{align*}
+}
 % where $l=3, \quad\epsilon = 10^{-2}$
+Test Norm:
 \small{
 \begin{align*}
 \norm{(v,\bftau)}^2&=
@@ -599,6 +602,8 @@ G_{\bfq}&:=-T\\
 \end{align*}
 \end{column} 
 \end{columns}
+\centering
+Use change of variables to get conservation or entropy variables.
 % \begin{align*}
 % f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
 % \end{align*}
@@ -689,7 +694,7 @@ Navier-Stokes variational formulation is
 % \centering
 % \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/pres\n.pdf}
 % \end{subfigure}
-\textbf{Mesh \n}\\
+\textcolor{utblack}{Mesh \n}\\
 \vspace{1ex}
 \begin{subfigure}[c]{0.65\textwidth}
 \centering
@@ -761,30 +766,33 @@ Entropy Variables\\
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
 \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-Infinitely strong shock propagation.
 % \foreach \n in {9,...,9}
 % {
 % \only<\n>
 % {
-% \vspace{4ex}
+% \vspace{-2ex}
 % \begin{figure}[ht]
 % \centering
 
 \begin{columns}[t] % contents are top vertically aligned
 \begin{column}[T]{0.5\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=1.0\textwidth]{Noh/FormulationComparison/den9.pdf}
+% \centering
+\hspace{1em}Infinitely strong shock propagation.
+\includegraphics[height=1.0\textwidth]{Noh/FormulationComparison/den9.pdf}\\
 \end{column}
 % \end{subfigure}
 \hspace{8ex}
 \begin{column}[T]{0.4\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.4\textwidth}
 \centering
+\textcolor{utblack}{Sequence of 4 Time Slabs}\\
+Primitive Variables\\
+\vspace{1ex}
 \includegraphics[width=0.9\textwidth]{Noh/FormulationComparison/Form0Mesh8.png}\\
+Conservation Variables\\
+\vspace{1ex}
 \includegraphics[width=0.9\textwidth]{Noh/FormulationComparison/Form1Mesh8.png}\\
-\centering
-Sequence of 4 time slabs
 \end{column}
 \end{columns}
 % \end{subfigure}
@@ -817,8 +825,7 @@ Sequence of 4 time slabs
 % \nocite{DPGOverview,EllisLC,CamelliaDPG}
 \end{frame}
 
-
-\begin{frame}[shrink=10]
+\begin{frame}[noframenumbering,shrink=10]
 \frametitle{Thank You!}
 \framesubtitle{Recommended References}
     \nocite{DPGOverview}
