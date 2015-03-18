@@ -1,0 +1,419 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Jacobs Landscape Poster
+% LaTeX Template
+% Version 1.0 (29/03/13)
+%
+% Created by:
+% Computational Physics and Biophysics Group, Jacobs University
+% https://teamwork.jacobs-university.de:8443/confluence/display/CoPandBiG/LaTeX+Poster
+%
+% Further modified by:
+% Nathaniel Johnston (nathaniel@njohnston.ca)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+
+\input{../preamble.tex}
+\graphicspath{{../Figures/}}
+\usepackage{bbding}
+\usetheme{confposter} % Use the confposter theme supplied with this template
+\usepackage{exscale}
+
+\setbeamercolor{block title}{fg=utorange,bg=white} % Colors of the block titles
+\setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
+\setbeamercolor{block alerted title}{fg=black,bg=utsecgreen} % Colors of the highlighted block titles
+\setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
+
+% \setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
+% \setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
+% \setbeamercolor{block alerted title}{fg=white,bg=dblue!70} % Colors of the highlighted block titles
+% \setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
+% Many more colors are available for use in beamerthemeconfposter.sty
+
+%-----------------------------------------------------------
+% Define the column widths and overall poster size
+% To set effective sepwid, onecolwid and twocolwid values, first choose how many columns you want and how much separation you want between columns
+% In this template, the separation width chosen is 0.024 of the paper width and a 4-column layout
+% onecolwid should therefore be (1-(# of columns+1)*sepwid)/# of columns e.g. (1-(4+1)*0.024)/4 = 0.22
+% Set twocolwid to be (2*onecolwid)+sepwid = 0.464
+% Set threecolwid to be (3*onecolwid)+2*sepwid = 0.708
+
+\newlength{\sepwid}
+\newlength{\onecolwid}
+\newlength{\twocolwid}
+\newlength{\threecolwid}
+\setlength{\paperwidth}{48in} % A0 width: 46.8in
+\setlength{\paperheight}{36in} % A0 height: 33.1in
+\setlength{\sepwid}{0.024\paperwidth} % Separation width (white space) between columns
+\setlength{\onecolwid}{0.22\paperwidth} % Width of one column
+\setlength{\twocolwid}{0.464\paperwidth} % Width of two columns
+\setlength{\threecolwid}{0.708\paperwidth} % Width of three columns
+\setlength{\topmargin}{-0.5in} % Reduce the top margin size
+%-----------------------------------------------------------
+
+\usepackage{graphicx}  % Required for including images
+
+\usepackage{booktabs} % Top and bottom rules for tables
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+\title{Space-Time DPG for Fluid Problems} % Poster title
+
+\author{Truman Ellis and Leszek Demkowicz} % Author(s)
+
+\institute{Institute for Computational Engineering and Sciences, University of
+Texas} % Institution(s)
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
+\addtobeamertemplate{block alerted end}{}{\vspace*{2ex}} % White space under highlighted (alert) blocks
+
+\setlength{\belowcaptionskip}{2ex} % White space under figures
+\setlength\belowdisplayshortskip{2ex} % White space under equations
+
+\begin{frame}[t] % The whole poster is enclosed in one beamer frame
+
+\begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid} % The first column
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+
+% \begin{alertblock}{Objectives}
+%
+% Lorem ipsum dolor sit amet, consectetur, nunc tellus pulvinar tortor, commodo eleifend risus arcu sed odio:
+% \begin{itemize}
+% \item Mollis dignissim, magna augue tincidunt dolor, interdum vestibulum urna
+% \item Sed aliquet luctus lectus, eget aliquet leo ullamcorper consequat. Vivamus eros sem, iaculis ut euismod non, sollicitudin vel orci.
+% \item Nascetur ridiculus mus.
+% \item Euismod non erat. Nam ultricies pellentesque nunc, ultrices volutpat nisl ultrices a.
+% \end{itemize}
+%
+% \end{alertblock}
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Introduction}
+The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+The DPG framework can be used to derive stable discretizations of any well-posed variational formulation.
+In contrast to many other numerical methods, DPG does not suffer from a pre-asymptotic regime (unstable behavior on coarse meshes).
+This means that a simulation can be initiated at the coarsest scale possible while automatic adaptivity resolves solution features 
+based on a robust, built-in measure of residual error.
+We present preliminary work on a space-time DPG formulation that enables automatic local time stepping and a kind of parallel-in-time integration.
+% The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+% The DPG framework can be used to derive stable discretizations of any well-posed variational formulation 
+% and has been successfully applied to problems such as heat conduction, time-harmonic Helmholtz, 
+% Maxwell's equations, linear elasticity and plate problems, Stokes flow, and both incompressible and compressible Navier-Stokes.
+% In contrast to many other numerical methods, DPG does not suffer from a pre-asymptotic regime (unstable behavior on coarse meshes).
+% This means that a simulation can be initiated at the coarsest scale possible while automatic adaptivity resolves solution features 
+% based on a robust, built-in measure of residual error.
+% DPG is intensely locally compute intensive with significant embarrassingly parallel computations done both pre- and post-global solve.
+% We present preliminary work on a space-time DPG formulation that enables automatic local time stepping and a kind of parallel-in-time integration.
+
+% The discontinuous Petrov-Galerkin finite element method has been described as least squares finite ele-
+% ments with a twist. The key difference is that least squares methods seek to minimize the residual of the
+% solution in the $L^2$ norm, while DPG seeks the minimization in a dual norm realized through the inverse Riesz
+% map. 
+% Exact mass conservation has been an issue that has plagued least squares finite elements for a long
+% time. In this work, we augment our DPG system with Lagrange multipliers in
+% order to exactly enforce local conservation. Effectively, this turns our
+% minimization problem into a constrained minimization problem. We note that
+% standard DPG, while not guaranteed to be conservative, appears to be nearly
+% conservative in practice.
+
+\end{block}
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\begin{block}{A Minimum Residual Method}
+
+Let $U$ and $V$ be trial and test Hilbert spaces for a well-posed variational
+problem $b(u,v)=l(v)$. In operator form this is $Bu=l$, where $B:U\rightarrow
+V'$. We seek to minimize the residual for the discrete space $U_h\subset U$:
+\[
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
+\]
+Use the Riesz inverse to minimize in the $V$-norm rather than its dual:
+\begin{align*}
+\frac{1}{2}&\norm{Bu_h-l}^2_{V'}=\frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}^2_V\\
+&=\frac{1}{2}\LRp{R_V^{-1}(Bu_h-l),R_V^{-1}(Bu_h-l)}_V\,.
+\end{align*}
+First order optimality requires
+the G\^ateaux derivative to be zero in all directions $\delta u \in
+U_h$, i.e.,
+\[
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U_h.
+\]
+By definition of the Riesz operator, this is equivalent to
+\begin{equation*}
+\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
+\end{equation*}
+Identify $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ as the
+optimal test function for trial function $\delta u_h$. This gives us
+\begin{equation*}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}).
+\end{equation*}
+
+\end{block}
+
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End of the first column
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+
+%----------------------------------------------------------------------------------------
+%	COLUMN
+%----------------------------------------------------------------------------------------
+\begin{column}{\onecolwid} % The second column
+
+\begin{block}{Space-Time DPG}
+
+\begin{itemize}
+  \item Time stepping techniques are not ideally suited to highly adaptive grids
+  \item Space-time FEM proposed as a solution
+  \begin{itemize}
+    \item[\textcolor{green}{\Checkmark}] Unified treatment of space and time
+    \item[\textcolor{green}{\Checkmark}] Local space-time adaptivity (local time stepping)
+    \item[\textcolor{green}{\Checkmark}] Parallel-in-time integration
+    \item[\textcolor{red}{\XSolidBrush}] Spatially stable FEM methods may not be stable in space-time
+    \item[\textcolor{red}{\XSolidBrush}] Need to support higher dimensional problems
+  \end{itemize}
+  \item DPG provides necessary stability and adaptivity
+\end{itemize}
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.8\textwidth]{Schematics/SpaceTimeSchematic}
+\end{figure}
+
+\end{block}
+
+\begin{block}{Ultra-Weak Transient Convection-Diffusion}
+
+Start with the strong-form PDE.
+\[
+\pd{u}{t}+\nabla\cdot(\bfbeta u)-\epsilon\Delta u = g
+\]
+Rewrite as a system of first-order equations.
+\begin{align*}
+\frac{1}{\epsilon}\bfsigma-\nabla u&=\boldsymbol0\\
+\Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=g
+\end{align*}
+Multiply by test functions and integrate by parts over each element, $K$.
+% \begin{align*}
+% -\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\nabla_{xt} v}_K\hspace{-1em}+\LRa{(\bfbeta
+% u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(g,v)_K\\
+% \frac{1}{\epsilon}\LRp{\bfsigma,\bftau}_K+\LRp{u,\nabla\cdot\bftau}_K
+% -\LRa{u,\tau_n}_{\partial K}&=0
+% \end{align*}
+Declare traces and fluxes to be independent unknowns and incorporate boundary
+conditions to obtain the final variational formulation.
+\begin{align*}
+&\frac{1}{\epsilon}(\bfsigma,\bftau)_K
++(u,\nabla\cdot\bftau)_K
+-\LRa{\hat u,\tau_n}_{\partial K}\\
+&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\nabla_{xt} v}_K+\LRa{\hat f,v}_{\partial K}
+=(g,v)_K
+\end{align*}
+\begin{figure}
+\includegraphics[width=0.7\linewidth]{figs/TraceSupport.png}
+\end{figure}
+\end{block}
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End second column
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid} % The third column
+
+
+\begin{block}{Sod Shock-Tube Results}
+
+Extension to other fluid problems like compressible Navier-Stokes
+equation is straightforward. 
+
+Sod and Noh results computed with small physical viscosity ($10^{-5}$ and $10^{-3}$ respectively), 
+but no shock capturing or artificial viscosity.
+\begin{figure}
+\includegraphics[width=\linewidth]{Sod/MinNSDecoupled1e-5/mesh15.png}\\
+\includegraphics[width=0.8\linewidth]{figs/SodComparison.pdf}\\
+% \includegraphics[width=0.8\linewidth]{Sod/MinNSDecoupled1e-5/vel15.pdf}\\
+% \includegraphics[width=0.8\linewidth]{Sod/MinNSDecoupled1e-5/pres15.pdf}\\
+\end{figure}
+\end{block}
+
+\begin{block}{Noh Implosion Results}
+Computed with a sequence of 4 time slabs.
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{Noh/MinNSDecoupled/mesh9.png}\\
+\includegraphics[width=0.8\linewidth]{figs/NohComparison.pdf}\\
+\end{figure}
+\end{block}
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End third column
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid} % The fourth column
+
+% \begin{block}{Other Results}
+
+
+% \end{block}
+
+%----------------------------------------------------------------------------------------
+%	CONCLUSION
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Conclusions}
+\begin{itemize}
+\item DPG provides a stable and adaptive framework for space-time
+\item Technique is suitable to any well-posed transient problem
+\item Time slabs can reduce global solve cost
+\item Proof of robustness for convection-diffusion in preparation
+\end{itemize}
+\end{block}
+
+\begin{block}{Concurrent Work}
+\begin{itemize}
+\item Multiphysics
+\begin{itemize}
+  \item Heat conduction (Poisson and Heat equation)
+  \item Wave problems (Helmholtz and Maxwell)
+  \item Linear elasticity and plate problems
+  \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
+\end{itemize}
+\item Natively nonlinear DPG
+\item DPG for non-Hilbert $L^p$ spaces
+\item Local conservation
+\item Iterative solvers
+\item Entropy scaling for physically meaningful test norms
+\item General polyhedral elements
+\end{itemize}
+
+% \begin{itemize}
+%   \item We've turned our minimization problem into a saddlepoint problem.
+%   \item The computational cost is one extra degree of freedom per element.
+%   % \item Local conservation allows us to eliminate the $||v||_{L^2}$ term in
+%   %   the inner product.
+%   \item Enforcement occasionally changes the refinement strategy.
+%   \item Standard DPG is nearly conservative in practice.
+%   \item Nearly identical results with better conservation.
+%   % \item Saw some improvement on the condition number for local solves.
+% \end{itemize}
+
+\end{block}
+%
+% %----------------------------------------------------------------------------------------
+% %	ADDITIONAL INFORMATION
+% %----------------------------------------------------------------------------------------
+%
+% \begin{block}{Additional Information}
+%
+% Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius dictum.
+% \begin{itemize}
+% \item Curabitur pellentesque dignissim
+% \item Eu facilisis est tempus quis
+% \item Duis porta consequat lorem
+% \end{itemize}
+%
+% \end{block}
+%
+%----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Recommended References}
+
+\nocite{*} % Insert publications even if they are not cited in the poster
+\small{\bibliographystyle{unsrt}
+\bibliography{refs}\vspace{0.75in}}
+
+\end{block}
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+% \setbeamercolor{block title}{fg=red,bg=white} % Change the block title color
+%
+% \begin{block}{Acknowledgements}
+%
+% \small{\rmfamily{Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.}} \\
+%
+% \end{block}
+
+%----------------------------------------------------------------------------------------
+%	CONTACT INFORMATION
+%----------------------------------------------------------------------------------------
+
+% \setbeamercolor{block alerted title}{fg=black,bg=utbrown} % Change the alert block title colors
+% \setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
+
+% \begin{alertblock}{Contact Information}
+%
+% \begin{itemize}
+% \item Web: \href{http://www.university.edu/smithlab}{http://www.university.edu/smithlab}
+% \item Email: \href{mailto:john@smith.com}{john@smith.com}
+% \item Phone: +1 (000) 111 1111
+% \end{itemize}
+%
+% \end{alertblock}
+
+\vspace{-6ex}
+
+\begin{center}
+\begin{tabular}{ccc}
+% \includegraphics[width=0.4\linewidth]{logos/ICES-secondary-logo.png} & \hfill &
+\includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.9\linewidth]{logos/ICES-wordmark-teal.pdf}
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End of fourth column
+
+%----------------------------------------------------------------------------------------
+
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\end{columns} % End of all the columns in the poster
+
+\end{frame} % End of the enclosing frame
+
+\end{document}
