@@ -1,0 +1,979 @@
+\documentclass[18pt,xcolor=table]{beamer}
+\usepackage{etex}
+\reserveinserts{28}
+\input{../preamble.tex}
+\graphicspath{{../SandiaTalk/figs/}{../Figures/}}
+
+\usepackage{bbm}
+\usepackage{textpos}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\usepackage[space]{grffile}
+\usepackage{graphicx}
+\usepackage{forloop}
+% \usepackage[aps,prb,citeautoscript]{revtex4-1}
+% \usepackage[super]{natbib}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\usepackage{animate}
+\usepackage{listings}
+\usepackage{bbding}
+\usepackage{comment}
+\bibliography{../Papers}
+
+\newcounter{nn}
+
+% \AtBeginSection[]
+% {
+%   \begin{frame}
+%     \frametitle{Table of Contents}
+%     \framesubtitle{\hspace{1ex}}
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+% }
+% \AtBeginSubsection[] {
+%   \begin{frame}
+%     \frametitle{Table of Contents}
+%     \framesubtitle{\hspace{1ex}}
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+% }
+
+\definecolor{utorange}{RGB}{203,96,21}
+\definecolor{utblack}{RGB}{99,102,106}
+\definecolor{utbrown}{RGB}{110,98,89}
+\definecolor{utsecbrown}{RGB}{217,200,158}
+\definecolor{utsecgreen}{RGB}{208,222,187}
+\definecolor{utsecblue}{RGB}{127,169,174}
+
+\mode<presentation>
+{
+  % \usetheme{Pittsburgh}
+  \usetheme{Boadilla}
+  \usefonttheme[onlymath]{serif}
+
+  \setbeamercovered{invisible}
+  \setbeamertemplate{navigation symbols}{}
+
+  % Color Theme
+    \setbeamercolor{normal text}{bg=white,fg=utblack}
+  \setbeamercolor{structure}{fg=utorange}
+
+  \setbeamercolor{alerted text}{fg=red!85!black}
+
+  \setbeamercolor{item projected}{use=item,fg=black,bg=item.fg!35}
+
+  \setbeamercolor*{palette primary}{use=structure,fg=white, bg=utorange}
+  \setbeamercolor*{palette secondary}{use=structure,bg=utsecbrown}
+  \setbeamercolor*{palette tertiary}{use=structure,bg=utsecgreen}
+  \setbeamercolor*{palette quaternary}{use=structure,fg=structure.fg,bg=utsecblue}
+
+  % \setbeamercolor*{frametitle}{use=structure,fg=utorange, bg=utsecbrown}
+  \setbeamercolor*{framesubtitle}{fg=utbrown}
+
+  \setbeamercolor*{block title}{parent=structure,fg=black,bg=utsecgreen}
+  \setbeamercolor*{block body}{fg=black,bg=utblack!10}
+  \setbeamercolor*{block title alerted}{parent=alerted text,bg=black!15}
+  \setbeamercolor*{block title example}{parent=example text,bg=black!15}
+
+  \setbeamerfont{framesubtitle}{size=\small}
+}
+
+% \usepackage[orientation=landscape,size=custom,width=16,height=9.75,scale=0.5,debug]{beamerposter}
+% \usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.5,debug]{beamerposter}
+
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+    \hbox{%
+      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+        \usebeamerfont{author in head/foot}\insertshortauthor%~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+      \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \usebeamerfont{title in head/foot}\insertshorttitle
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+        \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+        \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+      \end{beamercolorbox}}%
+        \vskip0pt%
+}
+\makeatother
+
+\usepackage{kerkis}
+\usepackage[T1]{fontenc}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{amsmath}
+
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
+
+
+\pgfdeclareimage[height=1.2cm]{utbig}{logos/UTWordmark}
+\pgfdeclareimage[height=0.6cm]{ut}{logos/UTWordmark}
+% \pgfdeclareimage[height=10.0cm]{utbig}{logos/ICES-wordmark-teal.pdf}
+% \pgfdeclareimage[height=0.6cm]{ut}{logos/ICES-wordmark-teal.pdf}
+% \pgfdeclareimage[height=1.5cm]{iceslogo}{logos/ICES-wordmark-teal.png}
+% \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
+
+% \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
+\title[Space-Time DPG for Fluid Problems]{Space-Time Discontinuous Petrov-Galerkin\\ Finite Elements for Fluid Problems}
+% \subtitle{If you have one}
+\author[Truman E. Ellis]{ \underline{Truman~Ellis} \\
+{\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser, \\Collaborators: Nate Roberts (Argonne), Jesse Chan (Rice)}
+}
+
+\begin{comment}
+The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
+The DPG framework can be used to derive stable discretizations of any well-posed variational formulation 
+and has been successfully applied to problems such as heat conduction, time-harmonic Helmholtz, 
+Maxwell's equations, linear elasticity and plate problems, Stokes flow, and both incompressible and compressible Navier-Stokes.
+In contrast to many other numerical methods, DPG does not suffer from a pre-asymptotic regime (unstable behavior on coarse meshes).
+This means that a simulation can be initiated at the coarsest scale possible while automatic adaptivity resolves solution features 
+based on a robust, built-in measure of residual error.
+DPG is intensely locally compute intensive with significant embarrassingly parallel computations done both pre- and post-global solve.
+We present preliminary work on a space-time DPG formulation that enables automatic local time stepping and a kind of parallel-in-time integration.
+We also present the Camellia library, which is built on top of Trilinos and 
+supports rapid specification of DPG problems while maintaining computational efficiency and scalability.
+\end{comment}
+
+% \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
+\institute{
+\large{13th US National Congress on Computational Mechanics}
+\vspace{4ex}
+
+\pgfuseimage{utbig}
+\\ \vspace{2ex}
+\includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
+}
+\date[USNCCM 2015]%{\pgfuseimage{iceslogo} }
+
+\begin{document}
+\def\thefootnote{\arabic{footnote}}
+
+\tikzstyle{block} = [rectangle, draw, rounded corners, shade, top color=white, text width=5em,
+  bottom color=blue!50!black!20, draw=blue!40!black!60, very thick, text centered, minimum height=4em]
+  \tikzstyle{line} = [draw, -latex']
+  \tikzstyle{cloud} = [draw, ellipse,top color=white, bottom color=red!20, node distance=2cm, minimum height=2em]
+
+
+  \beamertemplateballitem
+  %\beamertemplatetransparentcoveredhigh
+
+  \frame{\titlepage}
+
+  \addtobeamertemplate{frametitle}{}{%
+      \begin{textblock*}{100mm}(0.87\textwidth,-0.75cm)
+    \pgfuseimage{ut}
+    \end{textblock*}
+  }
+
+
+%   /$$$$$$$  /$$$$$$$   /$$$$$$         /$$$$$$                                            /$$                        
+%  | $$__  $$| $$__  $$ /$$__  $$       /$$__  $$                                          |__/                        
+%  | $$  \ $$| $$  \ $$| $$  \__/      | $$  \ $$ /$$    /$$  /$$$$$$   /$$$$$$  /$$    /$$ /$$  /$$$$$$  /$$  /$$  /$$
+%  | $$  | $$| $$$$$$$/| $$ /$$$$      | $$  | $$|  $$  /$$/ /$$__  $$ /$$__  $$|  $$  /$$/| $$ /$$__  $$| $$ | $$ | $$
+%  | $$  | $$| $$____/ | $$|_  $$      | $$  | $$ \  $$/$$/ | $$$$$$$$| $$  \__/ \  $$/$$/ | $$| $$$$$$$$| $$ | $$ | $$
+%  | $$  | $$| $$      | $$  \ $$      | $$  | $$  \  $$$/  | $$_____/| $$        \  $$$/  | $$| $$_____/| $$ | $$ | $$
+%  | $$$$$$$/| $$      |  $$$$$$/      |  $$$$$$/   \  $/   |  $$$$$$$| $$         \  $/   | $$|  $$$$$$$|  $$$$$/$$$$/
+%  |_______/ |__/       \______/        \______/     \_/     \_______/|__/          \_/    |__/ \_______/ \_____/\___/ 
+%                                                                                                                      
+%                                                                                                                      
+% 
+\section{DPG: A Framework for Computational Mechanics}
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{A Framework for Automated Scientific Computing}
+% Overview of Features
+% \begin{itemize}
+% \item Provides a framework for developing stable finite element methods
+% \item Robust for singularly perturbed problem
+% \item Stable in the pre-asymptotic regime
+% \item Residual measure drives adaptivity
+% \item Hermitian positive-definite stiffness matrix
+% \end{itemize}
+% \end{frame}
+
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+\framesubtitle{A Framework for Computational Mechanics}
+Find $u\in U$ such that
+\[
+b(u,v)=l(v)\quad\forall v\in V
+\]
+with operator $B:U\rightarrow V'$ defined by $b(u,v)=\LRa{Bu,v}_{V'\times V}$.
+
+This gives the operator equation 
+\[
+Bu=l\quad\in V'\,.
+\]
+We wish to minimize the residual $Bu-l\in V'$:
+\[
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bw_h-l}^2_{V'}\,.
+\]
+Dual norms are not computationally tractable. 
+Inverse Riesz map moves the residual to a more accessible space:
+\[
+u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bw_h-l)}^2_{V}\,.
+\]
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+\framesubtitle{Petrov-Galerkin with Optimal Test Functions}
+% \framesubtitle{Optimal Petrov-Galerkin Methods}
+Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
+U_h$ gives,
+\[
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U,
+\]
+which by definition of the Riesz map is equivalent to 
+\begin{equation*}
+\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,,
+\end{equation*}
+with optimal test functions $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ for each trial function $\delta u_h$.
+\begin{block}{Resulting Petrov-Galerkin System}
+This gives a simple bilinear form
+\begin{equation*}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
+\end{equation*}
+with $v_{\delta u_h}\in V$ that solves the auxiliary problem
+\begin{equation*}
+\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+\end{equation*}
+\end{block}
+\end{frame}
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{Mixed Formulation}
+% Identifying the error representation function:
+% \[
+% \psi:=R_V^{-1}(Bu_h-l)
+% \] 
+% allows us to develop an alternative interpretation of DPG.
+% \begin{block}{DPG as a Mixed Problem}
+% Find $\psi\in V$, $u_h\in U_h$ such that
+% \begin{equation*}
+% \begin{aligned}
+% \LRp{\psi,\delta v}_V-b(u_h,\delta v)&=-l(\delta v) \quad&\forall&\delta v&\in V\\
+% b(\delta u_h,\psi)&=0 \quad&\forall&\delta u_h&\in U_h
+% \end{aligned}
+% \end{equation*}
+% \end{block}
+% In this unconventional saddle-saint problem, the approximate solution $u_h$ comes from a finite-dimensional
+% trial space and plays the role of the Lagrange multiplier for the error representation function
+% \end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{DPG is the Most Stable Petrov-Galerkin Method}
+% Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
+% If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
+% with constant $\gamma_h$,
+% \[
+% \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
+% \]
+% then the Galerkin error satisfies the bound
+% \[
+% \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
+% \]
+% Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
+% \begin{block}{Energy Norm}
+% If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
+% Babu\v{s}ka's theorem
+% implies that the minimum residual method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
+% \end{block}
+% \end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Overview of DPG}
+% \footfullcite{DPGOverview}}
+\framesubtitle{Other Features}
+\begin{block}{Discontinuous Petrov-Galerkin}
+\begin{itemize}
+  \item Continuous test space produces global solve for optimal test functions
+  \item Discontinuous test space results in an embarrassingly parallel solve
+\end{itemize}
+\end{block}
+\begin{block}{Hermitian Positive Definite Stiffness Matrix}
+Property of all minimum residual methods
+\[
+b(u_h,v_{\delta u_h})=\LRp{v_{u_h},v_{\delta u_h}}_V=\overline{\LRp{v_{\delta u_h},v_{u_h}}_V}=\overline{b(\delta u_h,v_{u_h})}
+\]
+\end{block}
+\begin{block}{Error Representation Function}
+Energy norm of Galerkin error (residual) can be computed without exact solution
+\[
+\norm{u_h-u}_E=\norm{B(u_h-u)}_{V'}=\norm{Bu_h-l}_{V'}=\norm{R_V^{-1}(Bu_h-l)}_V
+\]
+\end{block}
+\end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{High Performance Computing}
+% \begin{columns}[c]
+% \begin{column}{.5\textwidth}
+% Eliminates human intervention
+% \medskip
+
+% \begin{itemize}
+%   \item Stability
+%   \item Robustness
+%   \item Adaptivity
+%   \item Automaticity
+%   \item Compute intensive
+%   \item Embarrassingly parallel local solves
+%   \item Factorization recyclable
+%   \item Low communication
+%   \item SPD stiffness matrix
+%   \item Multiphysics
+% \end{itemize}
+
+% % Issues to be solved
+% % \begin{itemize}
+% %   \item Iterative solvers
+% % \end{itemize}
+% \end{column}
+% \begin{column}{.5\textwidth}
+% \vspace{-3ex}
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.9\textwidth]{Motivation/Stampede.png}
+% \\\small{Stampede Supercomputer at TACC}\\
+% \includegraphics[width=0.9\textwidth]{Motivation/Mira.png}
+% \\\small{Mira Supercomputer at Argonne}\\
+% \end{figure}
+% \end{column}
+% \end{columns}
+
+% \end{frame}
+
+
+
+%    /$$$$$$                                                  /$$$$$$$$ /$$                        
+%   /$$__  $$                                                |__  $$__/|__/                        
+%  | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$            | $$    /$$ /$$$$$$/$$$$   /$$$$$$ 
+%  |  $$$$$$  /$$__  $$ |____  $$ /$$_____/ /$$__  $$ /$$$$$$   | $$   | $$| $$_  $$_  $$ /$$__  $$
+%   \____  $$| $$  \ $$  /$$$$$$$| $$      | $$$$$$$$|______/   | $$   | $$| $$ \ $$ \ $$| $$$$$$$$
+%   /$$  \ $$| $$  | $$ /$$__  $$| $$      | $$_____/           | $$   | $$| $$ | $$ | $$| $$_____/
+%  |  $$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$           | $$   | $$| $$ | $$ | $$|  $$$$$$$
+%   \______/ | $$____/  \_______/ \_______/ \_______/           |__/   |__/|__/ |__/ |__/ \_______/
+%            | $$                                                                                  
+%            | $$                                                                                  
+%            |__/  
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG}
+\framesubtitle{Extending DPG to Transient Problems}
+\begin{itemize}
+  \item Time stepping techniques are not ideally suited to highly adaptive grids
+  \item Space-time FEM proposed as a solution
+  \begin{itemize}
+    \item[\textcolor{green}{\Checkmark}] Unified treatment of space and time
+    \item[\textcolor{green}{\Checkmark}] Local space-time adaptivity (local time stepping)
+    \item[\textcolor{green}{\Checkmark}] Parallel-in-time integration (space-time multigrid)
+    \item[\XSolidBrush] Spatially stable FEM methods may not be stable in space-time
+    \item[\XSolidBrush] Need to support higher dimensional problems
+  \end{itemize}
+  \item DPG provides necessary stability and adaptivity
+\end{itemize}
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.8\textwidth]{Schematics/SpaceTimeSchematic}
+\end{figure}
+\end{frame}
+
+
+\section{Space-Time Model Problem}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG for Convection-Diffusion}
+\framesubtitle{Space-Time Divergence Form}
+Equation is parabolic in space-time.
+\[
+\pd{u}{t}+\bfbeta\cdot\Grad u-\epsilon\Delta u=f
+\]
+This is just a composition of a constitutive law and conservation of mass.
+\begin{align*}
+\bfsigma-\epsilon\Grad u&=0\\
+\pd{u}{t}+\Div\LRp{\bfbeta u-\bfsigma}&=f
+\end{align*}
+
+We can rewrite this in terms of a space-time divergence.
+\begin{align*}
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\Gradxt\cdot\vecttwo{\bfbeta u-\bfsigma}{u}&=f
+\end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time DPG for Convection-Diffusion}
+\framesubtitle{Ultra-Weak Formulation with Discontinuous Test Functions}  %% needed for proper positioning of the logo ...
+% \vspace{-2ex}
+Multiply by test function and integrate by parts over space-time element K.
+\begin{equation*}
+\begin{aligned}
+\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}_K+\LRp{u,\Div\bftau}_K-\LRa{\hat u,\bftau\cdot\bfn_x}_{\partial K}&=0\\
+-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}_K+\LRa{\hat t,v}_{\partial K}&=f
+\end{aligned}
+\end{equation*}
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+\vspace{-3ex}
+where
+\vspace{-1ex}
+\begin{align*}
+\hat u&:=\trace(u)\\
+\hat t&:=\trace(\bfbeta u-\bfsigma)\cdot\bfn_x\\
+&+\trace(u)\cdot n_t
+\end{align*}
+\vspace{-4ex}
+\begin{itemize}
+  \item Trace $\hat u$ defined on spatial boundaries
+  \item Flux $\hat t$ defined on all boundaries
+\end{itemize}
+\end{column}
+\begin{column}[T]{0.6\textwidth} % alternative top-align that's better for graphics
+\vspace{-2ex}
+\begin{block}{Support of Trace Variables}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=2.0cm,y=2.0cm, scale=0.6, every node/.style={scale=0.6}]
+\clip(-0.7,-0.6) rectangle (5.27,2.09);
+\draw (0,2)-- (0,0);
+\draw (0,0)-- (1,0);
+\draw (1,0)-- (4,0);
+\draw (4,0)-- (5,0);
+\draw (5,0)-- (5,2);
+\draw (5,2)-- (3,2);
+\draw (3,2)-- (2,2);
+\draw (2,2)-- (0,2);
+\draw (1,0)-- (1.5,1);
+\draw (1.5,1)-- (2,2);
+\draw (1.5,1)-- (3.5,1);
+\draw (3,2)-- (3.5,1);
+\draw (3.5,1)-- (4,0);
+\draw (-0.21,0.9) node[anchor=south west] {$\hat u$};
+\draw (4.82,0.9) node[anchor=south west] {$\hat u$};
+\draw (3.5,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.0,0.45) node[anchor=south west] {$\hat u$};
+\draw (1.5,1.4) node[anchor=south west] {$\hat u$};
+\draw (3.0,1.4) node[anchor=south west] {$\hat u$};
+\draw (0.05,0.9) node[anchor=south west] {$\hat t$};
+\draw (1.40,0.45) node[anchor=south west] {$\hat t$};
+\draw (3.79,0.45) node[anchor=south west] {$\hat t$};
+\draw (2.47,1.0) node[anchor=south west] {$\hat t$};
+\draw (3.33,1.4) node[anchor=south west] {$\hat t$};
+\draw (1.89,1.4) node[anchor=south west] {$\hat t$};
+\draw (5.07,0.9) node[anchor=south west] {$\hat t$};
+\draw (4.44,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.46,0.0) node[anchor=south west] {$\hat t$};
+\draw (0.45,0.0) node[anchor=south west] {$\hat t$};
+\draw (2.44,1.7) node[anchor=south west] {$\hat t$};
+\draw (0.76,1.7) node[anchor=south west] {$\hat t$};
+\draw (4.21,1.7) node[anchor=south west] {$\hat t$};
+\draw [->] (-0.5,-0.5) -- (-0.5,0);
+\draw [->] (-0.5,-0.5) -- (0,-0.5);
+\draw (-0.54,0.29) node[anchor=north west] {$t$};
+\draw (0.07,-0.35) node[anchor=north west] {$x$};
+\end{tikzpicture}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Robust Norms}
+% \vspace{-5ex}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\vspace{-3ex}
+
+Bilinear form with group variables:
+\[
+b\LRp{\LRp{u,\hat u},v} = \LRp{u,A^*_h v}_{\LOmega} + \LRa{\uh, \jump{v}}_{\Gh}
+\]
+For conforming $v^*$ satisfying $A^* v^* = u$
+\begin{align*}
+&\norm{u}_{\LOmega}^2= b(u,v^*)
+=\frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V\\
+&\quad\leq\sup_{v^*\neq0}\frac{|b(u,v^*)|}{\norm{v^*}}\norm{v^*}
+=\norm{u}_E \norm{v^*}_V
+\end{align*}
+% If our test norm is bounded by $\norm{u}_{\LOmega}$,
+% we can quarantee that 
+% If $\norm{v^*}_V\lesssim\norm{u}_{L^2(\Omega_h)}$
+% then $\Rightarrow\norm{u}_{L^2(\Omega_h)}\lesssim\norm{u}_E$.
+Necessary robustness condition:
+\begin{align*}
+&\norm{v^*}_V\lesssim\norm{u}_{L^2(\Omega_h)}\\
+&\quad\Rightarrow\norm{u}_{L^2(\Omega_h)}\lesssim\norm{u}_E
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\vspace{-3ex}
+\centering
+
+Analytical Solution
+\begin{align*}
+u&=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\\
+\lambda_{1,2}&=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+\end{align*}
+where $l=3, \quad\epsilon = 10^{-2}$
+\vspace{-3ex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeAnalyticalExact}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Robust Norms}
+A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not produce boundary layers in the optimal test function.
+\vspace{-5ex}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm0}
+\end{figure}
+\vspace{-5ex}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+&+\norm{\frac{1}{\epsilon}\bftau+\Grad v}^2
++\norm{v}^2
++\norm{\bftau}^2
+\end{align*}
+}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm4}
+\end{figure}
+\vspace{-5ex}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+&+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+&+\epsilon\norm{\Grad v}^2
++\norm{\bfbeta\cdot\Grad v}^2
++\norm{v}^2
+\end{align*}
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Ideal Optimal Shape Functions}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Graph Norm
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Graph_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Graph_tau}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Robust Norm
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Robust_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/Robust_tau}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Approximated ($p=3$) Optimal Shape Functions}
+\vspace{-3ex}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Graph Norm
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/GraphApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/GraphApprox3_tau}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[t]
+\centering
+Robust Norm
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/RobustApprox3_v}\\
+\includegraphics[width=0.8\textwidth]{OptimalTestFunctions/RobustApprox3_tau}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Convection-Diffusion}
+\framesubtitle{Robust Norms for 2D Space-Time}
+\vspace{-6.5ex}
+\begin{columns}[t]
+\begin{column}{0.4\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{Confusion/SpaceTimeRobustness/coupledrobust_convergence2D.pdf}
+\end{figure}
+\vspace{-5ex}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+&+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+&+\epsilon\norm{\Grad v}^2
++\norm{\bfbeta\cdot\Grad v}^2
++\norm{v}^2
+\end{align*}
+}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{Confusion/SpaceTimeRobustness/nsdecoupledh1_convergence2D.pdf}
+\end{figure}
+\vspace{-5ex}
+\small{
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\tilde\bfbeta\cdot\Gradxt v}^2
++\norm{\Div\bftau}^2\\
+&+\frac{1}{h^2}\norm{\bftau}^2
++\norm{\Grad v}^2
++\norm{v}^2
+\end{align*}
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Incompressible Navier-Stokes}
+\framesubtitle{Space-Time Divergence Form}
+First order space-time divergence form:
+\begin{align*}
+  \frac{1}{\nu}\bfsigma_1-\Grad u_1&=0\\
+  \frac{1}{\nu}\bfsigma_2-\Grad u_2&=0\\
+  \Divxt\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}}&=\bff\\
+  \Div\bfu&=0\\
+  \int_\Omega p&=0
+\end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t,shrink=10]
+\frametitle{Space-Time Incompressible Navier-Stokes}
+\framesubtitle{Ultra-Weak Formulation with Discontinuous Test Functions}
+Multiplying by $\bftau_1$, $\bftau_2$, $\bfu$, and $q$, and integrating by
+parts
+\begin{align*}
+  \LRp{\frac{1}{\nu}\bfsigma_1,\bftau_1}
+  +\LRp{u_1,\Div\bftau_1}
+  -\LRa{\hat u_1,\tau_{1n}}&=0\\
+  \LRp{\frac{1}{\nu}\bfsigma_2,\bftau_2}
+  +\LRp{u_2,\Div\bftau_2}
+  -\LRa{\hat u_2,\tau_{2n}}&=0\\
+  -\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu},\Gradxt\bfv}
+  +\LRa{\hat\bft,\bfv}
+  &=\LRp{\bff,\bfv}\\
+  -\LRp{\bfu,\Grad q}
+  +\LRa{\widehat{\bfu\cdot\bfn},q}&=0\\
+  \int_\Omega p&=0
+\end{align*}
+where
+\[
+\hat\bft=\trace\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}\cdot\bfn_{xt}}
+\]
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Incompressible Navier-Stokes}
+\framesubtitle{Taylor-Green Vortex Problem}
+\vspace{-2ex}
+\small{
+\begin{align*}
+\bfu=\vecttwo{e^{-2\nu t}\sin x\cos y}{-e^{-2\nu t}\cos x\sin y}
+\end{align*}
+}
+\vspace{-7ex}
+\begin{columns}[t]
+\begin{column}{0.45\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{Incompressible/TaylorGreen/coupledrobust_convergence.pdf}
+\end{figure}
+% \vspace{-5ex}
+% \small{
+% \begin{align*}
+% \norm{(v,\bftau)}^2&=
+% \norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+% &+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+% &+\epsilon\norm{\Grad v}^2
+% +\norm{\bfbeta\cdot\Grad v}^2
+% +\norm{v}^2
+% \end{align*}
+% }
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{Incompressible/TaylorGreen/nsdecoupledh1_convergence.pdf}
+\end{figure}
+% \vspace{-5ex}
+% \small{
+% \begin{align*}
+% \norm{(v,\bftau)}^2&=
+% \norm{\tilde\bfbeta\cdot\Gradxt v}^2
+% +\norm{\Div\bftau}^2\\
+% &+\frac{1}{h^2}\norm{\bftau}^2
+% +\norm{\Grad v}^2
+% +\norm{v}^2
+% \end{align*}
+% }
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Space-Time Convection-Diffusion}
+% \framesubtitle{Robust Convergence to Analytical Solution}
+% \vspace{-4ex}
+% \small{
+% \begin{align*}
+% u=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\,,\quad
+% \lambda_{1,2}=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+% \end{align*}
+% }
+% % where $l=3, \quad\epsilon = 10^{-2}$
+% Test Norm:
+% \small{
+% \begin{align*}
+% \norm{(v,\bftau)}^2&=
+% \norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2
+% +\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+% &+\epsilon\norm{\Grad v}^2
+% +\norm{\bfbeta\cdot\Grad v}^2
+% +\norm{v}^2
+% \end{align*}
+% }
+% \vspace{-4ex}
+% \begin{columns}[t]
+% \begin{column}{0.5\textwidth}
+% \vspace{-4ex}
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\textwidth]{SpaceTimeAnalyticalExact}
+% \end{figure}
+% \end{column}
+% \begin{column}{0.5\textwidth}
+% \vspace{-4ex}
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm4}
+% \end{figure}
+% \end{column}
+% \end{columns}
+% \end{frame}
+
+
+
+\section{Space-Time Compressible Navier-Stokes}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{First Order System with Primitive Variables}
+Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
+\begin{align*}
+  \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
+  \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
+  \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+  \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+  \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+\end{align*}
+\end{frame}
+
+
+%    /$$$$$$                  /$$
+%   /$$__  $$                | $$
+%  | $$  \__/  /$$$$$$   /$$$$$$$
+%  |  $$$$$$  /$$__  $$ /$$__  $$
+%   \____  $$| $$  \ $$| $$  | $$
+%   /$$  \ $$| $$  | $$| $$  | $$
+%  |  $$$$$$/|  $$$$$$/|  $$$$$$$
+%   \______/  \______/  \_______/
+%                                
+%                                
+%        
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
+
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/pres\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{Sod/MinNSDecoupled1e-5/mesh\n.png}
+\end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
+
+
+
+%   /$$   /$$           /$$      
+%  | $$$ | $$          | $$      
+%  | $$$$| $$  /$$$$$$ | $$$$$$$ 
+%  | $$ $$ $$ /$$__  $$| $$__  $$
+%  | $$  $$$$| $$  \ $$| $$  \ $$
+%  | $$\  $$$| $$  | $$| $$  | $$
+%  | $$ \  $$|  $$$$$$/| $$  | $$
+%  |__/  \__/ \______/ |__/  |__/
+%                                
+%                                
+% 
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+Infinitely strong shock propagation.
+% \foreach \n in {9,...,9}
+% {
+% \only<\n>
+% {
+\vspace{4ex}
+% \begin{figure}[ht]
+% \centering
+
+\begin{columns}[t] % contents are top vertically aligned
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=1.0\textwidth]{Noh/MinNSDecoupled/den9.pdf}
+\end{column}
+% \end{subfigure}
+\hspace{8ex}
+\begin{column}[T]{0.55\textwidth} % each column can also be its own environment
+% \begin{subfigure}[c]{0.4\textwidth}
+\centering
+\vspace{2ex}
+\includegraphics[width=0.9\textwidth]{Noh/MinNSDecoupled/mesh9.png}\\
+\centering
+Sequence of 4 time slabs
+\end{column}
+\end{columns}
+% \end{subfigure}
+% \end{figure}
+% }
+% }
+
+\end{frame}
+
+
+
+\section{Related DPG Research}
+\begin{frame}[t]
+\frametitle{Related Research}
+\framesubtitle{Past and Present Topics in DPG Research}  %% needed for proper positioning of the logo ...
+\begin{itemize}
+\item Multiphysics
+\begin{itemize}
+  \item Heat conduction (Poisson and Heat equation)
+  \item Wave problems (Helmholtz and Maxwell)
+  \item Linear elasticity and plate problems
+  \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
+\end{itemize}
+\item Natively nonlinear DPG
+\item DPG for non-Hilbert $L^p$ spaces
+\item Local conservation
+\item Iterative solvers
+\item Entropy scaling for physically meaningful test norms
+\item General polyhedral elements
+\end{itemize}
+% \nocite{DPGOverview,EllisLC,CamelliaDPG}
+\end{frame}
+
+\begin{frame}[noframenumbering,shrink=10]
+\frametitle{Thank You!}
+\framesubtitle{Recommended References}
+    \nocite{DPGOverview}
+    \nocite{EllisLC}
+    \nocite{CamelliaDPG}
+    \nocite{DemkowiczHeuer}
+    \nocite{ChanHeuerThanhDemkowicz2012}
+    \nocite{DPGStokes}
+    \renewcommand*{\bibfont}{\small}
+    \setbeamertemplate{bibliography item}[triangle]
+    \printbibliography[keyword=main]
+    % \bigskip
+    \printbibliography[notkeyword=main]
+\end{frame}
+
+\end{document}

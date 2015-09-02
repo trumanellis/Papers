@@ -1,0 +1,34 @@
+\documentclass{article}
+\input{../../preamble.tex}
+
+\title{Inviscid Burgers Equation Notes}
+% \author{Truman E. Ellis}
+\date{}
+
+\begin{document}
+\maketitle
+Strong form:
+\[
+\pd{u}{t}+\frac{1}{2}\pd{u^2}{x}=0
+\]
+Space-time divergence form:
+\[
+\Divxt{\vecttwo{\frac{1}{2}u^2}{u}}=0
+\]
+Ultra-weak form:
+\[
+-\LRp{\vecttwo{\frac{1}{2}u^2}{u},\Gradxt v}+\LRa{\hat t,v}=0
+\]
+where $\hat t=\vecttwo{\frac{1}{2}u^2}{u}\cdot\bfn_{xt}$.
+
+Linearized form:
+\[
+-\LRp{\vecttwo{\tilde u\Delta u}{\Delta u},\Gradxt v}+\LRa{\hat t,v}=\LRp{\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u},\Gradxt v}
+\]
+
+I don't see a way of relating the definition of $\hat t$ as a linear term of $\Delta u$. 
+As the background flow, $\tilde u$ converges to the exact solution, $\Delta u$ converges to zero. 
+Ideally, for a converged solution, $\hat t=\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u}\cdot\bfn_{xt}$,
+but the current LinearTerm code does not allow this possibility.
+
+\end{document}

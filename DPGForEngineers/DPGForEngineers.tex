@@ -3,13 +3,14 @@
 \usepackage[margin=1.25in]{geometry}
 
 \title{DPG for Engineers}
-\author{Truman E. Ellis, Jesse L. Chan, Leszek F. Demkowicz, Jay Gopalakrishnan}
+\author{Truman Ellis, Jesse Chan, Leszek Demkowicz, Jay Gopalakrishnan}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
 We discuss and explain the discontinuous Petrov-Galerkin finite element method with an engineering audience in mind.
+As such, we try not to delve into too much mathematics.
 \end{abstract}
 
 \section{Motivation and Introductory Concepts}
@@ -60,17 +61,52 @@ and map it back to $V$ via the inverse Riesz map:
 R_V^{-1}(Bu-l)=0\quad\in V.
 \]
 
-% \subsubsection{Broken Sobolev Spaces}
-% Quick definition of Sobolev spaces
-
 \subsection{Ritz Methods and Least Squares}
+% Talk about why Bubnov-Galerkin is so good at Poisson and Elasticity and why it fails at other classes of problems.
+% Explain how Least Squares FEM attempts to rectify this
 
 \subsection{SUPG -- Or Stability Through the Appropriate Test Space}
+The finite element method provides an attractive mathematically sound framework for computational mechanics,
+yet for many years it was thought to be inadequate for solution of anything but symmetric problems such Poisson and elasticity.
+A breakthrough came through with the 1990 invention of the streamline-upwind/Petrov-Galerkin (SUPG) method by Tom Hughes \cite{SUPG} and his collaborators.
+Effectively, SUPG adds an upwind bias to test functions to imitate upwinded finite difference techniques 
+and was really the first finite element method to successfully solve fluid flow problems.
+One of the key insights was that by choosing the correct test space, you could improve the stability of the finite element method.
+This is an important concept in the development of the DPG framework.
 
-\section{Development of a DPG Method for the Poisson Equation}
+\section{Derivation of the DPG Framework}
+% \section{Development of a DPG Method for the Poisson Equation}
 % Start with a specific example then generalize
 % Alternatively do convection-diffusion or reaction-diffusion
+We present two concrete examples, Poisson and convection-diffusion, before generalizing in the next section.
+\subsection{DPG for Poisson}
+Consider the Poisson problem with a mix of Dirichlet and Neumann boundary conditions: find $u\in U$ such that
+\begin{align*}
+-\Delta u&=f\quad\text{ on }\Omega\\
+u&=g\quad\text{ on }\Gamma_g\\
+\Grad u\cdot\bfn&=h\quad\text{ on }\Gamma_h\,.\\
+\end{align*}
+We begin by selecting a solution trial space.
+For comparison purposes to other finite element methods, we choose $U=H^1(\Omega)$.
+From our functional analysis discussion, we know that we can write our residual
+\[
+-\Delta u-f\quad\in V'\,.
+\]
+Since $V'$ is a Hilbert space, we have some norm that we can measure the residual in. 
+% Consider whether to start with variational form or strong form
 
 \section{DPG for Well Posed PDEs}
+
+\section{Lessons from Several Application Domains}
+
+\subsection{Helmholtz}
+
+\subsection{Convection-Diffusion}
+% Robust norms
+
+\subsection{Space-Time}
+
+\bibliographystyle{elsarticle-num} 
+\bibliography{../Papers}
 
 \end{document}

@@ -1,0 +1,208 @@
+\documentclass{article}
+\usepackage[top=1.5in, bottom=1.0in, left=1in, right=1in]{geometry}
+\input{../../preamble.tex}
+\graphicspath{{../../Figures/}}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=Python,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+\title{Ideal Optimal Test Functions for Simple Problems}
+\author{Truman E. Ellis}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+DPG minimizes the residual in a dual norm through the use of optimal test functions. 
+We consider a couple special cases for simple problems.
+\end{abstract}
+
+\section*{Abstract Derivation of a Generalized Minimum Residual Method}
+Let $U$ and $V$ be trial and test Hilbert spaces for a well-posed variational
+problem $b(u,v)=l(v)$. In operator form this is $Bu=l$, where $B:U\rightarrow
+V'$. We seek to minimize the residual for the discrete space $U_h\subset U$:
+\[
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
+\]
+Use the Riesz inverse to minimize in the $V$-norm rather than its dual:
+\begin{align*}
+\frac{1}{2}&\norm{Bu_h-l}^2_{V'}=\frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}^2_V\\
+&=\frac{1}{2}\LRp{R_V^{-1}(Bu_h-l),R_V^{-1}(Bu_h-l)}_V\,.
+\end{align*}
+First order optimality requires
+the G\^ateaux derivative to be zero in all directions $\delta u \in
+U_h$, i.e.,
+\[
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U_h.
+\]
+By definition of the Riesz operator, this is equivalent to
+\begin{equation*}
+\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
+\end{equation*}
+Identify $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ as the
+optimal test function for trial function $\delta u_h$. This gives us
+\begin{equation*}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}).
+\end{equation*}
+This gives a simple bilinear form
+\begin{equation*}
+b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
+\end{equation*}
+with $v_{\delta u_h}\in V$ that solves the auxiliary problem
+\begin{equation*}
+\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+\end{equation*}
+
+\section*{Convergence in Different Norms}
+Because DPG guarantees stability for any well-posed variational formulation, we are free to experiment with many different formulations of the same problem.
+In this research note, we will concern ourselves with Poisson, pure convection, and convection-diffusion.
+We illustrate the implied norms of convergence for several different formulations of these problems.
+
+\begin{table}
+\centering
+\begin{tabular}{ c c c }
+  1 & 2 & 3 \\
+  4 & 5 & 6 \\
+  7 & 8 & 9 \\
+\end{tabular}
+\end{table}
+
+\section*{Optimal Test Functions for Simple Problems}
+It can be educational to visualize these optimal test functions for simple cases.
+The precise shape depends very strongly on the chosen topology for $V$ (i.e. the choice of norm).
+In order to better draw analogy to classical finite element methods, we assume $C^0$ continuity of both the trial and test spaces.
+For simple problems such as Poisson and pure convection, we could probably derive the optimal test functions analytically, 
+but to facilitate simple comparisons, we assembled a simple FEniCS script to compute the global optimal test functions on an interval mesh $[-2,2]$ 
+for a hat function defined on $[-1,1]$. In order to accurately represent the infinitely dimensional \emph{ideal} optimal test function, 
+we solve with 10000 low order elements. The script we used is in the appendix.
+
+We plot the computed optimal test functions for four different test norm topologies (norms without subscripts are $L^2$):
+\begin{align*}
+\norm{v}^2_V&=\norm{v}^2+\norm{\Grad v}^2\\
+\norm{v}^2_V&=10^{-6}\norm{v}^2+\norm{\Grad v}^2\\
+\norm{v}^2_V&=\norm{\Grad v}^2\\
+\norm{v}^2_V&=\norm{v}^2
+\end{align*}
+Note that the third norm requires global boundary conditions in order to produce a unique optimal test function. 
+We use the results from norm 2 to infer the correct boundary conditions.
+
+\clearpage
+\subsection*{Poisson}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/PoissonH1NoBC.pdf}
+\caption{$\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Poisson1e-6NoBC.pdf}
+\caption{$10^{-6}\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/PoissonGradBC.pdf}
+\caption{$\norm{\Grad v}^2$ with $v(-2)=0$ and  $v(2)=0$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/PoissonL2NoBC.pdf}
+\caption{$\norm{v}^2$}
+\end{subfigure}
+\caption{Poisson ideal optimal test functions}
+\end{figure}
+
+\clearpage
+\subsection*{Convection}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/ConvectionH1NoBC.pdf}
+\caption{$\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Convection1e-6NoBC.pdf}
+\caption{$10^{-6}\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/ConvectionGradBC.pdf}
+\caption{$\norm{\Grad v}^2$ with $v(-2)=0.5$ and  $v(2)=-0.5$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/ConvectionL2NoBC.pdf}
+\caption{$\norm{v}^2$}
+\end{subfigure}
+\caption{Convection ideal optimal test functions}
+\end{figure}
+
+\clearpage
+\subsection*{Convection-Diffusion with $\epsilon=10^{-1}$}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Confusion1e-1_H1NoBC.pdf}
+\caption{$\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Confusion1e-1_1e-6NoBC.pdf}
+\caption{$10^{-6}\norm{v}^2+\norm{\Grad v}^2$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Confusion1e-1_GradBC.pdf}
+% \includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Confusion1e-1_GradBC.pdf}
+\caption{$\norm{\Grad v}^2$ with $v(-2)=0.5$ and  $v(2)=-0.5$}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{OptimalTestFunctions/SpecialCases/Confusion1e-1_L2NoBC.pdf}
+\caption{$\norm{v}^2$}
+\end{subfigure}
+\caption{Convection-diffusion ideal optimal test functions}
+\end{figure}
+
+\section*{Analysis}
+From the results, it seems that the $L^2$ topology produces delta optimal test functions 
+which may include delta functions at sharp kinks in the trial function.
+A more thorough mathematical analysis is warranted.
+
+\clearpage
+\lstinputlisting[language=Python,title={SpecialCaseOptimalTestFunctions.py}]{SpecialCaseOptimalTestFunctions.py}
+
+\end{document}

@@ -11,4 +11,6 @@
 *.ilg
 *.ind
 *.gz
+*.xml
 *.fdb_latexmk
+*.DS_Store
