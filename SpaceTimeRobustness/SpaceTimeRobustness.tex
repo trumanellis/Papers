@@ -134,12 +134,13 @@ $\epsilon$ is the  diffusion scale, and $f$ is the source term.
 Based on previous experience \cite{?}, we apply flux boundary conditions on the inflow 
 and trace boundary conditions on the outflow
 \begin{align*}
-\trace\LRp{\bfbeta\cdot u-\epsilon\Grad u}\cdot\bfn_x&=h_0\quad\text{on}\quad\Gamma_-\\
+\trace\LRp{\bfbeta\cdot u-\epsilon\Grad u}\cdot\bfn_x&=t_-\quad\text{on}\quad\Gamma_-\\
 \trace\LRp{u}&=u_+\quad\text{on}\quad\Gamma_+\\
 \trace\LRp{u}&=u_0\quad\text{on}\quad\Gamma_0\,.
 \end{align*}
 
 \subsubsection{Relevant Sobolev Spaces}
+Begin by defining operators $\Gradxt u:=\vecttwo{\Grad u}{\pd{u}{t}}$ and $\Divxt\bfu:=\Div\bfu_x+\pd{u_t}{t}$.
 We will need the following Sobolev spaces defined on our space-time domain.
 \begin{align*}
 \HOneQ&=\LRc{u\in\LQ\,:\,\Grad u\in\LVecQ}\\
@@ -191,7 +192,7 @@ Multiplying \eqref{eq:confusionFirstOrder} by test functions $\bftau\in\LVecQ$ a
 	\begin{aligned}
 		% u\in H^1_{xt}(Q)\,,\,\bfsigma\in\bfH(\text{div},Q)&\\
 		&u\in H^1_{xt}(Q) &u=u_+\quad &\text{on }\Gamma_+\\
-		&\bfsigma\in \bfH(\text{div},Q)&(\bfbeta u-\epsilon\Grad u)\cdot\bfn=h_0\quad &\text{on }\Gamma_-\\
+		&\bfsigma\in \bfH(\text{div},Q)&(\bfbeta u-\epsilon\Grad u)\cdot\bfn=t_-\quad &\text{on }\Gamma_-\\
 		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}-\LRp{\Grad u,\bftau}&=0\quad&\forall\bftau\in\LVecQ\\
 		&\LRp{\Divxt\vecttwo{\bfbeta u-\bfsigma}{u},v}&=f\quad&\forall v\in\LQ\,,
 	\end{aligned}
@@ -223,11 +224,11 @@ We can remove the conditions on the test functions by introducing trace unknowns
 \end{align*}
 Our new ultra-weak formulation with continuous test functions is
 \begin{equation}
-\label{eq:confusionUltraWeakBrokenBF}
+\label{eq:confusionUltraWeakContinuousBF}
 	\begin{aligned}
 		&u\in L^2(Q)\,,\,\bfsigma\in\LVecQ\\
 		&\hat u\in H^{1/2}(\partial Q)\,,\,&\hat u=u_+&\text{ on }\Gamma_+\\
-		&\hat t\in H^{-1/2}_{xt}(\partial Q)\,,\,&\hat t=h_0&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
+		&\hat t\in H^{-1/2}_{xt}(\partial Q)\,,\,&\hat t=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
 		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\quad&\forall\bftau\in\bfH(\text{div},Q)\\
 		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\quad&\forall v\in H^1_{xt}(Q)\,.
 	\end{aligned}
@@ -237,16 +238,16 @@ Our new ultra-weak formulation with continuous test functions is
 One of the key insights that led to the development of the DPG framework was the process of breaking test functions, 
 that is testing with functions from larger broken Sobolev spaces, replacing $H^1_{xt}(Q)$ with  $H^1_{xt}(Q_h)$ 
 and $\bfH(\text{div},Q)$ with $\bfH(\text{div},Q_h)$.
-Discretizing such spaces are much simpler than the standard spaces which require enforcement of global continuity conditions.
+Discretizing such spaces is much simpler than standard spaces which require enforcement of global continuity conditions.
 The cost of introducing broken spaces is that we have to extend our interface unknowns $\hat u$ and $\hat t$ 
-to live on the mesh skeleton.% $\Gamma_h=\bigcup_{K\in Q_h}\partial K$.
+to live on the mesh skeleton. % $\Gamma_h=\bigcup_{K\in Q_h}\partial K$.
 Our ultra-weak formulation with broken test functions looks like
 \begin{equation}
 \label{eq:confusionUltraWeakBrokenBF}
 	\begin{aligned}
 		&u\in L^2(Q)\,,\,\bfsigma\in\LVecQ\\
 		&\hat u\in H^{1/2}(Q_h)\,,\,&\hat u=u_+&\text{ on }\Gamma_+\\
-		&\hat t\in H^{-1/2}_{xt}(Q_h)\,,\,&\hat t=h_0&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
+		&\hat t\in H^{-1/2}_{xt}(Q_h)\,,\,&\hat t=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
 		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\quad&\forall\bftau\in\bfH(\text{div},Q)\\
 		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\quad&\forall v\in H^1_{xt}(Q)\,.
 	\end{aligned}
@@ -294,9 +295,10 @@ Note that for conforming $v^*$ satisfying $A^* v^* = u$
 =\norm{u}_E \norm{v^*}_V
 \end{align*}
 This defines a necessary condition for robustness, namely that
-\begin{align*}
+\begin{align}
+\label{eq:necessaryCondition}
 \norm{v^*}_V\lesssim\norm{u}_{L^2}\,.
-\end{align*}
+\end{align}
 If this condition is satisfied, then we get our final result:
 \begin{align*}
 \norm{u}_{L^2}\lesssim\norm{u}_E\,.
@@ -310,22 +312,31 @@ We illustrate this point by considering two norms which satisfy the above condit
 The graph norm is $\norm{A^*v}_{L^2}+\norm{v}_{L^2}$:
 \begin{equation*}
 \norm{(v,\bftau)}^2=
-\norm{\Div\bftau-\tilde\bfbeta\cdot\Grad v}^2
+\norm{\Div\bftau-\bfbeta\cdot\Grad v}^2
 +\norm{\frac{1}{\epsilon}\bftau+\Grad v}^2
 +\norm{v}^2
 +\norm{\bftau}^2\,.
 \end{equation*}
-The coupled robust norm is a slight modification of the norm derived in \cite{ChanHeuerThanhDemkowicz2012}:
+The coupled robust norm is a slight modification of the norm derived in \cite{ChanHeuerThanhDemkowicz2012} 
+(for further details on the modification, see \cite{JesseDissertation}):
 \begin{equation*}
 \norm{(v,\bftau)}^2=
-\norm{\Div\bftau-\tilde\bfbeta\cdot\Grad v}^2
+\norm{\Div\bftau-\bfbeta\cdot\Grad v}^2
 +\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
 +\epsilon\norm{\Grad v}^2
 +\norm{\bfbeta\cdot\Grad v}^2
 +\norm{v}^2\,.
 \end{equation*}
-The motivation for the modification can be found in \cite{JesseDissertation}.
 
+The bilinear form and test norm define a mapping from input trial functions to an optimal test function:
+\[
+T=R_V^{-1}B\,:\,U\rightarrow V\,.
+\]
+Below, we plot the optimal test functions produced given a representative trial function $u=x-\frac{1}{2}$, steady 1D ultra-weak convection-diffusion, 
+and either the graph norm or the coupled robust norm.
+Note that the optimal test functions will be different for any other trial function.
+In the left column, we see the fully resolved \emph{ideal} optimal test function that DPG theory relies on.
+On the right, we see the approximated optimal test function using a enriched cubic test space.
 \begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.4\textwidth}
@@ -366,51 +377,39 @@ The motivation for the modification can be found in \cite{JesseDissertation}.
 \label{fig:optimalRobust}
 \end{figure}
 
-% \section{Problem}
-% Consider domain $Q=\Omega\times[0,T]$ with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
-% where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
-% and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
-
-% Assume that boundary conditions are applied on the boundary $\Gamma_0\subset \Gamma$.  Recall that, for the ultra-weak variational formulation
-% \[
-% b\LRp{\LRp{u,\uh},v} = \LRp{u,A^*_h v}_{\LQ} + \LRa{\uh, \jump{v}}_{\Gh\setminus \Gamma_0}
-% \]
-% we can recover
-% \[
-% \norm{u}_{\LQ}^2 = b(u,v^*)
-% \]
-% for conforming $v^*$ satisfying the adjoint equation
-% \begin{align*}
-% A^* v^* &= u\\
-% v^* &= 0 \text{ on } \Gh\setminus\Gamma_0.
-% \end{align*}
-% Together, these give necessary conditions on the test norm $\norm{\cdot}_V$ such that we have $L^2$ robustness (this gives robustness in the variable $u$; for the first order formulation, conditions for $\sigma$ must also be shown).  
-% \[
-% \norm{u}_{\LQ}^2 = b(u,v^*) \leq \frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V \leq \norm{u}_E \norm{v^*}_V
-% \]
-% Thus, showing $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$ gives the result that $\norm{u}_{\LQ} \lesssim \norm{u}_E$.  
+Mathematically, the graph norm satisfies the necessary condition to be a robust norm, but the ideal optimal test functions contain strong boundary
+layers which can not be realistically approximated with the provided enriched space.
+If the approximated optimal test functions can not come sufficiently close to the ideal, then the whole DPG theory falls apart.
+See \cite{PracticalDPG} for more discussion.
+This provides an additional condition on a test norm before we can truly call it robust: the ideal test functions must be adequately representable within 
+the provided enriched space.
+This ultimately comes down to an analysis of the relative magnitudes of individual terms within the test norm, usually attempting to bound reactive or convective terms by diffusive terms.
+The coupled robust norm satisfies \ref{eq:necessaryCondition} and also produces relatively smooth optimal test functions that can be sufficiently approximated
+with a cubic polynomial space.
 
 \section{A Robust Norm for Transient Convection-Diffusion}
 
-Consider convection-diffusion
+Consider transient convection-diffusion with homogeneous boundary conditions
 \begin{align*}
 \frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
 \pd{u}{t} + \bfbeta\cdot\Grad u - \Div\bfsigma &= f\\
-\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+\beta_n u-\epsilon\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
 u &= 0 \text{ on } \Gamma_+\\
-u &= u_0 \text{ on } \Gamma_0.
+u &= u_0 \text{ on } \Gamma_0,
 \end{align*}
-Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$ and $\Gradxt:=\vecttwo{\Grad}{\pd{}{t}}$, then we can rewrite this as
+where $\Div\bfbeta=0$ and $\norm{\Grad\bfbeta}_{L^\infty}\le C_{\bfbeta}$.
+Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$, then we can rewrite this as
 \begin{align*}
 \frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
 \tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
 % \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\\
-\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+\beta_n u-\epsilon\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
 u &= 0 \text{ on } \Gamma_+\\
 u &= u_0 \text{ on } \Gamma_0.
 \end{align*}
 We decompose the adjoint into three parts:
 a discontinuous part
+\textcolor{red}{(Dr. Demkowicz, what kind of argument do we want to use to avoid dealing with this part? I assume it's something to do with breaking test functions.)}
 \begin{align*}
 \frac{1}{\epsilon}\bftau_0+\Grad v_0 &=0\\
 -\tilde\bfbeta\cdot\Gradxt v_0 + \Div\bftau_0 &= 0\\
@@ -452,7 +451,7 @@ provides the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
 
 In the following lemmas we establish the following bounds:
 \begin{itemize}
-\item Bound on $\norm{\LRp{v_0,\bftau_0}}_V$.
+\item Bound on $\norm{\LRp{v_0,\bftau_0}}_V$. \textcolor{red}{What do we do for this?}
 \item Bound on $\norm{\LRp{v_1,\bftau_1}}_V$. 
 Lemma~\ref{lem:convective} gives $\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq\norm{g}$.
 Since $\Div\bftau_1=g+\tilde\bfbeta\cdot\Gradxt v_1$, 
@@ -493,16 +492,22 @@ Thus, all $(v_2,\bftau_2)$ terms in \eqref{eq:robustnorm} are accounted for.
 Our goal is to analyze the stability properties of the adjoint equations by deriving bounds of the form
 $\norm{(v_1,\bftau_1)}_V\leq\norm{g}_\LQ$ and $\norm{(v_2,\bftau_2)}_V\leq\norm{f}_\LQ$.
 
-\textcolor{red}{Insert conditions on $\bfbeta$}
+% \textcolor{red}{Insert conditions on $\bfbeta$}
 \begin{lemma}
 \label{lem:convective}
-For the above conditions on $\bfbeta$,
+% For the above conditions on $\bfbeta$,
+% If 
+% \[
+% \norm{\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI}_L^{\infty}\le C_{\bfbeta}
+% \]
+% then
+We can bound
 \[
 \norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq \norm{g}.
 \]
 \end{lemma}
 \begin{proof}
-Multiply by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
+Multiply $-\tilde\bfbeta\cdot\Gradxt v=g-\Div\bftau$ by $-\tilde\bfbeta\cdot\Gradxt v$ and integrate over $Q$ to get
 \begin{equation}
 \label{eq:adj1}
 \norm{\tilde\bfbeta\cdot\Gradxt v}^2=-\int_Q g\tilde\bfbeta\cdot\Gradxt v+\int_Q\tilde\bfbeta\cdot\Gradxt v\Div\bftau\,.
@@ -542,36 +547,36 @@ Plugging this into \eqref{eq:adj1}, we get
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad-\epsilon\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v\Grad v\cdot\bfn_x
-+\epsilon\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)\\
++\frac{\epsilon}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v\cdot\Grad v)\\
 %
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
--\int_{\Gamma_-}\tilde\bfbeta\cdot\Gradxt v\underbrace{\Grad v\cdot\bfn_x}_{=0}
--\int_{\Gamma_+}\LRp{\underbrace{\pd{v}{t}}_{=0}+\bfbeta\cdot\Grad v}\Grad v\cdot\bfn_x\\
+-\epsilon\int_{\Gamma_-}\tilde\bfbeta\cdot\Gradxt v\underbrace{\Grad v\cdot\bfn_x}_{=0}
+-\epsilon\int_{\Gamma_+}\LRp{\underbrace{\pd{v}{t}}_{=0}+\bfbeta\cdot\Grad v}\Grad v\cdot\bfn_x\\
 &\quad
-+\frac{1}{2}\int_{\Gamma_-}\underbrace{\bfbeta\cdot\bfn_x}_{<0}(\Grad v\cdot\Grad v)
-+\frac{1}{2}\int_{\Gamma_+}\bfbeta\cdot\bfn_x(\Grad v\cdot\Grad v)\\
++\frac{\epsilon}{2}\int_{\Gamma_-}\underbrace{\bfbeta\cdot\bfn_x}_{<0}(\Grad v\cdot\Grad v)
++\frac{\epsilon}{2}\int_{\Gamma_+}\bfbeta\cdot\bfn_x(\Grad v\cdot\Grad v)\\
 &\quad
-+\frac{1}{2}\int_{\Gamma_0}\underbrace{n_t}_{<0}(\Grad v\cdot\Grad v)
-+\frac{1}{2}\int_{\Gamma_T}n_t\underbrace{(\Grad v\cdot\Grad v)}_{=0}\\
++\frac{\epsilon}{2}\int_{\Gamma_0}\underbrace{n_t}_{<0}(\Grad v\cdot\Grad v)
++\frac{\epsilon}{2}\int_{\Gamma_T}n_t\underbrace{(\Grad v\cdot\Grad v)}_{=0}\\
 %
 &\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
-+\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
++\epsilon\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\Grad v}\cdot\Grad v\\
 %
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
-+\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
++\epsilon\int_{\Gamma_+}\LRp{-\pd{v}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\pd{v}{\bfn_x}\bfn_x}\cdot\pd{v}{\bfn_x}\bfn_x\\
 %
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 &\quad
-\underbrace{-\frac{1}{2}\int_{\Gamma_+}\LRp{\pd{v}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}\\
+\underbrace{-\frac{\epsilon}{2}\int_{\Gamma_+}\LRp{\pd{v}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}\\
 %
 &\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
@@ -580,8 +585,11 @@ Plugging this into \eqref{eq:adj1}, we get
 +\epsilon\int_Q\Grad v(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v\\
 %
 &\leq\frac{\norm{g}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v}^2}{2}
-+\epsilon C\norm{\Grad v}^2
++\epsilon C_{\bfbeta}\norm{\Grad v}^2
 \end{align*}
+\textcolor{red}{
+Seems to additionally require that $\epsilon C_{\bfbeta}\norm{\Grad v}^2\le\norm{\tilde\bfbeta\cdot\Gradxt v}^2$.
+}
 \end{proof}
 
 \begin{lemma}
@@ -627,7 +635,7 @@ Integrating by parts:
 +\epsilon\int_Qe^{t}\Grad v\cdot\bff
 -\epsilon\int_{\Gamma_x}e^{t}v\bff\cdot\bfn_x
 \end{align*}
-Note that $\Divxt{e^{t}v\tilde\bfbeta}=e^{t}(\tilde\bfbeta\Gradxt v+v)$ if $\Div\bfbeta=0$.
+Note that $\Divxt{e^{t}v\tilde\bfbeta}=e^{t}(\tilde\bfbeta\cdot\Gradxt v+v)$ if $\Div\bfbeta=0$.
 % Dividing both sides by $e^{t}$ and moving some terms to the right hand side, we get
 Moving some terms to the right hand side, we get
 \begin{align*}
@@ -715,6 +723,28 @@ e^T\left(
 \right)
 \end{align*}
 \end{proof}
+
+\section{Numerical Tests}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\includegraphics[width=\textwidth]{OptimalTestFunctions/Robust_v}\\
+\includegraphics[width=\textwidth]{OptimalTestFunctions/Robust_tau}\\
+\caption{Ideal}
+\label{fig:idealRobust}
+\end{subfigure}
+\begin{subfigure}[t]{0.4\textwidth}
+\centering
+\includegraphics[width=\textwidth]{OptimalTestFunctions/RobustApprox3_v}\\
+\includegraphics[width=\textwidth]{OptimalTestFunctions/RobustApprox3_tau}\\
+\caption{Approximated}
+\label{fig:approxRobust}
+\end{subfigure}
+\caption{Coupled robust norm optimal test functions for $u=x-\frac{1}{2}$}
+\label{fig:optimalRobust}
+\end{figure}
 
 \bibliographystyle{elsarticle-num} 
 \bibliography{../Papers}

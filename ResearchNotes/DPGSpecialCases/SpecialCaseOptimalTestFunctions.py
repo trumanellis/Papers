@@ -27,7 +27,7 @@ def u0_boundary(x, on_boundary):
 bc = DirichletBC(Vp, u0, u0_boundary)
 
 epsilon = 1
-beta = Constant((0,))
+beta = Constant((1,))
 
 # Define variational problem
 v = TrialFunction(Vp)
@@ -47,7 +47,7 @@ u = HatExpression(domain=mesh)
 # a = inner(v,dv)*dx
 
 # Scaled H1 Norm
-c = 1e-6;
+c = 1e-0;
 a = c*inner(v,dv)*dx + inner(grad(v),grad(dv))*dx
 
 # Grad Norm (requires boundary conditions for a unique solution)
@@ -62,16 +62,16 @@ a = c*inner(v,dv)*dx + inner(grad(v),grad(dv))*dx
 L = -inner(beta*u,grad(dv))*dx + inner(epsilon*grad(u),grad(dv))*dx
 
 # Ultra-Weak Formulation
-L = -inner(beta*u,grad(dv))*dx + inner(epsilon*grad(u),grad(dv))*dx
+# L = -inner(beta*u,grad(dv))*dx + inner(epsilon*grad(u),grad(dv))*dx
 
 # Compute solution
 v = Function(Vp)
 
 # With boundary conditions
-# solve(a == L, v, bc)
+solve(a == L, v, bc)
 
 # Without boundary conditions
-solve(a == L, v)
+# solve(a == L, v)
 
 vfine = project(v,Vpfine)
 

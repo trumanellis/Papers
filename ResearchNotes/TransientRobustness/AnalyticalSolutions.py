@@ -3,7 +3,7 @@ from pylab import *
 # 1D Solution
 eps = 1e-2
 l = 4
-x = 0-logspace(-6,0,1000)
+x = 0-logspace(-6,0,2000)
 # x = linspace(0,1,1000)
 t = linspace(0,1,1000)
 
@@ -82,7 +82,8 @@ t = 0
 eps = 1e-2
 l = 4
 k = l
-x = linspace(-1,0,100)
+# x = linspace(-1,0,100)
+x = 0-logspace(-6,0,100)
 y = linspace(-.5,.5,100)
 X, Y = meshgrid(x,y)
 lambda1 = (-1.+sqrt(1.-4.*eps*k))/(-2*eps)
@@ -91,7 +92,7 @@ n = 1
 nu1 = pi**2*eps
 r1 = (1+sqrt(1+4*eps*nu1))/(2*eps)
 s1 = (1-sqrt(1+4*eps*nu1))/(2*eps)
-u0 = 0.1*(exp(s1*X)-exp(r1*X))/(r1*exp(-r1)-s1*exp(-s1))*cos(pi*Y)
+u0 = 10*eps*(exp(s1*X)-exp(r1*X))/(r1*exp(-r1)-s1*exp(-s1))*cos(pi*Y)
 a1 = 1
 a2 = 0
 t = 0
