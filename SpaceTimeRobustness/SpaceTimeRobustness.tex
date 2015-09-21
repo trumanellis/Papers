@@ -36,8 +36,12 @@
 \section{Introduction}
 The discontinuous Petrov-Galerkin finite element method presents a promising new framework for developing robust numerical methods for computational mechanics.
 % DPG promises the possibility of developing stable finite element methods for any well-posed variational problem.
-In a sense, DPG contains the promise of being an automated scientific computing technology; it provides stability for any variational formulation, optimal conversion rates in user-defined norm, no pre-asymptotic stability issues on coarse meshes, a measure of the error residual which can be used to robustly drive adaptivity, Hermitian positive definite stiffness matrices for any problem, weak enforcement of boundary conditions, and several other attractive properties.
-We start with an abstract derivation of the DPG framework then define the concept of a robust test norm, specialize to transient convection-diffusion, derive a new robust norm, then provide some numerical verifications of the theory.
+DPG contains the promise of being an automated scientific computing technology -- it provides stability for any variational formulation, 
+optimal convergence rates in user-defined norm, no pre-asymptotic stability issues on coarse meshes, 
+a measure of the error residual which can be used to robustly drive adaptivity, 
+Hermitian positive definite stiffness matrices for any problem, weak enforcement of boundary conditions, and several other attractive properties.
+We start with an abstract derivation of the DPG framework then define the concept of a robust test norm, 
+specialize to transient convection-diffusion, derive a new robust norm, then provide some numerical verifications of the theory.
 
 \subsection{Overview of DPG}
 \subsubsection{A Generalized Minimum Residual Method}
@@ -122,7 +126,8 @@ In order to better illustrate choice of the $U$ and $V$ spaces, we introduce the
 Consider spatial domain domain $\Omega$ and corresponding space-time domain $Q=\Omega\times[0,T]$ 
 with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
 where $\Gamma_-$ is the spatial inflow boundary, $\Gamma_+$ is the spatial outflow boundary, $\Gamma_0$ is the initial time boundary, 
-and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton.
+and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton, 
+while $\Gamma_{h_x}$ denotes any parts of the skeleton with a nonzero spatial normal and $\Gamma_{h_t}$ have a nonzero temporal normal.
 
 The transient convection-diffusion equation is
 \begin{equation*}
@@ -725,26 +730,68 @@ e^T\left(
 \end{proof}
 
 \section{Numerical Tests}
+We verify robust convergence of our transient coupled robust norm on an analytical solution (shown in \ref{fig:transientAnalytical}) that decays to a steady state Eriksson-Johnson problem:
+\[
+u=\exp(-lt)\LRs{\exp(\lambda_1 x)-\exp(\lambda_2 x)}+
+10\epsilon\cos(\pi y)\frac{\exp(s_1x)-\exp(r_1x)}{r_1 \exp(-r_1)-s_1 \exp(-s_1)}\,,
+\]
+where $l=4$,
+$\lambda_{1,2}=\frac{-1\pm\sqrt{1-4\epsilon l}}{-2\epsilon}$,
+$r_1=\frac{1+\sqrt{1+4\pi^2\epsilon^2}}{2\epsilon}$, and
+$s_1=\frac{1-\sqrt{1+4\pi^2\epsilon^2}}{2\epsilon}$.
+The problem domain is $[-1,0]\times[-0.5,0.5]$ and $\bfbeta=\vecttwo{1}{0}$.
+We show robustness for $\epsilon=10^{-2}$ and $10^{-6}$ and for linear, quadratic, and quartic polynomial trial functions.
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.32\textwidth}
 \centering
-\includegraphics[width=\textwidth]{OptimalTestFunctions/Robust_v}\\
-\includegraphics[width=\textwidth]{OptimalTestFunctions/Robust_tau}\\
-\caption{Ideal}
-\label{fig:idealRobust}
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_00.png}
+\caption{$t=0.0$}
 \end{subfigure}
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.32\textwidth}
 \centering
-\includegraphics[width=\textwidth]{OptimalTestFunctions/RobustApprox3_v}\\
-\includegraphics[width=\textwidth]{OptimalTestFunctions/RobustApprox3_tau}\\
-\caption{Approximated}
-\label{fig:approxRobust}
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_05.png}
+\caption{$t=0.5$}
 \end{subfigure}
-\caption{Coupled robust norm optimal test functions for $u=x-\frac{1}{2}$}
-\label{fig:optimalRobust}
+\begin{subfigure}[t]{0.32\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_10.png}
+\caption{$t=1.0$}
+\end{subfigure}
+\caption{Transient analytical solution}
+\label{fig:transientAnalytical}
 \end{figure}
+
+In addition to showing that the norm derived above is robust, we compare to another norm we stumbled on when working with transient compressible Navier-Stokes,
+hereafter referred to as the NS Decoupled Norm or ``NSDecoupledH1'' in the figures:
+\[
+\norm{(v,\bftau)}^2=
+\norm{\tilde\bfbeta\cdot\Gradxt v}^2
++\norm{\Div\bftau}^2
++\frac{1}{h^2}\norm{\bftau}^2
++\norm{\Grad v}^2
++\norm{v}^2\,.
+\]
+We don't have a corresponding mathematical analysis for this norm, but it appears to behave very well in every numerical test we've applied it to.
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.8\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Confusion/Robustness/convergence_epsilon=1e-2.pdf}
+\caption{$\epsilon=10^{-2}$}
+\end{subfigure}
+\begin{subfigure}[t]{0.8\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Confusion/Robustness/convergence_epsilon=1e-6.pdf}
+\caption{$\epsilon=10^{-6}$}
+\end{subfigure}
+\caption{Convergence to analytical solution}
+\label{fig:robustConvergence}
+\end{figure}
+
+\section{Conclusions}
 
 \bibliographystyle{elsarticle-num} 
 \bibliography{../Papers}
