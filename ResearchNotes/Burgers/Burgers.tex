@@ -15,6 +15,7 @@ Space-time divergence form:
 \[
 \Divxt{\vecttwo{\frac{1}{2}u^2}{u}}=0
 \]
+\section*{Integrate by Parts, then Linearize}
 Ultra-weak form:
 \[
 -\LRp{\vecttwo{\frac{1}{2}u^2}{u},\Gradxt v}+\LRa{\hat t,v}=0
@@ -30,5 +31,17 @@ I don't see a way of relating the definition of $\hat t$ as a linear term of $\D
 As the background flow, $\tilde u$ converges to the exact solution, $\Delta u$ converges to zero. 
 Ideally, for a converged solution, $\hat t=\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u}\cdot\bfn_{xt}$,
 but the current LinearTerm code does not allow this possibility.
+
+\section*{Linearize, then Integrate by Parts}
+Linearized form:
+\[
+\LRp{\Divxt\vecttwo{\tilde u\Delta u}{\Delta u},v}=-\LRp{\Divxt\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u},v}
+\]
+Ultra-weak form:
+\[
+-\LRp{\vecttwo{\tilde u\Delta u}{\Delta u},\Gradxt v}+\LRa{\Delta\hat t,v}=\LRp{\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u},\Gradxt v}-\LRa{\tilde{\hat t},v}
+\]
+where $\Delta\hat t=\trace\vecttwo{\tilde u\Delta u}{\Delta u}\cdot\bfn_{xt}$
+and $\tilde{\hat t}=\trace\vecttwo{\frac{1}{2}\tilde u^2}{\tilde u}\cdot\bfn_{xt}$.
 
 \end{document}
