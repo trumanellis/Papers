@@ -33,19 +33,80 @@
 
 % \section{Numerical Experiments}
 
+% Literature Review
+% Cite DPG2, Dahmen confusion paper, both Heuer papers (copied from Encyclopedia article), second Dahmen paper, maybe mention Stevenson paper
+
+\begin{abstract}
+Abstract	
+\end{abstract}
+
 \section{Introduction}
 The discontinuous Petrov-Galerkin finite element method presents a promising new framework for developing robust numerical methods for computational mechanics.
 % DPG promises the possibility of developing stable finite element methods for any well-posed variational problem.
 DPG contains the promise of being an automated scientific computing technology -- it provides stability for any variational formulation, 
-optimal convergence rates in user-defined norm, no pre-asymptotic stability issues on coarse meshes, 
-a measure of the error residual which can be used to robustly drive adaptivity, 
-Hermitian positive definite stiffness matrices for any problem, weak enforcement of boundary conditions, and several other attractive properties.
-We start with an abstract derivation of the DPG framework then define the concept of a robust test norm, 
-specialize to transient convection-diffusion, derive a new robust norm, then provide some numerical verifications of the theory.
+optimal convergence rates in a user-defined norm, virtually no pre-asymptotic stability issues on coarse meshes, 
+and a measure of the error residual which can be used to robustly drive adaptivity.
+The method also delivers Hermitian positive definite stiffness matrices for any problem, 
+weak enforcement of boundary conditions, and several other attractive properties.
+We start with an abstract derivation of the DPG framework then define the concept of a robust test norm
+and specialize to transient convection-diffusion.
+Two new robust norms are derived and numerical verifications of the theory are presented.
+% derive a new robust norm, then provide some numerical verifications of the theory.
 
-\subsection{Overview of DPG}
-\subsubsection{A Generalized Minimum Residual Method}
-We begin with any well posed variational problem: find $u\in U$ such that
+
+\subsection{Space-Time Finite Elements}
+Most finite element simulations of transient phenomena use a semi-discrete formulation:
+the PDE is first discretized in space using finite elements and then the leftover system of ordinary differential equations in time
+is usually solved by a finite difference method.
+But it is possible to treat time as just another dimension to be discretized with finite elements.
+% The benefit of this procedure is that it is simple to implement and well understood numerically.
+% Hughes\cite{HughesSpaceTimeElastoDynamics} notes that 
+% ``It is frequently argued that finite elements represent a superior methodology to finite differences'' 
+% and that it is not surprising that many efforts have been made to apply finite element technologies to the space-time domain.
+Some of the earliest proponents of this approach were Kaczkowski\cite{Kaczkowski1975}, 
+Argyris and Scharpf\cite{ArgyrisSpaceTime}, Fried\cite{FriedSpaceTime}, and Oden\cite{OdenSpaceTime}.
+These techniques were built on the underlying concept of Hamilton's principle.
+
+% Bajer and Bonthoux present a nice review in \cite{Bonthoux1991}.
+% Space-time finite elements present an attractive way to handle meshes with moving boundaries.
+% Lesoinne and Farhat\cite{GCL} studied several techniques for solving on moving meshes including Arbitrary Lagrangian-Eulerian
+% finite volume and finte element schemes as well as space-time finite volume schemes. 
+% The authors derived Geometric Conservation Laws (GCL) as important constraints that a scheme must satisfy for a time-accurate solution.
+% They found that except for the case of space-time finite elements, the GCLs imposed important constraints on the schemes under consideration.
+
+Van der Vegt and van der Ven\cite{vanderVegtEuler} have advanced a space-time discontinuous Galerkin method 
+for 3D inviscid compressible moving boundary problems.
+% \begin{quotation}
+% The separation between space and time becomes cumbersome for time-dependent domain
+% boundaries, which require the mesh to follow the boundary movement. We will therefore
+% not separate space and time but consider the Euler equations directly in four dimensional
+% space and use basis functions in the finite element discretization which are discontinuous
+% across element faces, both in space and time.
+% We refer to this technique as the space–time discontinuous Galerkin finite element method.
+% The space-time DG method provides optimal efficiency for adapting and deforming the mesh while maintaining a conservative scheme which
+% does not require interpolation of data after mesh refinement or deformation.
+% \end{quotation}
+Klaij \etal\cite{KlaijCompressible} then extended the method to compressible Navier-Stokes while Rhebergen \etal\cite{Rhebergen2013}
+developed the method for incompressible Navier-Stokes.
+Rhebergen and Cockburn\cite{RhebergenHDG} also developed a space-time HDG method for incompressible Navier-Stokes.
+Tezduyar and Behr\cite{Tezduyar1992} develop a deforming-spatial-domain/space-time procedure coupled with Galerkin/least-squares 
+to handle incompressible Navier-Stokes flows
+with moving boundaries and later Aliabadi and Tezduyar\cite{Aliabadi1993} apply the procedure to compressible flows.
+Hughes and Stewart\cite{HughesSpaceTime} develop a general space-time multiscale framework for deriving stabilized methods for
+transient phenomena.
+
+% The tent-pitcher algorithm of {\"U}ng{\"o}r\cite{TentPitcher} has become a popular way of mitigating the cost of space-time computations.
+% The basic idea is that a space-time DG method can be solved element-by-element if the space-time mesh satisfies a cone constraint, i.e.
+% the mesh faces can not be steeper in the temporal direction than a specified angle generated by the characteristics of the solution.
+% In which case, each element is uncoupled from its neighbors, significantly increasing the efficiency of a solver. 
+% Since the cone condition evolves with the solution, the mesh must be generated on the fly based on the most recent solution information.
+% Abedi, Petracovici, and Haber\cite{Abedi2006} applied this causal mesh generation to linear elastodynamics.
+
+% \subsection{Robust DPG Methods}
+
+\section{Overview of DPG}
+\subsection{A Generalized Minimum Residual Method}
+We begin with a well posed variational problem: find $u\in U$ such that
 \[
 b(u,v)=l(v) \quad\forall v\in V
 \]
@@ -55,15 +116,15 @@ we can reformulate the equation in operator form:
 \[
 Bu=l\in V'\,.
 \]
-We wish to find the $u_h$ in a finite dimensional subspace that minimizes the residual $Bu-l$ in $V'$:
+We wish to find the element $u_h$ of a finite dimensional subspace which minimizes the residual $Bu-l$ in $V'$:
 \[
 u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bu-l}^2_{V'}\,.
 \]
-This mathematical framework is very natural, but it is not yet practical as the $V'$ norm is not especially translatable to computations.
+This mathematical framework is very natural, but it is not yet practical as the $V'$ norm is not especially amenable to computations.
 With the assumption that we are working with Hilbert spaces, 
 we can use the Riesz representation theorem to find a complementary object in $V$ rather than $V'$. 
-Let $R_V:V\ni v\rightarrow(v,\cdot)\in V'$ be the Riesz map. 
-Then the inverse Riesz map (which is an isometry) lets us represent our residual in $V$:
+Let $R_V:V\ni v\rightarrow(v,\cdot)\in V'$ be the Riesz map, which is an isometry. 
+Then the inverse Riesz map lets us represent our residual in $V$:
 % This is a very natural mathematical framework based soundly in functional analysis, but it is not yet a practical method as the $V'$ norm is not
 % especially tractable to work with.
 % The insight is that since we are working with Hilbert spaces, we can use the Riesz representation theorem to find a complementary object 
@@ -72,13 +133,14 @@ Then the inverse Riesz map (which is an isometry) lets us represent our residual
 \[
 u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bu-l)}^2_{V}\,.
 \]
-Since this is a minimization problem, we need to find the critical points, so
-taking the G\^ateaux derivative to be zero in all directions $\delta u \in
-U_h$ gives,
+Since this is a convex minimization problem, 
+the solution is given by the critical points where the 
+G\^ateaux derivative is zero in all directions $\delta u \in
+U_h$:
 \[
-\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U,
+\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U\,.
 \]
-which by definition of the Riesz map is equivalent to the duality pairing
+By definition of the Riesz map this is equivalent to the duality pairing
 \begin{equation*}
 \LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,.
 \end{equation*}
@@ -92,7 +154,7 @@ Note that $v_{\delta u_h}\in V$ comes from the auxiliary problem
 \LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
 =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
 \end{equation*}
-We might call this an \emph{optimal Petrov-Galerkin} method.
+We might refer to this as an \emph{optimal Petrov-Galerkin} method.
 We arrive at the same method by realizing the supremum in the inf-sup condition (see \cite{DPGOverview}), motivating the \emph{optimal} nomenclature.
 As a minimum residual method, optimal Petrov-Galerkin methods produce Hermitian, positive-definite stiffness matrices since
 \[
@@ -100,27 +162,33 @@ b(u_h,\vdeltau)=(v_{u_h},\vdeltau)_V=\overline{(\vdeltau,v_{u_h})}=\overline{b(\
 \]
 % We can calculate the energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of the Galerkin error without knowing the exact solution by using the residual:
 % The energy norm (defined by $\norm{u}_E:=\norm{Bu}_{V'}$) of the residual comes from a straightforward post-process:
-The energy norm of the error equals the residual and comes from a straightforward post-process:
+% The energy norm of the error equals the residual and comes from a straightforward post-process:
+The energy norm of the error is directly related to the residual:
 \[
 \norm{u_h-u}_E=\norm{B(u_h-u)}_{V'}=\norm{Bu_h-l}_{V'}=\norm{R_V^{-1}(Bu_h-l)}_V\,,
 \]
 where we designate $R_V^{-1}(Bu_h-l)$ the \emph{error representation function}.
-This has proven to be a very robust \emph{a-posteriori} error estimator for driving adaptivity.
+This has proven to be a very robust \emph{a-posteriori} error estimator for driving adaptivity \cite{DPG3}.
 
 \subsection{Transient Convection-Diffusion}
 \subsubsection{Problem Description}
 In order to better illustrate choice of the $U$ and $V$ spaces, we introduce the transient convection-diffusion problem.
 Consider spatial domain domain $\Omega$ and corresponding space-time domain $Q=\Omega\times[0,T]$ 
 with boundary $\Gamma=\Gamma_-\cup\Gamma_+\cup\Gamma_0\cup\Gamma_T$ 
-where $\Gamma_-$ is the inflow boundary, $\Gamma_+$ is the outflow boundary, $\Gamma_0$ is the initial time boundary, 
-and $\Gamma_T$ is the final time boundary. Let $\Gamma_h$ denote the entire mesh skeleton, 
-while $\Gamma_{h_x}$ denotes any parts of the skeleton with a nonzero spatial normal and $\Gamma_{h_t}$ have a nonzero temporal normal.
+where $\Gamma_-$ is the inflow boundary ($\bfbeta\cdot\bfn_x<0$, where $\bfbeta$ is the convection vector and $\bfn_x$ is the outward spatial normal),
+$\Gamma_+$ is the outflow boundary ($\bfbeta\cdot\bfn_x\geq0$), $\Gamma_0$ is the initial time boundary, 
+and $\Gamma_T$ is the final time boundary. Let $\Gamma_h:=\bigcup\partial K$ denote the entire mesh skeleton, 
+where $\partial K$ denotes the boundary of element $K$.
+$\Gamma_{h_x}$ denotes any parts of the skeleton with a nonzero spatial normal and $\Gamma_{h_t}$ have a nonzero temporal normal.
+% Given outward spatial normal $\bfn_x$ and convection vector $\bfbeta$, define inflow boundary $\Gamma_-\subset\Gamma_x$ where $\bfbeta\cdot\bfn_x<0$
+% and outflow boundary $\Gamma_+$ where 
 
 The transient convection-diffusion equation is
 \begin{equation*}
 \frac{\partial u}{\partial t}+\Div(\bfbeta u)-\epsilon\Delta u=f\,,
 \end{equation*}
-where $u$ is the quantity of interest, often interpreted to be a concentration of some quantity, $\bfbeta$ is the convection vector,
+where $u$ is the quantity of interest, often interpreted to be a concentration of some quantity,
+ % $\bfbeta$ is the convection vector,
 $\epsilon$ is the  diffusion coefficient, and $f$ is the source term.
 
 We apply flux boundary conditions on the inflow and trace boundary conditions on the outflow
@@ -129,9 +197,14 @@ We apply flux boundary conditions on the inflow and trace boundary conditions on
 \trace\LRp{u}&=u_+\quad\text{on}\quad\Gamma_+\\
 \trace\LRp{u}&=u_0\quad\text{on}\quad\Gamma_0\,.
 \end{align*}
+We note that Dirichlet boundary conditions also induce Dirichlet boundary conditions for the adjoint problem.  
+Since the direction of convection is reversed for the adjoint convection-diffusion problem, 
+this results in boundary layer adjoint solutions, which must be controlled using special weighted norms \cite{RoosStynesTobiska08,DemkowiczHeuer}.
+% (cite Tobiska, Roos, Stynes, as well as Heuer/LD robustness paper #1).  
+However, since the convection-diffusion operator is not self-adjoint, the Cauchy inflow boundary condition induces a Neumann boundary condition for the adjoint problem.  As a result, the adjoint solution does not contain boundary layers, simplifying the construction of a robust DPG method.
 
 \subsubsection{Relevant Sobolev Spaces}
-Begin by defining operators $\Gradxt u:=\vecttwo{\Grad u}{\pd{u}{t}}$ and $\Divxt\bfu:=\Div\bfu_x+\pd{u_t}{t}$, where $\bfu=(\bfu_x,u_t)$.
+We begin by defining operators $\Gradxt u:=\vecttwo{\Grad u}{\pd{u}{t}}$ and $\Divxt\bfu:=\Div\bfu_x+\pd{u_t}{t}$, where $\bfu=(\bfu_x,u_t)$.
 We will need the following Sobolev spaces defined on our space-time domain.
 \begin{align*}
 \HOneQ&=\LRc{u\in\LQ\,:\,\Grad u\in\LVecQ}\\
@@ -141,10 +214,10 @@ H^1_{xt}(Q)&=\LRc{u\in\LQ\,:\,\Gradxt u\in\LVecQ}\\
 \end{align*}
 We will also need the corresponding broken Sobolev spaces.
 \begin{align*}
-H^1(Q_h)&=\LRc{u\in\LQ\,:\,u|_K\in\HOneK,\,K\in Q_h}&=\prod_{K\in Q_h}H^1(K)\\
-H^1_{xt}(Q_h)&=\LRc{u\in\LQ\,:\,u|_K\in H^1_{xt}(K),\,K\in Q_h}&=\prod_{K\in Q_h}H^1_{xt}(K)\\
-\bfH(\text{div},Q_h)&=\LRc{\bfsigma\in\LVecQ\,:\,u|_K\in\bfH(\text{div},K),\,K\in Q_h}&=\prod_{K\in Q_h}\bfH(\text{div},K)\\
-\bfH(\text{div}_{xt},Q_h)&=\LRc{\bfsigma\in\LVecQ\,:\,u|_K\in\bfH(\text{div}_{xt},K),\,K\in Q_h}&=\prod_{K\in Q_h}\bfH(\text{div}_{xt},K)
+H^1(Q_h)&=\LRc{u\in\LQ\,:\,u|_K\in\HOneK,\,K\in Q_h}&&=\prod_{K\in Q_h}H^1(K)\\
+H^1_{xt}(Q_h)&=\LRc{u\in\LQ\,:\,u|_K\in H^1_{xt}(K),\,K\in Q_h}&&=\prod_{K\in Q_h}H^1_{xt}(K)\\
+\bfH(\text{div},Q_h)&=\LRc{\bfsigma\in\LVecQ\,:\,u|_K\in\bfH(\text{div},K),\,K\in Q_h}&&=\prod_{K\in Q_h}\bfH(\text{div},K)\\
+\bfH(\text{div}_{xt},Q_h)&=\LRc{\bfsigma\in\LVecQ\,:\,u|_K\in\bfH(\text{div}_{xt},K),\,K\in Q_h}&&=\prod_{K\in Q_h}\bfH(\text{div}_{xt},K)
 \end{align*}
 Consider the following trace operators:
 \begin{align*}
@@ -152,7 +225,7 @@ Consider the following trace operators:
 \text{tr}^K_{\text{div}_{xt}} \bfsigma&=\bfsigma|_{\partial K_{xt}}\cdot\bfn_{K_{xt}} & \bfsigma\in \bfH(\text{div}_{xt},K)
 \end{align*}
 where $\partial K_x$ refers to spatial faces of element $K$, $\partial K_{xt}$ to the full space-time boundary, and $\bfn_{K_{xt}}$ is the unit outward normal on $\partial K_{xt}$.
-The operators $\text{tr}_{grad}$ and $\text{tr}_{\text{div}_{xt}}$ perform the same operation element by element producing the linear maps
+The operators $\text{tr}_{grad}$ and $\text{tr}_{\text{div}_{xt}}$ perform the same operation element by element to produce the linear maps
 \begin{align*}
 \text{tr}_{\text{grad}}&\,:\,H^1(Q_h)\rightarrow\prod_{K\in Q_h}H^{1/2}(\partial K_x)\\
 \text{tr}_{\text{div}_{xt}}&\,:\,\bfH(\text{div}_{xt},Q_h)\rightarrow\prod_{K\in Q_h}H^{-1/2}(\partial K_{xt})
@@ -244,7 +317,7 @@ Our ultra-weak formulation with broken test functions looks like
 	\end{aligned}
 \end{equation}
 The main consequence of breaking test functions is that it reduces the cost of solving for optimal test functions from a global solve 
-to an embarrassingly parallel local solve element by element.
+to an embarrassingly parallel solve element-by-element.
 Now that we've derived a suitable variational formulation, we are left with the task of selecting a test norm with which to compute our optimal test functions.
 % Moro \etal \cite{MoroNguyenPeraire11} handle the flux unknowns with a numerical flux in the hybridized DPG (HDPG) method, but the standard DPG method treats
 % these as new unknowns to be solved for.
@@ -258,7 +331,7 @@ Now that we've derived a suitable variational formulation, we are left with the 
 % The overall number of interface unknowns in the primal DPG method is the same, however, since the solution is required to be $H^1$ conforming 
 % and the trace unknowns are essentially hidden there.
 
-\subsection{Robust Test Norms}
+\section{Robust Test Norms}
 The final unresolved choice is what norm to apply to the $V$ space.
 This is one of the most important factors in designing a robust DPG method as the corresponding Riesz operator 
 needs to be inverted to solve for the optimal test functions.
@@ -269,7 +342,7 @@ In this paper, we extend that work to transient convection-diffusion in space-ti
 
 % Talk about robustness assuming infinite dimensional V
 We define a robust test norm such that the $L^2$ norm of the solution 
-is bounded by the energy norm of the solution up to a constant independent of $\epsilon$.
+is bounded by the energy norm of the solution with a constant independent of $\epsilon$.
 We can rewrite any ultra-weak formulation with broken test functions as the following
 bilinear form with group variables:
 \[
@@ -326,13 +399,16 @@ The case for the coupled robust norm was made in \cite{JesseDissertation}:
 +\norm{\Div\bftau-\bfbeta\cdot\Grad v}^2
 +\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\,.
 \end{equation*}
+The argument for the coupled norm was that in certain cases we noticed pollution of $u$ from errors in $\bfsigma$,
+for example at singularities in $\bfsigma$, $u$ also exhibited degraded quality with the robust norm. 
+The coupled robust norm seemed to relax this behavior, i.e. errors in $u$ appear more independent of errors in $\bfsigma$.
 
 The bilinear form and test norm define a mapping from input trial functions to an optimal test function:
 \[
 T=R_V^{-1}B\,:\,U\rightarrow V\,.
 \]
-Below, we plot the optimal test functions produced given a representative trial function $u=x-\frac{1}{2}$
-and either the graph norm or the coupled robust norm.
+Below, we plot the optimal test functions produced given $\epsilon=10^{-2}, $a representative trial function $u=x-\frac{1}{2}$,
+and either the graph norm, the robust norm, or the coupled robust norm.
 Note that the optimal test functions will be different for any other trial function.
 In the left column, we see the fully resolved \emph{ideal} optimal test function that DPG theory relies on.
 On the right, we see the approximated optimal test function using a enriched cubic test space.
@@ -405,8 +481,9 @@ the provided enriched space.
 This ultimately comes down to an analysis of the relative magnitudes of individual terms within the test norm, usually attempting to bound reactive or convective terms by diffusive terms.
 The coupled robust norm satisfies condition \eqref{eq:necessaryCondition} and also produces relatively smooth optimal test functions that can be sufficiently approximated
 with a cubic polynomial space.
+Niemi \etal attempted to approximate boundary layers in optimal shape functions with Shishkin meshes \cite{NiemiShishkin,niemi2013discontinuous}.
 
-\section{A Robust Norm for Transient Convection-Diffusion}
+\subsection{A Robust Norm for Transient Convection-Diffusion}
 Now we present the analysis leading to a coupled robust norm for transient convection-diffusion.
 Consider the problem with homogeneous boundary conditions
 \begin{align*}
@@ -432,7 +509,7 @@ A^*(v,\bftau)=\LRp{\frac{1}{\epsilon}\bftau+\Grad v,-\tilde\bfbeta\cdot\Gradxt v
 \]
 We decompose now the continuous adjoint problem
 \[
-A^*(v,\bftau=(\bff,g)
+A^*(v,\bftau)=(\bff,g)
 \]
 into two cases
 % We load the adjoint problem with:
@@ -487,7 +564,6 @@ and
 \end{align}
 respectively designated the \emph{robust} test norm and the \emph{coupled robust} test norm,
 provide the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
-The case for using the coupled robust norm can be found in \cite{JesseDissertation}.
 
 In the following lemmas we establish the following bounds:
 \begin{itemize}
@@ -524,6 +600,7 @@ Since $\epsilon^{1/2}\Grad v_2=\bff-\epsilon^{-1/2}\bftau_2$,
 \]
 We have not been able to develop bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ and $\norm{\Div\bftau}$ 
 which means that we can not guarantee robust control of $\bfsigma$ with with provided test norms.
+% Intuitively since $\bfsigma$ is a spatial variable, it may not make sense to speak of controlling it 
 % Finally,
 % \[
 % \norm{\bfbeta\cdot\Grad v_2}\leq\norm{\bfbeta}_\infty\norm{\Grad v_2}\leq\norm{\bfbeta}_\infty\norm{\bff}.
@@ -622,9 +699,10 @@ e^T\left(
 -\epsilon\int_{\Gamma_-}v\pd{v}{\bfn_x}
 \quad+\epsilon\int_{\Gamma_x}v\pd{v}{\bfn_x}
 }
-\right.\\
-&\left.
-\quad-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2
+% \right.\\
+% &\left.
+% \quad
+-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
 \right)
 \\
@@ -632,9 +710,10 @@ e^T\left(
 e^T\left(
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
-\right.\\
-&\left.
-\quad+\frac{1}{2}\int_Q\cancelto{0}{\Divxt\tilde\bfbeta} v^2
+% \right.\\
+% &\left.
+% \quad
++\frac{1}{2}\int_Q\cancelto{0}{\Divxt\tilde\bfbeta} v^2
 \quad-\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn v^2
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
 \right)
@@ -643,9 +722,10 @@ e^T\left(
 e^T\left(
 \int_Qgv
 +\epsilon\int_Q\Grad v\cdot\bff
-\right.\\
-&\left.
-\quad+\frac{1}{2}\LRp{\int_{\Gamma_0} \underbrace{-v^2}_{\leq 0}
+% \right.\\
+% &\left.
+% \quad
++\frac{1}{2}\LRp{\int_{\Gamma_0} \underbrace{-v^2}_{\leq 0}
 \quad+\int_{\Gamma_T} \cancelto{0}{v^2}
 \quad+\int_{\Gamma_-} \underbrace{\bfbeta\cdot\bfn_x v^2}_{\leq 0}
 \quad+\int_{\Gamma_+} \bfbeta\cdot\bfn_x \cancelto{0}{v^2}
@@ -677,7 +757,7 @@ $
 $
 we can bound
 \[
-\norm{\tilde\bfbeta\cdot\Gradxt v_1}\leq \norm{g}.
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{g}.
 \]
 \end{lemma}
 \begin{proof}
@@ -796,7 +876,7 @@ with ``diffusive'' terms like $\epsilon\norm{\Grad v}$ which scale like $h^{d-2}
 This is also the mechanism by which we avoid creating sharp boundary layers in our optimal test functions -- by correctly balancing reactive and diffusive terms.
 In the following numerical experiments, we compute with these mesh dependent norms.
 
-We verify robust convergence of our transient coupled robust norm on an analytical solution (shown in \ref{fig:transientAnalytical}) that decays to a steady state Eriksson-Johnson problem:
+We verify robust convergence of our transient coupled robust norm on an analytical solution (shown in Figure \ref{fig:transientAnalytical}) that decays to a steady state Eriksson-Johnson problem:
 \[
 u=\exp(-lt)\LRs{\exp(\lambda_1 x)-\exp(\lambda_2 x)}+
 \cos(\pi y)\frac{\exp(s_1x)-\exp(r_1x)}{\exp(-s_1)-\exp(-r_1)}\,,
@@ -810,7 +890,7 @@ We show robustness for $\epsilon=10^{-2},\,10^{-4},\,10^{-6},\,10^{-8}$ for line
 Flux boundary conditions were applied based on the exact solution at $x=-1$ and $t=0$ 
 while trace boundary conditions were set at $y=-0.5$, $y=0.5$, and $x=0$.
 An adaptive solve was undertaken using a greedy refinement strategy in which any elements with at least 20\% of the energy error 
-of highest energy error element were refined at each step.
+of highest energy error element were refined at each step. See \cite{DPG3} for details on adaptivity within the DPG context.
 
 In the plot legends, $L^2$ indicates $\LRp{\norm{u-u_\text{exact}}_L^2+\norm{\bfsigma-\bfsigma_\text{exact}}_{L^2}}^{\frac{1}{2}}$ 
 while $V^*$ indicates the energy error reported by the method.
@@ -835,7 +915,7 @@ considered here. When plotted in isolation, the $L^2$ error in $\bfsigma$ was us
 \includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_10.png}
 \caption{$t=1.0$}
 \end{subfigure}
-\caption{Transient analytical solution}
+\caption{Transient Eriksson-Johnson solution}
 \label{fig:transientAnalytical}
 \end{figure}
 
