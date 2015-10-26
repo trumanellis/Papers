@@ -3,7 +3,19 @@
 \input{../preamble.tex}
 \graphicspath{{../SandiaTalk/figs/}{../Figures/}}
 
-\title{Space-Time Robustness}
+% Theorem Styles
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+% Definition Styles
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\title{Robust DPG Methods for Transient Convection-Diffusion}
 \author{Truman Ellis, Jesse Chan, Leszek Demkowicz}
 \date{}
 
@@ -37,17 +49,25 @@
 % Cite DPG2, Dahmen confusion paper, both Heuer papers (copied from Encyclopedia article), second Dahmen paper, maybe mention Stevenson paper
 
 \begin{abstract}
-Abstract	
+We introduce two robust DPG methods for transient convection-diffusion problems.	
+Once a variational formulation is selected, the choice of test norm critically influences the quality of a particular DPG method.
+It is desirable that a test norm produce convergence of the solution in a norm equivalent to $L^2$ while producing optimal test functions 
+that can be accurately computed and maintaining good conditioning of the optimal test function solve on highly adaptive meshes.
+Two such \emph{robust} norms are introduced and proven to guarantee close to $L^2$ convergence of the primary solution variable.
+Numerical experiments demonstrate robust convergence of the two methods.
 \end{abstract}
 
 \section{Introduction}
-The discontinuous Petrov-Galerkin finite element method presents a promising new framework for developing robust numerical methods for computational mechanics.
+The discontinuous Petrov-Galerkin finite element method presents an attractive new framework 
+for developing robust numerical methods for computational mechanics.
 % DPG promises the possibility of developing stable finite element methods for any well-posed variational problem.
 DPG contains the promise of being an automated scientific computing technology -- it provides stability for any variational formulation, 
 optimal convergence rates in a user-defined norm, virtually no pre-asymptotic stability issues on coarse meshes, 
 and a measure of the error residual which can be used to robustly drive adaptivity.
 The method also delivers Hermitian positive definite stiffness matrices for any problem, 
-weak enforcement of boundary conditions, and several other attractive properties.
+weak enforcement of boundary conditions, and several other attractive properties \cite{DPG2,DPGOverview,DPGMixed}.
+For the most recent review of DPG, see \cite{DPGEncyclopedia}.
+The process of developing robust DPG methods for steady convection-diffusion was explored in \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
 We start with an abstract derivation of the DPG framework then define the concept of a robust test norm
 and specialize to transient convection-diffusion.
 Two new robust norms are derived and numerical verifications of the theory are presented.
@@ -101,6 +121,17 @@ transient phenomena.
 % In which case, each element is uncoupled from its neighbors, significantly increasing the efficiency of a solver. 
 % Since the cone condition evolves with the solution, the mesh must be generated on the fly based on the most recent solution information.
 % Abedi, Petracovici, and Haber\cite{Abedi2006} applied this causal mesh generation to linear elastodynamics.
+
+It is possible to use the semi-discrete approach to solving transient problems with DPG, 
+but it doesn't appear to be a natural fit with the adaptive nature of DPG.
+The Courant-Friedrichs-Lewy (CFL) condition is not binding with implicit time integration schemes, but it can be a guiding principle for temporal accuracy.
+If we are interested in temporally accurate solutions, we are limited by the fact that our smallest mesh elements 
+(which may be orders of magnitude smaller than the largest elements) are constrained to proceed at a much smaller time step than the mesh as a whole. 
+We can either restrict the whole mesh to the smallest time step, or we can attempt some sort of local time stepping.
+A space-time DPG formulation presents an attractive choice as we will be able to preserve our natural adaptivity 
+from the steady problems while extending it in time.
+Thus we achieve an adaptive solution technique for transient problems in a unified framework.
+This paper expands previous work developing robust DPG methods for steady convection-diffusion to the space-time form.
 
 % \subsection{Robust DPG Methods}
 
@@ -373,7 +404,7 @@ In practice, we have found it to be sufficient to use an ``enriched'' space of h
 polynomial dimension than the trial space \cite{PracticalDPG}.
 This adds an additional requirement when assembling a robust test norm, namely that our optimal test functions should be adequately representable within this enriched space.
 We illustrate this point by considering three norms which satisfy the above conditions for 1D steady convection-diffusion.
-The graph norm is $\norm{A^*v}_{L^2}+\norm{v}_{L^2}$:
+The graph norm is $\LRp{\norm{A^*v}_{L^2}^2+\norm{v}_{L^2}^2}^{\frac{1}{2}}$:
 \begin{equation*}
 \norm{(v,\bftau)}^2=
 \norm{\Div\bftau-\bfbeta\cdot\Grad v}^2
@@ -459,17 +490,17 @@ On the right, we see the approximated optimal test function using a enriched cub
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_v}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_tau}\\
 \caption{Ideal}
-\label{fig:idealRobust}
+\label{fig:idealCoupledRobust}
 \end{subfigure}
 \begin{subfigure}[t]{0.4\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_v_approx3}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_tau_approx3}\\
 \caption{Approximated}
-\label{fig:approxRobust}
+\label{fig:approxCoupledRobust}
 \end{subfigure}
 \caption{Coupled robust norm optimal test functions for $u=x-\frac{1}{2}$}
-\label{fig:optimalRobust}
+\label{fig:optimalCoupledRobust}
 \end{figure}
 
 Mathematically, the graph norm satisfies the necessary condition to be a robust norm, but the ideal optimal test functions contain strong boundary
@@ -483,8 +514,8 @@ The coupled robust norm satisfies condition \eqref{eq:necessaryCondition} and al
 with a cubic polynomial space.
 Niemi \etal attempted to approximate boundary layers in optimal shape functions with Shishkin meshes \cite{NiemiShishkin,niemi2013discontinuous}.
 
-\subsection{A Robust Norm for Transient Convection-Diffusion}
-Now we present the analysis leading to a coupled robust norm for transient convection-diffusion.
+\subsection{Application to Transient Convection-Diffusion}
+Now we present the analysis leading to two robust norms for transient convection-diffusion.
 Consider the problem with homogeneous boundary conditions
 \begin{align*}
 \frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
@@ -849,7 +880,11 @@ Plugging this into \eqref{eq:adj1}, we get
 \end{proof}
 
 \section{Numerical Tests}
-The norms given in \eqref{eq:robustnorm} and \eqref{eq:coupledrobustnorm} are robust, but may run into issues with poor conditioning.
+The norms given in \eqref{eq:robustnorm} and \eqref{eq:coupledrobustnorm} are robust, 
+but the reaction ($0^\text{th}$ order) terms still dominate the diffusion terms which 
+produces boundary layers in optimal test functions and
+prohibits their resolution with a simple enrichment strategy.
+% but may run into issues with poor conditioning.
 We can mitigate this by introducing mesh-dependent norms:
 \begin{align}
 \label{eq:meshrobustnorm}

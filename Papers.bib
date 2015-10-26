@@ -259,6 +259,7 @@ year = {2013}
 @techreport{VariousVariational,
 author = {L.F. Demkowicz},
 institution = {ICES},
+number = {15-03},
 month = jan,
 priority = {2},
 title = {Various Variational Formulations and Closed Range Theorem},
@@ -268,6 +269,7 @@ year = {2015}
 @techreport{BreakingSpaces,
 author = {C. Carstensen and L.F. Demkowicz J. Gopalakrishnan},
 institution = {ICES},
+number = {15-18},
 month = july,
 priority = {2},
 title = {Breaking spaces and forms for the {DPG} method and
@@ -870,15 +872,27 @@ volume = {24},
 year = {1997}
 }
 
-@techreport{PracticalDPG,
+techreport{PracticalDPG,
 author = {Gopalakrishnan, J. and Qiu, W.},
 institution = {IMA},
+number = {33},
 keywords = {dpg},
-note = {submitted},
 posted-at = {2013-11-19 19:39:17},
 priority = {2},
 title = {An analysis of the practical {DPG} method},
 year = {2011}
+}
+
+@article{PracticalDPG,
+author = {Gopalakrishnan, J. and Qiu, W.},
+journal = {Math. Comp.},
+volume = {83},
+number = {286},
+keywords = {dpg},
+pages = {537--552},
+title = {An analysis of the practical {DPG} method},
+year = {2014},
+month = mar,
 }
 
 article{Givoli88,
@@ -2305,7 +2319,7 @@ author = {C. Bajer and C. Bonthoux},
 }
 
 @article{niemi2013discontinuous,
-  title={Discontinuous Petrov--Galerkin method based on the optimal test space norm for steady transport problems in one space dimension},
+  title={Discontinuous {P}etrov-{G}alerkin method based on the optimal test space norm for steady transport problems in one space dimension},
   author={Niemi, Antti H and Collier, Nathaniel O and Calo, Victor M},
   journal={Journal of Computational Science},
   volume={4},
@@ -2317,7 +2331,7 @@ author = {C. Bajer and C. Bonthoux},
 
 @article{NiemiShishkin,
  author = {Niemi, Antti H. and Collier, Nathaniel O. and Calo, Victor M.},
- title = {Automatically Stable Discontinuous Petrov-Galerkin Methods for Stationary Transport Problems: Quasi-optimal Test Space Norm},
+ title = {Automatically Stable Discontinuous {P}etrov-{G}alerkin Methods for Stationary Transport Problems: Quasi-optimal Test Space Norm},
  journal = {Comput. Math. Appl.},
  issue_date = {December, 2013},
  volume = {66},
@@ -2327,10 +2341,50 @@ author = {C. Bajer and C. Bonthoux},
  issn = {0898-1221},
  pages = {2096--2113},
  numpages = {18},
- url = {http://dx.doi.org/10.1016/j.camwa.2013.07.016},
- doi = {10.1016/j.camwa.2013.07.016},
  acmid = {2542950},
  publisher = {Pergamon Press, Inc.},
  address = {Tarrytown, NY, USA},
  keywords = {Automatic stabilization technique, Convection-dominated diffusion, Discontinuous Petrov-Galerkin, Finite element method, Numerical stability, Robustness},
 } 
+ url = {http://dx.doi.org/10.1016/j.camwa.2013.07.016},
+ doi = {10.1016/j.camwa.2013.07.016},
+
+@techreport{DPGEncyclopedia,
+author = {L.F. Demkowicz and J. Gopalakrishnan},
+institution = {ICES},
+number = {15-20},
+month = dec,
+posted-at = {2013-12-23 20:58:51},
+priority = {2},
+title = {Discontinuous {P}etrov-{Galerkin} ({DPG}) Method},
+year = {2015}
+keywords = {recommended},
+}
+
+@techreport{EllisRobustnessReport,
+author = {T.E. Ellis and J.L. Chan and L.F. Demkowicz},
+institution = {ICES},
+number = {15-21},
+month = oct,
+priority = {2},
+title = {Robust {DPG} Methods for Transient Convection-Diffusion},
+year = {2015}
+}
+
+@article{RobertsDPGNavierStokes,
+title = "A discontinuous {P}etrov-{G}alerkin methodology for adaptive solutions to the incompressible {N}avier-{S}tokes equations ",
+journal = {J. Comput. Phys.},
+volume = "301",
+number = "",
+pages = "456 - 483",
+year = "2015",
+note = "",
+issn = "0021-9991",
+author = "N.V. Roberts and L.F. Demkowicz and R.D. Moser",
+keywords = "Discontinuous Petrov Galerkin",
+keywords = "Incompressible flow",
+keywords = "Navier–Stokes equations",
+keywords = "Adaptive finite elements "
+}
+doi = "http://dx.doi.org/10.1016/j.jcp.2015.07.014",
+url = "http://www.sciencedirect.com/science/article/pii/S0021999115004593",

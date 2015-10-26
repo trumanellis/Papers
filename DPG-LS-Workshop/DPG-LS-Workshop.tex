@@ -2,7 +2,7 @@
 \usepackage{etex}
 \reserveinserts{28}
 \input{../preamble.tex}
-\graphicspath{{../SandiaTalk/figs/}{../Figures/}}
+\graphicspath{{../Proposal/figs/}{../Figures/}}
 
 \usepackage{bbm}
 \usepackage{textpos}
@@ -171,6 +171,175 @@ supports rapid specification of DPG problems while maintaining computational eff
     \pgfuseimage{ut}
     \end{textblock*}
   }
+
+
+%   /$$      /$$             /$$     /$$                        /$$     /$$                    
+%  | $$$    /$$$            | $$    |__/                       | $$    |__/                    
+%  | $$$$  /$$$$  /$$$$$$  /$$$$$$   /$$ /$$    /$$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$ 
+%  | $$ $$/$$ $$ /$$__  $$|_  $$_/  | $$|  $$  /$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$
+%  | $$  $$$| $$| $$  \ $$  | $$    | $$ \  $$/$$/   /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$
+%  | $$\  $ | $$| $$  | $$  | $$ /$$| $$  \  $$$/   /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$
+%  | $$ \/  | $$|  $$$$$$/  |  $$$$/| $$   \  $/   |  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$
+%  |__/     |__/ \______/    \___/  |__/    \_/     \_______/   \___/  |__/ \______/ |__/  |__/
+%                                                                                              
+%                                                                                              
+\section{Motivation: Automating Scientific Computing}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Navier-Stokes Equations}
+\framesubtitle{Numerical Challenges}
+\begin{columns}[c]
+\begin{column}{.6\textwidth}
+Robust simulation of unsteady fluid dynamics remains a challenging issue.
+\vspace{2ex}
+
+\begin{itemize}
+\item{} Resolving solution features (sharp, localized viscous-scale phenomena)
+\begin{itemize}
+\item{} Shocks
+\item{} Boundary layers - resolution needed for drag/load
+\item{} Turbulence (non-localized)
+\end{itemize}
+% \item{} Nonlinear convergence and uniqueness of solutions
+\item{} Stability of numerical schemes
+\begin{itemize}
+\item{} Nonlinearity
+\item{} Nature of PDE changes for different flow regimes
+\item{} Coarse/adaptive grids
+\item{} Higher order
+\end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{.4\textwidth}
+\vspace{-3ex}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{Motivation/bullet_shock.png}\\
+Shock\\\vspace{1ex}
+\includegraphics[width=0.9\textwidth]{Motivation/boundary_layer.png}\\
+Boundary layer
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}  
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Motivation}
+\framesubtitle{Initial Mesh Design is Expensive and Time-Consuming}
+\begin{columns}[t]
+\begin{column}[c]{0.4\textwidth}
+\begin{itemize}
+  \item Surface mesh must accurately represent geometry
+  \item Volume mesh needs sufficient resolution for asymptotic regime
+  % Before we accurately know the flow features
+  % \item Boundary layer meshes must respect $y^+$ guidelines
+  \item Engineers often forced to work by trial and error
+  \item Bad in the context of HPC
+  \uncover<2>{\item \textcolor{utorange}{We desire an automated computational technology}}
+\end{itemize}
+\end{column}
+\begin{column}[c]{0.6\textwidth}
+\vspace{2ex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/NumecaRaceCar.png}
+\\\small{Formula 1 Mesh by Numeca}\\
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{DPG on Coarse Meshes}
+\framesubtitle{Adaptive Solve of the Carter Plate Problem\footfullcite{JesseDissertation} $Re=1000$}
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T0.png}\\
+\vspace{-1ex}
+{\scriptsize Temperature on Initial Mesh}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T8.png}
+\vspace{-1ex}
+{\scriptsize Temperature after 8 Refinements}
+\vspace{1ex}
+
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T4.png}\\
+\vspace{-1ex}
+{\scriptsize Temperature after 4 Refinements}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{Motivation/PlateMovie/T11.png}
+\vspace{-1ex}
+{\scriptsize Temperature after 11 Refinements}
+\vspace{1ex}
+\end{figure}
+\end{column}
+\end{columns}
+% \foreach \n in {1,...,11}
+% {
+% \only<\n>
+% {
+% \begin{figure}[ht]
+% \centering
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/u\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Velocity}\\
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/T\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Temperature}\\
+% \end{subfigure}
+% \begin{subfigure}[c]{0.5\textwidth}
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.99\textwidth]{Motivation/Plate/mesh\n.png}\\
+% \vspace{-1ex}
+% {\scriptsize Mesh \n}\\
+% \end{subfigure}
+% \end{figure}
+% }
+% }
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Lessons from Other Methods}
+\framesubtitle{~~}
+\begin{description}
+  \item[Streamline Upwind Petrov-Galerkin:] Adaptively changing the test space can produce a method with better stability.
+  \item[Discontinuous Galerkin:] Discontinuous basis functions are a legitimate option for finite element methods.
+  \item[Hybridized DG:] Mesh interface unknowns can facilitate static condensation -- reducing the number of DOFs in the global solve.
+  \item[Least-Squares FEM:] The finite element method is most powerful in a minimum residual context (i.e. as a Ritz method).
+  \item[Space-Time FEM:] Highly adaptive methods should have adaptive time integration. 
+  Superior framework for problems with moving boundaries.
+  Requires a method that is both temporally and spatially stable.
+  % \item[Mixed FEM:] A first order formulation gives more flexibility.
+\end{description}
+% SUPG - changing your test space can produce better stability.
+
+% DG - Discontinuous basis functions are a legitimate option in the finite element framework.
+
+% HDG - Mesh interface unknowns can facilitate static condensation -- reducing the number of DOFs in the global solve.
+
+% Least Squares
+
+% Space-Time FEM - 
+%   \item Satisfies geometric conservation laws\footnotemark
+%   \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
+\end{frame}
 
 
 %   /$$$$$$$  /$$$$$$$   /$$$$$$         /$$$$$$                                            /$$                        
@@ -510,7 +679,7 @@ where
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time Convection-Diffusion}
-\framesubtitle{Robust Norms}
+\framesubtitle{$L^2$ Equivalent Norms}
 % \vspace{-5ex}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
@@ -542,15 +711,17 @@ Necessary robustness condition:
 \centering
 
 Analytical Solution
+\small{
 \begin{align*}
-u&=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\\
-\lambda_{1,2}&=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\\
++\LRp{1-e^{\frac{1}{\epsilon}x}}
 \end{align*}
-where $l=3, \quad\epsilon = 10^{-2}$
-\vspace{-3ex}
+}
+% where $l=3, \quad\epsilon = 10^{-2}$
+\vspace{-2ex}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{SpaceTimeAnalyticalExact}
+\includegraphics[width=0.8\textwidth]{Confusion/Robustness/1d_problem.png}
 \end{figure}
 \end{column}
 \end{columns}
@@ -559,14 +730,14 @@ where $l=3, \quad\epsilon = 10^{-2}$
 % ------------------------------------------------------------
 \begin{frame}[t]
 \frametitle{Space-Time Convection-Diffusion}
-\framesubtitle{Robust Norms}
+\framesubtitle{$L^2$ Equivalent Norms}
 A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not produce boundary layers in the optimal test function.
 \vspace{-5ex}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm0}
+\includegraphics[width=\textwidth]{Confusion/Robustness/convergence1D_p2_graph.pdf}
 \end{figure}
 \vspace{-5ex}
 \small{
@@ -582,7 +753,7 @@ A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not p
 \begin{column}{0.5\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm4}
+\includegraphics[width=\textwidth]{Confusion/Robustness/convergence1D_p2_robust.pdf}
 \end{figure}
 \vspace{-5ex}
 \small{
@@ -601,7 +772,7 @@ A norm should be: bounded by $\norm{u}_{\LOmega}$, have good conditioning, not p
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Convection-Diffusion}
+\frametitle{Steady Convection-Diffusion}
 \framesubtitle{Ideal Optimal Shape Functions}
 \vspace{-3ex}
 \begin{columns}
@@ -629,7 +800,7 @@ Coupled Robust Norm
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Convection-Diffusion}
+\frametitle{Steady Convection-Diffusion}
 \framesubtitle{Approximated ($p=3$) Optimal Shape Functions}
 \vspace{-3ex}
 \begin{columns}
@@ -654,26 +825,223 @@ Coupled Robust Norm
 
 % ------------------------------------------------------------
 \begin{frame}[t]
+\frametitle{Steady Convection-Diffusion}
+\framesubtitle{Two Robust Norms for Steady Convection-Diffusion}
+
+The following norms are robust for steady convection-diffusion.
+
+The robust norm was derived in \footfullcite{ChanHeuerThanhDemkowicz2012}:
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\bfbeta\cdot\Grad v}^2
++\epsilon\norm{\Grad v}^2
++\min\LRp{\frac{\epsilon}{h^2},1}\norm{v}^2\\
+&+\norm{\Div\bftau}^2
++\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\,.
+\end{align*}
+The case for the coupled robust norm was made in \footfullcite{JesseDissertation}:
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\bfbeta\cdot\Grad v}^2
++\epsilon\norm{\Grad v}^2
++\min\LRp{\frac{\epsilon}{h^2},1}\norm{v}^2\\
+&+\norm{\Div\bftau-\bfbeta\cdot\Grad v}^2
++\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\,.
+\end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
 \frametitle{Space-Time Convection-Diffusion}
-\framesubtitle{Robust Norms for 2D Space-Time}
-\vspace{-6.5ex}
+\framesubtitle{Two Robust Norms for Transient Convection-Diffusion}
+Let $\tilde\bfbeta:=\vecttwo{\bfbeta}{1}$ and $\Gradxt v:=\vecttwo{\Grad v}{\pd{v}{t}}$.
+
+The following norms are robust for space-time convection-diffusion.
+
+Robust Norm:
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\textcolor{red}{\tilde\bfbeta\cdot\Gradxt v}}^2
++\epsilon\norm{\Grad v}^2
++\min\LRp{\frac{\epsilon}{h^2},1}\norm{v}^2\\
+&+\norm{\Div\bftau}^2
++\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\,.
+\end{align*}
+Coupled Robust Norm
+\begin{align*}
+\norm{(v,\bftau)}^2&=
+\norm{\textcolor{red}{\tilde\bfbeta\cdot\Gradxt v}}^2
++\epsilon\norm{\Grad v}^2
++\min\LRp{\frac{\epsilon}{h^2},1}\norm{v}^2\\
+&+\norm{\Div\bftau-\textcolor{red}{\tilde\bfbeta\cdot\Gradxt v}}^2
++\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\,.
+\end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Adjoint Operator}
+Consider the problem with homogeneous boundary conditions
+\begin{align*}
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
+% \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\\
+\beta_n u-\epsilon\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+u &= 0 \text{ on } \Gamma_+\\
+u &= u_0 \text{ on } \Gamma_0.
+\end{align*}
+The adjoint operator $A^*$ is given by 
+\[
+A^*(v,\bftau)=\LRp{\frac{1}{\epsilon}\bftau+\Grad v,-\tilde\bfbeta\cdot\Gradxt v+\Div\bftau}\,.
+\]
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Controlling Different Field Variables}
+We decompose the continuous adjoint problem
+$
+A^*(\bftau,v)=(\bff,g)
+$
+into
+\begin{block}{Continuous part with forcing $g$}
+\begin{columns}[t]
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\frac{1}{\epsilon}\bftau_1+\Grad v_1 &=0\\
+-\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= g\\
+\end{align*}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\bftau_1\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_1 &= 0 \text{ on } \Gamma_+\\
+v_1 &= 0 \text{ on } \Gamma_T
+\end{align*}
+\end{column}
+\end{columns}
+\end{block}
+\begin{block}{Continuous part with forcing $\bff$}
+\begin{columns}[t]
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
+-\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
+\end{align*}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_2 &= 0 \text{ on } \Gamma_+\\
+v_2 &= 0 \text{ on } \Gamma_T
+\end{align*}
+\end{column}
+\end{columns}
+\end{block}
+% % and a continuous part with forcing $\bff$
+% \begin{align*}
+% \frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
+% -\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
+% \bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+% v_2 &= 0 \text{ on } \Gamma_+\\
+% v_2 &= 0 \text{ on } \Gamma_T\,.
+% \end{align*}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Proved Bounds at Our Disposal}
+Proofs of these lemmas can be found in \footfullcite{EllisRobustnessReport}.
+\begin{lemma}[1]
+If $\Div\bfbeta=0$, we can bound
+\[
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{\bff}^2
+\]
+where $v=v_1+v_2$.
+\end{lemma}
+\begin{lemma}[2]
+If $\norm{\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI}_{L^{\infty}}\le C_{\bfbeta}$,
+we can bound
+\[
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{g}.
+\]
+\end{lemma}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Control of $u$}
+\begin{block}{Bound on $\norm{(v_1,\bftau_1)}$}
+\vspace{-2ex}
+\begin{align*}
+\text{Lemma (2)}\Rightarrow&&\norm{\tilde\bfbeta\cdot\Gradxt v_1}&\lesssim\norm{g}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1}&\leq\norm{g}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim2\norm{g}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1-\tilde\bfbeta\cdot\Gradxt v_1}&=\norm{g}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2&\leq\norm{g}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_1}&=\epsilon\norm{\Grad v_1}\leq\norm{g}
+\end{align*}
+Plugging in $g=u$, we can guarantee robust control
+\[
+\norm{(u,0)}_{L^2(\Omega_h)}\lesssim\norm{(u,\bfsigma)}_E\,.
+\]
+\end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Control of $\bfsigma$}
+\begin{block}{Bound on $\norm{(v_2,\bftau_2)}$}
+\vspace{-2ex}
+\begin{align*}
+\text{Definition}\Rightarrow&&\norm{\Div\bftau_2-\tilde\bfbeta\cdot\Gradxt v_2}&=0\leq\norm{\bff}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2&\leq\epsilon\norm{\bff}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_2}&=\norm{\bff}+\epsilon\norm{\Grad v_2}=(1+\epsilon)\norm{\bff}
+\end{align*}
+We have not been able to prove bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ or $\norm{\Div\bftau_2}$. 
+\bigskip
+
+Thus we can not guarantee that plugging in $\bff=\bfsigma$ we get robust control
+\[
+\norm{(0,\bfsigma)}_{L^2(\Omega_h)}\cancel{\lesssim}\norm{(u,\bfsigma)}_E\,.
+\]
+\end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Transient Analytical Solution}
+Transient impulse decays to Eriksson-Johnson steady state solution.
+\[
+u=\exp(-lt)\LRs{\exp(\lambda_1 x)-\exp(\lambda_2 x)}+
+\cos(\pi y)\frac{\exp(s_1x)-\exp(r_1x)}{\exp(-s_1)-\exp(-r_1)}
+\]
+\vspace{-4.0ex}
 \begin{columns}[t]
 \begin{column}{0.3\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_00.png}
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_00.png}\\
+$t=0.0$
 \end{figure}
 \end{column}
 \begin{column}{0.3\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_05.png}
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_05.png}\\
+$t=0.5$
 \end{figure}
 \end{column}
 \begin{column}{0.3\textwidth}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_10.png}
+\includegraphics[width=\textwidth]{Confusion/Robustness/2d_problem_t_=_10.png}\\
+$t=1.0$
 \end{figure}
 \end{column}
 \end{columns}
@@ -681,8 +1049,8 @@ Coupled Robust Norm
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Convection-Diffusion}
-\framesubtitle{Robust Norms for 2D Space-Time}
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Robust Convergence to Analytical Solution}
 \vspace{-6.5ex}
 \begin{columns}[t]
 \begin{column}{0.4\textwidth}
@@ -706,134 +1074,91 @@ Coupled Robust Norm
 \end{columns}
 \end{frame}
 
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Incompressible Navier-Stokes}
-\framesubtitle{Space-Time Divergence Form}
-First order space-time divergence form:
-\begin{align*}
-  \frac{1}{\nu}\bfsigma_1-\Grad u_1&=0\\
-  \frac{1}{\nu}\bfsigma_2-\Grad u_2&=0\\
-  \Divxt\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}}&=\bff\\
-  \Div\bfu&=0\\
-  \int_\Omega p&=0
-\end{align*}
-\end{frame}
-
-% ------------------------------------------------------------
-\begin{frame}[t,shrink=10]
-\frametitle{Space-Time Incompressible Navier-Stokes}
-\framesubtitle{Ultra-Weak Formulation with Discontinuous Test Functions}
-Multiplying by $\bftau_1$, $\bftau_2$, $\bfu$, and $q$, and integrating by
-parts
-\begin{align*}
-  \LRp{\frac{1}{\nu}\bfsigma_1,\bftau_1}
-  +\LRp{u_1,\Div\bftau_1}
-  -\LRa{\hat u_1,\tau_{1n}}&=0\\
-  \LRp{\frac{1}{\nu}\bfsigma_2,\bftau_2}
-  +\LRp{u_2,\Div\bftau_2}
-  -\LRa{\hat u_2,\tau_{2n}}&=0\\
-  -\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu},\Gradxt\bfv}
-  +\LRa{\hat\bft,\bfv}
-  &=\LRp{\bff,\bfv}\\
-  -\LRp{\bfu,\Grad q}
-  +\LRa{\widehat{\bfu\cdot\bfn},q}&=0\\
-  \int_\Omega p&=0
-\end{align*}
-where
-\[
-\hat\bft=\trace\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}\cdot\bfn_{xt}}
-\]
-\end{frame}
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Space-Time Incompressible Navier-Stokes}
-\framesubtitle{Taylor-Green Vortex Problem}
-\vspace{-2ex}
-\small{
-\begin{align*}
-\bfu=\vecttwo{e^{-2\nu t}\sin x\cos y}{-e^{-2\nu t}\cos x\sin y}
-\end{align*}
-}
-\vspace{-7ex}
-\begin{columns}[t]
-\begin{column}{0.45\textwidth}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{Incompressible/TaylorGreen/coupledrobust_convergence.pdf}
-\end{figure}
-% \vspace{-5ex}
-% \small{
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Space-Time Incompressible Navier-Stokes}
+% \framesubtitle{Space-Time Divergence Form}
+% First order space-time divergence form:
 % \begin{align*}
-% \norm{(v,\bftau)}^2&=
-% \norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
-% &+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
-% &+\epsilon\norm{\Grad v}^2
-% +\norm{\bfbeta\cdot\Grad v}^2
-% +\norm{v}^2
+%   \frac{1}{\nu}\bfsigma_1-\Grad u_1&=0\\
+%   \frac{1}{\nu}\bfsigma_2-\Grad u_2&=0\\
+%   \Divxt\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}}&=\bff\\
+%   \Div\bfu&=0\\
+%   \int_\Omega p&=0
 % \end{align*}
-% }
-\end{column}
-\begin{column}{0.45\textwidth}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{Incompressible/TaylorGreen/nsdecoupledh1_convergence.pdf}
-\end{figure}
-% \vspace{-5ex}
-% \small{
-% \begin{align*}
-% \norm{(v,\bftau)}^2&=
-% \norm{\tilde\bfbeta\cdot\Gradxt v}^2
-% +\norm{\Div\bftau}^2\\
-% &+\frac{1}{h^2}\norm{\bftau}^2
-% +\norm{\Grad v}^2
-% +\norm{v}^2
-% \end{align*}
-% }
-\end{column}
-\end{columns}
-\end{frame}
+% \end{frame}
 
+% % ------------------------------------------------------------
+% \begin{frame}[t,shrink=10]
+% \frametitle{Space-Time Incompressible Navier-Stokes}
+% \framesubtitle{Ultra-Weak Formulation with Discontinuous Test Functions}
+% Multiplying by $\bftau_1$, $\bftau_2$, $\bfu$, and $q$, and integrating by
+% parts
+% \begin{align*}
+%   \LRp{\frac{1}{\nu}\bfsigma_1,\bftau_1}
+%   +\LRp{u_1,\Div\bftau_1}
+%   -\LRa{\hat u_1,\tau_{1n}}&=0\\
+%   \LRp{\frac{1}{\nu}\bfsigma_2,\bftau_2}
+%   +\LRp{u_2,\Div\bftau_2}
+%   -\LRa{\hat u_2,\tau_{2n}}&=0\\
+%   -\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu},\Gradxt\bfv}
+%   +\LRa{\hat\bft,\bfv}
+%   &=\LRp{\bff,\bfv}\\
+%   -\LRp{\bfu,\Grad q}
+%   +\LRa{\widehat{\bfu\cdot\bfn},q}&=0\\
+%   \int_\Omega p&=0
+% \end{align*}
+% where
+% \[
+% \hat\bft=\trace\LRp{\vecttwo{\bfu\otimes\bfu-\vecttwo{\bfsigma_1}{\bfsigma_2}+p\bfI}{\bfu}\cdot\bfn_{xt}}
+% \]
+% \end{frame}
 
 % % ------------------------------------------------------------
 % \begin{frame}[t]
-% \frametitle{Space-Time Convection-Diffusion}
-% \framesubtitle{Robust Convergence to Analytical Solution}
-% \vspace{-4ex}
+% \frametitle{Space-Time Incompressible Navier-Stokes}
+% \framesubtitle{Taylor-Green Vortex Problem}
+% \vspace{-2ex}
 % \small{
 % \begin{align*}
-% u=e^{-lt}(e^{\lambda_1(x-1)}-e^{\lambda_2(x-1)})\,,\quad
-% \lambda_{1,2}=\frac{-1\pm\sqrt{1-4l\epsilon}}{-2\epsilon}
+% \bfu=\vecttwo{e^{-2\nu t}\sin x\cos y}{-e^{-2\nu t}\cos x\sin y}
 % \end{align*}
 % }
-% % where $l=3, \quad\epsilon = 10^{-2}$
-% Test Norm:
-% \small{
-% \begin{align*}
-% \norm{(v,\bftau)}^2&=
-% \norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2
-% +\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
-% &+\epsilon\norm{\Grad v}^2
-% +\norm{\bfbeta\cdot\Grad v}^2
-% +\norm{v}^2
-% \end{align*}
-% }
-% \vspace{-4ex}
+% \vspace{-7ex}
 % \begin{columns}[t]
-% \begin{column}{0.5\textwidth}
-% \vspace{-4ex}
+% \begin{column}{0.45\textwidth}
 % \begin{figure}[t]
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeAnalyticalExact}
+% \includegraphics[width=\textwidth]{Incompressible/TaylorGreen/coupledrobust_convergence.pdf}
 % \end{figure}
+% % \vspace{-5ex}
+% % \small{
+% % \begin{align*}
+% % \norm{(v,\bftau)}^2&=
+% % \norm{\Div\bftau-\tilde\bfbeta\cdot\Gradxt v}^2\\
+% % &+\min\LRp{\frac{1}{h^2},\frac{1}{\epsilon}}\norm{\bftau}^2\\
+% % &+\epsilon\norm{\Grad v}^2
+% % +\norm{\bfbeta\cdot\Grad v}^2
+% % +\norm{v}^2
+% % \end{align*}
+% % }
 % \end{column}
-% \begin{column}{0.5\textwidth}
-% \vspace{-4ex}
+% \begin{column}{0.45\textwidth}
 % \begin{figure}[t]
 % \centering
-% \includegraphics[width=\textwidth]{SpaceTimeAnalyticalNorm4}
+% \includegraphics[width=\textwidth]{Incompressible/TaylorGreen/nsdecoupledh1_convergence.pdf}
 % \end{figure}
+% % \vspace{-5ex}
+% % \small{
+% % \begin{align*}
+% % \norm{(v,\bftau)}^2&=
+% % \norm{\tilde\bfbeta\cdot\Gradxt v}^2
+% % +\norm{\Div\bftau}^2\\
+% % &+\frac{1}{h^2}\norm{\bftau}^2
+% % +\norm{\Grad v}^2
+% % +\norm{v}^2
+% % \end{align*}
+% % }
 % \end{column}
 % \end{columns}
 % \end{frame}
@@ -978,15 +1303,17 @@ Sequence of 4 time slabs
 \frametitle{Thank You!}
 \framesubtitle{Recommended References}
     \nocite{DPGOverview}
-    \nocite{EllisLC}
+    \nocite{DPGEncyclopedia}
+    \nocite{EllisRobustnessReport}
     \nocite{CamelliaDPG}
-    \nocite{DemkowiczHeuer}
-    \nocite{ChanHeuerThanhDemkowicz2012}
-    \nocite{DPGStokes}
+    % \nocite{DemkowiczHeuer}
+    % \nocite{ChanHeuerThanhDemkowicz2012}
+    \nocite{RobertsDPGNavierStokes}
     \renewcommand*{\bibfont}{\small}
     \setbeamertemplate{bibliography item}[triangle]
+    % \printbibliography[keyword=recommended]
     \printbibliography[keyword=main]
-    % \bigskip
+    \bigskip
     \printbibliography[notkeyword=main]
 \end{frame}
 
