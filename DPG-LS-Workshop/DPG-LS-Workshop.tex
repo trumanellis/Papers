@@ -1005,7 +1005,8 @@ Plugging in $g=u$, we can guarantee robust control
 We have not been able to prove bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ or $\norm{\Div\bftau_2}$. 
 \bigskip
 
-Thus we can not guarantee that plugging in $\bff=\bfsigma$ we get robust control
+% Thus we can not guarantee that plugging in $\bff=\bfsigma$ we get robust control
+Plugging in $\bff=\bfsigma$, we can \textbf{not} guarantee robust control
 \[
 \norm{(0,\bfsigma)}_{L^2(\Omega_h)}\cancel{\lesssim}\norm{(u,\bfsigma)}_E\,.
 \]
@@ -1165,6 +1166,119 @@ $t=1.0$
 
 
 
+% \section{Space-Time Compressible Navier-Stokes}
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Space-Time Navier-Stokes}
+% \framesubtitle{First Order System with Primitive Variables}
+% Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
+% \begin{align*}
+%   \frac{1}{\mu}\mathbb{D}-\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}+\frac{2}{3}\Div\bfu\bbI&=0\\
+%   \frac{Pr}{C_p\mu}\bfq+\Grad T&=0\\
+%   \Divxt\vecttwo{\rho\bfu}{\rho}&=f_c\\
+%   \Divxt\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bbI-\mathbb{D}}{\rho\bfu}&=\bff_m\\
+%   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
+% \end{align*}
+% \end{frame}
+
+
+% %    /$$$$$$                  /$$
+% %   /$$__  $$                | $$
+% %  | $$  \__/  /$$$$$$   /$$$$$$$
+% %  |  $$$$$$  /$$__  $$ /$$__  $$
+% %   \____  $$| $$  \ $$| $$  | $$
+% %   /$$  \ $$| $$  | $$| $$  | $$
+% %  |  $$$$$$/|  $$$$$$/|  $$$$$$$
+% %   \______/  \______/  \_______/
+% %                                
+% %                                
+% %        
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+% \foreach \n in {1,...,15}
+% {
+% \only<\n>
+% {
+% \vspace{-2ex}
+% \begin{figure}[ht]
+% \centering
+
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/den\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/pres\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=1.0\textwidth]{Sod/MinNSDecoupled1e-5/mesh\n.png}
+% \end{subfigure}
+% \end{figure}
+% }
+% }
+% \end{frame}
+
+
+
+% %   /$$   /$$           /$$      
+% %  | $$$ | $$          | $$      
+% %  | $$$$| $$  /$$$$$$ | $$$$$$$ 
+% %  | $$ $$ $$ /$$__  $$| $$__  $$
+% %  | $$  $$$$| $$  \ $$| $$  \ $$
+% %  | $$\  $$$| $$  | $$| $$  | $$
+% %  | $$ \  $$|  $$$$$$/| $$  | $$
+% %  |__/  \__/ \______/ |__/  |__/
+% %                                
+% %                                
+% % 
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Compressible Navier-Stokes}
+% \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
+% Infinitely strong shock propagation.
+% % \foreach \n in {9,...,9}
+% % {
+% % \only<\n>
+% % {
+% \vspace{4ex}
+% % \begin{figure}[ht]
+% % \centering
+
+% \begin{columns}[t] % contents are top vertically aligned
+% \begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=1.0\textwidth]{Noh/MinNSDecoupled/den9.pdf}
+% \end{column}
+% % \end{subfigure}
+% \hspace{8ex}
+% \begin{column}[T]{0.55\textwidth} % each column can also be its own environment
+% % \begin{subfigure}[c]{0.4\textwidth}
+% \centering
+% \vspace{2ex}
+% \includegraphics[width=0.9\textwidth]{Noh/MinNSDecoupled/mesh9.png}\\
+% \centering
+% Sequence of 4 time slabs
+% \end{column}
+% \end{columns}
+% % \end{subfigure}
+% % \end{figure}
+% % }
+% % }
+
+% \end{frame}
+
+
+
+
 \section{Space-Time Compressible Navier-Stokes}
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -1179,6 +1293,119 @@ Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
   \Divxt\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu+\bfq-\bfu\cdot\mathbb{D}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
 \end{align*}
 \end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{Compact Notation}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Conserved quantities
+\vspace{-2ex}
+\begin{align*}
+C_c&:=\rho\\
+\bfC_m&:=\rho\bfu\\
+C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\\
+% C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.5\textwidth}
+Euler fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfF_c&:=\rho\bfu\\
+\bbF_m&:=\rho\bfu\otimes\bfu+\rho RT\bbI\\
+\bfF_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\rho RT\bfu\\
+% F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+\end{align*}
+\end{column} 
+\end{columns}
+\begin{columns}[t]
+\begin{column}{0.3\textwidth}
+Viscous fluxes 
+\vspace{-2ex}
+\begin{align*}
+\bfK_c&:=\boldsymbol 0\\
+\bbK_m&:=\bbD\\
+\bfK_e&:=-\bfq+\bfu\cdot\bbD\\
+% K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous variables
+\vspace{-2ex}
+\begin{align*}
+\bbM_{\bbD}&:=\frac{1}{\mu}\bbD\\
+\bfM_{\bfq}&:=\frac{Pr}{C_p\mu}\bfq\\
+% M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+\end{align*}
+\end{column} 
+\begin{column}{0.3\textwidth}
+Viscous relations
+\vspace{-2ex}
+\begin{align*}
+\bfG_{\bbD}&:=2\bfu\\
+G_{\bfq}&:=-T\\
+% G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+\end{align*}
+\end{column} 
+\end{columns}
+\centering
+Use change of variables to get conservation or entropy variables.
+% \begin{align*}
+% f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+% \end{align*}
+% and group variables
+% \begin{align*}
+% W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+% \hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+% \Sigma&:=\LRc{\bbD,\bfq}\\
+% \hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+% \Psi&:=\LRc{\bbS\,,\,\bftau}\\
+% V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+% \end{align*}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Navier-Stokes}
+\framesubtitle{Define Group Variables}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+Group terms
+\vspace{-2ex}
+\begin{align*}
+C&:=\LRc{C_c\,,\, \bfC_m\,,\, C_e}\\
+F&:=\LRc{\bfF_c\,,\, \bbF_m\,,\, \bfF_e}\\
+K&:=\LRc{\bfK_c\,,\, \bbK_m\,,\, \bfK_e}\\
+M&:=\LRc{\bbM_{\bbD}\,,\, \bfM_{\bfq}}\\
+G&:=\LRc{\bfG_{\bbD}\,,\, G_{\bfq}}\\
+f&:=\LRc{f_c\,,\, \bff_m\,,\, f_e}\\
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+Group variables
+\vspace{-2ex}
+\begin{align*}
+W&:=\LRc{\rho\,,\,\bfu\,,\,T}\\
+\hat W&:=\LRc{2\hat\bfu\,,\,-\hat T}\\
+\Sigma&:=\LRc{\bbD,\bfq}\\
+\hat t&:=\LRc{\hat t_e\,,\,\hat\bft_m,\,,\,\hat t_e}\\
+\Psi&:=\LRc{\bbS\,,\,\bftau}\\
+V&:=\LRc{v_c\,,\,\bfv_m,\,,\,v_e}\,.
+\end{align*}
+\end{column}
+\end{columns}
+Navier-Stokes variational formulation is
+\begin{align*}
+\LRp{M,\Psi}+\LRp{G,\Div\Psi}-\LRa{\hat W,\Psi\cdot\bfn_x}&=0\\
+-\LRp{\vecttwo{F-K}{C},\Gradxt V}+\LRa{\hat t,V}&=\LRp{f,V}\,.
+\end{align*}
+\end{frame}
+
+
 
 
 %    /$$$$$$                  /$$
@@ -1204,27 +1431,73 @@ Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
 \begin{figure}[ht]
 \centering
 
-\begin{subfigure}[c]{0.45\textwidth}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/den\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/pres\n.pdf}
+% \end{subfigure}
+\textcolor{utblack}{Mesh \n}\\
+\vspace{1ex}
+\begin{subfigure}[c]{0.65\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/den\n.pdf}
+\includegraphics[width=1.0\textwidth]{Sod/FormulationComparison/Form0Mesh\n.png}\\
+Primitive Variables\\
+\vspace{2ex}
 \end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
+\begin{subfigure}[c]{0.65\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/vel\n.pdf}
+\includegraphics[width=1.0\textwidth]{Sod/FormulationComparison/Form1Mesh\n.png}\\
+Conservation Variables\\
+\vspace{2ex}
 \end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
+\begin{subfigure}[c]{0.65\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{Sod/MinNSDecoupled1e-5/pres\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[width=1.0\textwidth]{Sod/MinNSDecoupled1e-5/mesh\n.png}
+\includegraphics[width=1.0\textwidth]{Sod/FormulationComparison/Form2Mesh\n.png}\\
+Entropy Variables\\
 \end{subfigure}
 \end{figure}
 }
 }
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{Compressible Navier-Stokes}
+\framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
+\foreach \n in {1,...,15}
+{
+\only<\n>
+{
+\vspace{-2ex}
+\begin{figure}[ht]
+\centering
+
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/den\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/vel\n.pdf}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\centering
+\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/pres\n.pdf}
+\end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[width=1.0\textwidth]{Sod/FormulationComparison/mesh\n.png}
+% \end{subfigure}
+\end{figure}
+}
+}
+\end{frame}
 
 
 %   /$$   /$$           /$$      
@@ -1242,30 +1515,33 @@ Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
 \begin{frame}[t]
 \frametitle{Compressible Navier-Stokes}
 \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
-Infinitely strong shock propagation.
 % \foreach \n in {9,...,9}
 % {
 % \only<\n>
 % {
-\vspace{4ex}
+% \vspace{-2ex}
 % \begin{figure}[ht]
 % \centering
 
 \begin{columns}[t] % contents are top vertically aligned
-\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
+\begin{column}[T]{0.5\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=1.0\textwidth]{Noh/MinNSDecoupled/den9.pdf}
+% \centering
+\hspace{1em}Infinitely strong shock propagation.
+\includegraphics[height=1.0\textwidth]{Noh/FormulationComparison/den9.pdf}\\
 \end{column}
 % \end{subfigure}
 \hspace{8ex}
-\begin{column}[T]{0.55\textwidth} % each column can also be its own environment
+\begin{column}[T]{0.4\textwidth} % each column can also be its own environment
 % \begin{subfigure}[c]{0.4\textwidth}
 \centering
-\vspace{2ex}
-\includegraphics[width=0.9\textwidth]{Noh/MinNSDecoupled/mesh9.png}\\
-\centering
-Sequence of 4 time slabs
+\textcolor{utblack}{Sequence of 4 Time Slabs}\\
+Primitive Variables\\
+\vspace{1ex}
+\includegraphics[width=0.9\textwidth]{Noh/FormulationComparison/Form0Mesh8.png}\\
+Conservation Variables\\
+\vspace{1ex}
+\includegraphics[width=0.9\textwidth]{Noh/FormulationComparison/Form1Mesh8.png}\\
 \end{column}
 \end{columns}
 % \end{subfigure}
@@ -1277,27 +1553,28 @@ Sequence of 4 time slabs
 
 
 
-\section{Related DPG Research}
-\begin{frame}[t]
-\frametitle{Related Research}
-\framesubtitle{Past and Present Topics in DPG Research}  %% needed for proper positioning of the logo ...
-\begin{itemize}
-\item Multiphysics
-\begin{itemize}
-  \item Heat conduction (Poisson and Heat equation)
-  \item Wave problems (Helmholtz and Maxwell)
-  \item Linear elasticity and plate problems
-  \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
-\end{itemize}
-\item Natively nonlinear DPG
-\item DPG for non-Hilbert $L^p$ spaces
-\item Local conservation
-\item Iterative solvers
-\item Entropy scaling for physically meaningful test norms
-\item General polyhedral elements
-\end{itemize}
-% \nocite{DPGOverview,EllisLC,CamelliaDPG}
-\end{frame}
+
+% \section{Related DPG Research}
+% \begin{frame}[t]
+% \frametitle{Related Research}
+% \framesubtitle{Past and Present Topics in DPG Research}  %% needed for proper positioning of the logo ...
+% \begin{itemize}
+% \item Multiphysics
+% \begin{itemize}
+%   \item Heat conduction (Poisson and Heat equation)
+%   \item Wave problems (Helmholtz and Maxwell)
+%   \item Linear elasticity and plate problems
+%   \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
+% \end{itemize}
+% \item Natively nonlinear DPG
+% \item DPG for non-Hilbert $L^p$ spaces
+% \item Local conservation
+% \item Iterative solvers
+% \item Entropy scaling for physically meaningful test norms
+% \item General polyhedral elements
+% \end{itemize}
+% % \nocite{DPGOverview,EllisLC,CamelliaDPG}
+% \end{frame}
 
 \begin{frame}[noframenumbering,shrink=10]
 \frametitle{Thank You!}
