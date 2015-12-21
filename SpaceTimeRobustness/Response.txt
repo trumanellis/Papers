@@ -1,0 +1,62 @@
+I read the paper by T. Ellis, J. Chan, and L. Demkowicz. I think the paper addresses
+an interesting issue, and the results are interesting. On the other hand, I believe
+that the paper has a few rought spots that need clarification/correction, and also that
+it should have a written in a wider sense than the one it is currently written, especially
+considering that it is aimed at appearing in a survey volume like the one you are editing.
+Then, I detail now what are my main suggestions for this paper:
+
+1. Make, possibly in the concluding remarks, some comments on the relationship this
+work has with HdG, and also with multiscale FEM. I definitely think there is a connection
+between the approaches, and then I would encourage the authors to make this connection
+explicit (for example, the propeties of broken test functions in S 2.2.4 are very similar
+to the properties of Multiscale basis functions)
+
+A discussion of how DPG relates to multiscale methods and HDG has been added to the introduction.
+
+2. In the problem presentation, is the convective field \beta a time-dependent function?
+If so, there is clearly an overlap between the distinct components of the boundary of Q.
+This might have an impact in the boundary conditions chosen.
+
+LD will answer.
+
+3. In equation (3), I believe there is a boundary term missing (this term is then present
+in (4), containing a numerical flux)
+
+The boundary terms are built into the test functions in equation (3).
+
+4. I think the first paragraph in page 6 should be in the introduction. It states the main
+idea of the paper, so....
+
+We decided to maintain this paragraph in its current place, but added a couple sentences 
+to the introduction covering these ideas.
+
+5. Also in page 6, could the authors give some extra motivation on the inclusion of the
+L^2 norm of u in the norm? It doesn't seem to come directly from the formulation. Also,
+am I correct in supposing that, unless this term is included in the norm, the local problems
+appearing by using the broken norms given in (7) and (8) would not be well-posed?
+
+LD will answer.
+
+6. Could the authors include some more comments in their proofs? They seem to be correct,
+and they follow somehow familiar arguments, but still I believe some more details should
+be given on how we go from one point to the next one. Also, some comments on how to
+link one result to the following one would be welcome, just to make the paper easier
+to read
+
+We added comments to make following the proofs a little easier.
+
+7. At the end of Section 3 the authors could give some comments on what is the significance
+of the previous results. In particular, do they lead, naturally, to an error estimate of the method?
+
+A couple lines were added at the end of Section 3 to summarize.
+
+8. The legends in the plots are barely readable. Can the authors please make them clearer?
+Also, it could be interesting to see an elevation of a numerical solution containing a boundary,
+or inner, layer.
+
+Fixed.
+
+9. Finally, there are several typos and inconsistencies in the references. Please unify the format,
+and order them alphabetically.
+
+Fixed.
