@@ -13,7 +13,7 @@
 \newtheorem{definition}{Definition}[section]
 \newtheorem{example}{Example}[section]
 \theoremstyle{remark}
-\newtheorem{remark}{Remark}
+\newtheorem*{remark}{Remark}
 
 \title{Robust DPG Methods for Transient Convection-Diffusion}
 \author{Truman Ellis, Jesse Chan, Leszek Demkowicz}
@@ -69,9 +69,18 @@ weak enforcement of boundary conditions, and several other attractive properties
 For the most recent review of DPG, see \cite{DPGEncyclopedia}.
 The process of developing robust DPG methods for steady convection-diffusion was explored in \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
 \textcolor{red}{
-A robust DPG method is one in which the norm of convergence is both equivalent to $L^2$ and for which the optimal test functions
-do not contain boundary layers.
-Most of the theory of DPG falls apart when the optimal test functions contain boundary layers as they would remain unresolved for any practical method.
+In the sense, the main challenge is to come up with a correct test norm. The residual is measured
+in the dual test norm, and the DPG method minimizes the residual. The residual can be interpreted
+as a special {\em energy norm}. In other words, the DPG method delivers an orthogonal
+projection in the energy norm. The task is especially challenging for singular perturbation
+problems. Given a trial norm, we strive to determine a quasi-optimal test norm such that
+the corresponding energy norm is robustly equivalent to the trial  norm of choice. An additional
+difficulty comes from the fact that the optimal test functions should be easily approximated
+with a simple enrichment strategy. For convection dominated diffusion, this means that
+the test functions should not develop boundary layers. The task of determining the
+quasi optimal test norm (we call it a {\em robust test norm} leads then to a stability analysis
+for the adjoint equation which is the subject of this paper. For a more general discussion
+on the subject, see \cite{DPGEncyclopedia}.
 }
 % Such boundary layers would remain unresolved in a practical DPG method and most of the theory of DPG does not hold in such cases.
 We start with an abstract derivation of the DPG framework then define the concept of a robust test norm
@@ -81,17 +90,20 @@ Two new robust norms are derived and numerical verifications of the theory are p
 
 \textcolor{red}{
 It is worth mentioning connections to other modern stabilized finite element methods. 
-DPG can be thought of as a generalization of least-squares finite element methods and in fact simplifies to this case
+DPG can be thought of as a generalization of least-squares finite element methods, and in fact simplifies to this case
 when the $L^2$ topology is chosen for the test space.
-Allusions have been drawn to multi-scale methods, 
-but DPG uses multi-scale basis functions not to approximate the solution, 
-but to approximate optimal test functions in the sense of Barrett and Morton (see \cite{LocalGlobalDPG}).
-For each basis function, these test functions are defined as solutions of the global adjoint equation 
-with the basis function as the forcing term, and it can be shown that the resulting test space 
-delivers $L^2$-optimal solutions.  
+% Allusions have been drawn to multi-scale methods, 
+Connections to multi-scale methods have been studied in \cite{Cohen2012} and \cite{ChanEvansQiu2014}.
+In the particular case of ultra-weak variational formulation and scaled adjoint graph norm used for the test norm,
+the DPG method delivers optimal test functions of Barrett and Morton (see \cite{LocalGlobalDPG}).
+% DPG uses multi-scale basis functions not to approximate the solution, 
+% but to approximate optimal test functions in the sense of Barrett and Morton (see \cite{LocalGlobalDPG}).
+For each trial basis function, these test functions are defined as solutions 
+of the global adjoint equation with the basis function as the forcing term. 
+It can be shown that the Petrov-Galerkin method with the resulting test space delivers $L^2$-projection.  
 DPG approximates this test space (though not each individual optimal test function) 
 using an enriched (i.e. multiscale) mortar least squares formulation.  
-In a similar sense, DPG can also be interpreted as a Variational Multiscale Method \cite{ChanEvansQiu2014}
+In a similar sense, DPG can also be interpreted as a Variational Multiscale Method
 which approximates the fine-scale contribution by enforcing the orthogonality of the 
 fine scales under a specific inner product.  
 The connection to HDG is less clear; DPG shares much with the more classical mortar method, 
@@ -99,6 +111,7 @@ but its connection to HDG has primarily been explored in \cite{MoroMastersThesis
 Similarities include the use of trace unknowns which live on the mesh skeleton and the use of static condensation 
 to eliminate the interior degrees of freedom, but the means of stabilization for the two methods are very different.
 }
+% Look up encyclopedia article and look at reference to Dahmen's paper which draws connections to SUPG.
 
 
 \subsection{Space-Time Finite Elements}
@@ -439,6 +452,24 @@ The graph norm is $\LRp{\norm{A^*v}_{L^2}^2+\norm{v}_{L^2}^2}^{\frac{1}{2}}$:
 +\norm{v}^2
 +\norm{\bftau}^2\,.
 \end{equation*}
+\textcolor{red}{
+\begin{remark}
+In the DPG technology, the test norm must be {\em localizable}, i.e.,
+$$
+\Vert v \Vert^2_{V} = \sum_{K} \Vert v \Vert^2_{V(K)}
+$$
+where $\Vert v \Vert_{V(K)}$ denotes a test norm (and not just a seminorm) for the
+element test space. In practice this means the addition of properly scaled $L^2$-terms.
+Without those terms, we could not invert the Riesz operator on the element level.
+Addition of the $L^2$ terms does not necessarily contradict the robustness of the norm,
+see the discussion in \cite{DPGEncyclopedia} on bounded below operators. An alternate
+strategy has been explored in \cite{EllisLC} where we enforce element conservation
+property 
+by securing the presence of a constant function in the element test space. The residual
+is then minimized only over the orthogonal complement to the constants which eliminates
+the need for adding the $L^2$-term to the test norm.
+\end{remark}
+}
 The robust norm was derived in \cite{ChanHeuerThanhDemkowicz2012}:
 \begin{equation*}
 \norm{(v,\bftau)}^2=
@@ -749,7 +780,8 @@ e^T\left(
 \quad+\epsilon\int_{\Gamma_+}\underbrace{v}_{=0}\pd{v}{\bfn_x}
 \right)
 \\
-&\quad\footnotesize{\text{Note: boundary conditions give }\bftau_n=0\text{ on }\Gamma_-\text{ and }v=0\text{ on }\Gamma_+}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: boundary conditions give }\bftau_n=0\text{ on }\Gamma_-\text{ and }v=0\text{ on }\Gamma_+}
+}
 \\
 &=
 e^T\left(
@@ -766,7 +798,8 @@ e^T\left(
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
 \right)
 \\
-&\quad\footnotesize{\text{Note: }\Gamma_x=\Gamma_-\cup\Gamma_+\text{ and }v=0\text{ on }\Gamma_-}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\Gamma_x=\Gamma_-\cup\Gamma_+\text{ and }v=0\text{ on }\Gamma_-}
+}
 \\
 &=
 e^T\left(
@@ -780,7 +813,8 @@ e^T\left(
 \quad+\int_\Gamma \tilde\bfbeta\cdot\bfn v^2
 \right)
 \\
-&\quad\footnotesize{\text{Note: Integration by parts of }-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2\text{ and }\Div\bfbeta=0} 
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Integration by parts of }-\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt v^2\text{ and }\Div\bfbeta=0} 
+}
 \\
 &=
 e^T\left(
@@ -796,7 +830,8 @@ e^T\left(
 }
 \right)
 \\
-&\quad\footnotesize{\text{Note: Split boundary term into components, }v=0\text{ on }\Gamma_+\text{ and }\Gamma_T} 
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Split boundary term into components, }v=0\text{ on }\Gamma_+\text{ and }\Gamma_T} 
+}
 \\
 &\leq
 e^T\left(
@@ -812,7 +847,8 @@ e^T\left(
 +\epsilon\frac{\norm{\Grad v}^2}{2}
 \right)
 \\
-&\quad\footnotesize{\text{Note: Young's inequality}}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Young's inequality}}
+}
 \end{align*}
 \end{proof}
 
@@ -837,12 +873,14 @@ Multiply $-\tilde\bfbeta\cdot\Gradxt v_1=g-\Div\bftau_1$ by $-\tilde\bfbeta\cdot
 Note that
 \begin{align*}
 \frac{1}{\epsilon}\int_Q\tilde\bfbeta\cdot\Gradxt v_1\Div\bftau_1&=-\int_Q\tilde\bfbeta\cdot\Gradxt v_1\Div\Grad v_1 \\
-&\quad\footnotesize{\text{Note: }\bftau_1=\epsilon\Grad v_1}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\bftau_1=\epsilon\Grad v_1}
+}
 \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\int_Q\Grad(\tilde\bfbeta\cdot\Gradxt v_1)\cdot\Grad v_1 \\
-&\quad\footnotesize{\text{Note: Integration by parts}}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Integration by parts}}
+}
 \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
@@ -852,27 +890,31 @@ Note that
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\int_Q(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1
 +\frac{1}{2}\int_Q\tilde\bfbeta\cdot\Gradxt(\Grad v_1\cdot\Grad v_1)\\
-&\quad\footnotesize{\text{Note: }\Grad\Gradxt v_1\cdot\Grad v_1=\Gradxt\Grad v_1\cdot\Grad v_1=\frac{1}{2}\Gradxt(\Grad v_1\cdot\Grad v_1)}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\Grad\Gradxt v_1\cdot\Grad v_1=\Gradxt\Grad v_1\cdot\Grad v_1=\frac{1}{2}\Gradxt(\Grad v_1\cdot\Grad v_1)}
+}
 \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\int_Q(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1
 +\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v_1\cdot\Grad v_1)
 -\frac{1}{2}\int_Q\Divxt\tilde\bfbeta(\Grad v_1\cdot\Grad v_1)\\
-&\quad\footnotesize{\text{Note: Integration by parts}}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Integration by parts}}
+}
 \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\int_Q(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1
 +\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v_1\cdot\Grad v_1)
 -\frac{1}{2}\int_Q\Div\bfbeta(\Grad v_1\cdot\Grad v_1)\\
-&\quad\footnotesize{\text{Note: }\Divxt\tilde\bfbeta=\Div\bfbeta}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\Divxt\tilde\bfbeta=\Div\bfbeta}
+}
 \\
 %
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v_1\cdot\Grad v_1)
 +\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\\
-&\quad\footnotesize{\text{Note: }(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1-\frac{1}{2}\Div\bfbeta(\Grad v_1\cdot\Grad v_1)=\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1-\frac{1}{2}\Div\bfbeta(\Grad v_1\cdot\Grad v_1)=\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1}
+}
 \\
 \end{align*}
 Plugging this into \eqref{eq:adj1}, we get
@@ -888,7 +930,8 @@ Plugging this into \eqref{eq:adj1}, we get
 &\quad
 -\epsilon\int_{\Gamma_-}\tilde\bfbeta\cdot\Gradxt v_1\underbrace{\Grad v_1\cdot\bfn_x}_{=0}
 -\epsilon\int_{\Gamma_+}\LRp{\underbrace{\pd{v_1}{t}}_{=0}+\bfbeta\cdot\Grad v_1}\Grad v_1\cdot\bfn_x\\
-&\quad\footnotesize{\text{Note: }\Grad v_1\cdot\bfn_x=\tau_{1n}=0\text{ on }\Gamma_-\text{, }v_1=0\text{ on }\Gamma_+}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\Grad v_1\cdot\bfn_x=\tau_{1n}=0\text{ on }\Gamma_-\text{, }v_1=0\text{ on }\Gamma_+}
+}
 \\
 &\quad
 +\frac{\epsilon}{2}\int_{\Gamma_-}\underbrace{\bfbeta\cdot\bfn_x}_{<0}(\Grad v_1\cdot\Grad v_1)
@@ -896,7 +939,8 @@ Plugging this into \eqref{eq:adj1}, we get
 &\quad
 +\frac{\epsilon}{2}\int_{\Gamma_0}\underbrace{n_t}_{<0}(\Grad v_1\cdot\Grad v_1)
 +\frac{\epsilon}{2}\int_{\Gamma_T}n_t\underbrace{(\Grad v_1\cdot\Grad v_1)}_{=0}\\
-&\quad\footnotesize{\text{Note: }v_1=0\text{ on }\Gamma_T}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }v_1=0\text{ on }\Gamma_T}
+}
 \\
 %
 &\leq-\int_Q g\tilde\bfbeta\cdot\Gradxt v_1
@@ -904,7 +948,8 @@ Plugging this into \eqref{eq:adj1}, we get
 &\quad
 +\epsilon\int_{\Gamma_+}\LRp{-\pd{v_1}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\Grad v_1}\cdot\Grad v_1\\
-&\quad\footnotesize{\text{Note: Dropped negative terms from RHS}}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Dropped negative terms from RHS}}
+}
 % &\quad\footnotesize{\text{Note: }-\bfbeta\cdot\Grad v_1\Grad v_1\cdot\bfn_x+\frac{1}{2}\bfbeta\cdot\bfn_x(\Grad v_1\cdot\Grad v_1)
 % =(-\bfbeta\pd{v_1}{\bfn_x}+\frac{1}{2}\bfbeta\cdot\bfn_x\Grad v_1)\cdot\Grad v_1}
 \\
@@ -914,8 +959,9 @@ Plugging this into \eqref{eq:adj1}, we get
 &\quad
 +\epsilon\int_{\Gamma_+}\LRp{-\pd{v_1}{\bfn_x}\bfbeta
 +\frac{1}{2}\bfbeta\cdot\bfn_x\pd{v_1}{\bfn_x}\bfn_x}\cdot\pd{v_1}{\bfn_x}\bfn_x\\
-&\quad\footnotesize{\text{Note: }\Grad v_1\cdot\Grad v_1=\Grad v_1\cdot\Grad v_1\bfn_x\cdot\bfn_x=
+&\mathcolor{red}{\quad\footnotesize{\text{Note: }\Grad v_1\cdot\Grad v_1=\Grad v_1\cdot\Grad v_1\bfn_x\cdot\bfn_x=
 (\Grad v_1\cdot\bfn_x\bfn_x)\cdot(\Grad v_1\cdot\bfn_x\bfn_x)}
+}
 \\
 %
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v_1
@@ -928,12 +974,14 @@ Plugging this into \eqref{eq:adj1}, we get
 %
 &\leq\frac{\norm{g}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v_1}^2}{2}
 +\epsilon\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\\
-&\quad\footnotesize{\text{Note: Young's inequality}}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Young's inequality}}
+}
 \\
 %
 &\leq\frac{\norm{g}^2}{2}+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v_1}^2}{2}
 +\epsilon C_{\bfbeta}\norm{\Grad v_1}^2\\
-&\quad\footnotesize{\text{Note: Assumption on }\bfbeta}
+&\mathcolor{red}{\quad\footnotesize{\text{Note: Assumption on }\bfbeta}
+}
 \\
 %
 &\leq\LRp{\frac{1}{2}+C_{\bfbeta}}\norm{g}^2+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v_1}^2}{2}
@@ -944,9 +992,26 @@ Plugging this into \eqref{eq:adj1}, we get
 \end{proof}
 
 \textcolor{red}{
-These two lemmas establish the preceding bounds on individual terms in our robust and coupled robust test norms, allowing
-us to conclude that these norms provide equivalence between $L^2$ and the energy norm in which we get best approximation error.
+% These two lemmas establish the preceding bounds on individual terms in our robust and coupled robust test norms, allowing
+% us to conclude that these norms provide equivalence between $L^2$ and the energy norm in which we get best approximation error.
+In conclusion, with either robust test norm, we can claim the following stability result,
+$$
+\begin{array}{ll}
+\Vert u - u_h \Vert & \lesssim \Vert (u,\bfsigma,\hat{u},\hat{t}) - (u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h) \Vert_E \\[8pt]
+& = \inf_{(u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h)} \Vert (u,\bfsigma,\hat{u},\hat{t}) - (u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h) \Vert_E \, .
+\end{array}
+$$
+Notice that, contrary to the steady-state case, we have not been able to secure a robust $L^2$ bound
+for the stress. The best approximation error in the energy norm can be estimated locally, i.e.
+element-wise, see \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}. This leads to an ultimate, final $h$ estimate but
+not necessarily with robust constants. The loss of robustness in the best approximation error
+estimate is the consequence of rescaling the $L^2$-terms to avoid boundary layers in the optimal
+test functions. However, similarly to the steady-state case, with refinements, the mesh-dependent
+$L^2$-terms converge to the optimal ones so we hope to regain robustness in the limit. 
+We do not attempt to analyze the best approximation error in this contribution and restrict
+ourselves to numerical experiments only.
 }
+
 
 \section{Numerical Tests}
 The norms given in \eqref{eq:robustnorm} and \eqref{eq:coupledrobustnorm} are robust, 

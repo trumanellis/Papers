@@ -2,7 +2,7 @@
 \usepackage{etex}
 \reserveinserts{28}
 \input{../preamble.tex}
-\graphicspath{{../Proposal/figs/}{../Figures/}}
+\graphicspath{{../Proposal/figs/}{../PD13/figs/}{../Figures/}}
 
 \usepackage{bbm}
 \usepackage{textpos}
@@ -903,15 +903,15 @@ A^*(v,\bftau)=\LRp{\frac{1}{\epsilon}\bftau+\Grad v,-\tilde\bfbeta\cdot\Gradxt v
 \framesubtitle{Controlling Different Field Variables}
 We decompose the continuous adjoint problem
 $
-A^*(\bftau,v)=(\bff,g)
+A^*(\bftau,v)=(\bfsigma,u)
 $
 into
-\begin{block}{Continuous part with forcing $g$}
+\begin{block}{Continuous part with forcing $u$}
 \begin{columns}[t]
 \begin{column}{0.4\textwidth}
 \begin{align*}
 \frac{1}{\epsilon}\bftau_1+\Grad v_1 &=0\\
--\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= g\\
+-\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= u\\
 \end{align*}
 \end{column}
 \begin{column}{0.4\textwidth}
@@ -923,11 +923,11 @@ v_1 &= 0 \text{ on } \Gamma_T
 \end{column}
 \end{columns}
 \end{block}
-\begin{block}{Continuous part with forcing $\bff$}
+\begin{block}{Continuous part with forcing $\bfsigma$}
 \begin{columns}[t]
 \begin{column}{0.4\textwidth}
 \begin{align*}
-\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
+\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bfsigma\\
 -\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
 \end{align*}
 \end{column}
@@ -958,7 +958,7 @@ Proofs of these lemmas can be found in \footfullcite{EllisRobustnessReport}.
 \begin{lemma}[1]
 If $\Div\bfbeta=0$, we can bound
 \[
-\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{g}^2+\epsilon\norm{\bff}^2
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{u}^2+\epsilon\norm{\bfsigma}^2
 \]
 where $v=v_1+v_2$.
 \end{lemma}
@@ -966,7 +966,7 @@ where $v=v_1+v_2$.
 If $\norm{\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI}_{L^{\infty}}\le C_{\bfbeta}$,
 we can bound
 \[
-\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{g}.
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{u}.
 \]
 \end{lemma}
 \end{frame}
@@ -978,13 +978,13 @@ we can bound
 \begin{block}{Bound on $\norm{(v_1,\bftau_1)}$}
 \vspace{-2ex}
 \begin{align*}
-\text{Lemma (2)}\Rightarrow&&\norm{\tilde\bfbeta\cdot\Gradxt v_1}&\lesssim\norm{g}\\
-\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1}&\leq\norm{g}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim2\norm{g}\\
-\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1-\tilde\bfbeta\cdot\Gradxt v_1}&=\norm{g}\\
-\text{Lemma (1)}\Rightarrow&&\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2&\leq\norm{g}^2\\
-\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_1}&=\epsilon\norm{\Grad v_1}\leq\norm{g}
+\text{Lemma (2)}\Rightarrow&&\norm{\tilde\bfbeta\cdot\Gradxt v_1}&\lesssim\norm{u}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1}&\leq\norm{u}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim2\norm{u}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1-\tilde\bfbeta\cdot\Gradxt v_1}&=\norm{u}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2&\leq\norm{u}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_1}&=\epsilon\norm{\Grad v_1}\leq\norm{u}
 \end{align*}
-Plugging in $g=u$, we can guarantee robust control
+We can guarantee robust control
 \[
 \norm{(u,0)}_{L^2(\Omega_h)}\lesssim\norm{(u,\bfsigma)}_E\,.
 \]
@@ -998,15 +998,14 @@ Plugging in $g=u$, we can guarantee robust control
 \begin{block}{Bound on $\norm{(v_2,\bftau_2)}$}
 \vspace{-2ex}
 \begin{align*}
-\text{Definition}\Rightarrow&&\norm{\Div\bftau_2-\tilde\bfbeta\cdot\Gradxt v_2}&=0\leq\norm{\bff}\\
-\text{Lemma (1)}\Rightarrow&&\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2&\leq\epsilon\norm{\bff}^2\\
-\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_2}&=\norm{\bff}+\epsilon\norm{\Grad v_2}=(1+\epsilon)\norm{\bff}
+\text{Definition}\Rightarrow&&\norm{\Div\bftau_2-\tilde\bfbeta\cdot\Gradxt v_2}&=0\leq\norm{\bfsigma}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2&\leq\epsilon\norm{\bfsigma}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_2}&=\norm{\bfsigma}+\epsilon\norm{\Grad v_2}=(1+\epsilon)\norm{\bfsigma}
 \end{align*}
 We have not been able to prove bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ or $\norm{\Div\bftau_2}$. 
 \bigskip
 
-% Thus we can not guarantee that plugging in $\bff=\bfsigma$ we get robust control
-Plugging in $\bff=\bfsigma$, we can \textbf{not} guarantee robust control
+We can \textbf{not} guarantee robust control
 \[
 \norm{(0,\bfsigma)}_{L^2(\Omega_h)}\cancel{\lesssim}\norm{(u,\bfsigma)}_E\,.
 \]
@@ -1282,7 +1281,7 @@ $t=1.0$
 \section{Space-Time Compressible Navier-Stokes}
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{First Order System with Primitive Variables}
 Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
 \begin{align*}
@@ -1297,7 +1296,7 @@ Assuming Stokes hypothesis, ideal gas law, and constant viscosity:
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{Compact Notation}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
@@ -1370,7 +1369,77 @@ Use change of variables to get conservation or entropy variables.
 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Space-Time Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
+\framesubtitle{Conservation Variables}
+% \begin{columns}[t]
+% \begin{column}{0.5\textwidth}
+% Now we wish to do a change of variables to conservation variables: 
+Change of variables:
+\begin{align*}
+\rho&=\rho\\
+\bfm&=\rho\bfu\\
+E&=\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}
+\end{align*}
+Euler fluxes:
+\begin{align*}
+\bfF^c_c&=\bfm\\
+\mathbb{F}^c_m&=\frac{\bfm\otimes\bfm}{\rho}+(\gamma-1)\LRp{E-\frac{\bfm\cdot\bfm}{2\rho}}\bfI\\
+\bfF^c_e&=\gamma E\frac{\bfm}{\rho}-(\gamma-1)\frac{\bfm\cdot\bfm}{2\rho^2}\bfm\\
+\end{align*}
+% \end{column}
+% \begin{column}{0.5\textwidth}
+% \end{column}
+% \end{columns}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Compressible Navier-Stokes}
+\framesubtitle{Entropy Variables}
+% \vspace{-4ex}
+Change of variables:
+
+\scalebox{0.78}{\parbox{\linewidth}{%
+\begin{align*}
+V_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
+{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+\bfV_m&=\frac{\bfm}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}
+\end{align*}
+}}
+
+% with reverse mapping:
+% \begin{align*}
+% \rho&=-\alpha V_e\\
+% \bfm&=\alpha\bfV_m\\
+% E&=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
+% \end{align*}
+% We can define new fluxes in entropy variables:
+% \bfF^e_c&=\alpha\bfV_m\\
+% \mathbb{F}^e_m&=\alpha\LRp{-\frac{\bfV_m\otimes\bfV_m}{V_e}+(\gamma-1)\bfI}\\
+% \bfF^e_e&=\alpha\frac{\bfV_m}{V_e}\LRp{\frac{1}{2V_e}\bfV_m\cdot\bfV_m-\gamma}\\
+Euler fluxes:
+
+\scalebox{0.78}{\parbox{\linewidth}{%
+\begin{align*}
+\bfF^e_c&=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}\bfV_m\\
+\mathbb{F}^e_m&=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}\LRp{-\frac{\bfV_m\otimes\bfV_m}{V_e}+(\gamma-1)\bfI}\\
+\bfF^e_e&=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}\frac{\bfV_m}{V_e}\LRp{\frac{1}{2V_e}\bfV_m\cdot\bfV_m-\gamma}
+\end{align*}
+}}
+% where 
+% \[
+% \alpha(V_c,\bfV_m,V_e)=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}
+% \]
+% \end{column}
+% \end{columns}
+\end{frame}
+
+
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{Define Group Variables}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
@@ -1421,7 +1490,7 @@ Navier-Stokes variational formulation is
 %        
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
 \foreach \n in {1,...,15}
 {
@@ -1468,7 +1537,7 @@ Entropy Variables\\
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{Sod Shock Tube with $\mu=10^{-5}$}  %% needed for proper positioning of the logo ...
 \foreach \n in {1,...,15}
 {
@@ -1513,7 +1582,7 @@ Entropy Variables\\
 % 
 % ------------------------------------------------------------
 \begin{frame}[t]
-\frametitle{Compressible Navier-Stokes}
+\frametitle{Space-Time Compressible Navier-Stokes}
 \framesubtitle{Noh Implosion with $\mu=10^{-3}$}  %% needed for proper positioning of the logo ...
 % \foreach \n in {9,...,9}
 % {
@@ -1551,6 +1620,201 @@ Conservation Variables\\
 
 \end{frame}
 
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Enforce with Lagrange Multipliers}
+The local conservation law in convection diffusion is
+\[
+\int_{\partial K}\hat t=\int_K f\,,
+\]
+which is equivalent to having $\mathbf{v}_K:=\{v,\bftau\}=\{1_K,\boldsymbol0\}$ in the test space.
+In general, this is not satisfied by the optimal test functions.
+Following Moro et al\textsuperscript{\cite{MoroNguyenPeraire11}} (also
+Chang and Nelson\textsuperscript{\cite{ChangNelson1997}}), we
+can enforce this condition with Lagrange multipliers:
+\begin{align*}
+L(u_h,\bflambda) = \frac{1}{2}\norm{R_V^{-1}(Bu_h-l)}_V^2
+-\sum_K\lambda_K\underbrace{\langle Bu_h-l,\mathbf{v}_K\rangle}_
+{\langle\hat t, 1_K\rangle_{\partial K}-\langle f,1_K\rangle_K}\,,
+\end{align*}
+where $\bflambda=\{\lambda_1,\cdots,\lambda_N\}$.
+\end{frame}
+\begin{comment}
+So what does local conservation mean for the convection-diffusion equation. We
+want the integral of our fluxes over the element faces to be balanced by any
+source terms in the RHS. This is equivalent to having one in the test space.
+You can see this if you look at the bilinear form on the previous slide and
+plug one and zero in as test functions. Unfortunately the optimal test
+functions do not always span constants. It turns out we can augment our test
+space with constants through the use of Lagrange multipliers. So taking a
+couple of steps backward in the abstract form, we can augment our system with
+the Lagrange multipliers enforcing local conservation.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Enforce with Lagrange Multipliers}
+Finding the critical points of $L(u,\bflambda)$, we get the following
+equations \footfullcite{EllisDemkowiczChan2013}.
+\begin{align*}
+\frac{\partial L(u_h,\bflambda)}{\partial u_h}&=b(u_h,R_V^{-1}B\delta u_h)
+-l(R_V^{-1}B\delta u_h)\\
+&{\color{red}-\sum_K\lambda_K b(\delta
+u_h,\mathbf{v}_K)}=0\quad\forall\delta u_h\in U_h
+\end{align*}
+\[
+\frac{\partial
+L(u_h,\bflambda)}{\partial\lambda_K}=-b(u_h,\mathbf{v}_K)+l(\mathbf{v}_K)=0\quad\forall
+K
+\]
+A few consequences:
+\begin{itemize}
+\item We've turned our minimization problem into a saddlepoint problem.
+% \item New $\lambda_K$ DOFs can be statically condensed out.
+\item Only need to find the optimal test function in the orthogonal complement
+of constants. % Backup slide
+\end{itemize}
+\end{frame}
+\begin{comment}
+Now, proceeding forward again and setting the derivatives to zero, we have
+turned our minimization problem into a saddle point problem. Note that we have
+added extra DOFs equal to the number of mesh elements, but the structure of
+the problem allows these to be statically condensed out. The most interesting
+consequence of this modification (apart from enforcing local conservation) is
+that we can modify the search space for our optimal test functions to be
+the orthogonal complement of constants.
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Stokes Flow Around a Cylinder}
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\only<1>{
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_NC1.png}\\
+\vspace{-1ex}
+{\scriptsize 1 Refinement}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_NC6.png}
+\vspace{-1ex}
+{\scriptsize 6 Refinements}
+\vspace{1ex}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_C1.png}\\
+\vspace{-1ex}
+{\scriptsize 1 Refinement}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{StokesCylinder/umag9_C6.png}
+\vspace{-1ex}
+{\scriptsize 6 Refinements}
+\vspace{1ex}
+
+Conservative
+\end{figure}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.1\textwidth]{StokesCylinder/MassLoss9_NC.pdf}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.1\textwidth]{StokesCylinder/MassLoss9_C.pdf}
+
+Conservative
+\end{figure}
+}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{comment}
+\end{comment}
+
+
+%===============================================================================
+% NEW SLIDE
+%===============================================================================
+\begin{frame}
+\frametitle{Locally Conservative DPG}
+\framesubtitle{Stokes Flow Backward Facing Step}
+\begin{columns}
+\begin{column}{0.49\textwidth}
+\only<1>{
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{StokesStep/Quartic_NC0.png}\\
+\vspace{-1ex}
+{\scriptsize Initial Mesh}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{StokesStep/Quartic_NC8.png}
+\vspace{-1ex}
+{\scriptsize 8 Refinements}
+\vspace{1ex}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{StokesStep/Quartic_C0.png}\\
+\vspace{-1ex}
+{\scriptsize Initial Mesh}\\
+\vspace{1ex}
+\includegraphics[width=1.0\textwidth]{StokesStep/Quartic_C8.png}
+\vspace{-1ex}
+{\scriptsize 8 Refinements}
+\vspace{1ex}
+
+Conservative
+\end{figure}
+}
+\only<2>{
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.1\textwidth]{StokesStep/MassLoss_NC.pdf}
+
+Nonconservative
+\end{figure}
+\end{column}
+\begin{column}{0.49\textwidth}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1.1\textwidth]{StokesStep/MassLoss_C.pdf}
+
+Conservative
+\end{figure}
+}
+\end{column}
+\end{columns}
+\end{frame}
+\begin{comment}
+\end{comment}
 
 
 
