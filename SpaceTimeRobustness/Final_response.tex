@@ -1,0 +1,194 @@
+\documentclass[11pt,c]{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\bfsigma}{\boldsymbol\sigma}
+
+\begin{document}
+\baselineskip=16pt
+\parskip= 4pt
+%*************************************************page 1
+
+
+\begin{center}
+{\large \bf Reply to the Reviewers and the Editor}
+\end{center}
+
+We are very grateful to the reviewer for reading our paper and the critiqe. The reviewers
+questions along with our answers are listed below. All changes in the revised version
+of the paper are in red.
+
+
+
+
+{\em 
+I read the paper by T. Ellis, J. Chan, and L. Demkowicz. I think the paper addresses
+an interesting issue, and the results are interesting. On the other hand, I believe
+that the paper has a few rought spots that need clarification/correction, and also that
+it should have a written in a wider sense than the one it is currently written, especially
+considering that it is aimed at appearing in a survey volume like the one you are editing.
+Then, I detail now what are my main suggestions for this paper:}
+
+\begin{enumerate}
+
+  \item {\em Make, possibly in the concluding remarks, some comments on the relationship this
+work has with HdG, and also with multiscale FEM. I definitely think there is a connection
+between the approaches, and then I would encourage the authors to make this connection
+explicit (for example, the propeties of broken test functions in S 2.2.4 are very similar
+to the properties of Multiscale basis functions)}.
+
+A discussion of how DPG relates to multiscale methods and HDG has been added to the introduction.
+
+
+
+
+  \item {\em In the problem presentation, is the convective field $\beta$ a time-dependent function?
+If so, there is clearly an overlap between the distinct components of the boundary of Q.
+This might have an impact in the boundary conditions chosen.}
+
+
+
+We are not sure we understand the question. The boundary of the space-time domain 
+$Q := \Omega \times (0,T)$ consists of three parts: $\Omega \times {0}$,
+$\Omega \times {T}$ and the lateral boundary $\partial \Omega \times (0,T)$.
+The lateral boundary is partitioned into two parts dependent upon the advection 
+vector that may vary in time,
+$$
+\begin{array}{rl}
+\Gamma_{in} := & \{ (x,t) \in \partial \Omega \times (0,T) \: : \:
+\beta(x,t) \cdot n(x) < 0 \} \\
+\Gamma_{out} := & \{ (x,t) \in \partial \Omega \times (0,T) \: : \:
+\beta(x,t) \cdot n(x) \geq  0 \} 
+\end{array}
+$$
+Clearly, one and only one of the defining conditions is satisfied which means
+that the lateral boundary is {\em partitioned} into the two sets.
+
+
+
+
+
+  \item {\em In equation (3), I believe there is a boundary term missing (this term is then present
+in (4), containing a numerical flux).}
+
+The are three variational formulations. In the first one (equation (3)), test functions
+satisfy boundary conditions present in the definition of the $L^2$-adjoint and, as a consequence,
+no boundary terms are present. Removing boundary conditions from test functions in the
+second formulation (equation (4)) results in the introduction of additional unknowns - the
+traces and fluxes that live on the domain boundary. Finally, the ultimate variational
+formulation with broken test spaces (equation (5)) uses traces and fluxes on {\em the whole
+mesh skeleton} including the domain boundary. The intermediate formulation (4) is supposed
+to help reader to transition to the final formulation (5).
+
+
+  \item {\em I think the first paragraph in page 6 should be in the introduction. It states the main
+idea of the paper, so....}
+
+We decided to maintain this paragraph in its current place, but added the following extra
+comment to the introduction.
+
+
+In the sense, the main challenge is to come up with a correct test norm. The residual is measured
+in the dual test norm, and the DPG method minimizes the residual. The residual can be interpreted
+as a special {\em energy norm}. In other words, the DPG method delivers an orthogonal
+projection in the energy norm. The task is especially challenging for singular perturbation
+problems. Given a trial norm, we strive to determine a quasi-optimal test norm such that
+the corresponding energy norm is robustly equivalent to the trial  norm of choice. An additional
+difficulty comes from the fact that the optimal test functions should be easily approximated
+with a simple enrichment strategy. For convection dominated diffusion, this means that
+the test functions should not develop boundary layers. The task of determining the
+quasi optimal test norm (we call it a {\em robust test norm} leads then to a stability analysis
+for the adjoint equation which is the subject of this paper. For a more general discussion
+on the subject, see \cite{DPGEncyclopedia}.
+
+
+
+
+  \item {\em Also in page 6, could the authors give some extra motivation on the inclusion of the
+$L^2$ norm of u in the norm? It doesn't seem to come directly from the formulation. Also,
+am I correct in supposing that, unless this term is included in the norm, the local problems
+appearing by using the broken norms given in (7) and (8) would not be well-posed?}
+
+The following remark has been added to the text.
+
+\begin{remark}
+In the DPG technology, the test norm must be {\em localizable}, i.e.,
+$$
+\Vert v \Vert^2_{V} = \sum_{K} \Vert v \Vert^2_{V(K)}
+$$
+where $\Vert v \Vert_{V(K)}$ denotes a test norm (and not just a seminorm) for the
+element test space. In practice this means the addition of properly scaled $L^2$-terms.
+Without those terms, we could not invert the Riesz operator on the element level.
+Addition of the $L^2$ terms does not necessarily contradict the robustness of the norm,
+see the discussion in \cite{DPGEncyclopedia} on bounded below operators. An alternate
+strategy has been explored in \cite{EllisLC} where we enforce element conservation
+property 
+by securing the presence of a constant function in the element test space. The residual
+is then minimized only over the orthogonal complement to the constants which eliminates
+the need for adding the $L^2$-term to the test norm.
+\end{remark}
+
+
+  \item {\em Could the authors include some more comments in their proofs? They seem to be correct,
+and they follow somehow familiar arguments, but still I believe some more details should
+be given on how we go from one point to the next one. Also, some comments on how to
+link one result to the following one would be welcome, just to make the paper easier
+to read.}
+
+We have added a number of additional comments in the derivations to make the logical
+flow easier (all in red).
+
+  \item {\em At the end of Section 3 the authors could give some comments on what is the significance
+of the previous results. In particular, do they lead, naturally, to an error estimate of the method?}
+
+A couple lines have been  added at the end of Section 3 to summarize.
+
+In conclusion, with either robust test norm, we can claim the following stability result,
+$$
+\begin{array}{ll}
+\Vert u - u_h \Vert & \lesssim \Vert (u,\bfsigma,\hat{u},\hat{t}) - (u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h) \Vert_E \\[8pt]
+& = \inf_{(u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h)} \Vert (u,\bfsigma,\hat{u},\hat{t}) - (u_h,\bfsigma_h,\hat{u}_h,\hat{t}_h) \Vert_E \, .
+\end{array}
+$$
+Notice that, contrary to the steady-state case, we have not been able to secure a robust $L^2$ bound
+for the stress. The best approximation error in the energy norm can be estimated locally, i.e.
+element-wise, see \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}. This leads to an ultimate, final $h$ estimate but
+not necessarily with robust constants. The loss of robustness in the best approximation error
+estimate is the consequence of rescaling the $L^2$-terms to avoid boundary layers in the optimal
+test functions. However, similarly to the steady-state case, with refinements, the mesh-dependent
+$L^2$-terms converge to the optimal ones so we hope to regain robustness in the limit. 
+We do not attempt to analyze the best approximation error in this contribution and restrict
+ourselves to numerical experiments only.
+
+
+
+
+
+
+
+
+  \item {\em The legends in the plots are barely readable. Can the authors please make them clearer?
+Also, it could be interesting to see an elevation of a numerical solution containing a boundary,
+or inner, layer.}
+
+Fixed.
+
+  \item{\em Finally, there are several typos and inconsistencies in the references. Please unify the format,
+and order them alphabetically.}
+
+Fixed.
+
+\end{enumerate}
+
+
+\bibliographystyle{plain} 
+\bibliography{../Papers}
+
+\end{document}

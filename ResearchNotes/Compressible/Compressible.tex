@@ -1,0 +1,169 @@
+\documentclass{article}
+\input{../../preamble.tex}
+\usepackage[margin=1.25in]{geometry}
+
+\title{Ultra-Weak DPG for Compressible Navier-Stokes}
+\author{Truman E. Ellis}
+
+\begin{document}
+\maketitle
+
+\section*{Nonlinear Forms}
+\subsection*{Primitive Variables}
+Consider the DPG Navier-Stokes derivation from previously with primitive variables:
+\begin{subequations}
+\label{eq:compressibleNSBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{\bfu,\Div\mathbb{S}}
+	-\LRa{\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\rho\bfu}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\rho\bfu\otimes\bfu+\rho RT\bfI-\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}{\rho\bfu},
+	\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+where 
+\begin{equation*}
+\begin{aligned}
+\hat\bfu&=\trace(\bfu)\\
+\hat T&=\trace(T)\\
+\hat t_c&=\trace\LRp{\rho\bfu}\cdot\bfn_x
++\trace\LRp{\rho}n_t\\
+\hat\bft_m&=\trace\LRp{\rho\bfu\otimes\bfu+\rho RT\bfI-\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}\cdot\bfn_x
++\trace\LRp{\rho\bfu} n_t\\
+\hat t_e&=\trace\LRp{\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT+\bfq-\bfu\cdot\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}\cdot\bfn_x\\
+&\quad+\trace\LRp{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}n_t\,.
+\end{aligned}
+\end{equation*}
+Now define primitive fluxes for continuity, momentum, and energy equations:
+\begin{align*}
+\bfF^p_c&:=\rho\bfu\\
+\mathbb{F}^p_m&:=\rho\bfu\otimes\bfu+\rho RT\bfI\\
+\bfF^p_e&:=\rho\bfu\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}+\bfu\rho RT
+\end{align*}
+Our bilinear form is then simplified:
+\begin{subequations}
+\label{eq:primitiveBF}
+\begin{align}
+	\LRp{\frac{1}{\mu}\mathbb{D},\mathbb{S}}+\LRp{\bfu,\Div\mathbb{S}}
+	-\LRa{\hat\bfu,\mathbb{S}\bfn_x}&=0\\
+	\LRp{\frac{Pr}{C_p\mu}\bfq,\bftau}-\LRp{T,\Div\bftau}+\LRa{\hat T,\tau_n}&=0\\
+	-\LRp{\vecttwo{\bfF^p_c}{\rho},\Gradxt v_c}+\LRa{\hat t_c,v_c}&=\LRp{f_c,v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^p_m-\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}{\rho\bfu},\Gradxt\bfv_m}+\LRa{\hat\bft_m,\bfv_m}&=\LRp{\bff_m,\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^p_e+\bfq-\bfu\cdot\LRp{\mathbb{D}+\mathbb{D}^T-\frac{2}{3}\trace(\mathbb{D})\bfI}}{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}},\Gradxt v_e}
+	+\LRa{\hat t_e,v_e}&=\LRp{f_e,v_e}\,,
+\end{align}
+\end{subequations}
+
+
+\section*{Linearization}
+We define the set of linear variables: $L:=\LRc{\hat\bfu,\hat T,\hat t_c,\hat\bft_m,\hat t_e}$.
+Let $U$ be the set of variables involved in nonlinear interactions.
+We apply a linearization $U\approx\tilde U+\Delta U$ and solve
+\begin{equation*}
+	R_{,U}(\tilde U)\Delta U+R(L)=-R(\tilde U)\,,
+\end{equation*}
+where
+\begin{align*}
+R(L)&=
+-\LRa{\hat\bfu,\mathbb{S}\bfn_x}
++\LRa{\hat T,\tau_n}
++\LRa{\hat t_c,v_c}
++\LRa{\hat \bft_m,v_m}
++\LRa{\hat t_e,v_e}\\
+&-\LRp{f_c,v_c}
+-\LRp{\bff_m,\bfv_m}
+-\LRp{f_e,v_e}
+\end{align*}
+
+The set of nonlinear variables is $U^p:=\LRc{\rho,\bfu,T,\mathbb{D},\bfq}$.
+Then $R_{,U^p}(\tilde U^p)\Delta U^p$ is
+\begin{align*}
+	\LRp{\frac{1}{\mu}\Delta\mathbb{D},\mathbb{S}}+\LRp{\Delta\bfu,\Div\mathbb{S}}\\
+	+\LRp{\frac{Pr}{C_p\mu}\Delta\bfq,\bftau}-\LRp{\Delta T,\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^p_{c,U^p}\Delta U^p}{\Delta\rho},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^p_{m,U^p}\Delta U^p-\LRp{\Delta\mathbb{D}+\LRp{\Delta\mathbb{D}}^T-\frac{2}{3}\trace(\Delta\mathbb{D})\bfI}}
+	{\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^p_{e,U^p}\Delta U^p+\bfq-\Delta\bfu\cdot\LRp{\tilde{\mathbb{D}}+(\tilde{\mathbb{D}})^T-\frac{2}{3}\trace(\tilde{\mathbb{D}})\bfI}
+	-\tilde\bfu\cdot\LRp{\Delta\mathbb{D}+(\Delta\mathbb{D})^T-\frac{2}{3}\trace(\Delta\mathbb{D})\bfI}}
+	{C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
+	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}},\Gradxt v_e}
+\end{align*}
+where
+\begin{align*}
+\bfF^p_{c,U^p}\Delta U^p&:=\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
+\mathbb{F}^p_{m,U^p}&:=\Delta\rho\tilde\bfu\otimes\tilde\bfu+\tilde\rho\Delta\bfu\otimes\tilde\bfu+\tilde\rho\tilde\bfu\otimes\Delta\bfu
++R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bfI\\
+\bfF^p_{e,U^p}&:=C_v\Delta\rho\tilde\bfu\tilde T+C_v\tilde\rho\Delta\bfu\tilde T+C_v\tilde\rho\tilde\bfu\Delta T\\
+&+\frac{1}{2}\Delta\rho\tilde\bfu\tilde\bfu\cdot\tilde\bfu
++\frac{1}{2}\tilde\rho\Delta\bfu\tilde\bfu\cdot\tilde\bfu
++\frac{1}{2}\tilde\rho\tilde\bfu\Delta\bfu\cdot\tilde\bfu
++\frac{1}{2}\tilde\rho\tilde\bfu\tilde\bfu\cdot\Delta\bfu\\
+&+R\Delta\bfu\tilde\rho\tilde T
++R\tilde\bfu\Delta\rho\tilde T
++R\tilde\bfu\tilde\rho\Delta T
+\end{align*}
+and $R(\tilde U^p)$ is
+\begin{align*}
+	\LRp{\frac{1}{\mu}\tilde{\mathbb{D}},\mathbb{S}}+\LRp{\tilde\bfu,\Div\mathbb{S}}\\
+	+\LRp{\frac{Pr}{C_p\mu}\tilde\bfq,\bftau}-\LRp{\tilde T,\Div\bftau}\\
+	-\LRp{\vecttwo{\bfF^p_c(\tilde U^p)}{\tilde\rho},\Gradxt v_c}\\
+	-\LRp{\vecttwo{\mathbb{F}^p_m(\tilde U^p)-\LRp{\tilde{\mathbb{D}}+(\tilde{\mathbb{D}})^T-\frac{2}{3}\trace(\tilde{\mathbb{D}})\bfI}}{\tilde\rho\tilde\bfu},\Gradxt\bfv_m}\\
+	-\LRp{\vecttwo{\bfF^p_e(\tilde U^p)-\tilde\bfu\cdot\LRp{\tilde{\mathbb{D}}+(\tilde{\mathbb{D}})^T-\frac{2}{3}\trace(\tilde{\mathbb{D}})\bfI}}{\tilde\rho\LRp{C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu}},\Gradxt v_e}
+\end{align*}
+
+
+\subsubsection*{Primitive Variables}
+For the sake of simplifying notation, we drop the $\Delta$ notation from before. 
+Any values from the previous solution are denoted with a $\tilde{}$ notation while current values lack this.
+In the primitive variable formulation, $\Sigma=\LRc{\mathbb{D},\bfq}$, $U=\LRc{\rho,u_x,u_y,T}$, $\Psi=\LRc{\mathbb{S},\bftau}$, and $V=\LRc{v_c,v_x,v_y,v_e}$.
+We have the following definitions:
+\begin{align*}
+M^*\Psi+K^*\Grad V&=\vecttwo{M_{\mathbb{D}}^*\mathbb{S}}{M_{\bfq}^*\bftau}
++\vecttwo{K_{\mathbb{D}}^*\Grad V}{K_{\bfq}^*\Grad V}\\
+-\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+G^*\Grad\Psi&=-\vectthree
+{\bfF_c^*\cdot\Grad V+\bfC_c^*\cdot V_{,t}}
+{\bfF_m^*\cdot\Grad V+\bfC_m^*\cdot V_{,t}}
+{\bfF_e^*\cdot\Grad V+\bfC_e^*\cdot V_{,t}}
++\vectthree
+{\bfG_c^*\Grad\Psi}
+{\bfG_m^*\Grad\Psi}
+{\bfG_e^*\Grad\Psi}
+\end{align*}
+\begin{align*}
+M_\mathbb{D}^*\mathbb{S}&=\frac{1}{\mu}\mathbb{S}\\
+M_{\bfq}^*\bftau&=\frac{Pr}{C_p\mu}\bftau\\
+K_\mathbb{D}^*\Grad V&=\Grad\bfv_m+(\Grad\bfv_m)^T-\frac{2}{3}\Div\bfv_m\bfI
++\tilde\bfu\otimes\Grad v_e+(\tilde\bfu\otimes\Grad v_e)^T-\frac{2}{3}\tilde\bfu\cdot\Grad v_e\bfI\\
+K_{\bfq}^*\Grad V&=-\Grad v_e\\
+\bfF_c^*\cdot\Grad V&=
+\tilde\bfu\cdot\Grad v_c
++\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m+R\tilde T\Div\bfv_m
++C_v\tilde T\tilde\bfu\cdot\Grad v_e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde T\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_c^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
+%
+\bfF_m\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
++(\Grad\bfv_m+(\Grad\bfv_m)^T)\tilde\rho\tilde\bfu
++C_v\tilde T\tilde\rho\Grad v_e+\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e
++R\tilde T\tilde\rho\Grad v_e\\ 
+&\quad-\tilde{\mathbb{D}}\Grad v_e-(\tilde{\mathbb{D}})^T\Grad v_e+\frac{2}{3}\trace(\tilde{\mathbb{D}})\Grad v_e
+\\
+%
+\bfC_m^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+%
+\bfF_e^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_e^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}\\
+%
+\bfG_c^*\Grad\Psi&=0\\
+%
+\bfG_m^*\Grad\Psi&=\Div\mathbb{S}\\
+%
+\bfG_e^*\Grad\Psi&=-\Div\bftau
+\end{align*}
+
+
+\end{document}
