@@ -1,13 +1,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%  Dissertation.tex, to be compiled with latex.		        
-%%  08 April 2002	Version 4				                    
+%%  Dissertation.tex, to be compiled with latex.
+%%  08 April 2002	Version 4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%								                                
-%%  Writing a Doctoral Dissertation with LaTeX at		         
-%%	the University of Texas at Austin			                 
-%%								                                
-%%  (Modify this ``template'' for your own dissertation.)	     
-%%								                                
+%%
+%%  Writing a Doctoral Dissertation with LaTeX at
+%%	the University of Texas at Austin
+%%
+%%  (Modify this ``template'' for your own dissertation.)
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -19,9 +19,9 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Optional packages used for this sample dissertation. If you don't  
-% need a capability in your dissertation, feel free to comment out   
-% the package usage command.					                     
+% Optional packages used for this sample dissertation. If you don't
+% need a capability in your dissertation, feel free to comment out
+% the package usage command.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{amsmath,amsthm,amsfonts,amscd} % Some packages to write mathematics.
@@ -30,7 +30,7 @@
 \usepackage{makeidx}       	% Package to make an index.
 \usepackage{psfig}         	% Allows inclusion of eps files.
 \usepackage{epsfig}         % Allows inclusion of eps files.
-\usepackage{citesort}        
+\usepackage{citesort}
 \usepackage{url}		    % Allows good typesetting of web URLs.
 \usepackage{longtable}
 \usepackage{framed}
@@ -43,11 +43,14 @@
 \usepackage{etoolbox}
 \usepackage{rotating}
 
+% \SetSymbolFont{stmry}{bold}{U}{stmry}{m}{n}
+% \SetSymbolFont{stmry}{bold}{U}{stmry}{b}{n}
+
 \makeatletter
 \patchcmd{\epigraph}{\@epitext{#1}}{\itshape\@epitext{#1}}{}{}
 \makeatother
 
-%\usepackage{draftcopy}		
+%\usepackage{draftcopy}
 % Uncomment this line to have the
 % word, "DRAFT," as a background
 % "watermark" on all of the pages of
@@ -94,7 +97,7 @@
 %
 % NOTE: Maximum three supervisors. Minimum one supervisor.
 % NOTE: The Office of Graduate Studies will accept only two supervisors!
-% 
+%
 %
 \supervisor
 	[Leszek F. Demkowicz]
@@ -125,21 +128,21 @@
      %
      % The default value is `B.S., M.S.'
 
-\graduationmonth{May}      
+\graduationmonth{May}
      % Graduation month, either May, August, or December, in the form
      % as `\graduationmonth{May}'. Do not abbreviate.
      %
      % The default value (either May, August, or December) is guessed
      % according to the time of running LaTeX.
 
-\graduationyear{2016}   
+\graduationyear{2016}
      % Graduation year, in the form as `\graduationyear{2001}'.
      % Use a 4 digit (not a 2 digit) number.
      %
-     % The default value is guessed according to the time of 
+     % The default value is guessed according to the time of
      % running LaTeX.
 
-\typist{the author}       
+\typist{the author}
      % The name(s) of typist(s), put `the author' if you do it yourself.
      % E.g., `\typist{Maryann Hersey and the author}'.
      %
@@ -175,7 +178,7 @@
 \oneandonehalfspacequote
 
 \topmargin 0.125in	% Adjust this value if the PostScript file output
-			% of your dissertation has incorrect top and 
+			% of your dissertation has incorrect top and
 			% bottom margins. Print a copy of at least one
 			% full page of your dissertation (not the first
 			% page of a chapter) and measure the top and
@@ -203,7 +206,7 @@
 % etc., you need to make an adjustment to the Table of Contents with the
 % command \longtocentry.
 %
-%\longtocentry 
+%\longtocentry
 
 
 
@@ -297,7 +300,7 @@ Dedicated to my parents.
 
 \begin{acknowledgments}		% Optional
 \index{Acknowledgments@\emph{Acknowledgments}}%
-Foremost, I want to express my greatest gratitude to my supervisor, Professor Thomas J.R. Hughes, for his guidance and inspiration. This work truly benefits from his profound insights in the broad areas of mechanics, mathematics, and scientific computing. 
+Foremost, I want to express my greatest gratitude to my supervisor, Professor Thomas J.R. Hughes, for his guidance and inspiration. This work truly benefits from his profound insights in the broad areas of mechanics, mathematics, and scientific computing.
 
 I would like to thank Professors Todd Arbogast, Omar Ghattas, Hector Gomez, Chad M. Landis, and Alexis F. Vasseur for serving my dissertation committee.
 
@@ -305,7 +308,7 @@ I am indebted to Dr. Luca Ded\`e and Prof. John A. Evans for teaching me the sur
 
 I am thankful to all my friends in Austin, in particular Nick Alger, Jie Bai, Henry Chang, Mike Harmon, Ying He, Talea Mayo, Yusuke Sakamoto, Kent van Vels, Ni Wang, Wenhao Wang, Hailong Xiao, Shan Yang, Wenqi Zhao, and Hongyu Zhu.
 
-I want to thank my parents and my girlfriend. My accomplishment is impossible without your sacrifices and love. 
+I want to thank my parents and my girlfriend. My accomplishment is impossible without your sacrifices and love.
 
 \end{acknowledgments}
 
@@ -354,9 +357,13 @@ A general-purpose parallel computing software, named \texttt{PERIGEE}, is develo
 
 \subfile{TimeStepping.tex}
 
-% \subfile{SpaceTimeDPG.tex}
+\subfile{RobustConvectionDiffusion.tex}
 
-% \subfile{ProposedWork.tex}
+\subfile{Incompressible.tex}
+
+\subfile{Compressible.tex}
+
+% \subfile{FutureWork.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix/Appendices                                                %
@@ -365,8 +372,12 @@ A general-purpose parallel computing software, named \texttt{PERIGEE}, is develo
 % If you have only one appendix, use the command \appendix instead
 % of \appendices.
 %
-%\appendices
-%\index{Appendices@\emph{Appendices}}%
+\appendices
+\index{Appendices@\emph{Appendices}}%
+
+\subfile{VariableComparison.tex}
+
+\subfile{EntropyNorm.tex}
 
 %\include{chapter-appendix1}
 

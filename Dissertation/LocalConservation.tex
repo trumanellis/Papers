@@ -100,7 +100,7 @@ Note that conservation is preserved with respect to fluxes rather than field var
 
 % No assumptions have been made so far on the definition of the inner product on
 % $V$. In fact, proper choice of $\LRp{\cdot,\cdot}_V$ can make the difference
-% between a solid DPG method and one that suffers from robustness issues 
+% between a solid DPG method and one that suffers from robustness issues
 % (a robust technique remain stable as the singularly perturbed parameter approaches ``extreme'' values).
 
 \section{Element Conservative Convection-Diffusion}
@@ -188,15 +188,23 @@ Find
 $\bs u:=(u,\bfsigma,\hat u,\hat t)
 \in\bs U:=L^2(\Omega_h)\times \bs L^2(\Omega_h)\times H^{1/2}(\Gamma_h)\times H^{-1/2}(\Gamma_h)$
 such that
+
+\resizebox{0.95\linewidth}{!}{
+\begin{minipage}{\linewidth}
 \begin{align}
 \label{eq:variationalFormulation}
-\underbrace{-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{\hat t,v}_{\partial K}
+\nonumber\underbrace{-(\bfbeta u-\bfsigma,\nabla v)_K+\LRa{\hat t,v}_{\partial K}
 + \frac{1}{\epsilon}(\bfsigma,\bftau)_K
 +(u,\nabla\cdot\bftau)_K
 -\LRa{\hat u,\tau_n}_{\partial K}}_{b(\mathbf{u}, \mathbf{v})}
-&=\underbrace{\:(f,v)_K\genfrac{}{}{0pt}{}{}{}}_{l(\mathbf{v})} &\text{in }\Omega \\
+&=\underbrace{\:(f,v)_K\genfrac{}{}{0pt}{}{}{}}_{l(\mathbf{v})} &\text{in }\Omega
+\\
 \hat u&=0 &\text{on }\Gamma
 \end{align}
+\end{minipage}
+}
+
+\noindent
 for all $\bs v:=(v,\bftau)\in
 \bs V:=H^1(\Omega_h)\times\bfH(\text{div},\Omega_h)$.
 
@@ -213,13 +221,14 @@ $\epsilon^{-1}$.  Our aim is to design a DPG method with this in mind.  We
 follow the methodology introduced by Heuer and Demkowicz in
 \cite{DemkowiczHeuer}: the ultra-weak variational formulation for
 convection-diffusion can be refactored as
-\[
-b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}} =
-\sum_{K\in \Oh}\LRs{\LRa{\hat t,v}_{\partial K}
-+\LRa{\uh,\tau_n}_{\delta K} + \LRp{u,\Div \bftau
--\bfbeta\cdot\nabla v}_{L^2(K)}
-+\LRp{\bfsigma,\frac{1}{\epsilon} \bftau + \nabla v}_{L^2(K)}},
-\]
+\begin{align*}
+b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}=
+\sum_{K\in \Oh}&\LRa{\hat t,v}_{\partial K}
++\LRa{\uh,\tau_n}_{\delta K}
++\LRp{u,\Div \bftau -\bfbeta\cdot\nabla v}_{L^2(K)}
+\\\quad
+&+\LRp{\bfsigma,\frac{1}{\epsilon} \bftau + \nabla v}_{L^2(K)},
+\end{align*}
 modulo application of boundary data.  If we choose specific
 \textit{conforming} test functions satisfying the adjoint equations
 \begin{align*}
@@ -230,31 +239,32 @@ then evaluating $b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}$ at these
 specific test functions returns back $\norm{u}^2 + \norm{\bfsigma}^2$, the $L^2$
 norm of our field variables.  Multiplying and dividing through by the test
 norm $\norm{\bfv}_V$, we have
-\[
-\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2 =
+\begin{align*}
+\norm{u}_{L^2}^2 + \norm{\bfsigma}_{L^2}^2 &=
 b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}} =
 \frac{b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}}{\norm{\bfv}_V}\norm{\bfv}_V
+\\&
 \leq \norm{u,\bfsigma,\uh,\hat t}_E\norm{\bfv}_V,
-\]
+\end{align*}
 where
 \[
 \norm{u,\bfsigma,\uh,\hat t}_E = \sup_{v\in
 V\setminus\LRc{0}}\frac{b\LRp{\LRp{u,\bfsigma,\uh,\hat t},\LRp{v,\bftau}}}{\norm{\bfv}_V}
 \]
 is the DPG energy norm.  If we can robustly bound the test norm $\norm{\bfv}_V
-\lesssim \LRp{\norm{u}_{\L}^2+\norm{\bfsigma}^2_{\L}}^{1/2}$ (i.e. derive a
+\lesssim \LRp{\norm{u}_{L^2}^2+\norm{\bfsigma}^2_{L^2}}^{1/2}$ (i.e. derive a
 bound from above with a constant independent of $\epsilon$), then we can
 divide through to get
 \begin{equation}
-\LRp{\norm{u}_{\L}^2 + \norm{\bfsigma}_{\L}^2}^{\frac{1}{2}} \lesssim
+\LRp{\norm{u}_{L^2}^2 + \norm{\bfsigma}_{L^2}^2}^{\frac{1}{2}} \lesssim
 \norm{(u,\bfsigma,\uh,\hat t)}_E.
 \label{eq:robustBound}
 \end{equation}
 % In other words, the energy norm in which DPG is optimal bounds independently
 % of $\epsilon$ the $L^2$ norm; as we drive our energy error down to zero, we
 % can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
-In other words, the energy norm in which DPG 
-% is optimal bounds independently of $\epsilon$ the $L^2$ norm; as 
+In other words, the energy norm in which DPG
+% is optimal bounds independently of $\epsilon$ the $L^2$ norm; as
 is optimal bounds the $L^2$ norm independently of epsilon.  So, as
 we drive our energy error down to zero, we
 can expect that the $L^2$ error will also decrease regardless of $\epsilon$.
@@ -275,8 +285,8 @@ here, which is motivated and explained in more detail in
 Having reviewed and laid the foundation for DPG methods, we can now formulate our conservative DPG scheme.  % added by Jesse
 Let $\bs U_h:=U_h\times\bs S_h\times\hat U_h\times\hat F_h\subset L^2(\Omega_h)\times\bs
 L^2(\Omega_h)\times H^{\frac{1}{2}}(\Gamma_h)\times H^{-\frac{1}{2}}(\Gamma_h)$
-be a finite-dimensional subspace, and let 
-$\bs u_h:=(u_h,\bfsigma_h,\hat u_h,\hat t_h)\in\bs U_h$ 
+be a finite-dimensional subspace, and let
+$\bs u_h:=(u_h,\bfsigma_h,\hat u_h,\hat t_h)\in\bs U_h$
 be the group variable. The element conservative DPG scheme is
 derived from the Lagrangian:
 \begin{equation}
@@ -310,10 +320,15 @@ convection-diffusion, we get:
 -(\bfbeta u-\bfsigma,\nabla \vdeltau)+\langle\hat t,\vdeltau\rangle
 + \frac{1}{\epsilon}(\bfsigma,\taudeltau)
 +(u,\nabla\cdot\taudeltau)
--\langle\hat u,\taudeltau\cdot\bs n\rangle\\
+\\
+-\langle\hat u,\taudeltau\cdot\bs n\rangle
 -\sum_K\lambda_K (\delta\hat t,(1_K,\bs0))
-&=(f,\vdeltau) & \forall\delta\bs u_h\in\bs U_h\\
-\langle\hat t,(1_K,\bs0)\rangle &=(f,1_K) & \forall K\,.
+&=(f,\vdeltau)
+\\
+& \forall\delta\bs u_h\in\bs U_h\\
+\langle\hat t,(1_K,\bs0)\rangle &=(f,1_K)
+\\
+& \forall K\,.
 \end{array}
 \right.
 \label{eq:conservativeConfusionSystem}
@@ -426,14 +441,16 @@ test functions. First of all, we characterize the ``kernel'' space:
 \end{equation}
 In other words, the kernel space contains only the equilibrated fluxes.
 With $\bfu \in \bfU_0$, we have then:
-\begin{equation}
+\begin{align}
+  \nonumber
    \sup_{\bfw \in \bfU_0} \frac{| a(\bfu,\bfw) |}{|| \bfw ||_{\bfU} }
-   \geq \frac{| b(\bfu,T \bfu) |}{|| \bfu ||}
+   &\geq \frac{| b(\bfu,T \bfu) |}{|| \bfu ||}
    = \frac{| b(\bfu,T \bfu) |}{|| T\bfu ||}\frac{||T\bfu||}{||\bfu||}
+   \\&
    = \sup_{(v,\bftau)}\frac{| b((u,\bfsigma,\hat{u},\hat{t}), (v,\bftau)) |}{|| (v,\bftau) ||}
    \frac{||T\bfu||}{||\bfu||}
    \geq \gamma^2 || (u,\bfsigma,\hat{u},\hat{t}) ||\,,
-\end{equation}
+\end{align}
 where $\gamma$ is the stability constant for the standard continuous DPG formulation.
 The first inequality follows as we plug in the definition for $a$ and pick
 $\bfw=\bfu$. The second equality is trivial, while the next one follows by definition of the optimal test
@@ -554,13 +571,14 @@ If we have a robust estimate,
 \label{eq:robust_est2}
 \end{equation}
 then
-\begin{equation}
-| \sum_K \lambda_K \langle \hat{t}, 1_K \rangle | \leq C (\sum_K \mu(K) \lambda_K^2)^{1/2}
+\begin{align}
+| \sum_K \lambda_K \langle \hat{t}, 1_K \rangle | & \leq C (\sum_K \mu(K) \lambda_K^2)^{1/2}
 \, (\sum_K || (v,\bftau) ||_V^2)^{1/2}
+\\\nonumber&
 = C (\sum_K \mu(K) \lambda_K^2)^{1/2}  || \hat{t} ||_E
 \leq C\norm{\bflambda}\norm{\bfu}_E
 \,,
-\end{equation}
+\end{align}
 as needed.
 
 For instance, condition~\eqref{eq:robust_est2} will be satisfied if the test inner product
@@ -586,7 +604,7 @@ as it is derived directly from the adjoint of the problem supplemented with
 Chan \etal\cite{ChanHeuerThanhDemkowicz2012} derived a more robust alternative
 norm for convection diffusion (dubbed the robust norm). We recently
 developed a modification of the robust norm that produces better
-results in the presence of singularities; 
+results in the presence of singularities;
 for more details and motivation, see \cite{JesseDissertation}.
 \begin{align}
 \norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
@@ -603,19 +621,22 @@ With this choice of test norm, our local problem now becomes:
 
 Find $\vdeltau\in\HOneK,\,\taudeltau\in\HdivK$ such that:
 \begin{align}
+\nonumber
 \min&\left\{\frac{1}{\epsilon},\frac{1}{\mu(K)}\right\}(\taudeltau,\delta\bftau)_K
 +(\nabla\cdot\taudeltau-\bfbeta\cdot\nabla
 \vdeltau,\nabla\cdot\delta\bftau-\bfbeta\cdot\nabla\delta v)_K
-+(\bfbeta\cdot\nabla\vdeltau,\bfbeta\cdot\nabla \delta v)_K\nonumber\\
-&+\epsilon(\nabla\vdeltau,\nabla \delta v)_K
+\\\nonumber&
++(\bfbeta\cdot\nabla\vdeltau,\bfbeta\cdot\nabla \delta v)_K
++\epsilon(\nabla\vdeltau,\nabla \delta v)_K
 +\alpha(\vdeltau,\delta v)_K
 =b(\delta\bs u_h,(\delta v,\delta\bftau))
+\\&
 \quad\quad\forall\delta v\in\HOneK,\,\delta\bftau\in\HdivK\,,
 \label{eq:localSolve}
 \end{align}
 where typically $\alpha=1$.
 
-With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}. 
+With a locally conservative formulation, we can take $\alpha=0$ in local problem \eqref{eq:localSolve}.
 The fact that the test functions will be determined then up to a constant does not matter, for
 $\hat t$ in equation \eqref{eq:conservativeConfusionSystem}$_1$ is orthogonal to constants.
 Mathematically, we are dealing with equivalence classes of functions, but in
@@ -1188,7 +1209,7 @@ test norm also plays into this calculation of the error representation
 function. As discussed earlier, the conservative formulation allows us to
 throw away the $L^2$ term on $v$. The inclusion of this term required certain
 assumptions on $\bfbeta$ \cite{ChanHeuerThanhDemkowicz2012} that break down for
-the vortex problem, where $\snorm{\bfbeta}\rightarrow 0$ in the center of the domain. 
+the vortex problem, where $\snorm{\bfbeta}\rightarrow 0$ in the center of the domain.
 Here, we see the standard method needlessly refines
 in the center of the domain where the solution is constant. The conservative
 scheme is more discerning about refinements and focuses them where
@@ -1239,6 +1260,8 @@ refinement, the conservative solution nails the peak velocity. The
 nonconservative solution is completely useless at this point. We see the same
 thing with the backward facing step problem. The conservative solution preserves
 qualitative features even on the coarsest mesh, while standard DPG requires far higher resolution
-to achieve a similar solution. 
+to achieve a similar solution.
 
+% \bibliographystyle{plain}  % Here the bibliography 		     %
+% \bibliography{../Papers}        % is inserted.			     %
 \end{document}
