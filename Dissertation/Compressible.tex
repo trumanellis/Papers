@@ -173,7 +173,47 @@ The adjoint equations are:
 {\bfG_m^*(\Grad\Psi)}
 {G_e^*(\Grad\Psi)}\,,
 \end{align*}
-where the various terms are defined in Appendix \ref{sec:VariableComparison}.
+where
+these terms can be developed by analyzing the bilinear form and grouping terms according to trial variable:
+\begin{align*}
+M_\bbD^*\bbS&=\bbS\\
+M_{\bfq}^*\bftau&=\frac{Pr}{C_p}\bftau\\
+K_\bbD^*\Grad V&=\Grad\bfv_m+(\Grad\bfv_m)^T-\frac{2}{3}\Div\bfv_m\bbI
+\\&\quad
++\tilde\bfu\otimes\Grad v_e+(\tilde\bfu\otimes\Grad v_e)^T-\frac{2}{3}\tilde\bfu\cdot\Grad v_e\bbI\\
+K_{\bfq}^*\Grad V&=-\Grad v_e\\
+\bfF_c^*\cdot\Grad V&=
+\tilde\bfu\cdot\Grad v_c
++\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m+R\tilde T\Div\bfv_m
++C_v\tilde T\tilde\bfu\cdot\Grad v_e
+\\&\quad
++\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde T\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_c^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
+%
+\bfF_m\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
++(\Grad\bfv_m+(\Grad\bfv_m)^T)\tilde\rho\tilde\bfu
++C_v\tilde T\tilde\rho\Grad v_e
+\\&\quad
++\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e
++R\tilde T\tilde\rho\Grad v_e\\ 
+&\quad-\tilde{\bbD}\Grad v_e-(\tilde{\bbD})^T\Grad v_e+\frac{2}{3}\trace(\tilde{\bbD})\Grad v_e
+\\
+%
+\bfC_m^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
+%
+\bfF_e^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
+%
+\bfC_e^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}\\
+%
+\bfG_c^*\Grad\Psi&=0\\
+%
+\bfG_m^*\Grad\Psi&=\Div\bbS\\
+%
+\bfG_e^*\Grad\Psi&=-\Div\bftau
+\,.
+\end{align*}
+% where the various terms are defined in Appendix \ref{sec:VariableComparison}.
 We develop analogous robust norm:
 \begin{align*}
 \norm{\LRp{V,\Psi}}_{V,K}^2 &\coloneqq
@@ -205,6 +245,7 @@ and NSDecoupled norm:
 + \frac{1}{h^2}\norm{M^*}_K^2\,.
 \end{align*}
 
+
 \section{Numerical Experiments}
 \subsection{1D Space-Time Problems}
 \subsubsection{Sod Shock Tube}
@@ -212,55 +253,5 @@ and NSDecoupled norm:
 \subsubsection{Noh Implosion}
 
 \subsection{2D Space-Time Problems}
-
-% \subsubsection*{Primitive Variables}
-% For the sake of simplifying notation, we drop the $\Delta$ notation from before. 
-% Any values from the previous solution are denoted with a $\tilde{}$ notation while current values lack this.
-% In the primitive variable formulation, $\Sigma=\LRc{\bbD,\bfq}$, $U=\LRc{\rho,u_x,u_y,T}$, $\Psi=\LRc{\bbS,\bftau}$, and $V=\LRc{v_c,v_x,v_y,v_e}$.
-% We have the following definitions:
-% \begin{align*}
-% M^*\Psi+K^*\Grad V&=\vecttwo{M_{\bbD}^*\bbS}{M_{\bfq}^*\bftau}
-% +\vecttwo{K_{\bbD}^*\Grad V}{K_{\bfq}^*\Grad V}\\
-% -\vecttwo{\mathcal{F}^*}{C^*}\cdot\Gradxt V+G^*\Grad\Psi&=-\vectthree
-% {\bfF_c^*\cdot\Grad V+\bfC_c^*\cdot V_{,t}}
-% {\bfF_m^*\cdot\Grad V+\bfC_m^*\cdot V_{,t}}
-% {\bfF_e^*\cdot\Grad V+\bfC_e^*\cdot V_{,t}}
-% +\vectthree
-% {\bfG_c^*\Grad\Psi}
-% {\bfG_m^*\Grad\Psi}
-% {\bfG_e^*\Grad\Psi}
-% \end{align*}
-% \begin{align*}
-% M_\bbD^*\bbS&=\frac{1}{\mu}\bbS\\
-% M_{\bfq}^*\bftau&=\frac{Pr}{C_p\mu}\bftau\\
-% K_\bbD^*\Grad V&=\Grad\bfv_m+(\Grad\bfv_m)^T-\frac{2}{3}\Div\bfv_m\bbI
-% +\tilde\bfu\otimes\Grad v_e+(\tilde\bfu\otimes\Grad v_e)^T-\frac{2}{3}\tilde\bfu\cdot\Grad v_e\bbI\\
-% K_{\bfq}^*\Grad V&=-\Grad v_e\\
-% \bfF_c^*\cdot\Grad V&=
-% \tilde\bfu\cdot\Grad v_c
-% +\tilde\bfu\otimes\tilde\bfu:\Grad\bfv_m+R\tilde T\Div\bfv_m
-% +C_v\tilde T\tilde\bfu\cdot\Grad v_e+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu\tilde\bfu\cdot\Grad v_e+R\tilde T\tilde\bfu\cdot\Grad v_e\\
-% %
-% \bfC_c^*\cdot V_{,t}&=v_{c,t}+\tilde\bfu\cdot\bfv_{m,t}+(C_v\tilde T+\frac{1}{2}\tilde\bfu\cdot\tilde\bfu)v_{e,t}\\
-% %
-% \bfF_m\cdot\Grad\bfv_m&=\tilde\rho\Grad v_c
-% +(\Grad\bfv_m+(\Grad\bfv_m)^T)\tilde\rho\tilde\bfu
-% +C_v\tilde T\tilde\rho\Grad v_e+\frac{1}{2}\tilde\rho\tilde\bfu\cdot\tilde\bfu\Grad v_e+\tilde\rho\tilde\bfu\tilde\bfu\cdot\Grad v_e
-% +R\tilde T\tilde\rho\Grad v_e\\ 
-% &\quad-\tilde{\bbD}\Grad v_e-(\tilde{\bbD})^T\Grad v_e+\frac{2}{3}\trace(\tilde{\bbD})\Grad v_e
-% \\
-% %
-% \bfC_m^*\cdot V_{,t}&=\tilde\rho\bfv_{m,t}+\tilde\rho\tilde\bfu v_{e,t}\\
-% %
-% \bfF_e^*\cdot\Grad V&=R\tilde\rho\Div\bfv_m+C_v\tilde\rho\tilde\bfu\cdot\Grad v_e+R\tilde\rho\tilde\bfu\cdot\Grad v_e\\
-% %
-% \bfC_e^*\cdot V_{,t}&=C_v\tilde\rho v_{e,t}\\
-% %
-% \bfG_c^*\Grad\Psi&=0\\
-% %
-% \bfG_m^*\Grad\Psi&=\Div\bbS\\
-% %
-% \bfG_e^*\Grad\Psi&=-\Div\bftau
-% \end{align*}
 
 \end{document}

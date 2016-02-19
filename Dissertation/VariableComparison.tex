@@ -184,52 +184,65 @@ C_e&:=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
 \bfK_e&:=-\bfq+\frac{\bfV_m}{V_e}\cdot\LRp{\bbD+\bbD^T-\frac{2}{3}\trace(\bbD)\bbI}\\
 \bbM_{\bbD}&:=\bbD\\
 \bfM_{\bfq}&:=\frac{Pr}{C_p}\bfq\\
-\bfG_{\bbD}&:=\frac{\bfV_m}{V_e}\\
+\bfG_{\bbD}&:=-\frac{\bfV_m}{V_e}\\
 G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 \end{align*}
 
 \subsection{Linearized Terms}
 \begin{align*}
 \pd{C_c(\tilde W)}{W}\Delta W&:=
-	\Delta\rho
+	-\tilde V_e\pd{\alpha(\tilde W)}{W}\Delta W-\alpha(\tilde W)\Delta V_e
 	\\
 \pd{\bfC_m(\tilde W)}{W}\Delta W&:=
+	\tilde\bfV_m\pd{\alpha(\tilde W)}{W}\Delta W+\alpha(\tilde W)\Delta\bfV_m
 	\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu
 	\\
 \pd{C_e(\tilde W)}{W}\Delta W&:=
-	C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
-	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}
+	\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}\pd{\alpha(\tilde W)}{W}\Delta W
+	\\&\quad
+	-\alpha(\tilde W)\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+	+\alpha(\tilde W)\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
 	\\
 \pd{\bfF_c(\tilde W)}{W}\Delta W&:=
-	\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu
+	\tilde\bfV_m\pd{\alpha(\tilde W)}{W}\Delta W+\alpha(\tilde W)\Delta\bfV_m
 	\\
 \pd{\mathbb{F}_m(\tilde W)}{W}\Delta W&:=
-	\Delta\rho\tilde\bfu\otimes\tilde\bfu
-	+\tilde\rho\Delta\bfu\otimes\tilde\bfu
-	+\tilde\rho\tilde\bfu\otimes\Delta\bfu
-	+R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bbI
+	\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bbI}\pd{\alpha(\tilde W)}{W}\Delta W
+	\\&\quad
+	+\alpha(\tilde W)\LRp{
+	-\frac{\Delta\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}
+	-\frac{\tilde\bfV_m\otimes\Delta\bfV_m}{\tilde V_e}
+	+\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e^2}\Delta V_e
+	}
 	\\
 \pd{\bfF_e(\tilde W)}{W}\Delta W&:=
-	C_v\Delta\rho\tilde\bfu\tilde T+C_v\tilde\rho\Delta\bfu\tilde T+C_v\tilde\rho\tilde\bfu\Delta T
+	\frac{\tilde\bfV_m}{\tilde V_e}
+	\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\pd{\alpha(\tilde W)}{W}\Delta W
 	\\&\quad
-	+\frac{1}{2}\Delta\rho\tilde\bfu\tilde\bfu\cdot\tilde\bfu
-	+\frac{1}{2}\tilde\rho\Delta\bfu\tilde\bfu\cdot\tilde\bfu
-	+\frac{1}{2}\tilde\rho\tilde\bfu\Delta\bfu\cdot\tilde\bfu
-	+\frac{1}{2}\tilde\rho\tilde\bfu\tilde\bfu\cdot\Delta\bfu
-	\\&\quad
-	+R\Delta\bfu\tilde\rho\tilde T
-	+R\tilde\bfu\Delta\rho\tilde T
-	+R\tilde\bfu\tilde\rho\Delta T
+	+\alpha(\tilde W)\left(
+	\frac{\Delta\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}
+	\right.\\&\quad\quad\left.
+	-\frac{\tilde\bfV_m}{V_e^2}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\Delta V_e
+	\right.\\&\quad\quad\left.
+	+\frac{\tilde\bfV_m}{\tilde V_e}\LRp{
+	\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+	-\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+	}
+	\right)
 	\\
+\end{align*}
+\begin{align*}
 \pd{\bfK_c(\tilde W)}{W}\Delta W&:=
 	\boldsymbol 0\\
 \pd{\bbK_m(\tilde W)}{W}\Delta W&:=
 	\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}
 	\\
 \pd{\bfK_e(\tilde W)}{W}\Delta W&:=
-	-\Delta\bfq+\Delta\bfu\cdot\LRp{\tilde\bbD+\tilde\bbD^T-\frac{2}{3}\trace(\tilde\bbD)\bbI}
+	-\Delta\bfq+
+	\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}
+	\cdot\LRp{\tilde\bbD+\tilde\bbD^T-\frac{2}{3}\trace(\tilde\bbD)\bbI}
 	\\&\quad
-	+\tilde\bfu\cdot\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
+	+\frac{\tilde\bfV_m}{\tilde V_e}\cdot\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
 \pd{\bbM_{\bbD}(\tilde W)}{W}\Delta W&:=
 	\Delta\bbD
 	\\
@@ -237,11 +250,25 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 	\frac{Pr}{C_p}\Delta\bfq
 	\\
 \pd{\bfG_{\bbD}(\tilde W)}{W}\Delta W&:=
-	\Delta\bfu
+	-\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}
 	\\
 \pd{G_{\bfq}(\tilde W)}{W}\Delta W&:=
-	-\Delta T
+	-\frac{1}{C_vV_e^2}\Delta V_e
 	\,.
+\end{align*}
+\begin{align*}
+\pd{\alpha(\tilde W)}{W}\Delta W&=
+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+\gamma(-\tilde V_e)^{-(\gamma+1)}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\Delta V_e\\
+&+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
+\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\frac{1}{\gamma-1}\\
+&\LRp{\Delta V_c
+-\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
++\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+}
 \end{align*}
 
 \end{document}
