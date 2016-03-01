@@ -1,7 +1,9 @@
 % -*- root: Dissertation.tex -*-
 \documentclass[Dissertation.tex]{subfiles}
 \begin{document}
+\graphicspath{{../Figures/}}
 \chapter{Space-Time DPG for Compressible Navier-Stokes}
+\label{sec:compressible}
 \section{Motivation}
 
 The compressible Navier-Stokes equations are
@@ -247,11 +249,117 @@ and NSDecoupled norm:
 
 
 \section{Numerical Experiments}
-\subsection{1D Space-Time Problems}
-\subsubsection{Sod Shock Tube}
+% \subsection{1D Space-Time Problems}
+\subsection{Sod Shock Tube}
+% Re=1e4, p=2, delta_p=2, nlMaxIters=10, rampRe, coarseRe=1e2
 
-\subsubsection{Noh Implosion}
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den1.pdf}
+\caption{Density}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-vel1.pdf}
+\caption{Velocity}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres1.pdf}
+\caption{Pressure}
+\end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh1.png}
+\caption{Mesh}
+\end{subfigure}
+\caption{Sod solution with robust norm, initial mesh}
+\label{fig:SodRobust0}
+\end{figure}
 
-\subsection{2D Space-Time Problems}
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den7.pdf}
+\caption{Density}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-vel7.pdf}
+\caption{Velocity}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres7.pdf}
+\caption{Pressure}
+\end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh7.png}
+\caption{Mesh}
+\end{subfigure}
+\caption{Sod solution with robust norm, 6th refinement}
+\label{fig:SodRobust6}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den13.pdf}
+\caption{Density}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-vel13.pdf}
+\caption{Velocity}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres13.pdf}
+\caption{Pressure}
+\end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh13.png}
+\caption{Mesh}
+\end{subfigure}
+\caption{Sod solution with robust norm, 12th refinement}
+\label{fig:SodRobust12}
+\end{figure}
+
+\subsection{Noh Implosion}
+% Re=1e3, p=1, delta_p=2, nlMaxIters=10, coarseRe=10
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.32\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Noh/Robust-mesh0.png}
+\caption{Initial Mesh}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Noh/Robust-mesh5.png}
+\caption{After 5 refinements}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Noh/Robust-mesh10.png}
+\caption{After 10 refinements}
+\end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Noh/Robust-den.pdf}
+\caption{Density at final time}
+\end{subfigure}
+\caption{Noh solution with robust norm}
+\label{fig:NohRobustMesh}
+\end{figure}
+
+% \subsection{2D Space-Time Problems}
 
 \end{document}

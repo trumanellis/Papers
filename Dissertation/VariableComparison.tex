@@ -1,6 +1,7 @@
 % -*- root: Dissertation.tex -*-
 \documentclass[Dissertation.tex]{subfiles}
 \begin{document}
+\graphicspath{{../Figures/}}
 \chapter{Comparison of Primitive, Conservation, and Entropy Variables for Compressible Navier-Stokes}
 \label{sec:VariableComparison}
 % \section{Nonlinear Formulation}
@@ -270,5 +271,141 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 +\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
 }
 \end{align*}
+
+
+\section{Numerical Experiments}
+We perform a couple numerical experiments to compare the different formulations.
+In Chapter \ref{sec:compressible} we used a incrementally decreased $\mu$ with ever refinement step 
+as this approach was found to produce cleaner refinement patterns; here we hold $\mu$ constant
+for each problem to show that it is still possible to arrive at a converged solution, but
+we end up with a less desirable final refinement pattern.
+
+\subsection{Sod Shock Tube}
+% Re=1e5, p=2, delta_p=2, nlMaxIters=10, NSDecoupled
+We repeat the Sod shock tube problem described in Chapter \ref{sec:compressible} with $\mu=10^{-5}$,
+$p=2$, $\Delta p=2$, and the NSDecoupled norm.
+We omit plots of velocity and pressure as they don't really contribute anything new to the comparisons.
+Comparing figures (\ref{fig:SodPrimitive} - \ref{fig:SodEntropy}), it seems that
+primitive and entropy variables are of similiar quality, at least by the eyeball norm.
+Entropy variables, on the other hand, suffer from much more extreme overshoots and 
+undershoots compared to the other formulations.
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/primitive-den.pdf}
+\caption{Density}
+\end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/primitive-vel.pdf}
+% \caption{Velocity}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/primitive-pres.pdf}
+% \caption{Pressure}
+% \end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Sod/FormulationComparison/Form0Mesh15.png}
+\caption{Final mesh colored by $\rho$}
+\end{subfigure}
+\caption{Sod problem with primitive variables}
+\label{fig:SodPrimitive}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/conservation-den.pdf}
+\caption{Density}
+\end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/conservation-vel.pdf}
+% \caption{Velocity}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/conservation-pres.pdf}
+% \caption{Pressure}
+% \end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Sod/FormulationComparison/Form1Mesh15.png}
+\caption{Final mesh colored by $\rho$}
+\end{subfigure}
+\caption{Sod problem with conservation variables}
+\label{fig:SodConservation}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/entropy-den.pdf}
+\caption{Density}
+\end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/entropy-vel.pdf}
+% \caption{Velocity}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Sod/FormulationComparison/entropy-pres.pdf}
+% \caption{Pressure}
+% \end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Sod/FormulationComparison/Form2Mesh15.png}
+\caption{Final mesh colored by $V_c$}
+\end{subfigure}
+\caption{Sod problem with entropy variables}
+\label{fig:SodEntropy}
+\end{figure}
+
+\subsection{Noh Implosion}
+% Re=1e3, p=2, delta_p=2, nlMaxIters=10, timeslabs
+We repeat the Noh problem from before with $\mu=10^{-3}$, $p=2$, $\Delta p=2$, and the NSDecoupled norm.
+In Chapter \ref{sec:compressible} we simulated a half domain with a symmetry boundary condition
+at the origin; here we compute the full domain.
+The other difference is that this simulation was computed as a series of four time slabs 
+rather than as one monolithic computation.
+This means that the $[0,\frac{1}{4}]$ time slab was computed for 8 adaptive refinement steps
+then the final solution was projected onto the $[\frac{1}{4},\frac{1}{2}]$ time slab as an 
+initial condition.
+This was repeated until we arrived at the $[\frac{3}{4},1]$ time slab, where the density traces
+in Figure \ref{fig:NohDen} are taken.
+We see more unwanted refinements in this computation compared to Chapter \ref{sec:compressible}
+due to the spurious shock patterns that develop on coarse meshes.
+We are not able to compare the entropy formulation for this problem since the initial conditions 
+contain infinities under this formulation.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{Noh/FormulationComparison/den9.pdf}
+\caption{Density at final time}
+\label{fig:NohDen}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Noh/FormulationComparison/Form0Mesh8.png}
+\caption{Final mesh with primitive variables}
+\end{subfigure}
+\begin{subfigure}[t]{0.9\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Noh/FormulationComparison/Form1Mesh8.png}
+\caption{Final mesh with conservation variables}
+\end{subfigure}
+\caption{Noh meshes colored by $\rho$}
+\label{fig:Noh}
+\end{figure}
 
 \end{document}
