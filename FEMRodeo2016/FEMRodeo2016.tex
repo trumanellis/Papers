@@ -10,13 +10,13 @@
 \usepackage{pgfplots}
 \usepackage[space]{grffile}
 \usepackage{graphicx}
-% \usepackage{forloop}
+\usepackage{forloop}
 % \usepackage[aps,prb,citeautoscript]{revtex4-1}
 % \usepackage[super]{natbib}
-% \usepackage[backend=bibtex,sorting=none]{biblatex}
-% \usepackage{animate}
-% \usepackage{listings}
-% \usepackage{bbding}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\usepackage{animate}
+\usepackage{listings}
+\usepackage{bbding}
 \usepackage{comment}
 \bibliography{../Papers}
 
@@ -174,7 +174,6 @@ supports rapid specification of DPG problems while maintaining computational eff
 
 
 
-
 %   /$$$$$$$  /$$$$$$$   /$$$$$$         /$$$$$$                                            /$$                        
 %  | $$__  $$| $$__  $$ /$$__  $$       /$$__  $$                                          |__/                        
 %  | $$  \ $$| $$  \ $$| $$  \__/      | $$  \ $$ /$$    /$$  /$$$$$$   /$$$$$$  /$$    /$$ /$$  /$$$$$$  /$$  /$$  /$$
@@ -258,118 +257,8 @@ with $v_{\delta u_h}\in V$ that solves the auxiliary problem
 \end{block}
 \end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Overview of DPG}
-% \framesubtitle{Mixed Formulation}
-% Identifying the error representation function:
-% \[
-% \psi:=R_V^{-1}(Bu_h-l)
-% \] 
-% allows us to develop an alternative interpretation of DPG.
-% \begin{block}{DPG as a Mixed Problem}
-% Find $\psi\in V$, $u_h\in U_h$ such that
-% \begin{equation*}
-% \begin{aligned}
-% \LRp{\psi,\delta v}_V-b(u_h,\delta v)&=-l(\delta v) \quad&\forall&\delta v&\in V\\
-% b(\delta u_h,\psi)&=0 \quad&\forall&\delta u_h&\in U_h
-% \end{aligned}
-% \end{equation*}
-% \end{block}
-% In this unconventional saddle-saint problem, the approximate solution $u_h$ comes from a finite-dimensional
-% trial space and plays the role of the Lagrange multiplier for the error representation function
-% \end{frame}
 
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Overview of DPG}
-% \framesubtitle{DPG is the Most Stable Petrov-Galerkin Method}
-% Babu\v{s}ka's theorem guarantees that \emph{discrete stability and approximability imply convergence}.
-% If bilinear form $b(u,v)$, with $M:=\norm{b}$ satisfies the discrete inf-sup condition 
-% with constant $\gamma_h$,
-% \[
-% \sup_{v_h\in V_h}\frac{|b(u,v)|}{\norm{v_h}_V}\geq\gamma_h\norm{u_h}_U\,,
-% \]
-% then the Galerkin error satisfies the bound
-% \[
-% \norm{u_h-u}_U\leq\frac{M}{\gamma_h}\inf_{w_h\in U_h}\norm{w_h-u}_U\,.
-% \]
-% Optimal test function realize the supremum guaranteeing that $\gamma_h\geq\gamma$.\\
-% \begin{block}{Energy Norm}
-% If we use the energy norm, $\norm{u}_E:=\norm{Bu}_{V'}$ in the error estimate, then $M=\gamma=1$.
-% Babu\v{s}ka's theorem
-% implies that the minimum residual method is the most stable Petrov-Galerkin method (assuming exact optimal test functions).
-% \end{block}
-% \end{frame}
-
-
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Overview of DPG}
-% \footfullcite{DPGOverview}}
-\framesubtitle{Other Features}
-\begin{block}{Discontinuous Petrov-Galerkin}
-\begin{itemize}
-  \item Continuous test space produces global solve for optimal test functions
-  \item Discontinuous test space results in an embarrassingly parallel solve
-\end{itemize}
-\end{block}
-\begin{block}{Hermitian Positive Definite Stiffness Matrix}
-Property of all minimum residual methods
-\[
-b(u_h,v_{\delta u_h})=\LRp{v_{u_h},v_{\delta u_h}}_V=\overline{\LRp{v_{\delta u_h},v_{u_h}}_V}=\overline{b(\delta u_h,v_{u_h})}
-\]
-\end{block}
-\begin{block}{Error Representation Function}
-Energy norm of Galerkin error (residual) can be computed without exact solution
-\[
-\norm{u_h-u}_E=\norm{B(u_h-u)}_{V'}=\norm{Bu_h-l}_{V'}=\norm{R_V^{-1}(Bu_h-l)}_V
-\]
-\end{block}
-\end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Overview of DPG}
-% \framesubtitle{High Performance Computing}
-% \begin{columns}[c]
-% \begin{column}{.5\textwidth}
-% Eliminates human intervention
-% \medskip
-
-% \begin{itemize}
-%   \item Stability
-%   \item Robustness
-%   \item Adaptivity
-%   \item Automaticity
-%   \item Compute intensive
-%   \item Embarrassingly parallel local solves
-%   \item Factorization recyclable
-%   \item Low communication
-%   \item SPD stiffness matrix
-%   \item Multiphysics
-% \end{itemize}
-
-% % Issues to be solved
-% % \begin{itemize}
-% %   \item Iterative solvers
-% % \end{itemize}
-% \end{column}
-% \begin{column}{.5\textwidth}
-% \vspace{-3ex}
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=0.9\textwidth]{Motivation/Stampede.png}
-% \\\small{Stampede Supercomputer at TACC}\\
-% \includegraphics[width=0.9\textwidth]{Motivation/Mira.png}
-% \\\small{Mira Supercomputer at Argonne}\\
-% \end{figure}
-% \end{column}
-% \end{columns}
-
-% \end{frame}
 
 
 
@@ -711,139 +600,139 @@ Coupled Robust Norm
 \end{align*}
 \end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Robust Norms for Transient Convection-Diffusion}
-% \framesubtitle{Adjoint Operator}
-% Consider the problem with homogeneous boundary conditions
-% \begin{align*}
-% \frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
-% \tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
-% % \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\\
-% \beta_n u-\epsilon\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
-% u &= 0 \text{ on } \Gamma_+\\
-% u &= u_0 \text{ on } \Gamma_0.
-% \end{align*}
-% The adjoint operator $A^*$ is given by 
-% \[
-% A^*(v,\bftau)=\LRp{\frac{1}{\epsilon}\bftau+\Grad v,-\tilde\bfbeta\cdot\Gradxt v+\Div\bftau}\,.
-% \]
-% \end{frame}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Adjoint Operator}
+Consider the problem with homogeneous boundary conditions
+\begin{align*}
+\frac{1}{\epsilon}\bfsigma-\Grad u &=0\\
+\tilde\bfbeta\cdot\Gradxt u - \Div\bfsigma &= f\\
+% \Divxt\vecttwo{\bfbeta u-\bfsigma}{u}&=f\\
+\beta_n u-\epsilon\pd{u}{n} &= 0 \text{ on } \Gamma_-\\
+u &= 0 \text{ on } \Gamma_+\\
+u &= u_0 \text{ on } \Gamma_0.
+\end{align*}
+The adjoint operator $A^*$ is given by 
+\[
+A^*(v,\bftau)=\LRp{\frac{1}{\epsilon}\bftau+\Grad v,-\tilde\bfbeta\cdot\Gradxt v+\Div\bftau}\,.
+\]
+\end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Robust Norms for Transient Convection-Diffusion}
-% \framesubtitle{Controlling Different Field Variables}
-% We decompose the continuous adjoint problem
-% $
-% A^*(\bftau,v)=(\bfsigma,u)
-% $
-% into
-% \begin{block}{Continuous part with forcing $u$}
-% \begin{columns}[t]
-% \begin{column}{0.4\textwidth}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Controlling Different Field Variables}
+We decompose the continuous adjoint problem
+$
+A^*(\bftau,v)=(\bfsigma,u)
+$
+into
+\begin{block}{Continuous part with forcing $u$}
+\begin{columns}[t]
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\frac{1}{\epsilon}\bftau_1+\Grad v_1 &=0\\
+-\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= u\\
+\end{align*}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\bftau_1\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_1 &= 0 \text{ on } \Gamma_+\\
+v_1 &= 0 \text{ on } \Gamma_T
+\end{align*}
+\end{column}
+\end{columns}
+\end{block}
+\begin{block}{Continuous part with forcing $\bfsigma$}
+\begin{columns}[t]
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bfsigma\\
+-\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
+\end{align*}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{align*}
+\bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
+v_2 &= 0 \text{ on } \Gamma_+\\
+v_2 &= 0 \text{ on } \Gamma_T
+\end{align*}
+\end{column}
+\end{columns}
+\end{block}
+% % and a continuous part with forcing $\bff$
 % \begin{align*}
-% \frac{1}{\epsilon}\bftau_1+\Grad v_1 &=0\\
-% -\tilde\bfbeta\cdot\Gradxt v_1 + \Div\bftau_1 &= u\\
-% \end{align*}
-% \end{column}
-% \begin{column}{0.4\textwidth}
-% \begin{align*}
-% \bftau_1\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
-% v_1 &= 0 \text{ on } \Gamma_+\\
-% v_1 &= 0 \text{ on } \Gamma_T
-% \end{align*}
-% \end{column}
-% \end{columns}
-% \end{block}
-% \begin{block}{Continuous part with forcing $\bfsigma$}
-% \begin{columns}[t]
-% \begin{column}{0.4\textwidth}
-% \begin{align*}
-% \frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bfsigma\\
+% \frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
 % -\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
-% \end{align*}
-% \end{column}
-% \begin{column}{0.4\textwidth}
-% \begin{align*}
 % \bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
 % v_2 &= 0 \text{ on } \Gamma_+\\
-% v_2 &= 0 \text{ on } \Gamma_T
+% v_2 &= 0 \text{ on } \Gamma_T\,.
 % \end{align*}
-% \end{column}
-% \end{columns}
-% \end{block}
-% % % and a continuous part with forcing $\bff$
-% % \begin{align*}
-% % \frac{1}{\epsilon}\bftau_2+\Grad v_2 &=\bff\\
-% % -\tilde\bfbeta\cdot\Gradxt v_2 + \Div\bftau_2 &= 0\\
-% % \bftau_2\cdot\bfn_x &= 0 \text{ on } \Gamma_-\\
-% % v_2 &= 0 \text{ on } \Gamma_+\\
-% % v_2 &= 0 \text{ on } \Gamma_T\,.
-% % \end{align*}
-% \end{frame}
+\end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Robust Norms for Transient Convection-Diffusion}
-% \framesubtitle{Proved Bounds at Our Disposal}
-% Proofs of these lemmas can be found in \footfullcite{EllisRobustnessReport}.
-% \begin{lemma}[1]
-% If $\Div\bfbeta=0$, we can bound
-% \[
-% \norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{u}^2+\epsilon\norm{\bfsigma}^2
-% \]
-% where $v=v_1+v_2$.
-% \end{lemma}
-% \begin{lemma}[2]
-% If $\norm{\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI}_{L^{\infty}}\le C_{\bfbeta}$,
-% we can bound
-% \[
-% \norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{u}.
-% \]
-% \end{lemma}
-% \end{frame}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Proved Bounds at Our Disposal}
+Proofs of these lemmas can be found in \footfullcite{EllisRobustnessReport}.
+\begin{lemma}[1]
+If $\Div\bfbeta=0$, we can bound
+\[
+\norm{v}^2+\epsilon\norm{\Grad v}^2\leq\norm{u}^2+\epsilon\norm{\bfsigma}^2
+\]
+where $v=v_1+v_2$.
+\end{lemma}
+\begin{lemma}[2]
+If $\norm{\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI}_{L^{\infty}}\le C_{\bfbeta}$,
+we can bound
+\[
+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim \norm{u}.
+\]
+\end{lemma}
+\end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Robust Norms for Transient Convection-Diffusion}
-% \framesubtitle{Control of $u$}
-% \begin{block}{Bound on $\norm{(v_1,\bftau_1)}$}
-% \vspace{-2ex}
-% \begin{align*}
-% \text{Lemma (2)}\Rightarrow&&\norm{\tilde\bfbeta\cdot\Gradxt v_1}&\lesssim\norm{u}\\
-% \text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1}&\leq\norm{u}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim2\norm{u}\\
-% \text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1-\tilde\bfbeta\cdot\Gradxt v_1}&=\norm{u}\\
-% \text{Lemma (1)}\Rightarrow&&\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2&\leq\norm{u}^2\\
-% \text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_1}&=\epsilon\norm{\Grad v_1}\leq\norm{u}
-% \end{align*}
-% We can guarantee robust control
-% \[
-% \norm{(u,0)}_{L^2(\Omega_h)}\lesssim\norm{(u,\bfsigma)}_E\,.
-% \]
-% \end{block}
-% \end{frame}
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Control of $u$}
+\begin{block}{Bound on $\norm{(v_1,\bftau_1)}$}
+\vspace{-2ex}
+\begin{align*}
+\text{Lemma (2)}\Rightarrow&&\norm{\tilde\bfbeta\cdot\Gradxt v_1}&\lesssim\norm{u}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1}&\leq\norm{u}+\norm{\tilde\bfbeta\cdot\Gradxt v_1}\lesssim2\norm{u}\\
+\text{Lemma (2)}\Rightarrow&&\norm{\Div\bftau_1-\tilde\bfbeta\cdot\Gradxt v_1}&=\norm{u}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_1}^2+\epsilon\norm{\Grad v_1}^2&\leq\norm{u}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_1}&=\epsilon\norm{\Grad v_1}\leq\norm{u}
+\end{align*}
+We can guarantee robust control
+\[
+\norm{(u,0)}_{L^2(\Omega_h)}\lesssim\norm{(u,\bfsigma)}_E\,.
+\]
+\end{block}
+\end{frame}
 
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Robust Norms for Transient Convection-Diffusion}
-% \framesubtitle{Control of $\bfsigma$}
-% \begin{block}{Bound on $\norm{(v_2,\bftau_2)}$}
-% \vspace{-2ex}
-% \begin{align*}
-% \text{Definition}\Rightarrow&&\norm{\Div\bftau_2-\tilde\bfbeta\cdot\Gradxt v_2}&=0\leq\norm{\bfsigma}\\
-% \text{Lemma (1)}\Rightarrow&&\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2&\leq\epsilon\norm{\bfsigma}^2\\
-% \text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_2}&=\norm{\bfsigma}+\epsilon\norm{\Grad v_2}=(1+\epsilon)\norm{\bfsigma}
-% \end{align*}
-% We have not been able to prove bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ or $\norm{\Div\bftau_2}$. 
-% \bigskip
+% ------------------------------------------------------------
+\begin{frame}[t]
+\frametitle{Robust Norms for Transient Convection-Diffusion}
+\framesubtitle{Control of $\bfsigma$}
+\begin{block}{Bound on $\norm{(v_2,\bftau_2)}$}
+\vspace{-2ex}
+\begin{align*}
+\text{Definition}\Rightarrow&&\norm{\Div\bftau_2-\tilde\bfbeta\cdot\Gradxt v_2}&=0\leq\norm{\bfsigma}\\
+\text{Lemma (1)}\Rightarrow&&\norm{v_2}^2+\epsilon\norm{\Grad v_2}^2&\leq\epsilon\norm{\bfsigma}^2\\
+\text{Lemma (1)}\Rightarrow&&\frac{1}{\epsilon}\norm{\bftau_2}&=\norm{\bfsigma}+\epsilon\norm{\Grad v_2}=(1+\epsilon)\norm{\bfsigma}
+\end{align*}
+We have not been able to prove bounds on $\norm{\tilde\bfbeta\cdot\Gradxt v_2}$ or $\norm{\Div\bftau_2}$. 
+\bigskip
 
-% We can \textbf{not} guarantee robust control
-% \[
-% \norm{(0,\bfsigma)}_{L^2(\Omega_h)}\cancel{\lesssim}\norm{(u,\bfsigma)}_E\,.
-% \]
-% \end{block}
-% \end{frame}
+We can \textbf{not} guarantee robust control
+\[
+\norm{(0,\bfsigma)}_{L^2(\Omega_h)}\cancel{\lesssim}\norm{(u,\bfsigma)}_E\,.
+\]
+\end{block}
+\end{frame}
 
 % ------------------------------------------------------------
 \begin{frame}[t]
@@ -907,28 +796,6 @@ $t=1.0$
 \end{columns}
 \end{frame}
 
-
-% \section{Related DPG Research}
-% \begin{frame}[t]
-% \frametitle{Related Research}
-% \framesubtitle{Past and Present Topics in DPG Research}  %% needed for proper positioning of the logo ...
-% \begin{itemize}
-% \item Multiphysics
-% \begin{itemize}
-%   \item Heat conduction (Poisson and Heat equation)
-%   \item Wave problems (Helmholtz and Maxwell)
-%   \item Linear elasticity and plate problems
-%   \item Convection-Diffusion, Stokes, incompressible Navier-Stokes, compressible Navier-Stokes, Euler
-% \end{itemize}
-% \item Natively nonlinear DPG
-% \item DPG for non-Hilbert $L^p$ spaces
-% \item Local conservation
-% \item Iterative solvers
-% \item Entropy scaling for physically meaningful test norms
-% \item General polyhedral elements
-% \end{itemize}
-% % \nocite{DPGOverview,EllisLC,CamelliaDPG}
-% \end{frame}
 
 \begin{frame}[noframenumbering,shrink=10]
 \frametitle{Thank You!}
