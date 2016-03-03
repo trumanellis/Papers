@@ -1,0 +1,118 @@
+% -*- root: Dissertation.tex -*-
+\documentclass[Dissertation.tex]{subfiles}
+\begin{document}
+\graphicspath{{../Figures/}}
+\chapter{Scaling}
+\label{sec:Scaling}
+
+\section{Scaling Issues}
+The one challenge which we most significantly underestimated before undertaking this work 
+was how our solver would scale on these space-time problems.
+Priliminary 1D results (2D in space-time), were computable with standard direct solvers,
+but as we moved to 2D (3D in space-time), direct solvers proved to be a major bottleneck
+to larger solves, not least of which because they tend to take up more memory than iterative solvers.
+Fortunately, my collaborator Nathan Roberts has been implementing 
+flexible multigrid strategies within Camellia.
+Unfortunately, multigrid is well known to perform poorly on convection-dominated diffusion problems.
+In fact, we can easily construct a case for convection-diffusion with $\epsilon=10^{-2}$ on a $64\times64$
+mesh where a combination of conjugate gradient, v-cycle multigrid 
+exibits the following convergence history for the iterative solve.
+% fails to converge to a tolerance of $10^{-10}$ within 2000 iterations.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Scaling/ConfusionResidual.pdf}
+\caption{Residual convergence for a simple convection-diffusion problem}
+\label{fig:ConfusionResidual}
+\end{figure}
+The details of this simulation aren't important, the point is that it is fairly trivial to contrive a 
+test problem where multigrid performs very poorly for convection-diffusion.
+% In our experience, we've noticed that this tends to be somewhat mitigated on adaptive meshes rather rather than the uniform one used for this example.
+This behavior appears to be especially bad on uniform meshes and seems to be somewhat mitigated on adaptive meshes.
+
+\subsection{The Question of Space-Time Slabs}
+Here we briefly explore the benefits of splitting a computation into space-time slabs under the following assumptions.
+\begin{enumerate}
+\item The maximum required spatial resolution is much finer than the required temporal resolution.
+\item Regions requiring high spatial resolution are concentrated in relatively compact parts of the domain.
+\item Only isotropc refinements are permitted.
+\item The number of time slabs is a power of 2.
+\end{enumerate}
+The first and second conditions are representative of the boundary layer and 
+shock problems considered in this thesis.
+The third condition is necessary as Camellia does not currently support anisotropic refinements in space-time.
+
+Our test case is a steady boundary layer problem with exact solution
+\[
+u=1-e^\frac{x}{\epsilon}
+\]
+solved on a space-time domain $[-1,0]\times[0,1]$.
+We choose this problem because it is easy to analyze the optimal refinement strategy, but it should be
+possible to generalize this analysis to more complicated patterns.
+The optimal refinement pattern (while $h > \epsilon$) just keeps refining toward the right side of the domain.
+We consider three possible refinement patterns. 
+The first is to solve the problem as a single space-time slab starting with a single element, represented in
+Figure \ref{fig:SingleSlab}.
+The second strategy is to split the domain into a sequence of time slabs each starting with a single space-time element, represented in Figure \ref{fig:NaiveSlabs}.
+The third is uniformly pre-refine each time slab slab so that it has as many spatial elements as the total number of time slabs, represented in Figure \ref{fig:SmartSlabs}.
+Theoretically we could design more optimal initial meshes for each time slab, but that would 
+require \emph{a priori} knowledge of the location of solution features.
+
+\input{DrawSpaceTimeSlabs.tex}
+
+In each strategy, we wish to refine until we reach a desired spatial resolution of the boundary layer; the figures show a resolution of $h=1/16$.
+We can now count the total number of elements for each approach. 
+Let $N$ be the total number of refinements to achieve the desired spatial resolution, i.e. $h=\frac{1}{2^N}$
+for the smallest mesh elements.
+Let $2^k$ be the number of time slabs in approaches 2 and 3.
+The first strategy has a final mesh of 
+$
+E_{tot1}=2^N+\sum_{r=1}^N 2^r
+$
+elements.
+The second approach has the same number of elements per time slab and is thus not a viable alternative 
+(at least without anisotropic refinements).
+The third approach has
+$  
+E_{slab3}=2^{k}-1+2^{N-k}+\sum_{r=1}^{N-k}2^r
+$
+elements in each time slab, or $E_{tot3}=2^k\cdot E_{slab3}$.
+Obviously, the total number of elements summed over every time slab will be higher for this approach, 
+(as demonstrated in Figure \ref{fig:ElementCountRatio})
+but each individual time slab will have fewer elements than the first approach.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Dissertation/Scaling/RatioElementCount.pdf}
+\caption{Ratio of total element counts $E_{tot3}/E_{tot1}$}
+\label{fig:ElementCountRatio}
+\end{figure}
+
+There are two possible reasons we might want to use approach 3 over approach 1.
+The first is speed, if the sum of the solve times for each individual time slab is
+less than the solve time for a single solve done with approach 1, this might be an
+attractive option. In fact, for this test problem, we can directly compute this for
+various numbers of time slabs. 
+For the sake of comparison, the solve time is defined to be the total time to solve all
+time slabs while adaptively refining to a resolution of $h=1/2^{10}$ 
+with the default geometric multigrid settings in Camellia (discussed above).
+We plot these results in Figure \ref{fig:TimeSlabSolveTime} and there does appear to be 
+a sweet spot for this problem at 16 time slabs, but the potential speedup alone isn't 
+enough to justify the more complicated implementation.
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Dissertation/Scaling/TimeSlabSolveTime.pdf}
+\caption{Total solve time using strategy 3}
+\label{fig:TimeSlabSolveTime}
+\end{figure}
+
+A more compelling reason has to do with memory. It is possible that for certain problems we might consider
+the solution of the entire space-time domain might require more memory than is available.
+By splitting the solve into smaller time slabs, you could mitigate produce smaller global solves that do 
+fit into memory. So far, the memory constraint has not been a significant concern for the problems under
+consideration here, so we opted to stick with the simplest approach, the first strategy.
+
+\section{Projected Solve Times for Various Problems}
+The issues in the previous sections and the fact that both space-time support and iterative solver support
+in Camellia are still a work in progress (and hence not fully optimized) mean that we were not able to scale up to the size of problems we initially intended to solve.
+
+\end{document}
