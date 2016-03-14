@@ -3,6 +3,7 @@
 \graphicspath{{../Figures/}}
 \begin{document}
 \chapter{Robust DPG Methods for Transient Convection-Diffusion}
+\label{sec:robust}
 \section{Motivation}
 The process of developing robust DPG methods for steady convection-diffusion was explored in \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
 In the sense, the main challenge is to come up with a correct test norm. The residual is measured
@@ -280,14 +281,14 @@ In the left column, we see the fully resolved \emph{ideal} optimal test function
 On the right, we see the approximated optimal test function using a enriched cubic test space.
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/graph_steady_v}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/graph_steady_tau}\\
 \caption{Ideal}
 \label{fig:idealGraph}
 \end{subfigure}
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/graph_steady_v_approx3}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/graph_steady_tau_approx3}\\
@@ -300,14 +301,14 @@ On the right, we see the approximated optimal test function using a enriched cub
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/robust_steady_v}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/robust_steady_tau}\\
 \caption{Ideal}
 \label{fig:idealRobust}
 \end{subfigure}
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/robust_steady_v_approx3}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/robust_steady_tau_approx3}\\
@@ -320,14 +321,14 @@ On the right, we see the approximated optimal test function using a enriched cub
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_v}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_tau}\\
 \caption{Ideal}
 \label{fig:idealCoupledRobust}
 \end{subfigure}
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_v_approx3}\\
 \includegraphics[width=\textwidth]{OptimalTestFunctions/uLinear_1e-2/steady/coupledrobust_steady_tau_approx3}\\
@@ -429,7 +430,23 @@ and
 + \frac{1}{\epsilon}\norm{\bftau}_K^2\,,
 \end{align}
 respectively designated the \emph{robust} test norm and the \emph{coupled robust} test norm,
-provide the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
+provide the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$
+\footnote{
+We haven't developed a mathematical theory for it, but we've also had numerical success with a norm that 
+we've dubbed the NSDecoupled norm because we first stumbled on it during experiments with compressible
+Navier-Stokes:
+\begin{align*}
+\norm{\LRp{v,\bftau}}_{V,K}^2 &\coloneqq
+\norm{\bfbeta\cdot\Grad v+\pd{v}{t}}_K^2
++ \norm{\Grad v}_K^2
++ \norm{v}^2_K
+\\\nonumber&\quad
++ \norm{\Div \bftau}_K^2
++ \frac{1}{h^2}\norm{\bftau}_K^2\,.
+\end{align*}
+We mention it because it appeared to be the most successful in simulations
+of the moving piston problem in \ref{sec:piston}.
+}.
 
 In the following lemmas we establish the following bounds:
 \begin{itemize}
@@ -913,6 +930,12 @@ tends to produce smoother results in regions with sharp gradients.
 \caption{Convergence to analytical solution}
 \label{fig:robustConvergence}
 \end{figure}
+
+\section{Summary}
+As expected, convergence of the energy error appears to be a reliable predictor of convergence of the $L^2$ error. 
+This relation is especially tight for moderate values of $\epsilon$. 
+We've developed two robust test norms for transient convection-diffusion, though neither one guarantees robust control over $\bfsigma$ as we had
+with their steady analogs. 
 
 % \bibliographystyle{plain}  % Here the bibliography 		     %
 % \bibliography{../Papers}        % is inserted.			     %

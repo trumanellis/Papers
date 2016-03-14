@@ -56,7 +56,7 @@ We can write our first order system of equations in space-time as follows:
 \end{subequations}
 where our solution variables are $\rho$, $\bfu$, $T$, $\bbD$, and $\bfq$.
 
-We can simplify the following discussion by introducint the following notation. 
+We can simplify the following discussion by introducing the following notation. 
 The conserved quantities for each equation are:
 \begin{align*}
 C_c&:=\rho\\
@@ -130,7 +130,7 @@ Our final nonlinear variational formulation looks very similar to what we had fo
 -\LRp{\vecttwo{F-K}{C},\Gradxt V}+\LRa{\hat t,V}&=\LRp{f,V}\,.
 \end{align*}
 
-With appropriate change of varialbes, we could use this same form to consider a solution in terms
+With appropriate change of variables, we could use this same form to consider a solution in terms
 of either conservation variables or entropy variables, 
 a topic we briefly consider in Appendix \ref{sec:VariableComparison}.
 
@@ -216,7 +216,7 @@ K_{\bfq}^*\Grad V&=-\Grad v_e\\
 \,.
 \end{align*}
 % where the various terms are defined in Appendix \ref{sec:VariableComparison}.
-We develop analogous robust norm:
+We develop the analogous robust norm:
 \begin{align*}
 \norm{\LRp{V,\Psi}}_{V,K}^2 &\coloneqq
 \norm{F^*+C^*}_K^2
@@ -226,7 +226,7 @@ We develop analogous robust norm:
 + \norm{G^*}_K^2
 + \min\LRp{\frac{1}{\mu},\frac{1}{h^2}}\norm{M^*}_K^2\,,
 \end{align*}
-coupled robust norm
+coupled robust norm:
 \begin{align*}
 \norm{\LRp{V,\Psi}}_{V,K}^2 &\coloneqq
 \norm{F^*+C^*}_K^2
@@ -249,11 +249,54 @@ and NSDecoupled norm:
 
 
 \section{Numerical Experiments}
+We consider three 1D test problems as verification.
+The Sod shock tube, Noh implosion, and piston problem all have analytical solutions derived based on an inviscid flow assumption (Euler's equations).
+However, in the absence of viscosity, Euler's equations can have multiple solutions, and most numerical methods introduce a certain amount of
+artificial viscosity in order to select a unique solution.
+Most schemes also require the artificial viscosity to scale in some sense with mesh size so that they can effectively handle shocks.
+We run our simulations without any artificial viscosity, but in order to get a well-posed problem, we do introduce a small amount of physical viscosity.
+We apply a continuation in viscosity trick in order to achieve cleaner refinement patterns, setting
+\[
+\mu=\max\LRp{\mu_\text{fine},\,\min\LRp{\mu_\text{coarse},\,\frac{1}{2^{r+k}}}}\,,
+\]
+where $\mu_\text{fine}$ is the final viscosity we want, $\mu_\text{coarse}$ 
+is the desired viscosity on coarse meshes,
+$r$ is the refinement number and $k$ is a problem dependent parameter that determines how rapidly $\mu$
+ramps down to $\mu_\text{fine}$.
+% : $\mu=10^{-4}$ for Sod and $\mu=10^{-3}$ for Noh.
+Essentially we are just simulating low viscosity Navier-Stokes as a stand-in for the unsolvable pure Euler equations.
+% Following the same polynomial representation as we did in the section on local conservation (Section \ref{sec:lcNumerics}), the field variables were represented with quadratics.
 % \subsection{1D Space-Time Problems}
 \subsection{Sod Shock Tube}
 % Re=1e4, p=2, delta_p=2, nlMaxIters=10, rampRe, coarseRe=1e2
+The Sod shock tube problem was developed by Gary Sod in 1978\cite{Sod1978}, and has proven to be a popular problem for verification 
+of compressible Navier-Stokes and Euler solvers.
+It serves to verify that a numerical method can effectively handle a rarefaction wave, material discontinuity, and shock wave
+all in one domain.
+The domain of interest is a shock tube of length 1 with a material interface in the middle. The material on the left has initial conditions of 
+$(\rho_L,p_L,u_L)=(1,1,0)$ while the material on the right has $(\rho_R,p_R,u_R)=(0.125,0.1,0)$; both materials have $\gamma=1.4$. 
+The $t=0$ the interface between the materials is broken, 
+and shock wave propagates into the right material, while a rarefaction wave moves left. The analytical solution is self-similar, but it is common to take
+$t=0.2$ as a final time.
+At this time the shock wave and rarefaction waves have not hit the boundaries, 
+so it is sufficient to set boundary conditions corresponding to the initial conditions.
+In our case, we set $\hat t_c=\hat t_e=0$ on the left and right boundaries,
+$\hat t_m=-\rho_LRT_L$ on the left, and $\hat t_m=\rho_RRT_R$ on the right,
+while the fluxes are set equal to the discontinuous initial conditions on the $t=0$ boundary. 
+No boundary condition is required on the $t=0.2$ boundary since the equations are hyperbolic in time.
+We solve this with $p=2$, $\Delta p=2$, and one continuous time slab starting with only 4 space-time elements.
+It's possible to solve this problem by $\mu_\text{fine}=\mu_\text{coarse}=10^{-4}$, 
+but we get cleaner refinement patters by setting $\mu_\text{coarse}=100$ and $k=4$.
 
-\begin{figure}[ht]
+The results are plotted in Figures~\ref{fig:SodRobust0} - \ref{fig:SodRobust12} for three different refinement levels: the initial coarse mesh, 6 adaptive refinements, and 12 refinements.
+The coarsest mesh is obviously not sufficient to resolve the features of the flow, but it is at least somewhat representative of the exact solution.
+We see significant overshoots and undershoots as we start to pick up on the shock, but these die away as we resolve to the viscous length scale.
+The contact discontinuity is never fully resolved because the energy error never registers
+strongly enough to drive further refinement. 
+We predict that once the shock is sufficiently resolved,
+this would be the next priority for the refinement strategy.
+
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -279,7 +322,7 @@ and NSDecoupled norm:
 \label{fig:SodRobust0}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -305,7 +348,7 @@ and NSDecoupled norm:
 \label{fig:SodRobust6}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[t]{0.45\textwidth}
 \centering
@@ -333,8 +376,34 @@ and NSDecoupled norm:
 
 \subsection{Noh Implosion}
 % Re=1e3, p=1, delta_p=2, nlMaxIters=10, coarseRe=10
+The Noh implosion problem\cite{Noh1987} is another standard test for Euler solvers.
+The initial conditions are of an ideal gas with $\gamma=5/3$, zero pressure, uniform initial density of 1, 
+and uniform velocity toward the center of the domain.
+An infinitely strong shock propagates outward at a speed of 1/3.
+For 1D flow, the post shock density jumps to 4.
+The domain is $[-1,0]\times[0,1]$.
+We apply boundary conditions $\hat t_c=\hat t_m=-1$, $\hat t_e=0$ on the left boundary,
+symmetry conditions $\hat u=\hat t_c=\hat t_e=0$ on the right boundary, and flux conditions on $t=0$
+according to the initial conditions.
+We solve with $p=1$, $\Delta p=2$, $\mu_\text{fine}=10^3$, $\mu_\text{coarse}=10$, and $k=0$.
+The continuation in viscosity strategy makes a significant difference keeping
+the refinement pattern clean on this problem. 
+If we jump straight to the final viscosity, we get a lot of spurious shock behavior on coarse meshes
+which eventually go away, but leave a lot of unnecessary refinements.
 
-\begin{figure}[ht]
+The results for the initial mesh, an intermediate mesh, and the final mesh are plotted 
+in Figure \ref{fig:NohRobust}. 
+We see an unnecessary refinement pattern that appears in the 10th refinement mesh.
+We hypothesize that this might be related to poor resolution of the error representation function
+in these parts of the domain.
+One notable feature of the final solution is that we don't see a drop in the density near the symmetry boundary.
+This phenomena is known as wall heating and, though unphysical, appears to be nearly 
+universal in simulations of this problem.
+We don't perfectly match the solution, there are some wiggles at the shock front that could be resolved
+better, but the fact that we don't see any noticeable wall heating is significant.
+
+
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[t]{0.32\textwidth}
 \centering
@@ -357,9 +426,69 @@ and NSDecoupled norm:
 \caption{Density at final time}
 \end{subfigure}
 \caption{Noh solution with robust norm}
-\label{fig:NohRobustMesh}
+\label{fig:NohRobust}
 \end{figure}
 
-% \subsection{2D Space-Time Problems}
+\subsection{Piston Problem}
+\label{sec:piston}
+% Lesoinne and Farhat\cite{GCL} found that space-time methods provided the best satisfaction of
+% geometric conservation laws for moving mesh problems compared to several other techniques. 
+In the piston problem, we have a compressible gas with $\gamma=5/3$ initially at rest with zero pressure.
+At $t=0$, the left wall of the domain (initially $[0,1]$) starts moving inward at a velocity of 1.
+This triggers a shock which precedes the moving piston and collides with the stationary right wall 
+at $t=0.8$. The initial density is 1, but jumps to 4 after the first shock, and 10 after the second.
+The symmetry conditions from the Noh problem are applied on the right wall. 
+The left boundary has normal $n_{xt}=(-\sqrt{2},\sqrt{2})$ which means that fluxes at our disposal are:
+\begin{align*}
+\hat t_c&=\sqrt{2}(-\rho u+\rho)\\
+\hat t_m&=\sqrt{2}(-\rho u^2-\rho RT+\rho u)\\
+\hat t_e&=\sqrt{2}(-\rho u(C_vT+\frac{1}{2}u^2)-u\rho RT+\rho(C_vT+\frac{1}{2}u^2))\,,
+\end{align*}
+and since $u=1$ at the left wall
+\begin{align*}
+\hat t_c&=0\\
+\hat t_m&=-\sqrt{2}\rho RT\\
+\hat t_e&=-\sqrt{2}\rho RT\,.
+\end{align*}
+Therefore we set the following boundary conditions at the left boundary: $\hat u=1$, $\hat t_c=0$, 
+$\hat t_m-\hat t_e=0$.
+We solve using $p=2$, $\Delta p=2$, a fixed $\mu=100$, and an initial $4\times4$ space-time mesh.
+Unfortunately, the robust and coupled robust norms did not produce the cleanest solutions
+on this problem, and we were forced to use the NSDecoupled norm which has
+less mathematical justification but seems to work very well on shock problems.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Piston/Piston_density.png}
+\caption{Density}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Piston/Piston_velocity.png}
+\caption{Velocity}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Piston/Piston_temp.png}
+\caption{Temperature}
+\end{subfigure}
+\begin{subfigure}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Piston/Piston_mesh.png}
+\caption{Mesh}
+\end{subfigure}
+\caption{Piston solution with NSDecoupled norm after 8 adaptive refinements}
+\label{fig:PistonSolution}
+\end{figure}
+
+\section{Summary of Compressible Results}
+The chief strength of the DPG method is in its stability and adaptivity properties.
+It makes no claims of being a robust technique for handling shocks
+and in fact we ran into a lot of shock related difficulties in arriving at these solutions.
+The continuation in viscosity strategy, though avoidable, was an attempt at mitigating these challenges.
+What is notable is that we were able to kick-start each simulation from very coarse initial meshes
+and adaptively resolve the solution features.
 
 \end{document}

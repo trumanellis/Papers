@@ -118,7 +118,7 @@
 \committeemembers
 	[Thomas J.R. Hughes]
 	[Clint N. Dawson]
-	{Jayathi Y. Murthy}
+	{Tan Bui-Thanh}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -294,21 +294,22 @@
 %
 \begin{dedication}
 \index{Dedication@\emph{Dedication}}%
-Dedicated to my parents.
+Dedicated to my grandpa, George Lowell Ellis.
 \end{dedication}
 
 
 \begin{acknowledgments}		% Optional
 \index{Acknowledgments@\emph{Acknowledgments}}%
-Foremost, I want to express my greatest gratitude to my supervisor, Professor Thomas J.R. Hughes, for his guidance and inspiration. This work truly benefits from his profound insights in the broad areas of mechanics, mathematics, and scientific computing.
+Fill this in.
+% Foremost, I want to express my greatest gratitude to my supervisor, Professor Thomas J.R. Hughes, for his guidance and inspiration. This work truly benefits from his profound insights in the broad areas of mechanics, mathematics, and scientific computing.
 
-I would like to thank Professors Todd Arbogast, Omar Ghattas, Hector Gomez, Chad M. Landis, and Alexis F. Vasseur for serving my dissertation committee.
+% I would like to thank Professors Todd Arbogast, Omar Ghattas, Hector Gomez, Chad M. Landis, and Alexis F. Vasseur for serving my dissertation committee.
 
-I am indebted to Dr. Luca Ded\`e and Prof. John A. Evans for teaching me the surviving skills in computational mechanics. I want to thank Prof. Mike Borden for many helpful suggestions on finite element programming. I am grateful to Dr. Shaolie Hossain and Mr. Fred Nugen for their continuing encouragement during my Ph.D. study.
+% I am indebted to Dr. Luca Ded\`e and Prof. John A. Evans for teaching me the surviving skills in computational mechanics. I want to thank Prof. Mike Borden for many helpful suggestions on finite element programming. I am grateful to Dr. Shaolie Hossain and Mr. Fred Nugen for their continuing encouragement during my Ph.D. study.
 
-I am thankful to all my friends in Austin, in particular Nick Alger, Jie Bai, Henry Chang, Mike Harmon, Ying He, Talea Mayo, Yusuke Sakamoto, Kent van Vels, Ni Wang, Wenhao Wang, Hailong Xiao, Shan Yang, Wenqi Zhao, and Hongyu Zhu.
+% I am thankful to all my friends in Austin, in particular Nick Alger, Jie Bai, Henry Chang, Mike Harmon, Ying He, Talea Mayo, Yusuke Sakamoto, Kent van Vels, Ni Wang, Wenhao Wang, Hailong Xiao, Shan Yang, Wenqi Zhao, and Hongyu Zhu.
 
-I want to thank my parents and my girlfriend. My accomplishment is impossible without your sacrifices and love.
+% I want to thank my parents and my girlfriend. My accomplishment is impossible without your sacrifices and love.
 
 \end{acknowledgments}
 
@@ -321,11 +322,12 @@ I want to thank my parents and my girlfriend. My accomplishment is impossible wi
 \utabstract
 \index{Abstract}%
 \indent
-Multiphase flow is a familiar phenomenon from daily life and occupies an important role in physics, engineering, and medicine. The understanding of multiphase flows relies largely on the theory of interfaces, which is not well understood in many cases. To date, the Navier-Stokes-Korteweg equations \cite{Korteweg1901,Waals1979} and the Cahn-Hilliard equation \cite{Cahn1958} have represented two major branches of phase-field modeling. The Navier-Stokes-Korteweg equations describe a single component fluid material with multiple states of matter, e.g., water and water vapor; the Cahn-Hilliard type models describe multi-component materials with immiscible interfaces, e.g., air and water. In this dissertation, a unified multiphase fluid modeling framework is developed based on rigorous mathematical and thermodynamic principles. This framework does not assume any ad hoc modeling procedures and is capable of formulating meaningful new models with an arbitrary number of different types of interfaces.
+Fill this in.
+% Multiphase flow is a familiar phenomenon from daily life and occupies an important role in physics, engineering, and medicine. The understanding of multiphase flows relies largely on the theory of interfaces, which is not well understood in many cases. To date, the Navier-Stokes-Korteweg equations \cite{Korteweg1901,Waals1979} and the Cahn-Hilliard equation \cite{Cahn1958} have represented two major branches of phase-field modeling. The Navier-Stokes-Korteweg equations describe a single component fluid material with multiple states of matter, e.g., water and water vapor; the Cahn-Hilliard type models describe multi-component materials with immiscible interfaces, e.g., air and water. In this dissertation, a unified multiphase fluid modeling framework is developed based on rigorous mathematical and thermodynamic principles. This framework does not assume any ad hoc modeling procedures and is capable of formulating meaningful new models with an arbitrary number of different types of interfaces.
 
-In addition to the modeling, novel numerical technologies are developed in this dissertation focusing on the Navier-Stokes-Korteweg equations. First, the notion of entropy variables is properly generalized to the functional setting, which results in an entropy-dissipative semi-discrete formulation. Second, a family of quadrature rules is developed and applied to generate fully discrete schemes. The resulting schemes are featured with two main properties: they are provably dissipative in entropy and second-order accurate in time. In the presence of complex geometries and high-order differential terms, isogeometric analysis \cite{Hughes2005} is invoked to provide accurate representations of computational geometries and robust numerical tools. A novel periodic transformation operator technology is also developed within the isogeometric context. It significantly simplifies the procedure of the strong imposition of periodic boundary conditions. These attributes make the proposed technologies an ideal candidate for credible numerical simulation of multiphase flows.
+% In addition to the modeling, novel numerical technologies are developed in this dissertation focusing on the Navier-Stokes-Korteweg equations. First, the notion of entropy variables is properly generalized to the functional setting, which results in an entropy-dissipative semi-discrete formulation. Second, a family of quadrature rules is developed and applied to generate fully discrete schemes. The resulting schemes are featured with two main properties: they are provably dissipative in entropy and second-order accurate in time. In the presence of complex geometries and high-order differential terms, isogeometric analysis \cite{Hughes2005} is invoked to provide accurate representations of computational geometries and robust numerical tools. A novel periodic transformation operator technology is also developed within the isogeometric context. It significantly simplifies the procedure of the strong imposition of periodic boundary conditions. These attributes make the proposed technologies an ideal candidate for credible numerical simulation of multiphase flows.
 
-A general-purpose parallel computing software, named \texttt{PERIGEE}, is developed in this work to provide an implementation framework for the above numerical methods. A comprehensive set of numerical examples has been studied to corroborate the aforementioned theories. Additionally, a variety of application examples have been investigated, culminating with the boiling simulation. Importantly, the boiling model overcomes several challenges for traditional boiling models, owing to its thermodynamically consistent nature. The numerical results indicate the promising potential of the proposed methodology for a wide range of multiphase flow problems.
+% A general-purpose parallel computing software, named \texttt{PERIGEE}, is developed in this work to provide an implementation framework for the above numerical methods. A comprehensive set of numerical examples has been studied to corroborate the aforementioned theories. Additionally, a variety of application examples have been investigated, culminating with the boiling simulation. Importantly, the boiling model overcomes several challenges for traditional boiling models, owing to its thermodynamically consistent nature. The numerical results indicate the promising potential of the proposed methodology for a wide range of multiphase flow problems.
 
 
 
@@ -355,15 +357,13 @@ A general-purpose parallel computing software, named \texttt{PERIGEE}, is develo
 
 \subfile{LocalConservation.tex}
 
-\subfile{TimeStepping.tex}
-
 \subfile{RobustConvectionDiffusion.tex}
 
 \subfile{Incompressible.tex}
 
 \subfile{Compressible.tex}
 
-% \subfile{FutureWork.tex}
+\subfile{Conclusion.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix/Appendices                                                %
@@ -374,6 +374,8 @@ A general-purpose parallel computing software, named \texttt{PERIGEE}, is develo
 %
 \appendices
 \index{Appendices@\emph{Appendices}}%
+
+\subfile{TimeStepping.tex}
 
 \subfile{VariableComparison.tex}
 
@@ -421,7 +423,8 @@ A general-purpose parallel computing software, named \texttt{PERIGEE}, is develo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{vita}
-Ju Liu received the Bachelor of Science degree in Computational Mathematics from Xi'an Jiaotong University in 2008. He immediately entered the Computational and Applied Mathematics program at the University of Texas at Austin under the supervision of Prof. T.J.R. Hughes. His graduate research work has been awarded the Robert J. Melosh medal from the Duke University in 2013. Upon completion of his doctoral degree, he will work as a postdoctoral fellow at the Institute for Computational Engineering and Sciences.
+Fill this in.
+% Ju Liu received the Bachelor of Science degree in Computational Mathematics from Xi'an Jiaotong University in 2008. He immediately entered the Computational and Applied Mathematics program at the University of Texas at Austin under the supervision of Prof. T.J.R. Hughes. His graduate research work has been awarded the Robert J. Melosh medal from the Duke University in 2013. Upon completion of his doctoral degree, he will work as a postdoctoral fellow at the Institute for Computational Engineering and Sciences.
 
 \end{vita}
 

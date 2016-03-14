@@ -2,6 +2,7 @@
 \documentclass[Dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Introduction}
+\label{sec:introduction}
 \section{Motivation}
 
 Computational science has revolutionized the engineering design process -- enabling design analysis
@@ -308,7 +309,8 @@ Abedi, Petracovici, and Haber\cite{Abedi2006} applied this causal mesh generatio
 
 \subsection{Discontinuous Petrov-Galerkin Method}
 The discontinuous Petrov-Galerkin finite element method with optimal test functions
-was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG1, DPG2}.
+% was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG1,DPG2}.
+was first proposed by Demkowicz and Gopalakrishnan in 2009\cite{DPG2}.
 The basic ideas are fairly straight-forward; DPG minimizes the residual in a user defined energy norm.
 Consider a variational problem: find $u\in U$ such that
 \[

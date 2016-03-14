@@ -2,21 +2,22 @@
 \documentclass[Dissertation.tex]{subfiles}
 \begin{document}
 \graphicspath{{../Figures/}}
-\chapter{Scaling}
+\chapter{Scaling Issues}
 \label{sec:Scaling}
 
-\section{Scaling Issues}
+\section{Global Solvers}
 The one challenge which we most significantly underestimated before undertaking this work 
 was how our solver would scale on these space-time problems.
-Priliminary 1D results (2D in space-time), were computable with standard direct solvers,
+Preliminary 1D results (2D in space-time), were computable with standard direct solvers,
 but as we moved to 2D (3D in space-time), direct solvers proved to be a major bottleneck
 to larger solves, not least of which because they tend to take up more memory than iterative solvers.
 Fortunately, my collaborator Nathan Roberts has been implementing 
 flexible multigrid strategies within Camellia.
 Unfortunately, multigrid is well known to perform poorly on convection-dominated diffusion problems.
 In fact, we can easily construct a case for convection-diffusion with $\epsilon=10^{-2}$ on a $64\times64$
-mesh where a combination of conjugate gradient, v-cycle multigrid 
-exibits the following convergence history for the iterative solve.
+mesh solved with Camellia's default multigrid strategy outlined below that
+% mesh where a combination of conjugate gradient, v-cycle multigrid 
+exhibits the following convergence history for the iterative solve.
 % fails to converge to a tolerance of $10^{-10}$ within 2000 iterations.
 \begin{figure}
 \centering
@@ -29,12 +30,29 @@ test problem where multigrid performs very poorly for convection-diffusion.
 % In our experience, we've noticed that this tends to be somewhat mitigated on adaptive meshes rather rather than the uniform one used for this example.
 This behavior appears to be especially bad on uniform meshes and seems to be somewhat mitigated on adaptive meshes.
 
-\subsection{The Question of Space-Time Slabs}
+\subsection{Overview of Multigrid in Camellia}
+Conjugate gradient is a natural choice for iteratively solving DPG problems because they are always symmetric
+(Hermitian) positive definite.
+However a good preconditioner is necessary for efficiency.
+My collaborator, Nathan Roberts at Argonne National Lab, implemented a geometric multigrid preconditioner
+that has allowed us to solve larger problems than we could with direct solvers.
+I've served as more of a user and tester of the multigrid strategies than as a developer, so
+I'll only briefly describe an overview of the settings we settled on 
+that were used in the simulations in this thesis.
+
+After exploring the various options of additive or multiplicative two-cycle, V-cycle, W-cycle, or full multigrid,
+we settled on a multiplicative V-cycle strategy.
+We've chosen to employ an overlapping additive Schwarz smoother.
+In constructing the mesh hierarchy for the multigrid, going from a high order fine mesh, we first start
+with $p$-coarsening followed by $h$-coarsening.
+More details on multigrid within Camellia will appear in an upcoming technical report by Nathan Roberts.
+
+\section{The Question of Space-Time Slabs}
 Here we briefly explore the benefits of splitting a computation into space-time slabs under the following assumptions.
 \begin{enumerate}
 \item The maximum required spatial resolution is much finer than the required temporal resolution.
 \item Regions requiring high spatial resolution are concentrated in relatively compact parts of the domain.
-\item Only isotropc refinements are permitted.
+\item Only isotropic refinements are permitted.
 \item The number of time slabs is a power of 2.
 \end{enumerate}
 The first and second conditions are representative of the boundary layer and 
