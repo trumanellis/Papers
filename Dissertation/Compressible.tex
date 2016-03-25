@@ -4,7 +4,15 @@
 \graphicspath{{../Figures/}}
 \chapter{Space-Time DPG for Compressible Navier-Stokes}
 \label{sec:compressible}
-\section{Motivation}
+
+\section{Introduction}
+DPG for steady compressible Navier-Stokes was studied by Jesse Chan in \cite{JesseDissertation}.
+He observed that a pseudo-time stepping technique was necessary to get the Gauss-Newton solve to converge 
+to a quality solution.
+This suggested that space-time approach which naturally includes the transient terms
+might achieve such results with a simpler Newton iteration.
+
+\section{Nonlinear Form}
 
 The compressible Navier-Stokes equations are
 \begin{align}
@@ -54,7 +62,7 @@ We can write our first order system of equations in space-time as follows:
 	{\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}}&=f_e\,,
 \end{align}
 \end{subequations}
-where our solution variables are $\rho$, $\bfu$, $T$, $\bbD$, and $\bfq$.
+where our solution variables are $\rho$, $\bfu$, $T$, $\bbD$, and $\bfq$, each in a scalar, vector, or tensor version of $L^2(Q)$.
 
 We can simplify the following discussion by introducing the following notation. 
 The conserved quantities for each equation are:
@@ -102,11 +110,16 @@ we get
 where 
 \begin{equation*}
 \begin{aligned}
-\hat\bfu&=\trace(\bfu)\\
-\hat T&=\trace(T)\\
-\hat t_c&=\trace\LRp{\bfF_c-\bfK_c}\cdot\bfn_x+\trace\LRp{C_c}n_t\\
-\hat\bft_m&=\trace\LRp{\bbF_m-\bbK_m}\cdot\bfn_x+\trace\LRp{\bfC_m} n_t\\
-\hat t_e&=\trace\LRp{\bfF_e-\bfK_e}\cdot\bfn_x+\trace\LRp{C_e}n_t\,.
+\hat\bfu&=\trace(\bfu)
+&\in \bfH^{1/2}(\Gamma_{h_x})&\\
+\hat T&=\trace(T)
+&\in H^{1/2}(\Gamma_{h_x})&\\
+\hat t_c&=\trace\LRp{\bfF_c-\bfK_c}\cdot\bfn_x+\trace\LRp{C_c}n_t
+&\in H^{-1/2}_{xt}(\Gamma_h)&\\
+\hat\bft_m&=\trace\LRp{\bbF_m-\bbK_m}\cdot\bfn_x+\trace\LRp{\bfC_m} n_t
+&\in \bfH^{-1/2}_{xt}(\Gamma_h)&\\
+\hat t_e&=\trace\LRp{\bfF_e-\bfK_e}\cdot\bfn_x+\trace\LRp{C_e}n_t
+&\in H^{-1/2}_{xt}(\Gamma_h)&\,.
 \end{aligned}
 \end{equation*}
 We can further simplify this by introducing group terms and group variables:
@@ -482,6 +495,17 @@ less mathematical justification but seems to work very well on shock problems.
 \caption{Piston solution with NSDecoupled norm after 8 adaptive refinements}
 \label{fig:PistonSolution}
 \end{figure}
+
+\textcolor{red}{\subsection{Possible 2D Results}
+Attempting the following
+\begin{enumerate}
+\item{Noh}
+\item{Compressible Taylor-Green}
+\item{Sedov}
+\item{Triple Point}
+\item{Rayleigh-Taylor Instability}
+\end{enumerate}
+}
 
 \section{Summary of Compressible Results}
 The chief strength of the DPG method is in its stability and adaptivity properties.

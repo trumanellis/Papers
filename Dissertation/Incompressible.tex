@@ -30,7 +30,7 @@ As a first order system in space-time divergence form, this is
   \Div\bfu&=0\,.
   % \int_\Omega p&=0
 \end{align*}
-Multiplying by test functions $\bbS\in\bbH(\text{div},Q)$, $\bfv\in\HonextQ$, $q\in\HonexQ$, 
+Multiplying by test functions $\bbS\in\bbH(\text{div},Q)$, $\bfv\in\bfH^1_{xt}(Q)$, $q\in\HonexQ$, 
 and integrating by parts, we get
 \begin{align*}
   \LRp{\frac{1}{\nu}\bbD,\bbS}
@@ -43,11 +43,11 @@ and integrating by parts, we get
   +\LRa{\hat{\bfu}\cdot\bfn,q}&=0\,.
   % \int_\Omega p&=0
 \end{align*}
-where
+where $\bbD\in\mathbb{L}^2(Q)$, $\bfu\in\mathbf{L}^2(Q)$, $p\in L^2(Q)$, and
 \begin{align*}
-\hat\bfu&=\trace(\bfu)\\
+\hat\bfu&=\trace(\bfu)&\in \bfH^{1/2}(\Gamma_{h_x})&\\
 \hat\bft&=\trace\LRp{\bfu\otimes\bfu-\bbD+p\bbI}\cdot\bfn_x
-+\trace(\bfu)\cdot n_t\,.
++\trace(\bfu)\cdot n_t&\in \bfH^{-1/2}_{xt}(\Gamma_h)&\,.
 \end{align*}
 
 \section{Linearization}
@@ -204,6 +204,7 @@ We apply spatial boundary conditions on $\hat\bfu$ and at $t=0$ we apply boundar
 on $\hat\bft$ according to the initial conditions.
 Plots of $L^2$ and energy ($V^*$) error for various polynomial orders and Reynolds numbers are shown
 in Figure \ref{fig:TaylorGreenConvergence} for the coupled robust norm.
+As expected from our results for convection-diffusion, energy error and $L^2$ error follow each other.
 
 \begin{figure}
 \centering

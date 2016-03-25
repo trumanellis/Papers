@@ -1,5 +1,6 @@
 % -*- root: Dissertation.tex -*-
 \documentclass[Dissertation.tex]{subfiles}
+\graphicspath{{../Figures/}}
 \begin{document}
 \chapter{Introduction}
 \label{sec:introduction}
@@ -26,7 +27,7 @@ discrete inf-sup condition of Babu\v{s}ka \cite{Babuska70}. For mixed formulatio
 the classical variational formulation for the Stokes problem, the condition
 reduces to the celebrated Lady\v{z}enskaya-Babu\v{s}ka-Brezzi (LBB) condition
 relating approximation spaces for velocity and pressure \cite{BabuskaBrezziReport}.
-Leszek Demkowicz and Jay Gopalakrishnan first proposed the discontinuous Petrov-Galerkin method in 2009\cite{DPG1} in order to address stability issues for a
+Leszek Demkowicz and Jay Gopalakrishnan first proposed the discontinuous Petrov-Galerkin method in 2009\cite{DPG1,DPG2} in order to address stability issues for a
 very broad class of problems.
 % The DPG method automatically satisfies stability criteria by construction which enables DPG simulations to remain stable and
 % convergent even in the pre-asymptotic regime.
@@ -75,6 +76,37 @@ computational efficiency of whatever method is coupled to it.
 If the other method is finite element based, this could possibly be done as simply as swapping out the test functions being used
 -- perhaps the mesh is fine enough that we can do without the optimal test functions.
 We only mention this as a possible use of DPG; we are not going to look into such coupling in this research.
+
+\subsection{DPG for HPC}
+Many of the features inherent in the DPG method appear promising in the context of high performance computing.
+Our goal is to design a method that eliminates human intervention as much as possible.
+The superior stability of the method promises to prevent a simulation from crashing which could eliminate expensive restarts on large systems.
+Preliminary studies on convection-diffusion suggest exceptional robustness of the method in terms of diminishing viscosity, 
+promising successful application to a large class of flow problems.
+The adaptivity lent by the \emph{error representation function} provides a reliable and automated way to start from a coarse mesh and only refine
+toward solution features in need. 
+This uses compute resources much more efficiently than uniform refinements, allowing larger simulations with fewer resources.
+These features combine to produce a high degree of automaticity.
+Ultimately, it is desirable that an engineer could produce a rough mesh that just captures the geometry of the problem and
+start a DPG simulation that automatically picks up solution features without the user needing to jump back in and fix things.
+
+DPG is very compute intensive compared to the associated communication and memory costs.
+Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
+Additionally, the stability properties of DPG make high order stability a triviality, and in general, 
+high order methods tend to have a more attractive compute/communication profile than low order methods.
+In our codes, we use QR factorization for optimal test function solves, but this factorization is recyclable as we essentially have many right hand sides.
+The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
+a solve purely in terms of the skeleton degrees of freedom.
+In addition to significantly cutting down on the size of the global solve, 
+this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
+This property was one of the motivations behind the development of the hybridized discontinuous Galerkin \cite{HDG} method.
+No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
+positive definite stiffness matrix for the global solve.
+This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
+anticipate it might be an attractive feature in the future.
+As compute resources scale up, many more HPC simulations are increasingly becoming coupled in multiphysics simulations.
+Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- no need to develop many different methods for each part of the simulation.
+Already DPG has been successfully applied to a wide variety of problems in computational mechanics, as noted above.
 
 \section{Literature Review}
 We start this literature review by looking at various numerical methods that have been popular in the simulation of fluid dynamics problems.
@@ -142,7 +174,7 @@ The classical example of this technique is streamline upwind Petrov-Galerkin (SU
 continuous finite elements\cite{SUPG}.
 In addition to removing the spurious oscillations of Bubnov-Galerkin methods, SUPG recovers the optimal approximation in the $H^1$ norm in 1D.
 
-\paragraph{Streamline Upwind Petrov-Galerkin Method}
+\paragraph{Streamline Upwind Petrov-Galerkin Method.}
 In general, the trial (approximating) and test (weighting) spaces in the finite element method need not the the same as they are in the Bubnov-Galerkin method.
 The term Petrov-Galerkin refers to methods in which the two space differ.
 The original motivation behind the method was that in 1D convection-diffusion, it is possible to recover the exact solution at nodal points
@@ -184,7 +216,7 @@ That is, we perturb our original test functions by a scaled advection operator a
 For low order $C^0$ test functions, this naturally gives each test functions an upwind bias.
 This introduces an important idea -- that stability and optimal convergence can be achieved through suitable choice of test functions.
 
-\paragraph{Variational Multiscale Methods}
+\paragraph{Variational Multiscale Methods.}
 The variational multiscale method generalized and systematized the ideas behind SUPG for a larger class of problems.
 The motivation was that blind application of Bubnov-Galerkin does not produce robust results in the presence of multiscale physics\cite{VMS}.
 The approach is to decompose the solution into a coarse and fine scale: $u=\bar u+u'$. The coarse scale, $\bar u$, is solved numerically,
@@ -196,7 +228,7 @@ but deep analysis of the problem at hand is required to derive the effect of the
 Computationally, VMS methods allow for computation with standard $C^0$ finite elements which avoids the annoying propagation of unknowns in
 discontinuous Galerkin methods.
 
-\paragraph{Discontinuous Galerkin Methods}
+\paragraph{Discontinuous Galerkin Methods.}
 Discontinuous Galerkin finite elements were first introduced by Reed and Hill in 1973 for neutron transport problems\cite{ReedHillDG}.
 Early contributors included Babu\v{s}ka, Lions, Nitsche, and Zlamal, but Arnold, Brezzi, Cockburn, and Marini put together a unified analysis
 of DG methods for elliptic problems in \cite{ArnoldDG}.
@@ -246,7 +278,7 @@ Another issue with DG is that there is a pre-asymptotic regime where the solutio
 This is a relevant issue when comparing to DPG, but most other methods encounter this as well, so it is not vocalized as a DG specific problem.
 DG methods are also critiqued for having bad conditioning and optimal convergence in ``weak norms.''
 
-\paragraph*{Hybridized Discontinuous Galerkin Methods}
+\paragraph*{Hybridized Discontinuous Galerkin Methods.}
 The hybridized discontinuous Galerkin method was first introduced by Cockburn, Gopalakrishnan, and Lazarov\cite{HDG}
 as a way to address some of the issues with the standard DG method
 -- notably the proliferation of unknowns.
@@ -306,6 +338,28 @@ Since the cone condition evolves with the solution, the mesh must be generated o
 Abedi, Petracovici, and Haber\cite{Abedi2006} applied this causal mesh generation to linear elastodynamics.
 
 % Oden (first to propose), Bob Haber, Tayfun Tezduyar, Neum\"{u}ller
+
+Space-time multigrid has been gaining attention lately as a means of extending the parallelism of simulations which 
+are facing sequential bottlenecks.
+According to \cite{XBraid,XBraidPaper}:
+\begin{quotation}
+Traditional sequential time-marching algorithms are a critical part of most computer simulations of a time-dependent problem, but these algorithms are currently facing a sequential bottleneck. This bottleneck is driven by the broad trend that future performance gains will come from greater concurrency, not faster clock speeds. Previously, ever-increasing clock speeds decreased the compute time for each time step, thus allowing more time steps to be calculated without increasing the overall compute time. Now that clock speeds are stagnant, further refinements in time (i.e., increases in the number of time steps) will simply increase the simulation’s overall compute time. Many of these refinements in time will be required to maintain balance between spatial and temporal accuracies. Additionally, some simulations are already fully resolved in space, and it is unclear how such simulations will take advantage of the coming increases in concurrency.
+\end{quotation}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\textwidth]{Schematics/XBraid}
+\caption{Multigrid in time with XBraid by LLNL\cite{XBraid}}
+\label{fig:xbraid}
+\end{figure}
+
+Multigrid in time allows all times to be solved for simultaneously, dramatically improving parallelization opportunities within a
+simulation code, see Figure~\ref{fig:xbraid}.
+The practical downside is that this is a much more expensive procedure on small to medium sized computer architectures.
+It's only on very large systems that have maxed out the strong scaling of a single timestep where this approach starts to pay off.
+Thus, for the proof of concept problems solved on moderate sized system in this dissertation, we only expect to reap the extra cost
+without hitting the point of seeing the reward.
+However this concept has potential as we look towards exascale simulations in the future.
 
 \subsection{Discontinuous Petrov-Galerkin Method}
 The discontinuous Petrov-Galerkin finite element method with optimal test functions
@@ -414,9 +468,20 @@ analyzed and solved the Helmholtz equation with DPG.
 DPG was applied to linear elasticity and plate problems in \cite{BramwellDPG}, \cite{NiemiBramwellDemkowicz10}, and \cite{BramwellDemkowiczQiu10}.
 A 2D Maxwell cloaking problem was solved with DPG in \cite{DPGCloaking}
 and a 3D DPG theory for Maxwell was developed by Wieners and Wohlmuth\cite{WohlmuthReport}.
-DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,Ellis2013Report},
-Stokes\cite{DPGStokes,Ellis2013Report}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation},
+DPG has been applied to various fluid problems including convection-diffusion\cite{DPG3,DemkowiczHeuer,ChanHeuerThanhDemkowicz2012,Chan2013,EllisLC},
+Stokes\cite{DPGStokes,EllisLC}, Burgers' equation\cite{Chan2013dpg}, incompressible Navier-Stokes\cite{NateDissertation,RobertsDPGNavierStokes},
 and compressible Navier-Stokes\cite{JesseDissertation}.
+
+\paragraph{Camellia -- A Library for Computing with DPG.}
+DPG is a relatively young technology and has some fairly unique implementation requirements. 
+In particular, the use of element interface unknowns, the computation of the optimal test functions,
+and the use of the error representation function to drive adaptivity are not common
+features in many finite element libraries.
+Nathan Roberts began work on the Camellia\cite{CamelliaDPG} library the summer of 2011 at Sandia National Laboratory.
+Jesse Chan and I quickly became active contributors when we saw the promising early demonstrations.
+Camellia is written in modern C++ on top of Trilinos\cite{Trilinos}.
+It supports distributed computation with MPI
+Camellia has not undergone an official open source release yet and many of the features are still experimental.
 
 % \section{Goal}
 % The goal of this work is to develop a space-time formulation of DPG with the purpose of simulating transient

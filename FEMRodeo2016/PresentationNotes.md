@@ -1,4 +1,19 @@
 ### Title Slide
+Talk number: 29, second session Saturday morning.
+du/dx + dv/dy + dw/dz - 1/3(du/dx+dv/dy+dw/dz) - 1/3(du/dx+dv/dy+dw/dz) - 1/3(du/dx+dv/dy+dw/dz)
+w = 0
+du/dx + dv/dy - 1/3(du/dx+dv/dy) - 1/3(du/dx+dv/dy) - 1/3(du/dx+dv/dy)
+
+|du/dx+du/dx dv/dx+du/dy dw/dx+du/dz|    |du/dx+dv/dy+dw/dz      0                 0           |
+|du/dy+dv/dx dv/dy+dv/dy dw/dy+dv/dz|-2/3|     0            du/dx+dv/dy+dw/dz      0           |
+|du/dz+dw/dx dv/dz+dw/dy dw/dz+dw/dz|    |     0                 0            du/dx+dv/dy+dw/dz|
+w = 0
+|du/dx+du/dx dv/dx+du/dy 0|    |du/dx+dv/dy      0           0     |
+|du/dy+dv/dx dv/dy+dv/dy 0|-2/3|     0      du/dx+dv/dy      0     |
+|     0           0      0|    |     0           0      du/dx+dv/dy|
+
+d(w)/dt + d(uw)/dx+d(vw)/dy+d(ww)/dz+d(rho*R*T)/dz+2/3*d(du/dx+dv/dy)/dz
+
 Good afternoon, everyone. Thank you for coming to my talk. 
 I wanted to present some work I've been doing with my collaborators Leszek Demkowicz, 
 Bob Moser, Nate Roberts, and Jesse Chan developing a space-time DPG method for transient fluid flow applications.
