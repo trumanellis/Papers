@@ -16,7 +16,7 @@ difficulty comes from the fact that the optimal test functions should be easily 
 with a simple enrichment strategy. For convection dominated diffusion, this means that
 the test functions should not develop boundary layers. The task of determining the
 quasi optimal test norm (we call it a {\em robust test norm} leads then to a stability analysis
-for the adjoint equation which is the subject of this paper. For a more general discussion
+for the adjoint equation which is the subject of this chapter. For a more general discussion
 on the subject, see \cite{DPGEncyclopedia}.
 In this chapter, two new robust norms are derived and numerical verifications of the theory are presented.
 
@@ -103,11 +103,11 @@ Multiplying \eqref{eq:confusionFirstOrder} by test functions $\bftau\in\LVecQ$ a
 \label{eq:confusionStrongBF}
 	\begin{aligned}
 		% u\in H^1_{xt}(Q)\,,\,\bfsigma\in\bfH(\text{div},Q)&\\
-		&u\in H^1_{xt}(Q) &u=u_+\quad &\text{on }\Gamma_+\\
-		& &u=u_0\quad &\text{on }\Gamma_0\\
-		&\bfsigma\in \bfH(\text{div},Q)&(\bfbeta u-\epsilon\Grad u)\cdot\bfn=t_-\quad &\text{on }\Gamma_-\\
-		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}-\LRp{\Grad u,\bftau}&=0\quad&\forall\bftau\in\LVecQ\\
-		&\LRp{\Divxt\vecttwo{\bfbeta u-\bfsigma}{u},v}&=f\quad&\forall v\in\LQ\,.
+		&u\in H^1_{xt}(Q) &u&=u_+\quad &\text{on }\Gamma_+\\
+		& &u&=u_0\quad &\text{on }\Gamma_0\\
+		&\bfsigma\in \bfH(\text{div},Q)&(\bfbeta u-\epsilon\Grad u)\cdot\bfn&=t_-\quad &\text{on }\Gamma_-\\
+		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}-\LRp{\Grad u,\bftau}&&=0\quad&\forall\bftau\in\LVecQ\\
+		&\LRp{\Divxt\vecttwo{\bfbeta u-\bfsigma}{u},v}&&=f\quad&\forall v\in\LQ\,.
 	\end{aligned}
 \end{equation}
 % which is $L^2$-equivalent to the strong form.
@@ -119,7 +119,7 @@ the mixed formulation (relax the first equation), and the ultra-weak formulation
 The stability constants for the four formulations are related, but the functional settings and norms of convergence change.
 Early DPG work emphasized the ultra-weak formulation since in many ways it was the easiest to analyze, 
 though recently the classical formulation has been under very active consideration.
-In the interests of simpler analysis, we focus on the ultra-weak formulation in this paper.
+In the interests of simpler analysis, we focus on the ultra-weak formulation in this chapter.
 \begin{equation}
 \label{eq:confusionUltraWeakBF}
 	\begin{aligned}
@@ -140,10 +140,10 @@ Our new ultra-weak formulation with conforming test functions is
 \label{eq:confusionUltraWeakContinuousBF}
 	\begin{aligned}
 		&u\in L^2(Q)\,,\,\bfsigma\in\LVecQ\\
-		&\hat u\in H^{1/2}(\partial Q_x)\,,\,&\hat u=u_+&\text{ on }\Gamma_+\\
-		&\hat t\in H^{-1/2}_{xt}(\partial Q)\,,\,&\hat t=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
-		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\quad&\forall\bftau\in\bfH(\text{div},Q)\\
-		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\quad&\forall v\in H^1_{xt}(Q)\,.
+		&\hat u\in H^{1/2}(\partial Q_x)\,,\,&\hat u&=u_+&\text{ on }\Gamma_+\\
+		&\hat t\in H^{-1/2}_{xt}(\partial Q)\,,\,&\hat t&=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
+		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&&=0\quad&\forall\bftau\in\bfH(\text{div},Q)\\
+		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&&=f\quad&\forall v\in H^1_{xt}(Q)\,.
 	\end{aligned}
 \end{equation}
 
@@ -159,10 +159,10 @@ Our ultra-weak formulation with broken test functions looks like
 \label{eq:confusionUltraWeakBrokenBF}
 	\begin{aligned}
 		&u\in L^2(Q)\,,\,\bfsigma\in\LVecQ\\
-		&\hat u\in H^{1/2}(\Gamma_{h_x})\,,\,&\hat u=u_+&\text{ on }\Gamma_+\\
-		&\hat t\in H^{-1/2}_{xt}(\Gamma_h)\,,\,&\hat t=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
-		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&=0\quad&\forall\bftau\in\bfH(\text{div},Q_h)\\
-		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&=f\quad&\forall v\in H^1_{xt}(Q_h)\,.
+		&\hat u\in H^{1/2}(\Gamma_{h_x})\,,\,&\hat u&=u_+&\text{ on }\Gamma_+\\
+		&\hat t\in H^{-1/2}_{xt}(\Gamma_h)\,,\,&\hat t&=t_-&\text{ on }\Gamma_-\,,\quad\hat t=-u_0\text{ on }\Gamma_0\\
+		&\LRp{\frac{1}{\epsilon}\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn_x}&&=0\quad&\forall\bftau\in\bfH(\text{div},Q_h)\\
+		&-\LRp{\vecttwo{\bfbeta u-\bfsigma}{u},\Gradxt v}+\LRa{\hat t,v}&&=f\quad&\forall v\in H^1_{xt}(Q_h)\,.
 	\end{aligned}
 \end{equation}
 The main consequence of breaking test functions is that it reduces the cost of solving for optimal test functions from a global solve 
@@ -185,9 +185,9 @@ The final unresolved choice is what norm to apply to the $V$ space.
 This is one of the most important factors in designing a robust DPG method as the corresponding Riesz operator 
 needs to be inverted to solve for the optimal test functions.
 If the norm produces unresolved boundary layers in the auxiliary problem, then many of the attractive features of DPG may fall apart.
-This is the primary emphasis of this paper.
+This is the primary emphasis of this chapter.
 The problem of constructing stable test norms for steady convection-diffusion was addressed in \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
-In this paper, we extend that work to transient convection-diffusion in space-time.
+In this chapter, we extend that work to transient convection-diffusion in space-time.
 
 % Talk about robustness assuming infinite dimensional V
 We define a robust test norm such that the $L^2$ norm of the solution 
@@ -430,8 +430,8 @@ and
 + \frac{1}{\epsilon}\norm{\bftau}_K^2\,,
 \end{align}
 respectively designated the \emph{robust} test norm and the \emph{coupled robust} test norm,
-provide the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$
-\footnote{
+provide the necessary bound $\norm{v^*}_V \lesssim \norm{u}_{\LQ}$.
+\begin{remark}
 We haven't developed a mathematical theory for it, but we've also had numerical success with a norm that 
 we've dubbed the NSDecoupled norm because we first stumbled on it during experiments with compressible
 Navier-Stokes:
@@ -446,7 +446,7 @@ Navier-Stokes:
 \end{align*}
 We mention it because it appeared to be the most successful in simulations
 of the moving piston problem in \ref{sec:piston}.
-}.
+\end{remark}
 
 In the following lemmas we establish the following bounds:
 \begin{itemize}
