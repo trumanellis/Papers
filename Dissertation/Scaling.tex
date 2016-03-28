@@ -17,18 +17,21 @@ Unfortunately, multigrid is well known to perform poorly on convection-dominated
 In fact, we can easily construct a case for convection-diffusion with $\epsilon=10^{-2}$ on a $64\times64$
 mesh solved with Camellia's default multigrid strategy outlined below that
 % mesh where a combination of conjugate gradient, v-cycle multigrid 
-exhibits the following convergence history for the iterative solve.
+exhibits the convergence history in Figure~\ref{fig:ConfusionResidual} for the iterative solve.
 % fails to converge to a tolerance of $10^{-10}$ within 2000 iterations.
-\begin{figure}
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Scaling/ConfusionResidual.pdf}
 \caption{Residual convergence for a simple convection-diffusion problem}
 \label{fig:ConfusionResidual}
 \end{figure}
+
 The details of this simulation aren't important, the point is that it is fairly trivial to contrive a 
 test problem where multigrid performs very poorly for convection-diffusion.
 % In our experience, we've noticed that this tends to be somewhat mitigated on adaptive meshes rather rather than the uniform one used for this example.
 This behavior appears to be especially bad on uniform meshes and seems to be somewhat mitigated on adaptive meshes.
+Ideally we would like to implement a line smoother which is known to improve performance 
+on convection-dominated diffusion problems, but that is outside the scope of this thesis.
 
 \subsection{Overview of Multigrid in Camellia}
 Conjugate gradient is a natural choice for iteratively solving DPG problems because they are always symmetric
@@ -46,6 +49,95 @@ We've chosen to employ an overlapping additive Schwarz smoother.
 In constructing the mesh hierarchy for the multigrid, going from a high order fine mesh, we first start
 with $p$-coarsening followed by $h$-coarsening.
 More details on multigrid within Camellia will appear in an upcoming technical report by Nathan Roberts.
+
+\subsection{Scaling on Test Problems}
+% Support for space-time within Camellia is still fairly experimental and multigrid has 
+Both space-time and multigrid are fairly recent, experimental features within Camellia
+and the combination of the two has not scaled as well as we initially expected. 
+In the following tables we illustrate the ballooning cost of these space-time solves 
+for 2D incompressible Navier-Stokes.
+
+\subsubsection{Incompressible Flow Over a Cylinder}
+Table~\ref{tab:cylinder} refers to a space-time solve of transient flow over a flat plate. 
+Listed times are in seconds.
+The domain is $[-3,9]\times[-4.5,4.5]$ with a 0.5 radius cylinder in at the origin and a final time of 4.
+The Reynolds number is 100, the flow is initialized to the solution of potential flow over a cylinder.
+Velocity conditions are applied to the inflow, zero slip to the cylinder, and zero traction to every other boundary.
+The initial mesh has 80 space-time elements and with quadratic trial functions has 31304 DOFs 
+and looks like Figure~\ref{fig:CylinderMesh0}.
+After 4 adaptive refinements, the problem is up to 11742 elements, 4144674 DOFs, 
+and looks like Figure~\ref{fig:CylinderMesh4}.
+This problem was excluded from the main set of incompressible results in Chapter~\ref{sec:incompressible}
+because we don't achieve nearly enough resolution to observe any interesting flow features.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Cylinder/Mesh_uMag0.png}
+\caption{Initial mesh for cylinder problem colored by velocity magnitude}
+\label{fig:CylinderMesh0}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Cylinder/Mesh_uMag4.png}
+\caption{Fourth adaptive mesh for cylinder problem colored by velocity magnitude}
+\label{fig:CylinderMesh4}
+\end{figure}
+
+The cost per solve increases dramatically with every adaptive refinement step.
+We compare three runs from done on the Lonestar system at the Texas Advanced Computing Center.
+In the first, we use 1 node with 24 processors and then compare this to 4 nodes with 96 processors and
+32 nodes with 768 total processors.
+Strong scaling results are computed relative to the previous solve 
+with ideal values being $4\times$ and $8\times$ for the 4 node and 32 node runs, respectively.
+It is clear that increasing the number of processors does accelerate the solve, but we are not
+very close to the ideal speedup.
+We hypothesize that load balancing on this problem is sub-optimal as not ever processor has
+to deal with curvilinear element computations around the cylinder.
+With 768 processors, it takes more than 2 hours to complete 10 Newton iterations 
+on the fourth refinement step with just over 4 million DOFs.
+We estimate it would take about 6 refinement steps before we start resolving the viscous flow features.
+
+\begin{table}[!ht]
+\centering
+\caption{Solve time for transient flow over a cylinder}
+\label{tab:cylinder}
+\begin{tabular}{|crr|r|rc|rc|}
+\hline
+& & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} & \multicolumn{2}{|c|}{32 Nodes} \\
+Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4      \\
+\hline
+0 & 80            & 31304      & 1772   & 453   & 3.91 & 451  & 1.01 \\
+1 & 605           & 225908     & 8190   & 3574  & 2.29 & 717  & 4.98 \\
+2 & 3013          & 1081598    & 32008  & 12076 & 2.65 & 2648 & 4.56 \\
+3 & 9726          & 3429384    &          & 28744 &      & 6319 & 4.54 \\
+4 & 11742         & 4144674    &          &         &      & 8510 &      \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Taylor-Green Vortex}
+We also consider the Taylor-Green vortex problem described in Chapter~\ref{sec:incompressible}.
+The timings for the case of $Re=1000$ and $p=2$ are shown in Table~\ref{tab:taylor}.
+We see better scaling for this problem as there are not any curvilinear elements to deal with
+but the time to solve still blows up considerable with every refinement step.
+
+\begin{table}[!ht]
+\centering
+\caption{Solve time for the Taylor-Green vortex}
+\label{tab:taylor}
+\begin{tabular}{|crr|r|rc|}
+\hline
+& & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} \\
+Ref& Elems & DOFs & Time    & Time & Scaling vs 1 \\
+\hline
+0 & 60            & 21302      & 331.0    & 140.6   & 2.35 \\
+1 & 312           & 108410     & 945.2    & 290.6   & 3.25 \\
+2 & 2020          & 691834     & 4880.2   & 1363.5  & 3.58 \\
+3 & 9244          & 3043024    &          & 6171.6  & \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{The Question of Space-Time Slabs}
 Here we briefly explore the benefits of splitting a computation into space-time slabs under the following assumptions.
@@ -128,16 +220,5 @@ the solution of the entire space-time domain might require more memory than is a
 By splitting the solve into smaller time slabs, you could mitigate produce smaller global solves that do 
 fit into memory. So far, the memory constraint has not been a significant concern for the problems under
 consideration here, so we opted to stick with the simplest approach, the first strategy.
-
-\textcolor{red}{
-\section{Projected Solve Times for Various Problems}
-The issues in the previous sections and the fact that both space-time support and iterative solver support
-in Camellia are still a work in progress (and hence not fully optimized) mean that we were not able to scale up to the size of problems we initially intended to solve.
-The solve times for these 3D solves balloons rather quickly.
-}
-
-\textcolor{red}{
-\section{Strong Scaling in Camellia}
-}
 
 \end{document}

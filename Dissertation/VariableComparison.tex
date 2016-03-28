@@ -7,6 +7,17 @@
 % \section{Nonlinear Formulation}
 In this appendix we discuss some work we did exploring a comparison between three formulations of the 
 compressible Navier-Stokes equations: primitive variables, conservation variables, and entropy variables.
+Primitive variables are the natural physically intuitive variables in which the Navier-Stokes 
+equations are usually presented: density, velocity, and temperature.
+Conservation variables are popular as they simplify time stepping algorithms. 
+The independent variables are density, momentum, and total energy.
+Entropy variables were proposed by Tom Hughes in \cite{HughesEntropyVariables}
+and are selected such that the stiffness matrix in a Bubnov-Galerkin finite element 
+discretization is symmetric. 
+However the independent variables do not correspond to any intuitive physical quantity
+and the resulting equations are the most nonlinear of the three.
+Recalling the definitions from Chapter~\ref{sec:compressible}, we define the necessary
+linear and nonlinear terms that fit within that framework.
 
 \section{Primitive Variables}
 We begin by recalling the definitions for primitive variables:
@@ -27,7 +38,7 @@ G_{\bfq}&:=-T\,.
 \end{align*}
 
 \subsection{Linearized Terms}
-Now we introduce the linearized terms:
+The linearized terms are:
 \begin{align*}
 \pd{C_c(\tilde W)}{W}\Delta W&:=
 	\Delta\rho\\
@@ -73,13 +84,14 @@ Now we introduce the linearized terms:
 \end{align*}
 
 \section{Conservation Variables}
-Now we wish to do a change of variables to conservation variables: 
+The definition of conservation variables is as follows: 
 \begin{align*}
 \rho&=\rho\\
 \bfm&=\rho\bfu\\
-E&=\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}
+E&=\rho\LRp{C_v T+\frac{1}{2}\bfu\cdot\bfu}\,.
 \end{align*}
 
+This gives us new definitions for our nonlinear terms:
 \begin{align*}
 C_c&:=\rho\\
 \bfC_m&:=\bfm\\
@@ -97,6 +109,7 @@ G_{\bfq}&:=-\LRp{\frac{E-\frac{1}{2\rho}\bfm\cdot\bfm}{C_v\rho}}\,.
 \end{align*}
 
 \subsection{Linearized Terms}
+After linearizing, we get the following:
 \begin{align*}
 \pd{C_c(\tilde W)}{W}\Delta W&:=
 	\Delta\rho\\
@@ -160,19 +173,20 @@ Now we wish to do a change of variables to entropy variables:
 V_c&=\frac{-E+(E-\frac{1}{2\rho}\bfm\cdot\bfm)\LRp{\gamma+1-\ln\LRs{\frac{(\gamma-1)(E-\frac{1}{2\rho}\bfm\cdot\bfm)}{\rho^\gamma}}}}
 {E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
 \bfV_m&=\frac{\bfm}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
-V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\\
+V_e&=\frac{-\rho}{E-\frac{1}{2\rho}\bfm\cdot\bfm}\,,
 \end{align*}
 with reverse mapping:
 \begin{align*}
 \rho&=-\alpha V_e\\
 \bfm&=\alpha\bfV_m\\
-E&=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\\
+E&=\alpha\LRp{1-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}\,,
 \end{align*}
 where 
 \[
-\alpha(V_c,\bfV_m,V_e)=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}
+\alpha(V_c,\bfV_m,V_e)=\LRs{\frac{\gamma-1}{(-V_e)^\gamma}}^{\frac{1}{\gamma-1}}\exp\LRs{\frac{-\gamma+V_c-\frac{1}{2V_e}\bfV_m\cdot\bfV_m}{\gamma-1}}\,.
 \]
 
+The nonlinear terms are:
 \begin{align*}
 C_c&:=-\alpha V_e\\
 \bfC_m&:=\alpha\bfV_m\\
@@ -190,6 +204,7 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 \end{align*}
 
 \subsection{Linearized Terms}
+And the linearized terms for entropy variables are:
 \begin{align*}
 \pd{C_c(\tilde W)}{W}\Delta W&:=
 	-\tilde V_e\pd{\alpha(\tilde W)}{W}\Delta W-\alpha(\tilde W)\Delta V_e
@@ -255,9 +270,10 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 	\\
 \pd{G_{\bfq}(\tilde W)}{W}\Delta W&:=
 	-\frac{1}{C_vV_e^2}\Delta V_e
-	\,.
-\end{align*}
-\begin{align*}
+	\\
+% 	\,.
+% \end{align*}
+% \begin{align*}
 \pd{\alpha(\tilde W)}{W}\Delta W&=
 \LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
 \gamma(-\tilde V_e)^{-(\gamma+1)}
@@ -269,13 +285,13 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 &\LRp{\Delta V_c
 -\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
 +\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
-}
+}\,.
 \end{align*}
 
 
 \section{Numerical Experiments}
 We perform a couple numerical experiments to compare the different formulations.
-In Chapter \ref{sec:compressible} we used a incrementally decreased $\mu$ with ever refinement step 
+In Chapter \ref{sec:compressible} we used a incrementally decreased $\mu$ with every refinement step 
 as this approach was found to produce cleaner refinement patterns; here we hold $\mu$ constant
 for each problem to show that it is still possible to arrive at a converged solution, but
 we end up with a less desirable final refinement pattern.
@@ -384,6 +400,15 @@ We see more unwanted refinements in this computation compared to Chapter \ref{se
 due to the spurious shock patterns that develop on coarse meshes.
 We are not able to compare the entropy formulation for this problem since the initial conditions 
 contain infinities under this formulation.
+Again, primitive and conservation variables produce similar results.
+
+\section{Conclusion}
+The conclusion then is that since DPG already produces a symmetric, positive-definite stiffness
+matrix, there is no reason to prefer entropy variables.
+The choice between primitive and conservation variables depends on which one
+is easier to implement as they will both give similar results.
+We decided to stick with primitive variables as they were slightly simpler and
+less nonlinear.
 
 \begin{figure}[ht]
 \centering
