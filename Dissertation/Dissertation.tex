@@ -298,9 +298,67 @@ Dedicated to my grandpa, George Lowell Ellis.
 \end{dedication}
 
 
-\begin{acknowledgments}		% Optional
+\begin{acknowledgments}		% Optional 
 \index{Acknowledgments@\emph{Acknowledgments}}%
-Fill this in.
+The past six years have been some of the most significant and meaningful of my life. 
+Foremost I need to thank my co-advisor Leszek Demkowicz. 
+Your passion for research and dedication to following the math have been an inspiration and a revolution
+to how I view scientific computing.
+% Thank you for your patience when discussing mathematics with me.
+Thank you and Stasia for your incredible hospitality. 
+I've always told people that I lucked out by finding an advisor who genuinely cares about the well-being of his students.
+To my co-advisor Robert Moser, thank you for always being ready to discuss the deeper details of fluid dynamics 
+% while inspiring me to consider the larger picture of the problems that computational science is meant to solve.
+while inspiring me to consider the larger context of how computational science fits into society.
+
+This work could not have been completed without the frequent help and expertise of Nathan Roberts, who is largely responsible
+for the development of the Camellia DPG library which was instrumental to obtaining the results in this thesis.
+Jesse Chan, your mathematical insights made possible the proofs contained here.
+Thank you for your patience when I wanted to run something by you.
+I thoroughly enjoyed our conversations on philosophy, theology, politics, mathematics, relationships, and much 
+less serious topics. 
+% I am indebted to Jesse Chan for his math
+% I could not have done this without the support of Nathan Roberts who is largely responsible for building and maintaining 
+% the $hp-$adaptive DPG codebase Camellia which was solely responsible
+% Nathan Roberts, Jesse Chan - listening to me while I `ran something by him'
+
+I am grateful to my committee -- Tom Hughes, Clint Dawson, and Tan Bui-Thanh -- for suggesting interesting lines of research
+and offering perspectives on how my research fits into the larger world of computational science.
+% Committee for suggesting interesting topics to investigate.
+
+I owe a great debt of gratitude to Robert Rieben and Tzanio Kolev at Lawrence Livermore National Laboratory for seeing promise
+in a young graduate student and entrusting me with a project of real consequence and interest.
+My four summers at LLNL had a most profound influence on my career and perhaps more importantly, my appreciation for craft beers.
+Seriously, I have you to blame for my obsession with sour ales. 
+% Robert Rieben and Tzanio Kolev for starting me down this path.
+
+To my friends at ICES who made this such an enjoyable journey, thank you. 
+Matthias Taus, I couldn't have passed Methods of Applied Math without you.
+Hanging out with you and Olivia was always fun. \emph{Prosit!}
+Lindley Graham, you've been a good friend. Omar Al Hinai, despite your terrible business ideas, we had some great lunch discussions.
+Jesse and Jenny (and Liz), thank you for watching Charis so many times, she loves you guys.
+To Mike, Kathryn, Nick and Jade, John and Christa, Nora and Mat, Brendan, Federico, Sriram, Socratis, and so many others, thank you
+for my time in Austin so rewarding.
+
+To new friends who have provided support and encouragement during a very challenging period of my life, you probably don't know how much you meant to me.
+Molly Mae Potter, thank you for the counseling and for opening your home to me when I needed it. You are an inspiring woman. 
+Melissa Riddel, I enjoyed all the beers and adventures.
+Emily Manley, you are such a good person. I grew a lot through my association with you.
+% Emily Manley and Melissa Riddel, my life was enriched by your friendship.
+
+To an old friend for many years -- Lauren, thank you for the memories. I wish you peace and happiness in your new life.
+% Friends: Matthias Taus, Lindley Graham, Omar Al Hinai, Jesse and Jenny, Nora and Matthias, Kathryn, Nick and Jade, Olivia, Mike, Dee Dee, Brendan, Federico, Sriram, and Socratis
+% Friends who were there during the tough times: Molly Mae Potter, Emily Manley, Melissa Riddel
+
+This work is dedicated to my grandpa, George Lowell Ellis. Without his support, none of this would have happened. 
+To my parents -- John and Vicki-Lynn -- I enjoyed our weekly conversations, you two are awesome.
+To my brothers Kendrick and Morgan, thanks for the California adventures when I needed a break from Texas.
+I love you all.
+% To my brothers Kendrick and Morgan, you guys a
+% Family: Grandpa and Karen, Parents, brothers
+
+% Finally, I want to thank a good friend for many years without which I couldn't have done this. 
+% Lauren, I wish you the best in your new life.
 % Foremost, I want to express my greatest gratitude to my supervisor, Professor Thomas J.R. Hughes, for his guidance and inspiration. This work truly benefits from his profound insights in the broad areas of mechanics, mathematics, and scientific computing.
 
 % I would like to thank Professors Todd Arbogast, Omar Ghattas, Hector Gomez, Chad M. Landis, and Alexis F. Vasseur for serving my dissertation committee.
@@ -322,7 +380,49 @@ Fill this in.
 \utabstract
 \index{Abstract}%
 \indent
-Fill this in.
+Initial mesh design for computational fluid dynamics can be a time-consuming and expensive process. 
+The stability properties and nonlinear convergence of most numerical methods rely on a minimum level of mesh resolution. 
+This means that unless the initial computational mesh is fine enough, convergence can not be guaranteed. 
+Any meshes below this minimum resolution level are termed to be in the ``pre-asymptotic regime.'' 
+This condition implies that meshes need to in some way anticipate the solution before it is known. 
+On top of the minimum requirement that the surface meshes must adequately represent the geometry of the problem under consideration, 
+resolution requirements on the volume mesh make the CFD practitioner's job significantly more time consuming. 
+% This is not to mention auxiliary requirements from turbulence models needed to accurately resolve boundary layers. 
+% Thus, mesh design and simulation become an iterative trial and error process.
+% A common process is for an engineer to study the problem at hand and attempt to predict regions that require extra resolution. 
+% Then they will spend hours coaxing the mesher to produce an adequate mesh before importing the mesh into the solver.
+% Too often, the solver will fail to converge on the given mesh due to some unforeseen mesh inadequacy on part of the solution domain.
+% The engineer then needs to descend back into the mesher to fix the problem elements.
+% This process is repeated until the solver is satisfied and convergence can be reached.
+% This iterative trial and error is undesirable while working on personal computers or modestly sized compute clusters, 
+% but becomes increasing costly as the problem is scaled up to the tens or hundreds of thousands of processors common in high performance computing environments.
+
+In contrast to most other numerical methods, the discontinuous Petrov-Galerkin finite element method retains exceptional stability on extremely coarse meshes.
+DPG is also inherently very adaptive.
+It is possible to compute the residual error without knowledge of the exact solution, which can be used to robustly drive adaptivity.
+This results in a very automated technology, as the user can initialize a computation on the coarsest mesh which adequately represents the geometry 
+then step back and let the program solve and adapt iteratively until it resolves the solution features.
+
+A common complaint of minimum residual methods by computational fluid dynamics practitioners is that they are not locally conservative.
+In this thesis, this concern is addressed by developing a locally conservative DPG formulation by augmenting the system with Lagrange multipliers.
+The resulting DPG formulation is then proved to be robust and shown to produce superior numerical results over standard DPG
+on a selection of test problems.
+
+Adaptive convergence to steady incompressible and compressible Navier-Stokes solutions 
+was explored in \cite{JesseDissertation} and \cite{NateDissertation}.
+Space-time offers a natural extension to transient problems as it preserves the stability and adaptivity properties of DPG
+in the time dimension.
+Space-time also offers more extensive parallelization capability than problems treated with traditional time stepping
+as it allows multigrid concurrently in both space and time.
+A proof of concept space-time DPG formulation is developed for transient convection-diffusion. 
+The robust test norms derived for steady convection-diffusion are extended to the space-time case and proofs of robustness are provided.
+Numerical results verify the robust behavior and near $L^2$ optimality of the resulting solutions.
+
+The space-time formulation for convection-diffusion is then extended to transient incompressible and compressible Navier-Stokes by analogy.
+Several numerical experiments are performed, but a mathematical analysis is not attempted for these nonlinear problems.
+Several side topics are explored such as a study of the compressible Navier-Stokes equations under various variable transformations
+and the development of consistent test norms through the concept of physical entropy.
+
 % Multiphase flow is a familiar phenomenon from daily life and occupies an important role in physics, engineering, and medicine. The understanding of multiphase flows relies largely on the theory of interfaces, which is not well understood in many cases. To date, the Navier-Stokes-Korteweg equations \cite{Korteweg1901,Waals1979} and the Cahn-Hilliard equation \cite{Cahn1958} have represented two major branches of phase-field modeling. The Navier-Stokes-Korteweg equations describe a single component fluid material with multiple states of matter, e.g., water and water vapor; the Cahn-Hilliard type models describe multi-component materials with immiscible interfaces, e.g., air and water. In this dissertation, a unified multiphase fluid modeling framework is developed based on rigorous mathematical and thermodynamic principles. This framework does not assume any ad hoc modeling procedures and is capable of formulating meaningful new models with an arbitrary number of different types of interfaces.
 
 % In addition to the modeling, novel numerical technologies are developed in this dissertation focusing on the Navier-Stokes-Korteweg equations. First, the notion of entropy variables is properly generalized to the functional setting, which results in an entropy-dissipative semi-discrete formulation. Second, a family of quadrature rules is developed and applied to generate fully discrete schemes. The resulting schemes are featured with two main properties: they are provably dissipative in entropy and second-order accurate in time. In the presence of complex geometries and high-order differential terms, isogeometric analysis \cite{Hughes2005} is invoked to provide accurate representations of computational geometries and robust numerical tools. A novel periodic transformation operator technology is also developed within the isogeometric context. It significantly simplifies the procedure of the strong imposition of periodic boundary conditions. These attributes make the proposed technologies an ideal candidate for credible numerical simulation of multiphase flows.
@@ -423,7 +523,12 @@ Fill this in.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{vita}
-Fill this in.
+Truman Ellis received Bachelor of Science and Master of Science degrees from California Polytechnic State University in 2010. 
+In the fall of 2010 he began a doctoral program in Computational Science, Engineering, and Mathematics at the University of Texas at Austin
+under the supervision of Drs. Leszek Demkowicz and Robert Moser.
+During his graduate career, he completed four summers of research at Lawrence Livermore National Laboratory under the supervision of
+Drs. Tzanio Kolev and Robert Rieben developing a high order curvilinear finite element solver for shock hydrodynamics.
+Upon completion of his doctoral degree, he will work as a postdoctoral researcher at Sandia National Laboratory.
 % Ju Liu received the Bachelor of Science degree in Computational Mathematics from Xi'an Jiaotong University in 2008. He immediately entered the Computational and Applied Mathematics program at the University of Texas at Austin under the supervision of Prof. T.J.R. Hughes. His graduate research work has been awarded the Robert J. Melosh medal from the Duke University in 2013. Upon completion of his doctoral degree, he will work as a postdoctoral fellow at the Institute for Computational Engineering and Sciences.
 
 \end{vita}

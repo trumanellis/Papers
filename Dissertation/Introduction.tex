@@ -83,7 +83,7 @@ Our goal is to design a method that eliminates human intervention as much as pos
 The superior stability of the method promises to prevent a simulation from crashing which could eliminate expensive restarts on large systems.
 Preliminary studies on convection-diffusion suggest exceptional robustness of the method in terms of diminishing viscosity, 
 promising successful application to a large class of flow problems.
-The adaptivity lent by the \emph{error representation function} provides a reliable and automated way to start from a coarse mesh and only refine
+The adaptivity lent by the error representation function provides a reliable and automated way to start from a coarse mesh and only refine
 toward solution features in need. 
 This uses compute resources much more efficiently than uniform refinements, allowing larger simulations with fewer resources.
 These features combine to produce a high degree of automaticity.
@@ -102,8 +102,9 @@ this produces a embarrassingly parallel post-processing solve for the internal d
 This property was one of the motivations behind the development of the hybridized discontinuous Galerkin \cite{HDG} method.
 No matter what system of equations is being considered, DPG always produces a Hermitian (symmetric if real) 
 positive definite stiffness matrix for the global solve.
-This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
-anticipate it might be an attractive feature in the future.
+This property allows us to leverage the conjugate gradient algorithm as the foundation for iterative global solvers.
+% This property has not really been leveraged in our simulations so far, since we have focused on direct rather than iterative solvers, but we
+% anticipate it might be an attractive feature in the future.
 As compute resources scale up, many more HPC simulations are increasingly becoming coupled in multiphysics simulations.
 Since the only requirement for a well-defined discrete DPG method is a well-defined continuous problem, it is certainly possible that each different part of the multiphysics simulation could be discretized with DPG -- no need to develop many different methods for each part of the simulation.
 Already DPG has been successfully applied to a wide variety of problems in computational mechanics, as noted below.
@@ -358,7 +359,7 @@ simulation code, see Figure~\ref{fig:xbraid}.
 The practical downside is that this is a much more expensive procedure on small to medium sized computer architectures.
 It's only on very large systems that have maxed out the strong scaling of a single timestep where this approach starts to pay off.
 Thus, for the proof of concept problems solved on moderate sized system in this dissertation, we only expect to reap the extra cost
-without hitting the point of seeing the reward.
+without seeing the reward.
 However this concept has potential as we look towards exascale simulations in the future.
 
 \subsection{Discontinuous Petrov-Galerkin Method}
@@ -478,10 +479,14 @@ In particular, the use of element interface unknowns, the computation of the opt
 and the use of the error representation function to drive adaptivity are not common
 features in many finite element libraries.
 Nathan Roberts began work on the Camellia\cite{CamelliaDPG} library the summer of 2011 at Sandia National Laboratory.
-Jesse Chan and I quickly became active contributors when we saw the promising early demonstrations.
-Camellia is written in modern C++ on top of Trilinos\cite{Trilinos}.
-It supports distributed computation with MPI
-Camellia has not undergone an official open source release yet and many of the features are still experimental.
+% Jesse Chan and I quickly became active contributors when we saw the promising early demonstrations.
+Jesse Chan and I soon followed as active contributors.
+Camellia is written in modern C++ on top of Trilinos\cite{Trilinos} and supports distributed computation with MPI.
+It currently supports 1D, 2D, and 3D meshes with line, quadrilateral, triangle,
+hexahedral, and tetrahedral elements as well as space-time in 1D and 2D and both $h-$ and $p-$adaptivity.
+Though Camellia has not undergone an official open source release yet and many of the features are still experimental,
+the source code is available at \cite{CamelliaGitHub}.
+Every numerical result in this dissertation was computed using Camellia.
 
 % \section{Goal}
 % The goal of this work is to develop a space-time formulation of DPG with the purpose of simulating transient

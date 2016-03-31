@@ -12,6 +12,13 @@ to a quality solution.
 This suggested that space-time approach which naturally includes the transient terms
 might achieve such results with a simpler Newton iteration.
 
+We derive an ultra-weak space-time divergence formulation of the transient compressible Navier-Stokes equations,
+linearizing and developing robust test norms in a similar manner as was done in the previous chapter.
+We focus our numerical results on shock tube problems for which analytical solutions are known for the 
+inviscid Euler equations.
+Despite the absence of any sophisticated shock capturing, we are able to resolve the shocks with adaptivity 
+and produce some decent numerical results.
+
 \section{Nonlinear Form}
 
 The compressible Navier-Stokes equations are
@@ -29,6 +36,8 @@ Assuming Stokes hypothesis that $\lambda=-\frac{2}{3}\mu$,
 	\mathbb{T}=2\mu\bfS^*=2\mu\LRs{\frac{1}{2}\LRp{\Grad\bfu+\LRp{\Grad\bfu}^T}-\frac{1}{3}\Div\bfu\bbI}\,,
 \end{equation*}
 where $\bfS^*$ is the trace-less viscous strain rate tensor.
+As we are using Navier-Stokes as a stand-in for the Euler equations, it is sufficient to
+use a constant $\mu$ rather than something more physical like a power law equation.
 In order to work with standard finite element spaces, we introduce $\bbD=\mu\Grad\bfu$, so that 
 $\mathbb{T}=\LRp{\bbD+\bbD^T-\frac{2}{3}\trace(\bbD)\bbI}$.
 The heat flux is given by Fourier's law:
@@ -69,7 +78,7 @@ The conserved quantities for each equation are:
 \begin{align*}
 C_c&:=\rho\\
 \bfC_m&:=\rho\bfu\\
-C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\,.
+C_e&:=\rho(C_v T+\frac{1}{2}\bfu\cdot\bfu)\,,
 \end{align*}
 while the Euler fluxes are:
 \begin{align*}
@@ -86,7 +95,7 @@ and the viscous fluxes are:
 The constitutive terms are:
 \begin{align*}
 \bbM_{\bbD}&:=\bbD\\
-\bfM_{\bfq}&:=\frac{Pr}{C_p}\bfq\,
+\bfM_{\bfq}&:=\frac{Pr}{C_p}\bfq\,,
 \end{align*}
 and the constitutive relations are:
 \begin{align*}
@@ -151,11 +160,11 @@ a topic we briefly consider in Appendix \ref{sec:VariableComparison}.
 \section{Linearization}
 We again begin by splitting our residual into trace and volume terms:
 \[
-R(W,\hat W,\hat t) = R(W) + R(\hat W,\hat t)\,,
+R(W,\Psi,\hat W,\hat t) = R(W,\Psi) + R(\hat W,\hat t)\,,
 \]
 where
 \[
-R(W)=
+R(W,\Psi)=
 \LRp{\frac{1}{\mu}M,\Psi}+\LRp{G,\Div\Psi}
 -\LRp{\vecttwo{F-K}{C},\Gradxt V}-\LRp{f,V}\,,
 \]
@@ -165,13 +174,14 @@ R(\hat W,\hat t)=
 -\LRa{\hat W,\Psi\cdot\bfn_x}
 +\LRa{\hat t,V}\,.
 \]
-And again $R(\hat W,\hat t)$ is already linear, so we only need to linearize terms dependent on $W$.
-Let $W=\tilde W+\Delta W$, where $\tilde W$ is the previous solution in a Newton iteration and 
-$\Delta W$ is the update. We linearize about $\tilde W$ so that our linear problem becomes
+Again $R(\hat W,\hat t)$ is already linear, so we only need to linearize terms dependent on $W$.
+Let $\{W,\Psi\}=\{\tilde W,\tilde\Psi\}+\{\Delta W,\Delta\Psi\}$, where $\{\tilde W,\tilde\Psi\}$ 
+is the previous solution in a Newton iteration and 
+$\{\Delta W,\Delta\Psi\}$ is the update. We linearize about $\{\tilde W,\tilde\Psi\}$ so that our linear problem becomes
 \[
-\pd{R(\tilde W)}{W}\Delta W+R(\hat W,\hat t)=-R(\tilde W)\,,
+\pd{R(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}+R(\hat W,\hat t)=-R(\tilde W,\tilde\Psi)\,,
 \]
-with unknowns $\Delta W$, $\hat W$, and $\hat t$.
+with unknowns $\Delta W$, $\Delta\Psi$, $\hat W$, and $\hat t$.
 The full definitions for these linearized terms can be found in Appendix \ref{sec:VariableComparison}.
 
 \section{Robust Test Norms}
@@ -309,9 +319,9 @@ strongly enough to drive further refinement.
 We predict that once the shock is sufficiently resolved,
 this would be the next priority for the refinement strategy.
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.45\textwidth}
+\begin{subfigure}[t]{0.8\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den1.pdf}
 \caption{Density}
@@ -326,7 +336,7 @@ this would be the next priority for the refinement strategy.
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres1.pdf}
 \caption{Pressure}
 \end{subfigure}
-\begin{subfigure}[t]{0.9\textwidth}
+\begin{subfigure}[t]{\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh1.png}
 \caption{Mesh}
@@ -335,9 +345,9 @@ this would be the next priority for the refinement strategy.
 \label{fig:SodRobust0}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.45\textwidth}
+\begin{subfigure}[t]{0.8\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den7.pdf}
 \caption{Density}
@@ -352,7 +362,7 @@ this would be the next priority for the refinement strategy.
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres7.pdf}
 \caption{Pressure}
 \end{subfigure}
-\begin{subfigure}[t]{0.9\textwidth}
+\begin{subfigure}[t]{\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh7.png}
 \caption{Mesh}
@@ -361,9 +371,9 @@ this would be the next priority for the refinement strategy.
 \label{fig:SodRobust6}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.45\textwidth}
+\begin{subfigure}[t]{0.8\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-den13.pdf}
 \caption{Density}
@@ -378,7 +388,7 @@ this would be the next priority for the refinement strategy.
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-pres13.pdf}
 \caption{Pressure}
 \end{subfigure}
-\begin{subfigure}[t]{0.9\textwidth}
+\begin{subfigure}[t]{\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Dissertation/Sod/Robust-mesh13.png}
 \caption{Mesh}
@@ -416,7 +426,7 @@ We don't perfectly match the solution, there are some wiggles at the shock front
 better, but the fact that we don't see any noticeable wall heating is significant.
 
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
 \begin{subfigure}[t]{0.32\textwidth}
 \centering
@@ -450,6 +460,8 @@ In the piston problem, we have a compressible gas with $\gamma=5/3$ initially at
 At $t=0$, the left wall of the domain (initially $[0,1]$) starts moving inward at a velocity of 1.
 This triggers a shock which precedes the moving piston and collides with the stationary right wall 
 at $t=0.8$. The initial density is 1, but jumps to 4 after the first shock, and 10 after the second.
+By the final time of $t=0.85$ the second shock has traversed half the remaining distance from
+the right wall to the piston.
 The symmetry conditions from the Noh problem are applied on the right wall. 
 The left boundary has normal $n_{xt}=(-\sqrt{2},\sqrt{2})$ which means that fluxes at our disposal are:
 \begin{align*}
@@ -464,55 +476,81 @@ and since $u=1$ at the left wall
 \hat t_e&=-\sqrt{2}\rho RT\,.
 \end{align*}
 Therefore we set the following boundary conditions at the left boundary: $\hat u=1$, $\hat t_c=0$, 
-$\hat t_m-\hat t_e=0$.
+and $\hat t_m-\hat t_e=0$ implemented as a penalty condition.
 We solve using $p=2$, $\Delta p=2$, a fixed $\mu=100$, and an initial $4\times4$ space-time mesh.
 Unfortunately, the robust and coupled robust norms did not produce the cleanest solutions
 on this problem, and we were forced to use the NSDecoupled norm which has
 less mathematical justification but seems to work very well on shock problems.
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
-\begin{subfigure}[t]{0.45\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Piston/Piston_density.png}
 \caption{Density}
 \end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
+\begin{subfigure}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{Piston/Piston_velocity.png}
 \caption{Velocity}
 \end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{Piston/Piston_temp.png}
-\caption{Temperature}
-\end{subfigure}
-\begin{subfigure}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{Piston/Piston_mesh.png}
-\caption{Mesh}
-\end{subfigure}
+% \begin{subfigure}[t]{0.45\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Piston/Piston_temp.png}
+% \caption{Temperature}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Piston/Piston_mesh.png}
+% \caption{Mesh}
+% \end{subfigure}
 \caption{Piston solution with NSDecoupled norm after 8 adaptive refinements}
 \label{fig:PistonSolution}
 \end{figure}
 
-\textcolor{red}{\subsection{Possible 2D Results}
-Attempting the following
-\begin{enumerate}
-\item{Noh}
-\item{Compressible Taylor-Green}
-\item{Sedov}
-\item{Triple Point}
-\item{Rayleigh-Taylor Instability}
-\end{enumerate}
-}
+\begin{figure}[ht]
+\centering
+% \begin{subfigure}[t]{0.7\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Piston/Piston_density.png}
+% \caption{Density}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.45\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Piston/Piston_velocity.png}
+% \caption{Velocity}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.45\textwidth}
+% \centering
+% \includegraphics[width=\textwidth]{Piston/Piston_temp.png}
+% \caption{Temperature}
+% \end{subfigure}
+% \begin{subfigure}[t]{0.7\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Piston/Piston_mesh.png}
+% \caption{Mesh}
+% \end{subfigure}
+\caption{Piston mesh with NSDecoupled norm after 8 adaptive refinements}
+\label{fig:PistonMesh}
+\end{figure}
+
+% \textcolor{red}{\subsection{Possible 2D Results}
+% Attempting the following
+% \begin{enumerate}
+% \item{Noh}
+% \item{Compressible Taylor-Green}
+% \item{Sedov}
+% \item{Triple Point}
+% \item{Rayleigh-Taylor Instability}
+% \end{enumerate}
+% }
 
 \section{Summary of Compressible Results}
 The chief strength of the DPG method is in its stability and adaptivity properties.
 It makes no claims of being a robust technique for handling shocks
 and in fact we ran into a lot of shock related difficulties in arriving at these solutions.
 The continuation in viscosity strategy, though avoidable, was an attempt at mitigating these challenges.
-What is notable is that we were able to kick-start each simulation from very coarse initial meshes
+What is notable is that we were able to initialize each simulation from very coarse meshes
 and adaptively resolve the solution features.
 
 \end{document}

@@ -6,11 +6,10 @@
 \label{sec:incompressible}
 
 \section{Introduction}
-DPG for steady incompressible Navier-Stokes was studied by Roberts in \cite{NateDissertation}.
-We choose a different variational formulation more consistent with 
-our work with transient convection-diffusion.
-The equations are trivial for one spatial dimension so space-time explorations of incompressible
-Navier-Stokes require either 3D or 4D solves.
+DPG for steady incompressible Navier-Stokes was studied by Roberts in \cite{NateDissertation}, though
+we choose a variational formulation more consistent with our work on transient convection-diffusion.
+The equations are trivial for one spatial dimension so space-time incompressible
+Navier-Stokes requires either 3D or 4D solves.
 We derive a space-time DPG formulation for spatially 2D Navier-Stokes and show preliminary 
 convergence results for the Taylor-Green vortex problem.
 
@@ -18,7 +17,7 @@ convergence results for the Taylor-Green vortex problem.
 The 2D incompressible Navier-Stokes equations are:
 \begin{align*}
   \pd{\bfu}{t}+\Div\LRp{\bfu\otimes\bfu-\nu\Grad\bfu+p\bbI}&=\bff\\
-  \Div\bfu&=0
+  \Div\bfu&=0\,,
   % \int_\Omega p&=0
 \end{align*}
 where $\bfu$ is the velocity, $p$ is the pressure, $\nu$ is the kinematic viscosity,
@@ -35,12 +34,12 @@ and integrating by parts, we get
 \begin{align*}
   \LRp{\frac{1}{\nu}\bbD,\bbS}
   +\LRp{\bfu,\Div\bbS}
-  -\LRa{\hat\bfu,\bbS\cdot\bfn}&=0\\
+  -\LRa{\hat\bfu,\bbS\cdot\bfn_x}&=0\\
   -\LRp{\vecttwo{\bfu\otimes\bfu-\bbD+p\bbI}{\bfu},\Gradxt\bfv}
   +\LRa{\hat\bft,\bfv}
   &=(\bff,\bfv)\\
   -\LRp{\bfu,\Grad q}
-  +\LRa{\hat{\bfu}\cdot\bfn,q}&=0\,.
+  +\LRa{\hat{\bfu}\cdot\bfn,q}&=0\,,
   % \int_\Omega p&=0
 \end{align*}
 where $\bbD\in\mathbb{L}^2(Q)$, $\bfu\in\mathbf{L}^2(Q)$, $p\in L^2(Q)$, and
@@ -205,6 +204,7 @@ on $\hat\bft$ according to the initial conditions.
 Plots of $L^2$ and energy ($V^*$) error for various polynomial orders and Reynolds numbers are shown
 in Figure \ref{fig:TaylorGreenConvergence} for the coupled robust norm.
 As expected from our results for convection-diffusion, energy error and $L^2$ error follow each other.
+An attempt at solving transient flow over a cylinder is outlined in Section~\ref{sec:incompressibleCylinder}.
 
 \begin{figure}
 \centering

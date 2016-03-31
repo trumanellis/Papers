@@ -56,8 +56,13 @@ Both space-time and multigrid are fairly recent, experimental features within Ca
 and the combination of the two has not scaled as well as we initially expected. 
 In the following tables we illustrate the ballooning cost of these space-time solves 
 for 2D incompressible Navier-Stokes.
+A 2D space-time solver was implemented for compressible Navier-Stokes as well, but the 
+scaling issues illustrated here for incompressible Navier-Stokes were significantly worse
+in the presence of shocks. 
+Despite significant effort, we were not able to obtain publishable results for any 2D shock problems.
 
 \subsubsection{Incompressible Flow Over a Cylinder}
+\label{sec:incompressibleCylinder}
 Table~\ref{tab:cylinder} refers to a space-time solve of transient flow over a flat plate. 
 Listed times are in seconds.
 The domain is $[-3,9]\times[-4.5,4.5]$ with a 0.5 radius cylinder in at the origin and a final time of 4.
