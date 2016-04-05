@@ -11,7 +11,7 @@ was how our solver would scale on these space-time problems.
 Preliminary 1D results (2D in space-time), were computable with standard direct solvers,
 but as we moved to 2D (3D in space-time), direct solvers proved to be a major bottleneck
 to larger solves, not least of which because they tend to take up more memory than iterative solvers.
-Fortunately, my collaborator Nathan Roberts has been implementing 
+Fortunately, my collaborator Nathan Roberts at Argonne National Lab has been implementing 
 flexible multigrid strategies within Camellia.
 Unfortunately, multigrid is well known to perform poorly on convection-dominated diffusion problems.
 In fact, we can easily construct a case for convection-diffusion with $\epsilon=10^{-2}$ on a $64\times64$
@@ -37,11 +37,11 @@ on convection-dominated diffusion problems, but that is outside the scope of thi
 Conjugate gradient is a natural choice for iteratively solving DPG problems because they are always symmetric
 (Hermitian) positive definite.
 However a good preconditioner is necessary for efficiency.
-My collaborator, Nathan Roberts at Argonne National Lab, implemented a geometric multigrid preconditioner
+Nathan Roberts, implemented a geometric multigrid preconditioner
 that has allowed us to solve larger problems than we could with direct solvers.
 I've served as more of a user and tester of the multigrid strategies than as a developer, so
-I'll only briefly describe an overview of the settings we settled on 
-that were used in the simulations in this thesis.
+I'll only briefly describe an overview of the strategy we settled on 
+that were used for the simulations in this thesis.
 
 After exploring the various options of additive or multiplicative two-cycle, V-cycle, W-cycle, or full multigrid,
 we settled on a multiplicative V-cycle strategy.
@@ -90,14 +90,14 @@ because we don't achieve nearly enough resolution to observe any interesting flo
 \end{figure}
 
 The cost per solve increases dramatically with every adaptive refinement step.
-We compare three runs from done on the Lonestar system at the Texas Advanced Computing Center.
+We compare three runs done on the Lonestar system at the Texas Advanced Computing Center.
 In the first, we use 1 node with 24 processors and then compare this to 4 nodes with 96 processors and
 32 nodes with 768 total processors.
 Strong scaling results are computed relative to the previous solve 
 with ideal values being $4\times$ and $8\times$ for the 4 node and 32 node runs, respectively.
 It is clear that increasing the number of processors does accelerate the solve, but we are not
 very close to the ideal speedup.
-We hypothesize that load balancing on this problem is sub-optimal as not ever processor has
+We hypothesize that load balancing on this problem is sub-optimal as not every processor has
 to deal with curvilinear element computations around the cylinder.
 With 768 processors, it takes more than 2 hours to complete 10 Newton iterations 
 on the fourth refinement step with just over 4 million DOFs.
@@ -155,6 +155,7 @@ Here we briefly explore the benefits of splitting a computation into space-time 
 The first and second conditions are representative of the boundary layer and 
 shock problems considered in this thesis.
 The third condition is necessary as Camellia does not currently support anisotropic refinements in space-time.
+The fourth assumption simplifies the analysis and is at least representative of a common sense time slab strategy.
 
 Our test case is a steady boundary layer problem with exact solution
 \[
@@ -164,11 +165,11 @@ solved on a space-time domain $[-1,0]\times[0,1]$.
 We choose this problem because it is easy to analyze the optimal refinement strategy, but it should be
 possible to generalize this analysis to more complicated patterns.
 The optimal refinement pattern (while $h > \epsilon$) just keeps refining toward the right side of the domain.
-We consider three possible refinement patterns. 
-The first is to solve the problem as a single space-time slab starting with a single element, represented in
-Figure \ref{fig:SingleSlab}.
+We consider three possible time slab strategies and illustrate each with the same spatial resolution around the boundary layer. 
+The first is to solve the problem as a single space-time slab starting with a single element. 
+This is represented in Figure \ref{fig:SingleSlab}.
 The second strategy is to split the domain into a sequence of time slabs each starting with a single space-time element, represented in Figure \ref{fig:NaiveSlabs}.
-The third is uniformly pre-refine each time slab slab so that it has as many spatial elements as the total number of time slabs, represented in Figure \ref{fig:SmartSlabs}.
+The third is to uniformly pre-refine each time slab slab so that it has as many spatial elements as the total number of time slabs, represented in Figure \ref{fig:SmartSlabs}.
 Theoretically we could design more optimal initial meshes for each time slab, but that would 
 require \emph{a priori} knowledge of the location of solution features.
 
@@ -184,7 +185,7 @@ $
 E_{tot1}=2^N+\sum_{r=1}^N 2^r
 $
 elements.
-The second approach has the same number of elements per time slab and is thus not a viable alternative 
+The second approach has the same number of elements \emph{per time slab} and is thus not an attractive alternative 
 (at least without anisotropic refinements).
 The third approach has
 $  
@@ -210,8 +211,8 @@ various numbers of time slabs.
 For the sake of comparison, the solve time is defined to be the total time to solve all
 time slabs while adaptively refining to a resolution of $h=1/2^{10}$ 
 with the default geometric multigrid settings in Camellia (discussed above).
-We plot these results in Figure \ref{fig:TimeSlabSolveTime} and there does appear to be 
-a sweet spot for this problem at 16 time slabs, but the potential speedup alone isn't 
+We plot these results in Figure \ref{fig:TimeSlabSolveTime}. 
+There does appear to be a sweet spot for this problem at 16 time slabs, but the potential speedup alone isn't 
 enough to justify the more complicated implementation.
 \begin{figure}
 \centering

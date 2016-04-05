@@ -4,6 +4,8 @@
 \begin{document}
 \chapter{Conservation in Steady-State}
 \label{sec:conservation}
+
+\section{Motivation}
 We summarize some of our completed work on a locally conservative DPG formulation that was invented to address mass loss concerns for standard DPG.
 Locally conservative methods hold a special place for numerical analysts in
 the field of fluid dynamics.
@@ -124,14 +126,23 @@ H^1(\Omega_h) & := \prod_K H^1(K), \\[8pt]
 \end{array}
 \]
 We also need the trace spaces:
-\[
-\begin{array}{rl}
-H^\frac{1}{2}(\Gamma_h) & := \left\{ \hat{v} = \{\hat{v}_K \} \in \prod_K H^{1/2}(\partial K) \: :
-\: \exists v \in H^1(\Omega) : v|_{\partial K} = \hat{v}_K \right\}, \\[8pt]
-H^{-\frac{1}{2}}(\Gamma_h) & := \left\{ {\hat{\sigma}}_n = \{ {\hat{\sigma}}_{Kn} \}\in \prod_K H^{-1/2}(\partial K) \: : \: \exists \bfsigma \in \bfH(\text{div},\Omega)
+\begin{align*}
+H^\frac{1}{2}(\Gamma_h) & := \left\{ \hat{v} = \{\hat{v}_K \} \in \prod_K H^{1/2}(\partial K) \: : \:
+\right.\\&\quad\quad\quad\left.\vphantom{\frac{1}{1}}
+\exists v \in H^1(\Omega) : v|_{\partial K} = \hat{v}_K \right\}, \\
+H^{-\frac{1}{2}}(\Gamma_h) & := \left\{ {\hat{\sigma}}_n = \{ {\hat{\sigma}}_{Kn} \}\in \prod_K H^{-1/2}(\partial K) \: : \: 
+\right.\\&\quad\quad\quad\left.\vphantom{\frac{1}{1}}
+\exists \bfsigma \in \bfH(\text{div},\Omega)
 : {\hat{\sigma}}_{Kn} = (\bfsigma \cdot \bfn)|_{\partial K} \right\},
-\end{array}
-\]
+\end{align*}
+% \[
+% \begin{array}{rl}
+% H^\frac{1}{2}(\Gamma_h) & := \left\{ \hat{v} = \{\hat{v}_K \} \in \prod_K H^{1/2}(\partial K) \: :
+% \: \exists v \in H^1(\Omega) : v|_{\partial K} = \hat{v}_K \right\}, \\[8pt]
+% H^{-\frac{1}{2}}(\Gamma_h) & := \left\{ {\hat{\sigma}}_n = \{ {\hat{\sigma}}_{Kn} \}\in \prod_K H^{-1/2}(\partial K) \: : \: \exists \bfsigma \in \bfH(\text{div},\Omega)
+% : {\hat{\sigma}}_{Kn} = (\bfsigma \cdot \bfn)|_{\partial K} \right\},
+% \end{array}
+% \]
 which are developed more precisely in \cite{DPGStokes}.
 
 \subsection{Derivation}
@@ -170,7 +181,7 @@ u-\bfsigma)\cdot\mathbf{n},v}_{\partial K}&=(f,v)_K\\
 The discontinuous Petrov-Galerkin method refers to the fact that we are using
 discontinuous optimal test functions that come from a space differing from the
 trial space. It does not specify our choice of trial space. Nevertheless, many
-versions of DPG in the literature (convection-diffusion \cite{DPG6},
+versions of DPG in the literature (convection-diffusion \cite{DPGPoisson},
 linear elasticity \cite{BramwellDPG}, linear
 acoustics \cite{DPGHelmholtz}, Stokes
 \cite{DPGStokes}) associate DPG with the so-called ``ultra-weak formulation.''
@@ -187,9 +198,8 @@ equations together, we arrive at our desired variational problem.
 Find
 $\bs u:=(u,\bfsigma,\hat u,\hat t)
 \in\bs U:=L^2(\Omega_h)\times \bs L^2(\Omega_h)\times H^{1/2}(\Gamma_h)\times H^{-1/2}(\Gamma_h)$
-such that
-
-\resizebox{0.95\linewidth}{!}{
+such that\\
+\resizebox{1.0\linewidth}{!}{
 \begin{minipage}{\linewidth}
 \begin{align}
 \label{eq:variationalFormulation}

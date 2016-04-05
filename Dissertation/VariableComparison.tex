@@ -7,7 +7,7 @@
 % \section{Nonlinear Formulation}
 In this appendix we discuss some work we did exploring a comparison between three formulations of the 
 compressible Navier-Stokes equations: primitive variables, conservation variables, and entropy variables.
-Primitive variables are the natural physically intuitive variables in which the Navier-Stokes 
+Primitive variables are the natural, physically intuitive variables in which the Navier-Stokes 
 equations are usually presented: density, velocity, and temperature.
 Conservation variables are popular as they simplify time stepping algorithms. 
 The independent variables are density, momentum, and total energy.
@@ -38,23 +38,24 @@ G_{\bfq}&:=-T\,.
 \end{align*}
 
 \subsection{Linearized Terms}
+Let $W=\LRc{\rho,\bfu,T}$.
 The linearized terms are:
 \begin{align*}
-\pd{C_c(\tilde W)}{W}\Delta W&:=
+\pd{C_c(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\rho\\
-\pd{\bfC_m(\tilde W)}{W}\Delta W&:=
+\pd{\bfC_m(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
-\pd{C_e(\tilde W)}{W}\Delta W&:=
+\pd{C_e(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	C_v\Delta\rho\tilde T+C_v\tilde\rho\Delta T
 	+\frac{1}{2}\LRp{\Delta\rho\tilde\bfu\cdot\tilde\bfu+\tilde\rho\Delta\bfu\cdot\tilde\bfu+\tilde\rho\tilde\bfu\cdot\Delta\bfu}\\
-\pd{\bfF_c(\tilde W)}{W}\Delta W&:=
+\pd{\bfF_c(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu\\
-\pd{\mathbb{F}_m(\tilde W)}{W}\Delta W&:=
+\pd{\mathbb{F}_m(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\rho\tilde\bfu\otimes\tilde\bfu
 	+\tilde\rho\Delta\bfu\otimes\tilde\bfu
 	+\tilde\rho\tilde\bfu\otimes\Delta\bfu
 	+R\LRp{\Delta\rho\tilde T+\tilde\rho\Delta T}\bbI\\
-\pd{\bfF_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfF_e(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	C_v\Delta\rho\tilde\bfu\tilde T+C_v\tilde\rho\Delta\bfu\tilde T+C_v\tilde\rho\tilde\bfu\Delta T
 	\\&\quad
 	+\frac{1}{2}\Delta\rho\tilde\bfu\tilde\bfu\cdot\tilde\bfu
@@ -65,21 +66,23 @@ The linearized terms are:
 	+R\Delta\bfu\tilde\rho\tilde T
 	+R\tilde\bfu\Delta\rho\tilde T
 	+R\tilde\bfu\tilde\rho\Delta T\\
-\pd{\bfK_c(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_c(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\boldsymbol 0\\
-\pd{\bbK_m(\tilde W)}{W}\Delta W&:=
+\pd{\bbK_m(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
-\pd{\bfK_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_e(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	-\Delta\bfq+\Delta\bfu\cdot\LRp{\tilde\bbD+\tilde\bbD^T-\frac{2}{3}\trace(\tilde\bbD)\bbI}
 	\\&\quad
 	+\tilde\bfu\cdot\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
-\pd{\bbM_{\bbD}(\tilde W)}{W}\Delta W&:=
+\end{align*}
+\begin{align*}
+\pd{\bbM_{\bbD}(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\bbD\\
-\pd{\bfM_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{\bfM_{\bfq}(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\frac{Pr}{C_p}\Delta\bfq\\
-\pd{\bfG_{\bbD}(\tilde W)}{W}\Delta W&:=
+\pd{\bfG_{\bbD}(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	\Delta\bfu\\
-\pd{G_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{G_{\bfq}(\tilde W,\tilde\Psi)}{\{W,\Psi\}}\vecttwo{\Delta W}{\Delta\Psi}&:=
 	-\Delta T\,.
 \end{align*}
 
@@ -109,17 +112,18 @@ G_{\bfq}&:=-\LRp{\frac{E-\frac{1}{2\rho}\bfm\cdot\bfm}{C_v\rho}}\,.
 \end{align*}
 
 \subsection{Linearized Terms}
+Let $U=\LRc{\rho,\bfm,E}$.
 After linearizing, we get the following:
 \begin{align*}
-\pd{C_c(\tilde W)}{W}\Delta W&:=
+\pd{C_c(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\Delta\rho\\
-\pd{\bfC_m(\tilde W)}{W}\Delta W&:=
+\pd{\bfC_m(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\Delta\bfm\\
-\pd{C_e(\tilde W)}{W}\Delta W&:=
+\pd{C_e(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\Delta E\\
-\pd{\bfF_c(\tilde W)}{W}\Delta W&:=
+\pd{\bfF_c(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\Delta\bfm\\
-\pd{\mathbb{F}_m(\tilde W)}{W}\Delta W&:=
+\pd{\mathbb{F}_m(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\frac{\Delta\bfm\otimes\tilde\bfm}{\tilde\rho}
 	+\frac{\tilde\bfm\otimes\Delta\bfm}{\tilde\rho}
 	-\frac{\tilde\bfm\otimes\tilde\bfm}{\tilde\rho^2}\Delta\rho
@@ -129,7 +133,7 @@ After linearizing, we get the following:
 	-\frac{\tilde\bfm\cdot\Delta\bfm}{2\tilde\rho}
 	+\frac{\tilde\bfm\cdot\tilde\bfm}{2\tilde\rho^2}\Delta\rho
 	}\bbI\\
-\pd{\bfF_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfF_e(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\gamma\LRp{
 	\Delta E\frac{\tilde\bfm}{\tilde\rho}
 	+\tilde E\frac{\Delta\bfm}{\tilde\rho}
@@ -141,24 +145,24 @@ After linearizing, we get the following:
 	\right.\\&\quad\quad\left.
 	-\frac{\tilde\bfm\tilde\bfm\cdot\Delta\bfm}{2\tilde\rho^2}
 	+\frac{\tilde\bfm\tilde\bfm\cdot\tilde\bfm}{\tilde\rho^3}\Delta\rho\right)\\
-\pd{\bfK_c(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_c(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\boldsymbol 0\\
-\pd{\bbK_m(\tilde W)}{W}\Delta W&:=
+\pd{\bbK_m(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
-\pd{\bfK_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_e(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	-\Delta\bfq+\LRp{\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho}
 	\cdot\LRp{\tilde\bbD+\tilde\bbD^T-\frac{2}{3}\trace(\tilde\bbD)\bbI}
 	\\&\quad
 	+\frac{\tilde\bfm}{\tilde\rho}\cdot\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
 \end{align*}
 \begin{align*}
-\pd{\bbM_{\bbD}(\tilde W)}{W}\Delta W&:=
+\pd{\bbM_{\bbD}(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\Delta\bbD\\
-\pd{\bfM_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{\bfM_{\bfq}(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\frac{Pr}{C_p}\Delta\bfq\\
-\pd{\bfG_{\bbD}(\tilde W)}{W}\Delta W&:=
+\pd{\bfG_{\bbD}(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	\frac{\Delta\bfm}{\tilde\rho}-\frac{\tilde\bfm}{\tilde\rho^2}\Delta\rho\\
-\pd{G_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{G_{\bfq}(\tilde U,\tilde\Psi)}{\{U,\Psi\}}\vecttwo{\Delta U}{\Delta\Psi}&:=
 	-\left(\frac{\Delta E-\frac{1}{2\tilde\rho}\Delta\bfm\cdot\tilde\bfm
 	-\frac{1}{2\tilde\rho}\tilde\bfm\cdot\Delta\bfm
 	+\frac{1}{2\tilde\rho^2}\tilde\bfm\cdot\tilde\bfm\Delta\rho}{C_v\tilde\rho}
@@ -204,38 +208,39 @@ G_{\bfq}&:=\frac{1}{C_vV_e}\,.
 \end{align*}
 
 \subsection{Linearized Terms}
+Let $V=\LRc{V_c,\bfV_m,V_e}$.
 And the linearized terms for entropy variables are:
 \begin{align*}
-\pd{C_c(\tilde W)}{W}\Delta W&:=
-	-\tilde V_e\pd{\alpha(\tilde W)}{W}\Delta W-\alpha(\tilde W)\Delta V_e
+\pd{C_c(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
+	-\tilde V_e\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}-\alpha(\tilde V,\tilde\Psi)\Delta V_e
 	\\
-\pd{\bfC_m(\tilde W)}{W}\Delta W&:=
-	\tilde\bfV_m\pd{\alpha(\tilde W)}{W}\Delta W+\alpha(\tilde W)\Delta\bfV_m
+\pd{\bfC_m(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
+	\tilde\bfV_m\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}+\alpha(\tilde V,\tilde\Psi)\Delta\bfV_m
 	\Delta\rho\tilde\bfu+\tilde\rho\Delta\bfu
 	\\
-\pd{C_e(\tilde W)}{W}\Delta W&:=
-	\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}\pd{\alpha(\tilde W)}{W}\Delta W
+\pd{C_e(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
+	\LRp{1-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}
 	\\&\quad
-	-\alpha(\tilde W)\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
-	+\alpha(\tilde W)\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+	-\alpha(\tilde V,\tilde\Psi)\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+	+\alpha(\tilde V,\tilde\Psi)\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
 	\\
-\pd{\bfF_c(\tilde W)}{W}\Delta W&:=
-	\tilde\bfV_m\pd{\alpha(\tilde W)}{W}\Delta W+\alpha(\tilde W)\Delta\bfV_m
+\pd{\bfF_c(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
+	\tilde\bfV_m\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}+\alpha(\tilde V,\tilde\Psi)\Delta\bfV_m
 	\\
-\pd{\mathbb{F}_m(\tilde W)}{W}\Delta W&:=
-	\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bbI}\pd{\alpha(\tilde W)}{W}\Delta W
+\pd{\mathbb{F}_m(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
+	\LRp{-\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}+(\gamma-1)\bbI}\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}
 	\\&\quad
-	+\alpha(\tilde W)\LRp{
+	+\alpha(\tilde V,\tilde\Psi)\LRp{
 	-\frac{\Delta\bfV_m\otimes\tilde\bfV_m}{\tilde V_e}
 	-\frac{\tilde\bfV_m\otimes\Delta\bfV_m}{\tilde V_e}
 	+\frac{\tilde\bfV_m\otimes\tilde\bfV_m}{\tilde V_e^2}\Delta V_e
 	}
 	\\
-\pd{\bfF_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfF_e(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	\frac{\tilde\bfV_m}{\tilde V_e}
-	\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\pd{\alpha(\tilde W)}{W}\Delta W
+	\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}
 	\\&\quad
-	+\alpha(\tilde W)\left(
+	+\alpha(\tilde V,\tilde\Psi)\left(
 	\frac{\Delta\bfV_m}{\tilde V_e}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}
 	\right.\\&\quad\quad\left.
 	-\frac{\tilde\bfV_m}{V_e^2}\LRp{\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m-\gamma}\Delta V_e
@@ -248,44 +253,54 @@ And the linearized terms for entropy variables are:
 	\\
 \end{align*}
 \begin{align*}
-\pd{\bfK_c(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_c(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	\boldsymbol 0\\
-\pd{\bbK_m(\tilde W)}{W}\Delta W&:=
+\pd{\bbK_m(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}
 	\\
-\pd{\bfK_e(\tilde W)}{W}\Delta W&:=
+\pd{\bfK_e(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	-\Delta\bfq+
 	\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}
 	\cdot\LRp{\tilde\bbD+\tilde\bbD^T-\frac{2}{3}\trace(\tilde\bbD)\bbI}
 	\\&\quad
 	+\frac{\tilde\bfV_m}{\tilde V_e}\cdot\LRp{\Delta\bbD+\Delta\bbD^T-\frac{2}{3}\trace(\Delta\bbD)\bbI}\\
-\pd{\bbM_{\bbD}(\tilde W)}{W}\Delta W&:=
+\pd{\bbM_{\bbD}(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	\Delta\bbD
 	\\
-\pd{\bfM_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{\bfM_{\bfq}(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	\frac{Pr}{C_p}\Delta\bfq
 	\\
-\pd{\bfG_{\bbD}(\tilde W)}{W}\Delta W&:=
+\pd{\bfG_{\bbD}(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	-\LRp{\frac{\Delta\bfV_m}{\tilde V_e}-\frac{\tilde\bfV_m}{\tilde V_e^2}\Delta V_e}
 	\\
-\pd{G_{\bfq}(\tilde W)}{W}\Delta W&:=
+\pd{G_{\bfq}(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&:=
 	-\frac{1}{C_vV_e^2}\Delta V_e
 	\\
 % 	\,.
 % \end{align*}
 % \begin{align*}
-\pd{\alpha(\tilde W)}{W}\Delta W&=
-\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+\pd{\alpha(\tilde V,\tilde\Psi)}{\{V,\Psi\}}\vecttwo{\Delta V}{\Delta\Psi}&=
+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{-1}
 \gamma(-\tilde V_e)^{-(\gamma+1)}
-\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+\alpha(\tilde V,\tilde\Psi)
 \Delta V_e\\
-&+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
-\exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
-\frac{1}{\gamma-1}\\
-&\LRp{\Delta V_c
+&+
+\frac{\alpha(\tilde V,\tilde\Psi)}{\gamma-1}
+\LRp{\Delta V_c
 -\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
 +\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
 }\,.
+% \LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{2-\gamma}{\gamma-1}}
+% \gamma(-\tilde V_e)^{-(\gamma+1)}
+% \exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+% \Delta V_e\\
+% &+\LRs{\frac{\gamma-1}{(-\tilde V_e)^\gamma}}^{\frac{1}{\gamma-1}}
+% \exp\LRs{\frac{-\gamma+\tilde V_c-\frac{1}{2\tilde V_e}\tilde\bfV_m\cdot\tilde\bfV_m}{\gamma-1}}
+% \frac{1}{\gamma-1}\\
+% &\LRp{\Delta V_c
+% -\frac{1}{\tilde V_e}\tilde\bfV_m\cdot\Delta\bfV_m
+% +\frac{1}{2\tilde V_e^2}\tilde\bfV_m\cdot\tilde\bfV_m\Delta V_e
+% }\,.
 \end{align*}
 
 
@@ -301,8 +316,8 @@ we end up with a less desirable final refinement pattern.
 We repeat the Sod shock tube problem described in Chapter \ref{sec:compressible} with $\mu=10^{-5}$,
 $p=2$, $\Delta p=2$, and the NSDecoupled norm.
 We omit plots of velocity and pressure as they don't really contribute anything new to the comparisons.
-Comparing figures (\ref{fig:SodPrimitive} - \ref{fig:SodEntropy}), it seems that
-primitive and entropy variables are of similiar quality, at least by the eyeball norm.
+Comparing Figures \ref{fig:SodPrimitive} - \ref{fig:SodEntropy}, it seems that
+primitive and conservation variables are of similar quality, at least by the eyeball norm.
 Entropy variables, on the other hand, suffer from much more extreme overshoots and 
 undershoots compared to the other formulations.
 

@@ -5,9 +5,10 @@
 \chapter{Space-Time DPG for Incompressible Navier-Stokes}
 \label{sec:incompressible}
 
-\section{Introduction}
-DPG for steady incompressible Navier-Stokes was studied by Roberts in \cite{NateDissertation}, though
-we choose a variational formulation more consistent with our work on transient convection-diffusion.
+% \section{Introduction}
+DPG for steady incompressible Navier-Stokes was studied by Roberts in \cite{NateDissertation}. 
+We choose a variational formulation more consistent with our work on transient convection-diffusion
+where the fluxes are related to the conservation law.
 The equations are trivial for one spatial dimension so space-time incompressible
 Navier-Stokes requires either 3D or 4D solves.
 We derive a space-time DPG formulation for spatially 2D Navier-Stokes and show preliminary 
@@ -93,7 +94,7 @@ where
   -\LRp{\Delta\bfu,\Grad q}\,.
 \end{align*}
 
-Note that for the steady state case, the pressure is only uniquely defined up to a constant
+Note that for the steady state case, the pressure is only uniquely defined up to a constant,
 so in order to obtain a unique solution it is sufficient to set either a zero mean condition
 or to constrain the pressure to a certain value at a point.
 In the transient case, pressure is unique up to any arbitrary function of $t$.
@@ -204,7 +205,7 @@ on $\hat\bft$ according to the initial conditions.
 Plots of $L^2$ and energy ($V^*$) error for various polynomial orders and Reynolds numbers are shown
 in Figure \ref{fig:TaylorGreenConvergence} for the coupled robust norm.
 As expected from our results for convection-diffusion, energy error and $L^2$ error follow each other.
-An attempt at solving transient flow over a cylinder is outlined in Section~\ref{sec:incompressibleCylinder}.
+An attempt at solving transient flow over a cylinder is outlined in Appendix~\ref{sec:incompressibleCylinder}.
 
 \begin{figure}
 \centering

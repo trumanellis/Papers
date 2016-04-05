@@ -14,8 +14,9 @@ It is well known that the entropy function
 H=-\rho\log(p\rho^{-\gamma})\,.
 \]
 provides a natural residual for the system of equations.
-The Hessian of $H$ is known as the symmetrizer of the Navier-Stokes system
-$A_0=H_{,UU}$, and $(U,A_0U)$ provides a 
+The Hessian of $H$ is known as the symmetrizer of the Navier-Stokes system:
+$A_0=H_{,UU}$.
+The inner product $(U,A_0U)$ provides a 
 % physically consistent, entropy based metric.
 natural measure (metric) for the Euler equations.
 By definition of the entropy variables (see \cite{HughesEntropyVariables}) $V_{,U}=H_{,UU}$, where
@@ -82,10 +83,10 @@ on $\norm{u}$ with $\norm{A_0^\frac{1}{2}u}$.
 Let $u$ represent all volume variables, $\hat u$ all interface variables, and $v$ all test variables.
 We can write our ultra-weak formulation as
 \[
-b\LRp{\LRp{u,\hat u},v} = \LRp{u,A^* v}_{L^2} + \LRa{\uh, \jump{v}}_{\Gh}
+b\LRp{\LRp{u,\hat u},v} = \LRp{u,A^* v}_{L^2} + \LRa{\uh, \jump{v}}_{\Gh}\,,
 \]
 where $A^*$ represents the adjoint.
-For conforming $v^*$ satisfying $A^* v^* = A_0u$
+For conforming $v^*$ satisfying $A^* v^* = A_0u$:
 \begin{align*}
 &\norm{A_0^\frac{1}{2}u}^2
 =\frac{b(u,v^*)}{\norm{v^*}_V} \norm{v^*}_V\\
@@ -111,10 +112,10 @@ We begin by loading our compressible Navier-Stokes adjoint equations with $A_0W$
 Without proof, we suggest the existence of analogous lemmas \ref{lem:l2} and \ref{lem:convective}  
 for this case, namely that there exist bounds
 \begin{equation}
-\norm{A_0^{-\frac{1}{2}}V}^2+\mu\norm{A_0^{-\frac{1}{2}}\Grad V}^2\leq\norm{A_0^\frac{1}{2}}^2
+\norm{A_0^{-\frac{1}{2}}V}^2+\mu\norm{A_0^{-\frac{1}{2}}\Grad V}^2\leq\norm{A_0^\frac{1}{2}W}^2
 \end{equation}
 \begin{equation}
-\norm{A_0^{-\frac{1}{2}}\vecttwo{F^*}{C^*}(\Gradxt V)}\lesssim\norm{A_0^\frac{1}{2}}\,.
+\norm{A_0^{-\frac{1}{2}}\vecttwo{F^*}{C^*}(\Gradxt V)}\lesssim\norm{A_0^\frac{1}{2}W}\,.
 \end{equation}
 These would hypothetically be derived by substituting the first adjoint equation into 
 the second then multiplying both sides by

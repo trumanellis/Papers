@@ -5,22 +5,22 @@
 
 The goal of this work has been to develop a proof of concept for a space-time discontinuous Petrov-Galerkin
 finite element method with applications to fluid flow applications.
-Chapter~\ref{sec:introduction} similar motivations for applying DPG to transient fluid problems and
+Chapter~\ref{sec:introduction} provided motivations for applying DPG to transient fluid problems and
 explored some of the alternatives in the field.
 Local conservation is an important property to computational fluid dynamics practitioners.
 In Chapter~\ref{sec:conservation} we developed a variant of DPG that is locally conservative through
 the addition of Lagrange multipliers to the system.
 This locally conservative DPG method was proved to be stable and robust 
-and shown to dramatically improve numerical results on several test problems.
+and shown to dramatically improve coarse mesh numerical results on several test problems.
 
-In Chapter~\ref{sec:robust}, we develop a theory for space-time DPG applied to convection-diffusion
+In Chapter~\ref{sec:robust} we develop a theory for space-time DPG applied to convection-diffusion
 type problems.
 We use an ultra-weak formulation where the conservation equation is placed in a space-time
 divergence form. 
-This allows us to define physically meaningful fluxes and eases the transition to Navier-Stokes.
-We propose new test norms for space-time convection-diffusion and prove that they are provide
+This allows us to define physically meaningful fluxes related to conservation principles and eases the transition to Navier-Stokes.
+We propose new test norms for space-time convection-diffusion and prove that they provide
 near optimal convergence of the primary variable.
-Numerical results confirm the theory.
+Numerical results confirm the theory, showing that the energy norm in which the solution is optimal robustly bounds the $L^2$ norm.
 
 Chapter~\ref{sec:incompressible} and Chapter~\ref{sec:compressible} develop space-time DPG methods 
 for transient incompressible and compressible Navier-Stokes
@@ -66,10 +66,12 @@ incompressible Navier-Stokes simulations of Taylor-Green vortices, and several s
 of compressible Navier-Stokes including a problem with a moving boundary.
 
 \section{Future Work}
-As is common with any research, much work remains to be done.
+This work was really a proof of concept and much work remains in order to make this a competitive numerical method
+for transient fluid flow problems.
+% As is common with any research, much work remains to be done.
 
 \subsection{Improve Scaling}
-The most pressing issue before we pursue further work on space-time DPG is to improve the scaling
+The most pressing issue before pursuing further work on space-time DPG is to improve the scaling
 of our global solve.
 Past explorations of DPG were primarily focused on two dimensional solves.
 In space-time this two spatial dimensions requires a full 3D solve.
@@ -85,6 +87,13 @@ the viscous length scale.
 As such, if we were serious about applying DPG to shock problems, we would want to augment it
 with some sort of shock capturing strategy, preferably a consistent one that reduces to the original
 equations in the limit as we fully resolve solution features.
+
+Another possible solution that we've begun exploring is the development of DPG for non-Hilbert $L^p$
+Banach spaces. 
+Gibbs phenomenon is well known to be less pronounced in $L^1$ spaces than the $L^2$ spaces at
+the foundation of most finite element theory.
+The downside to this approach is that any finite element theory built around Hilbert spaces is no longer applicable
+and previously linear problems like convection-diffusion become nonlinear in non-Hilbert spaces.
 
 \subsection{More Extensive 2D Results}
 With the implementation of the previous two topics, we open the door to many more interesting 2D 
@@ -112,5 +121,8 @@ We've implemented space-time as a tensor product of a spatial mesh and a tempora
 In theory this means that 3D space-time shouldn't be significantly more complicated to implement,
 but we expect the costs to blow up even more than they did from 2D to 3D, as we would now be performing
 4D global solves.
+Additionally, the mesh partitioning libraries we leverage to distribute elements across processors are 
+not set up to handle 4D meshes.
+The pursuit of 3D problems would force us to fundamentally rethink how we implement space-time DPG.
 
 \end{document}

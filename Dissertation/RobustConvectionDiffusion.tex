@@ -4,7 +4,7 @@
 \begin{document}
 \chapter{Robust DPG Methods for Transient Convection-Diffusion}
 \label{sec:robust}
-\section{Motivation}
+\section{Introduction}
 The process of developing robust DPG methods for steady convection-diffusion was explored in \cite{DemkowiczHeuer,ChanHeuerThanhDemkowicz2012}.
 In the sense, the main challenge is to come up with a correct test norm. The residual is measured
 in the dual test norm, and the DPG method minimizes the residual. The residual can be interpreted
@@ -635,7 +635,7 @@ e^T\left(
 +\epsilon\frac{\norm{\bff}^2}{2}
 +\frac{\norm{v}^2}{2}
 +\epsilon\frac{\norm{\Grad v}^2}{2}
-\right)
+\right)\,.
 \\
 &\quad\footnotesize{\text{Note: Young's inequality}}
 \end{align*}
@@ -701,9 +701,8 @@ Note that
 &=-\int_{\Gamma_x}\tilde\bfbeta\cdot\Gradxt v_1\Grad v_1\cdot\bfn_x
 +\frac{1}{2}\int_\Gamma\tilde\bfbeta\cdot\bfn(\Grad v_1\cdot\Grad v_1)
 \\&\quad
-+\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\\
++\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\,.\\
 &\quad\footnotesize{\text{Note: }(\Grad\bfbeta\cdot\Grad v_1)\cdot\Grad v_1-\frac{1}{2}\Div\bfbeta(\Grad v_1\cdot\Grad v_1)=\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1}
-\\
 \end{align*}
 Plugging this into \eqref{eq:adj1}, we get
 \begin{align*}
@@ -749,9 +748,9 @@ Plugging this into \eqref{eq:adj1}, we get
 \\
 %
 &=-\int_Q g\tilde\bfbeta\cdot\Gradxt v_1
-+\epsilon\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\\
++\epsilon\int_Q\Grad v_1(\Grad\bfbeta-\frac{1}{2}\Div\bfbeta\bfI)\Grad v_1\,.\\
 &\quad
-\underbrace{-\frac{\epsilon}{2}\int_{\Gamma_+}\LRp{\pd{v_1}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}\\
+\underbrace{-\frac{\epsilon}{2}\int_{\Gamma_+}\LRp{\pd{v_1}{\bfn_x}}^2\bfbeta\cdot\bfn_x}_{<0}
 \end{align*}
 \begin{align*}
 %
@@ -768,7 +767,7 @@ Plugging this into \eqref{eq:adj1}, we get
 &\quad\footnotesize{\text{Note: Assumption on }\bfbeta}
 \\
 %
-&\leq\LRp{\frac{1}{2}+C_{\bfbeta}}\norm{g}^2+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v_1}^2}{2}
+&\leq\LRp{\frac{1}{2}+C_{\bfbeta}}\norm{g}^2+\frac{\norm{\tilde\bfbeta\cdot\Gradxt v_1}^2}{2}\,.
 \end{align*}
 % \textcolor{red}{
 % Seems to additionally require that $\epsilon C_{\bfbeta}\norm{\Grad v}^2\le\norm{\tilde\bfbeta\cdot\Gradxt v}^2$.
