@@ -124,8 +124,10 @@
 % \title[Space-Time DPG for Transient CFD]{Space-Time Discontinuous Petrov-Galerkin Finite Elements\\ for Transient Computational Fluid Dynamics}
 \title[Space-Time DPG for Fluid Mechanics]{Space-Time Discontinuous Petrov-Galerkin Finite Elements for Transient Fluid Mechanics}
 % \subtitle{If you have one}
-\author[Truman Everett Ellis]{ \underline{Truman~Everett~Ellis} \\
-{\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser}
+\author[Truman Everett Ellis]{ \underline{Truman~Everett~Ellis} \\[8pt]
+{\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser\\[8pt]
+Committee: Thomas Hughes, Clint Dawson, Tan Bui-Thanh\\[8pt]
+Collaborators: Nathan Roberts (Argonne), Jesse Chan (Virginia Tech)}
 }
 
 \begin{comment}
@@ -173,7 +175,7 @@ supports rapid specification of DPG problems while maintaining computational eff
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[Dissertation Defense]%{\pgfuseimage{iceslogo} }
+\date[April 20, 2016]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -717,7 +719,7 @@ Eliminates human intervention
 %                      
 %                      
 %      
-\section{Local Conservation}
+\section{Locally Conservative DPG}
 %===============================================================================
 % NEW SLIDE
 %===============================================================================
@@ -2021,18 +2023,29 @@ Entropy Variables\\
 \begin{figure}[ht]
 \centering
 
-\begin{subfigure}[c]{0.45\textwidth}
+\begin{columns}
+\begin{column}{0.7\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/den\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
+\includegraphics[width=1.1\textwidth]{Sod/FormulationComparison/den\n.pdf}
+\end{column}
+\begin{column}{0.3\textwidth}
 \centering
-\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/vel\n.pdf}
-\end{subfigure}
-\begin{subfigure}[c]{0.45\textwidth}
-\centering
-\includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/pres\n.pdf}
-\end{subfigure}
+\includegraphics[width=1.1\textwidth]{Sod/FormulationComparison/vel\n.pdf}\\
+\includegraphics[width=1.1\textwidth]{Sod/FormulationComparison/pres\n.pdf}
+\end{column}
+\end{columns}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/den\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/vel\n.pdf}
+% \end{subfigure}
+% \begin{subfigure}[c]{0.45\textwidth}
+% \centering
+% \includegraphics[height=0.7\textwidth]{Sod/FormulationComparison/pres\n.pdf}
+% \end{subfigure}
 % \begin{subfigure}[c]{0.45\textwidth}
 % \centering
 % \includegraphics[width=1.0\textwidth]{Sod/FormulationComparison/mesh\n.png}
@@ -2225,6 +2238,60 @@ After 5 refinements\\
 \centering
 \includegraphics[width=0.7\textwidth]{Piston/Piston_mesh.png}
 \\Mesh after 8 adaptive refinements
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Summary of Work}
+\framesubtitle{~}
+\vspace{-3ex}
+\begin{itemize}
+  \item\textbf{Area A:}
+  \begin{itemize}
+    \item Developed a provably robust locally conservative DPG method with appropriate test norms
+    \item Extended analysis of robust DPG methods for convection-diffusion to space-time
+  \end{itemize}
+  \item\textbf{Area B:}
+  \begin{itemize}
+    \item Contributions to parallel $hp-$adaptive Camellia\footfullcite{CamelliaDPG} (space-time, parallel solution/mesh I/O and export, templating)
+    \item Construction of higher order adaptive solvers for convection-diffusion, Stokes, Burgers' equation, incompressible Navier-Stokes,
+    and compressible Navier-Stokes
+  \end{itemize}
+  \item\textbf{Area C:}
+  \begin{itemize}
+    \item Solution of local conservation problems in convection-diffusion and Stokes flow problems
+    \item Solution of 2D space-time convection-diffusion and incompressible Navier-Stokes problems
+    \item Solution of 1D space-time compressible Navier-Stokes shock tube problems
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Future Directions}
+\framesubtitle{~}
+% \vspace{-3ex}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item \textbf{Improve performance:} line smoothing for multigrid
+\item \textbf{Shock capturing:} DPG makes no promises when it comes to Gibbs phenomenon
+\item \textbf{Non-Hilbert DPG:} $L^1$ is known to limit oscillations
+\item \textbf{Anisotropic refinements:} necessary for time slabs
+\item \textbf{More extensive 2D results:} shedding vortex problems, 2D shock problems
+\item \textbf{3D results:} will not be cheap
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Dissertation/Cylinder/Mesh_uMag4.png}
+\\Incompressible Flow Over a Cylinder
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 
