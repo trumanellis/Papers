@@ -130,44 +130,6 @@ Committee: Thomas Hughes, Clint Dawson, Tan Bui-Thanh\\[8pt]
 Collaborators: Nathan Roberts (Argonne), Jesse Chan (Virginia Tech)}
 }
 
-\begin{comment}
-The discontinuous Petrov-Galerkin method is a novel finite element framework with exceptional stability and adaptivity properties.
-The DPG framework can be used to derive stable discretizations of any well-posed variational formulation 
-and has been successfully applied to problems such as heat conduction, time-harmonic Helmholtz, 
-Maxwell's equations, linear elasticity and plate problems, Stokes flow, and both incompressible and compressible Navier-Stokes.
-In contrast to many other numerical methods, DPG does not suffer from a pre-asymptotic regime (unstable behavior on coarse meshes).
-This means that a simulation can be initiated at the coarsest scale possible while automatic adaptivity resolves solution features 
-based on a robust, built-in measure of residual error.
-DPG is intensely locally compute intensive with significant embarrassingly parallel computations done both pre- and post-global solve.
-We present preliminary work on a space-time DPG formulation that enables automatic local time stepping and a kind of parallel-in-time integration.
-We also present the Camellia library, which is built on top of Trilinos and 
-supports rapid specification of DPG problems while maintaining computational efficiency and scalability.
-% Parallel to our efforts 
-% In our efforts to create an automatic computational methodology, we have also 
-
-% In addition to the automaticity of coarse-mesh stability and adaptivity, DPG is very locally compute intensive, making it ideal for HPC systems.
-
-% Initial mesh design is a time consuming and expensive part of CFD simulations as a domain expert has to manually design the 
-% mesh to achieve near resolution in all parts of the domain lest the numerical method become unstable.
-% DPG in contrast does not have a pre-asymptotic regime, allowing simulations to start on the coarsest mesh that can adequately represent the domain geometry.
-% \emph{A posteriori} error estimation and adaptivity can also be done very naturally as DPG comes with an error representation function 
-% that indicates error in the energy norm.
-
-% Automatic adaptivity and pre-asymptotic stability produce a powerful synergy when combined with high performance computing.
-% Human intervention to correct or adapt a failed massively parallel simulation can be a costly endeavor, prompting the desire for a
-% numerical technology that will automatically adapt to changing physical dynamics while avoiding ``crashing'' due to under-resolved meshes.
-% DPG is very compute intensive compared to the associated communication and memory costs.
-% Most of the work is spent in embarrassingly parallel local solves for the optimal test functions and local stiffness matrix assembly.
-% Locally computed \emph{optimal test functions} ensure stability on convection dominated flows as well as resolved viscous flow.
-% The division of degrees of freedom into internal vs skeleton unknowns produces a global system which can be statically condensed into 
-% a solve purely in terms of the skeleton degrees of freedom.
-% In addition to significantly cutting down on the size of the global solve, 
-% this produces a embarrassingly parallel post-processing solve for the internal degrees of freedom.
-
-% We recently began exploring the extension of these attractive DPG properties to space-time domains, allowing us to automate and localize temporal adaptivity
-% in the same way that we already do with spatial adaptivity. Preliminary results have been generated with Camellia\cite{Roberts2011} for spatially 1D flows,
-% and a rewrite of Camellia for higher dimensions is currently in progress.
-\end{comment}
 
 % \institute{Institute for Computational Engineering \& Sciences\\ \mbox{}  \\  \pgfuseimage{utbig} }
 \institute{
@@ -196,6 +158,11 @@ supports rapid specification of DPG problems while maintaining computational eff
     \pgfuseimage{ut}
     \end{textblock*}
   }
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
 
 %   /$$      /$$             /$$     /$$                        /$$     /$$                    
 %  | $$$    /$$$            | $$    |__/                       | $$    |__/                    
@@ -875,7 +842,7 @@ the presence of singularities.
 %===============================================================================
 \begin{frame}
 \frametitle{Locally Conservative DPG}
-\framesubtitle{Stability and Robustness Analysis}
+\framesubtitle{Stability and Robustness Analysis\footfullcite{EllisLC}}
 \begin{itemize}
 \item We follow Brezzi's theory for an abstract mixed problem:
 \begin{equation*}
@@ -896,7 +863,7 @@ bilinear and linear forms.
 
 \item Robustness is proved by switching to energy norm in Brezzi analysis.
 
-\item Full details can be found in \emph{Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems}\footfullcite{EllisLC}.
+% \item Full details can be found in \emph{Locally Conservative Discontinuous Petrov-Galerkin Finite Elements for Fluid Problems}\footfullcite{EllisLC}.
 \end{itemize}
 \end{frame}
 
@@ -1756,6 +1723,50 @@ Robust norm:
 \end{figure}
 \end{column}
 \end{columns}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Space-Time Incompressible Navier-Stokes}
+\framesubtitle{Flow Over a Cylinder, \only<1>{Initial Mesh}\only<2>{4 Refinements}}  %% needed for proper positioning of the logo ...
+\begin{figure}
+\centering
+\only<1>{\includegraphics[width=0.8\textwidth]{Dissertation/Cylinder/Mesh_uMag0.png}}
+\only<2>{\includegraphics[width=0.8\textwidth]{Dissertation/Cylinder/Mesh_uMag4.png}}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Space-Time Incompressible Navier-Stokes}
+\framesubtitle{Solve Times and Strong Scaling}  %% needed for proper positioning of the logo ...
+\begin{block}{Transient Flow Over a Cylinder}
+\resizebox{0.95\linewidth}{!}{
+\begin{minipage}{\linewidth}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|crr|r|rc|rc|}
+\hline
+& & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} & \multicolumn{2}{|c|}{32 Nodes} \\
+Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4      \\
+\hline
+0 & 80            & 31304      & 1772   & 453   & 3.91 & 451  & 1.01 \\
+1 & 605           & 225908     & 8190   & 3574  & 2.29 & 717  & 4.98 \\
+2 & 3013          & 1081598    & 32008  & 12076 & 2.65 & 2648 & 4.56 \\
+3 & 9726          & 3429384    &          & 28744 &      & 6319 & 4.54 \\
+4 & 11742         & 4144674    &          &         &      & 8510 &      \\
+\hline
+% & & & 8.8 hours & 8.0 hours & & 2.4 hours &
+\end{tabular}
+\end{table}
+\end{minipage}
+}
+\end{block}
+Computations on Lonestar, 1 node = 24 processors
+
+32008 seconds = 8.8 hours\\ 28744 seconds = 8.0 hours\\ \hspace{1ex}8510 seconds = 2.4 hours
 \end{frame}
 
 
