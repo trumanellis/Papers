@@ -161,6 +161,7 @@ Collaborators: Nathan Roberts (Argonne), Jesse Chan (Virginia Tech)}
 
 \begin{frame}
 \frametitle{Table of Contents}
+\framesubtitle{\hspace{1ex}}
 \tableofcontents
 \end{frame}
 
@@ -777,10 +778,9 @@ K
 \end{block}
 A few consequences:
 \begin{itemize}
-\item We've turned our minimization problem into a saddle point problem.
+\item Minimization problem turns into a constrained minimization problem.
 % \item New $\lambda_K$ DOFs can be statically condensed out.
-\item Only need to find the optimal test function in the orthogonal complement
-of constants. % Backup slide
+\item Optimal test function are in the orthogonal complement of constants. % Backup slide
 \end{itemize}
 \end{frame}
 
@@ -1752,11 +1752,11 @@ Robust norm:
 & & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} & \multicolumn{2}{|c|}{32 Nodes} \\
 Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4      \\
 \hline
-0 & 80            & 31304      & 1772   & 453   & 3.91 & 451  & 1.01 \\
-1 & 605           & 225908     & 8190   & 3574  & 2.29 & 717  & 4.98 \\
-2 & 3013          & 1081598    & 32008  & 12076 & 2.65 & 2648 & 4.56 \\
-3 & 9726          & 3429384    &          & 28744 &      & 6319 & 4.54 \\
-4 & 11742         & 4144674    &          &         &      & 8510 &      \\
+0 & 80             & 31,304       & 1,772   & 453    & 3.91 & 451   & 1.01 \\
+1 & 605            & 225,908      & 8,190   & 3,574  & 2.29 & 717   & 4.98 \\
+2 & 3,013          & 1,081,598    & 32,008  & 12,076 & 2.65 & 2,648 & 4.56 \\
+3 & 9,726          & 3,429,384    &         & 28,744 &      & 6,319 & 4.54 \\
+4 & 11,742         & 4,144,674    &         &        &      & 8,510 &      \\
 \hline
 % & & & 8.8 hours & 8.0 hours & & 2.4 hours &
 \end{tabular}
@@ -1766,7 +1766,7 @@ Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4     
 \end{block}
 Computations on Lonestar, 1 node = 24 processors
 
-32008 seconds = 8.8 hours\\ 28744 seconds = 8.0 hours\\ \hspace{1ex}8510 seconds = 2.4 hours
+32,008 seconds = 8.8 hours\\ 28,744 seconds = 8.0 hours\\ \hspace{1ex}8,510 seconds = 2.4 hours
 \end{frame}
 
 
@@ -2080,11 +2080,11 @@ H=-\rho\log(p\rho^{-\gamma})
 provides a natural residual for the Navier-Stokes equations.
 
 $A_0=H_{,UU}=V_{,U}$
-is known as the symmetrizer and $(U,A_0U)$ provides a natural metric for the Euler equations.
+is known as the symmetrizer and $(U,A_0U)$ provides a natural metric for the linearized Euler equations.
 
 In primitive variables: 
 \[
-(u,A_0U)=(U_{,W}W,V_{,U}U_{,W}W)=(W,U_{,W}^TV_{,U}U_{,W}W)=(W,A_0(W)W)
+(U,A_0U)=(U_{,W}W,V_{,U}U_{,W}W)=(W,U_{,W}^TV_{,U}U_{,W}W)=(W,A_0(W)W)
 \]
 where
 \[
@@ -2099,6 +2099,7 @@ A_0(W)=U_{,W}^TV_{,U}U_{,W}=\arrthree
 {0}
 {\frac{\rho}{T^2}}
 \]
+$(W,A_0W)$ has units of density.
 
 \end{frame}
 
@@ -2113,9 +2114,10 @@ b\LRp{\LRp{W,\hat W},v} = \LRp{W,A^*_h v}_{\LOmega} + \LRa{\hat W, \jump{v}}_{\G
 \]
 For conforming $v^*$ satisfying $A^* v^* = A_0W$
 \begin{align*}
-&\norm{A_0^\frac{1}{2}W}^2
+\norm{A_0^\frac{1}{2}W}^2
+&=b(W,v^*)
 =\frac{b(W,v^*)}{\norm{v^*}_V} \norm{v^*}_V\\
-&\quad\leq\sup_{v^*\neq0}\frac{|b(W,v^*)|}{\norm{v^*}}\norm{v^*}
+&\leq\sup_{v^*\neq0}\frac{|b(W,v^*)|}{\norm{v^*}}\norm{v^*}
 =\norm{W}_E \norm{v^*}_V\,.
 \end{align*}
 Necessary robustness condition:
@@ -2381,11 +2383,11 @@ After 5 refinements\\
 & & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} & \multicolumn{2}{|c|}{32 Nodes} \\
 Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4      \\
 \hline
-0 & 80            & 31304      & 1772   & 453   & 3.91 & 451  & 1.01 \\
-1 & 605           & 225908     & 8190   & 3574  & 2.29 & 717  & 4.98 \\
-2 & 3013          & 1081598    & 32008  & 12076 & 2.65 & 2648 & 4.56 \\
-3 & 9726          & 3429384    &          & 28744 &      & 6319 & 4.54 \\
-4 & 11742         & 4144674    &          &         &      & 8510 &      \\
+0 & 80             & 31,304       & 1,772   & 453    & 3.91 & 451   & 1.01 \\
+1 & 605            & 225,908      & 8,190   & 3,574  & 2.29 & 717   & 4.98 \\
+2 & 3,013          & 1,081,598    & 32,008  & 12,076 & 2.65 & 2,648 & 4.56 \\
+3 & 9,726          & 3,429,384    &         & 28,744 &      & 6,319 & 4.54 \\
+4 & 11,742         & 4,144,674    &         &        &      & 8,510 &      \\
 \hline
 % & & & 8.8 hours & 8.0 hours & & 2.4 hours &
 \end{tabular}
@@ -2395,7 +2397,7 @@ Ref& Elems & DOFs & Time    & Time & Scaling vs 1     & Time & Scaling vs 4     
 \end{block}
 Computations on Lonestar, 1 node = 24 processors
 
-32008 seconds = 8.8 hours\\ 28744 seconds = 8.0 hours\\ \hspace{1ex}8510 seconds = 2.4 hours
+32,008 seconds = 8.8 hours\\ 28,744 seconds = 8.0 hours\\ \hspace{1ex}8,510 seconds = 2.4 hours
 \end{frame}
 
 
@@ -2411,18 +2413,18 @@ Computations on Lonestar, 1 node = 24 processors
 & & & 1 Node & \multicolumn{2}{|c|}{4 Nodes} \\
 Ref& Elems & DOFs & Time    & Time & Scaling vs 1 \\
 \hline
-0 & 60            & 21302      & 331    & 140   & 2.35 \\
-1 & 312           & 108410     & 945    & 290   & 3.25 \\
-2 & 2020          & 691834     & 4880   & 1363  & 3.58 \\
-3 & 9244          & 3043024    &        & 6171  & \\
+0 & 60            & 21,302      & 331    & 140    & 2.35 \\
+1 & 312           & 108,410     & 945    & 290    & 3.25 \\
+2 & 2,020         & 691,834     & 4,880  & 1,363  & 3.58 \\
+3 & 9,244         & 3,043,024   &        & 6,171  & \\
 \hline
 \end{tabular}
 \end{table}
 \end{block}
 Computations on Lonestar, 1 node = 24 processors
 
-4880 seconds = 1.4 hours\\
-6171 seconds = 1.7 hours
+4,880 seconds = 1.4 hours\\
+6,171 seconds = 1.7 hours
 \end{frame}
 
 
