@@ -823,7 +823,8 @@ u(x,y)=C_0+\sum_{n=1}^\infty C_n\frac{\exp(s_n(x-1))-\exp(r_n(x-1))}
 \label{eq:ericksonExact}
 \end{equation}
 The exact solution for $\epsilon=10^{-2}$, $C_1=1$, and $C_{n\neq1}=0$ is
-shown in Figure \ref{fig:erickson}.
+shown in Figure \ref{fig:erickson}. 
+Error convergence and flux imbalance are shown in Figure~\ref{fig:ericksonError} and Figure~\ref{fig:ericksonFlux}.
 
 \begin{figure}[p]
 \centering
@@ -843,7 +844,7 @@ shown in Figure \ref{fig:erickson}.
 \centering
 \includegraphics[width=0.7\textwidth]{figs/Erickson/modifiedFlux.pdf}
 \caption{Flux imbalance in Erickson-Johnson solutions}
-\label{ericksonFlux}
+\label{fig:ericksonFlux}
 \end{figure}
 
 \subsubsection{Vortex Problem}
@@ -854,6 +855,7 @@ inflow boundary condition when $\bfbeta\cdot\mathbf{n}<0$, in which case we set
 $\hat t=\bfbeta\cdot\mathbf{n}\cdot u_0$ where
 $u_0=\frac{\sqrt{x^2+y^2}-1}{\sqrt{2}-1}$ which will vary from 0 at the center
 of boundary edges to 1 at corners. We don't enforce an outflow boundary.
+Results and flux imbalance are shown in Figure~\ref{fig:vortex} and Figure~\ref{fig:vortex_flux}.
 
 \begin{figure}[p]
 \centering
@@ -887,6 +889,7 @@ conditions of $\hat t=0$ on the inflow and $\hat u=0$ on the outflow. Contrary
 to the other problems discussed, the solution for this problem does not range
 from zero to one. Rather, the colorbar in Figure \ref{fig:discontinuous} is
 scaled to  $[-1.110,0.889]$.
+Flux imbalance is shown in Figure~\ref{fig:discontinuous_flux}.
 
 \begin{figure}[p]
 \centering
@@ -918,6 +921,7 @@ This is a standard test problem for Burgers' equation. The domain is a unit
 square. We assign boundary conditions $\hat t=-(1-2x)$ on the bottom, $\hat
 t=-1/2$ on the left, while $\hat t=1/2$ on the right. Since this is a
 hyperbolic equation, there is no need to set a boundary condition on the top.
+Results and flux imbalance are shown in Figure~\ref{fig:burgers} and Figure~\ref{fig:burgers_flux}.
 
 \begin{figure}[p]
 \centering
@@ -978,6 +982,7 @@ step. The percent mass loss is thus
 {\int_{\Gamma_{in}}\bfu\cdot\bfn_{in}d\ell}\times100,
 \]
 where $S$ is some vertical mesh line.
+Results and mass loss are shown in Figures~\ref{fig:stokesCylinder}~-~\ref{fig:stokesCylinder9MassLoss}.
 
 \begin{figure}[p]
 \centering
@@ -1121,6 +1126,7 @@ assign parabolic inlet and outlet velocity boundary conditions
 and zero velocity on all other boundaries. In this problem, we solve with
 fourth order field and flux variables, fifth order traces, and sixth order
 test functions.
+Results and mass loss are shown in Figure~\ref{sec:stokesStep} and Figure~\ref{fig:stokesStepMassLoss}.
 
 \begin{figure}[!h]
 \centering
