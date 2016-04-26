@@ -254,7 +254,7 @@ Multiply by test function $v$ and integrate by parts over each element $K=[x_K,x
 -\int_K\beta(x)u\pd{v}{x}+\beta uv|_{x_K}^{x_{K+1}}=\int_K fv\,.
 \]
 The global formulation is formed by summing up each of the local contributions.
-Since our discretization is piece-wise discontinuous, boundary terms are dual valued, and we need
+Since our discretization is piece-wise discontinuous, boundary terms are double-valued, and we need
 to make a choice about which ones to use.
 Let $u(x_K^-)$ denote the upwind value at point $x^K$ (left side for $\beta$ positive), and $u(x_K^+)$ the downwind side.
 Then for element $K$, $u(x_K^+)$ and $u(x_{K+1}^-)$ refer to the values local to that element while $u(x_K^-)$ and $u(x_{K+1}^+)$ refer to the
@@ -267,9 +267,9 @@ The upwind bilinear form for positive $\beta$ on element $K$ will then be
 -\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
 \]
 
-DG methods has proven to be extremely successful in the field of computational fluid dynamics (and many other fields) due
+DG methods have proven to be extremely successful in the field of computational fluid dynamics (and many other fields) due
 to several properties that are very important to fluid dynamicists.
-It is automatically locally conservative since the test function span the space of constants.
+They are automatically locally conservative since the test function span the space of constants.
 The lowest order case is identical to first order finite volume methods.
 However, the most audible criticism of the DG method is the proliferation of unknowns relative to continuous finite elements.
 For linear elements in 1D, there will be twice as many unknowns, for 2D quadrilateral elements, four times as many, and with 3D hexahedral elements, eight
@@ -317,7 +317,7 @@ boundaries, which require the mesh to follow the boundary movement. We will ther
 not separate space and time but consider the Euler equations directly in four dimensional
 space and use basis functions in the finite element discretization which are discontinuous
 across element faces, both in space and time.
-We refer to this technique as the space–time discontinuous Galerkin finite element method.
+We refer to this technique as the space-time discontinuous Galerkin finite element method.
 The space-time DG method provides optimal efficiency for adapting and deforming the mesh while maintaining a conservative scheme which
 does not require interpolation of data after mesh refinement or deformation.
 \end{quotation}
