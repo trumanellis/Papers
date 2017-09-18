@@ -19,6 +19,7 @@
 \usepackage{bbding}
 \usepackage{comment}
 \usepackage{appendixnumberbeamer}
+\usepackage{multicol}
 \bibliography{../Papers}
 
 \newcounter{nn}
@@ -125,8 +126,8 @@
 % \subtitle{If you have one}
 \author[Truman Everett Ellis]{ \underline{Truman~Everett~Ellis} \\[8pt]
 {\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser\\[8pt]
-Committee: Thomas Hughes, Clint Dawson, Tan Bui-Thanh\\[8pt]
-Collaborators: Nathan Roberts (Argonne), Jesse Chan (Virginia Tech)}
+% Committee: Thomas Hughes, Clint Dawson, Tan Bui-Thanh\\[8pt]
+Collaborators: Nathan Roberts (Sandia), Jesse Chan (Rice)}
 }
 
 
@@ -319,167 +320,7 @@ Boundary layer
   Requires a method that is both temporally and spatially stable.
   % \item[Mixed FEM:] A first order formulation gives more flexibility.
 \end{description}
-% SUPG - changing your test space can produce better stability.
-
-% DG - Discontinuous basis functions are a legitimate option in the finite element framework.
-
-% HDG - Mesh interface unknowns can facilitate static condensation -- reducing the number of DOFs in the global solve.
-
-% Least Squares
-
-% Space-Time FEM -
-%   \item Satisfies geometric conservation laws\footnotemark
-%   \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
 \end{frame}
-
-%   /$$       /$$   /$$           /$$$$$$$                       /$$
-%  | $$      |__/  | $$          | $$__  $$                     |__/
-%  | $$       /$$ /$$$$$$        | $$  \ $$  /$$$$$$  /$$    /$$ /$$  /$$$$$$  /$$  /$$  /$$
-%  | $$      | $$|_  $$_/        | $$$$$$$/ /$$__  $$|  $$  /$$/| $$ /$$__  $$| $$ | $$ | $$
-%  | $$      | $$  | $$          | $$__  $$| $$$$$$$$ \  $$/$$/ | $$| $$$$$$$$| $$ | $$ | $$
-%  | $$      | $$  | $$ /$$      | $$  \ $$| $$_____/  \  $$$/  | $$| $$_____/| $$ | $$ | $$
-%  | $$$$$$$$| $$  |  $$$$/      | $$  | $$|  $$$$$$$   \  $/   | $$|  $$$$$$$|  $$$$$/$$$$/
-%  |________/|__/   \___/        |__/  |__/ \_______/    \_/    |__/ \_______/ \_____/\___/
-%
-%
-%
-% \subsection{Literature Review}
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Stabilized Finite Elements for CFD}
-% \framesubtitle{Streamline Upwind Petrov-Galerkin}
-% \begin{columns}[c]
-% \begin{column}{.65\textwidth}
-% \begin{itemize}
-%   \item First successful finite element method for CFD\footnotemark
-%   \item Residual based stabilization preserves consistency
-%   \item Upwind biasing of test functions
-%   \item Higher order generalizations possible
-%   \item Optimal $H_0^1$ approximation in 1D
-%   \item Gave rise to the field of stabilized finite elements
-%   \item Major contributors include Hughes, Franca, Johnson, Codina, Tezduyar, and many others
-%   \item Variational multiscale may be considered the spiritual successor to SUPG\footnotemark
-% \end{itemize}
-% \end{column}
-% \footnotetext[2]{\fullcite{SUPG}}
-% \footnotetext[3]{\fullcite{VMS}}
-% \begin{column}{.35\textwidth}
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=1.0\textwidth]{Motivation/SUPG.png}
-% \\\small{$H_0^1$ Projection}\\
-% \end{figure}
-% \end{column}
-% \end{columns}
-% \end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Streamline Upwind Petrov-Galerkin}
-% \framesubtitle{Two Equivalent Views on Stabilization}
-% Convection-diffusion can be written as
-% $$
-% Lu=(L_{adv}+L_{diff})u=f\,.
-% $$\\
-% % Two equivalent views on stabilization.
-% \vspace{-3ex}
-% \begin{columns}[t]
-% \begin{column}{.65\textwidth}
-% \begin{block}{Residual Based Stabilization}
-% \[
-% b_{SUPG}(u,v)=l_{SUPG}(v)
-% \]
-% where
-% \begin{align*}
-%   b_{SUPG}(u,v)&=b(u,v)
-%   +\sum_K\int_K\tau(L_{adv}v)(Lu-f)\\
-%   l_{SUPG}(v)&=l(v)+\sum_K\int_K\tau(L_{adv}v)f\,,
-% \end{align*}
-% $\tau$ is the SUPG stabilization parameter.
-% \end{block}
-% \end{column}
-% \begin{column}{.33\textwidth}
-% \begin{block}{Test Space Modification}
-% \[
-% b(u,\tilde v)=l(\tilde v)
-% \]
-% where
-% \[
-% \tilde v = v+\tau L_{adv}v\,.
-% \]
-% \includegraphics[width=1.0\textwidth]{Motivation/SUPGtest.png}
-% \end{block}
-% \end{column}
-% \end{columns}
-% \medskip
-% \end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Stabilized Finite Elements for CFD}
-% \framesubtitle{Discontinuous Galerkin}
-% \begin{itemize}
-%   \item Combines elements of finite volumes and finite elements
-%   \item First proposed for neutron transport\footfullcite{ReedHillDG}
-%   \item Early contributors include Babu\v{s}ka, Lions, Nitsche, and Zl\'{a}mal
-%   \item Develoment for CFD by Cockburn and Shu\footfullcite{CockburnShuDG}
-%   \item Development for elliptic problems given by Arnold, Brezzi, Cockburn, and Marini\footfullcite{ArnoldDG}
-%   % \item Rigorous mathematical foundation of finite elements
-%   \item Nonconforming basis, locally conservative
-%   \item Naturally high order, but may require additional stabilization
-%   % \item Simple to parallelize
-%   \item Other notable contributors include Peraire, Persson, Karniadakis \dots
-% \end{itemize}
-% \end{frame}
-
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Stabilized Finite Elements for CFD}
-% \framesubtitle{Discontinuous Galerkin}
-% Consider 1D convection equation
-% \[
-% \pd{\beta(x)u}{x}=f,\quad u(0)=u_0\,.
-% \]
-% Multiply by test function and integrate by parts over each element $K=[x_K,x_{x+1}]$
-% \[
-% -\int_K\beta(x)u\pd{v}{x}+\beta uv|_{x_K}^{x_{K+1}}=\int_K fv\,.
-% \]
-% Apply upwind flux
-% \[
-% -\int_K\beta(x)u\pd{v}{x}+\beta(x_{K+1})u(x_{K+1}^-)v(x_{K+1}^-)-\beta(x_K)u(x_K^-)v(x_K^+)=\int_K fv\,.
-% \]
-% Hybridized DG (HDG) method introduces trace unknowns which facilitates static condensation, reducing interface unknowns\footfullcite{HDG}.
-% \end{frame}
-
-% % ------------------------------------------------------------
-% \begin{frame}[t]
-% \frametitle{Space-Time Finite Element Methods}
-% \framesubtitle{Treat Time as Another Dimension to be Discretized}
-% Space-time methods treat time as just another dimension to be discretized.
-% \begin{columns}[c]
-% \begin{column}{.7\textwidth}
-% \begin{itemize}
-%   \item Early contributors include Kaczkowski and Oden
-%   \item Satisfies geometric conservation laws\footnotemark
-%   \item Tezduyar \etal\footnotemark developed a Galerkin/least-squares method for moving boundaries
-%   % deforming-spatial-domain/space-time procedure
-%   % with Galerkin/least-squares to handle moving domains with incompressible and compressible flow
-%   \item Van der Vegt and Van der Ven developed a popular space-time DG method\footnotemark
-%   \item {\"U}ng{\"o}r's tent-pitcher algorithm\footnotemark decouples space-time elements
-% \end{itemize}
-% \end{column}
-% \footnotetext[8]{\fullcite{GCL}}
-% \footnotetext[9]{\fullcite{Tezduyar1992}}
-% \footnotetext[10]{\fullcite{vanderVegtEuler}}
-% \footnotetext[11]{\fullcite{TentPitcher}}
-% \begin{column}{.3\textwidth}
-% \includegraphics[width=1.0\textwidth]{Motivation/TentPitcher.png}
-% \end{column}
-% \end{columns}
-% \end{frame}
 
 
 
@@ -492,62 +333,121 @@ Boundary layer
 %  | $$$$$$$/| $$      |  $$$$$$/      |  $$$$$$/   \  $/   |  $$$$$$$| $$         \  $/   | $$|  $$$$$$$|  $$$$$/$$$$/
 %  |_______/ |__/       \______/        \______/     \_/     \_______/|__/          \_/    |__/ \_______/ \_____/\___/
 %
-%
-%
+
+
+
 \section{DPG: A Framework for Computational Mechanics}
-% ------------------------------------------------------------
+%----------------------------
 \begin{frame}[t]
-\frametitle{Overview of DPG}
-\framesubtitle{DPG is a Minimum Residual Method}
-Find $u\in U$ such that
-\[
-b(u,v)=l(v)\quad\forall v\in V
-\]
-with operator $B:U\rightarrow V'$ defined by $b(u,v)=\LRa{Bu,v}_{V'\times V}$.
+\frametitle{Motivation}
+\framesubtitle{DPG Summary}  %% needed for proper positioning of the logo ...
+Overview of Features
+\begin{itemize}
+\item Stable for any well-posed variational problem
+\item Robust for singularly perturbed problems
+\item Works in the preasymptotic regime
+\item Designed for adaptive mesh refinement
+% \item Ideal for high-performance computing
+\end{itemize}
+\medskip
 
-This gives the operator equation
+DPG is a minimum residual method:
 \[
-Bu=l\quad\in V'\,.
+u_{h} = \underset{w_{h} \in U_{h}} \argmin \,\, \frac{1}{2}
+\norm{Bw_{h}-l}_{V'}^{2}
 \]
-We wish to minimize the residual $Bu-l\in V'$:
+\vspace{-1em}
 \[
-u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bw_h-l}^2_{V'}\,.
+\scalebox{1.8}{\ensuremath{\Updownarrow}}
 \]
-Dual norms are not computationally tractable.
-Inverse Riesz map moves the residual to a more accessible space:
+\vspace{-1em}
 \[
-u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bw_h-l)}^2_{V}\,.
+b(u_h,R_V^{-1}B\delta u_h)
+=l(R_V^{-1}B\delta u_h)
+\quad\forall\delta u_h\in U_h
 \]
+\vspace{-2ex}
+
+where $v_{\delta u_h}:=R_V^{-1}B\delta u_h$ are the
+\textcolor{utblack}{\textbf{optimal test functions}}.
+
+% \vspace{4ex}
+% For each $\delta u_h\in U_h$ find $\vdeltau\in V$ such that
+% \[
+% \LRp{\vdeltau,w}_V=b(u,w)\quad\forall w\in V
+% \]
+% where $V$ becomes $V_{p+\Delta p}$ in order to make this computationally tractable.
 \end{frame}
+\begin{comment}
+Before I begin, we'll start with an ultra-brief summary of DPG and why we might
+want to apply it to problems in CFD.
+For one, DPG has proven very robust in the face of singularly
+perturbed problems (think high Reynolds number flows).
+You do not need a domain expert to craft well designed meshes for each new
+problem. We are mathematically guaranteed to remain stable under very coarse
+meshes while adaptively refining toward a solution.
+
+Mathematically, DPG can be characterized as a minimum
+residual method. This means that through the choice of specific optimal test
+functions we automatically minimize the residual in the dual norm of a
+Hilbert space V. We also have a well-defined process to generate the optimal
+test functions which is computationally feasible.
+\end{comment}
 
 
-% ------------------------------------------------------------
-\begin{frame}[t]
-\frametitle{Overview of DPG}
-\framesubtitle{Petrov-Galerkin with Optimal Test Functions}
-% \framesubtitle{Optimal Petrov-Galerkin Methods}
-Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
-U_h$ gives,
-\[
-\left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U,
-\]
-which by definition of the Riesz map is equivalent to
-\begin{equation*}
-\LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,,
-\end{equation*}
-with optimal test functions $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ for each trial function $\delta u_h$.
-\begin{block}{Resulting Petrov-Galerkin System}
-This gives a simple bilinear form
-\begin{equation*}
-b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
-\end{equation*}
-with $v_{\delta u_h}\in V$ that solves the auxiliary problem
-\begin{equation*}
-\LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
-=\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
-\end{equation*}
-\end{block}
-\end{frame}
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{DPG is a Minimum Residual Method}
+% Find $u\in U$ such that
+% \[
+% b(u,v)=l(v)\quad\forall v\in V
+% \]
+% with operator $B:U\rightarrow V'$ defined by $b(u,v)=\LRa{Bu,v}_{V'\times V}$.
+%
+% This gives the operator equation
+% \[
+% Bu=l\quad\in V'\,.
+% \]
+% We wish to minimize the residual $Bu-l\in V'$:
+% \[
+% u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{Bw_h-l}^2_{V'}\,.
+% \]
+% Dual norms are not computationally tractable.
+% Inverse Riesz map moves the residual to a more accessible space:
+% \[
+% u_h=\argmin_{w_h\in U_h}\frac{1}{2}\norm{R_V^{-1}(Bw_h-l)}^2_{V}\,.
+% \]
+% \end{frame}
+%
+%
+% % ------------------------------------------------------------
+% \begin{frame}[t]
+% \frametitle{Overview of DPG}
+% \framesubtitle{Petrov-Galerkin with Optimal Test Functions}
+% % \framesubtitle{Optimal Petrov-Galerkin Methods}
+% Taking the G\^ateaux derivative to be zero in all directions $\delta u \in
+% U_h$ gives,
+% \[
+% \left(R_V^{-1}(Bu_h-l),R_V^{-1}B\delta u\right)_V = 0, \quad \forall \delta u \in U,
+% \]
+% which by definition of the Riesz map is equivalent to
+% \begin{equation*}
+% \LRa{Bu_h-l,R_V^{-1}B\delta u_h}=0\quad\forall\delta u_h\in U_h\,,
+% \end{equation*}
+% with optimal test functions $v_{\delta u_h}\coloneqq R_V^{-1}B\delta u_h$ for each trial function $\delta u_h$.
+% \begin{block}{Resulting Petrov-Galerkin System}
+% This gives a simple bilinear form
+% \begin{equation*}
+% b(u_h,v_{\delta u_h})=l(v_{\delta u_h}),
+% \end{equation*}
+% with $v_{\delta u_h}\in V$ that solves the auxiliary problem
+% \begin{equation*}
+% \LRp{v_{\delta u_h},\delta v}_V=\LRa{R_Vv_{\delta u_h},\delta v}
+% =\LRa{B\delta u_h,\delta v}=b(\delta u_h,\delta v)\quad\forall\delta v\in V.
+% \end{equation*}
+% \end{block}
+% \end{frame}
 
 
 
@@ -992,19 +892,33 @@ After 5 refinements\\
 
 
 \begin{frame}[shrink=10]
-\frametitle{Thank You!}
-\framesubtitle{Recommended References}
-    \nocite{DPGOverview}
-    \nocite{EllisLC}
-    \nocite{CamelliaDPG}
-    \nocite{DemkowiczHeuer}
-    \nocite{ChanHeuerThanhDemkowicz2012}
-    \nocite{DPGStokes}
-    \renewcommand*{\bibfont}{\small}
-    \setbeamertemplate{bibliography item}[triangle]
-    \printbibliography[keyword=main]
-    % \bigskip
-    \printbibliography[notkeyword=main]
+% \frametitle{Thank You!}
+\frametitle{Myself in Four Thousand Words}
+\framesubtitle{~}
+% \vspace{1ex}
+\begin{columns}[t]
+\column{.5\textwidth}
+\centering
+\includegraphics[height=1.7in]{photos/jeep}\\
+\includegraphics[height=1.7in]{photos/rope}
+\column{.5\textwidth}
+\centering
+\includegraphics[height=1.7in]{photos/sup}\\
+\includegraphics[height=1.7in]{photos/charis}
+\centering
+\end{columns}
+% \framesubtitle{Recommended References}
+%     \nocite{DPGOverview}
+%     \nocite{EllisLC}
+%     \nocite{CamelliaDPG}
+%     \nocite{DemkowiczHeuer}
+%     \nocite{ChanHeuerThanhDemkowicz2012}
+%     \nocite{DPGStokes}
+%     \renewcommand*{\bibfont}{\small}
+%     \setbeamertemplate{bibliography item}[triangle]
+%     \printbibliography[keyword=main]
+%     % \bigskip
+%     \printbibliography[notkeyword=main]
 \end{frame}
 
 \appendix
@@ -1013,214 +927,6 @@ After 5 refinements\\
 
 
 
-
-
-
-
-
-\begin{frame}[fragile]
-\frametitle{Camellia: DPG for the Masses}
-\framesubtitle{Overview}  %% needed for proper positioning of the logo ...
-\begin{block}{Design Goal}
-Make DPG research and experimentation as simple as possible, while maintaining computational efficiency and scalability.
-\end{block}
-% \smallskip
-Built on Trilinos (Teuchos, Intrepid, Shards, Epetra, etc).\\
-Mature support for:
-\begin{itemize}
-  \item Rapid specification of DPG variational forms, inner products, etc.
-  \item Distributed computation of stiffness matrix
-  \item 1D - 3D geometries
-  \item Curvilinear elements
-  \item $h$- and $p$-refinements (anisotropic in $h$)
-  % \item Arbitrarily irregular meshes
-  % \item Modular refinement strategy interface
-\end{itemize}
-Experimental support for:
-\begin{itemize}
-  \item Space-time computations
-  \item Iterative solvers (tested up to 32,768 cores)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Convection-Diffusion in Three Slides}
-\framesubtitle{Building the Bilinear Form}  %% needed for proper positioning of the logo ...
-\begin{columns}
-\begin{column}{.6\textwidth}
-\lstset{language=C++,
-                basicstyle=\ttfamily\footnotesize,
-                keywordstyle=\color{blue}\ttfamily,
-                stringstyle=\color{red}\ttfamily,
-                commentstyle=\color{green}\ttfamily,
-                morecomment=[l][\color{magenta}]{\#}
-}
-\begin{lstlisting}
-  VarFactory vf;
-  //fields:
-  VarPtr u = vf.fieldVar("u", L2);
-  VarPtr sigma = vf.fieldVar("sigma", VECTOR_L2);
-
-  // traces:
-  VarPtr u_hat = vf.traceVar("u_hat");
-  VarPtr t_n = vf.fluxVar("t_n");
-
-  // test:
-  VarPtr v = vf.testVar("v", HGRAD);
-  VarPtr tau = vf.testVar("tau", HDIV);
-
-  double eps = .01;
-  FunctionPtr beta_x = Function::constant(1);
-  FunctionPtr beta_y = Function::constant(2);
-  FunctionPtr beta = Function::vectorize(beta_x, beta_y);
-
-  BFPtr bf = Teuchos::rcp( new BF(vf) );
-
-  bf->addTerm((1/eps) * sigma, tau);
-  bf->addTerm(u, tau->div());
-  bf->addTerm(-u_hat, tau->dot_normal());
-
-  bf->addTerm(sigma - beta * u, v->grad());
-  bf->addTerm(t_n, v);
-
-  RHSPtr rhs = RHS::rhs();
-\end{lstlisting}
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.9\textwidth]{figs/LightCamelliaDriver1}
-% \end{figure}
-\end{column}
-\begin{column}{.4\textwidth}
-\small
-Find $u\in L^2(\Omega_h)$, $\bfsigma\in \bs L^2(\Omega_h)$, $\hat u\in H^{\frac{1}{2}}(\Gamma_h)$, $\hat t_n\in H^{-\frac{1}{2}}(\Gamma_h)$ \\
-such that
-\bigskip
-\begin{align*}
-&\frac{1}{\epsilon}\LRp{\bfsigma,\bftau}+\LRp{u,\Div\bftau}-\LRa{\hat u,\bftau\cdot\bfn}\\
-&-\LRp{\bfbeta u-\bfsigma,\Grad v}+\LRa{\hat t_n,v}=\LRp{f,v}
-\end{align*}
-\bigskip
-for all $v\in \HOneK$, $\bftau\in \HdivK$,
-\bigskip
-where $\epsilon=10^{-2}$, $\bfbeta=(1,2)^T$ and $f=0$.
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Convection-Diffusion in Three Slides}
-\framesubtitle{Boundary Conditions and Mesh}  %% needed for proper positioning of the logo ...
-\begin{columns}
-\begin{column}{.7\textwidth}
-\lstset{language=C++,
-                basicstyle=\ttfamily\footnotesize,
-                keywordstyle=\color{blue}\ttfamily,
-                stringstyle=\color{red}\ttfamily,
-                commentstyle=\color{green}\ttfamily,
-                morecomment=[l][\color{magenta}]{\#}
-}
-\begin{lstlisting}
-  int k = 2;
-  int delta_k = 2;
-  MeshPtr mesh = MeshFactory::quadMesh(bf, k+1, delta_k);
-
-  BCPtr bc = BC::bc();
-
-  SpatialFilterPtr y_equals_one = SpatialFilter::matchingY(1.0);
-  SpatialFilterPtr y_equals_zero = SpatialFilter::matchingY(0);
-  SpatialFilterPtr x_equals_one = SpatialFilter::matchingX(1.0);
-  SpatialFilterPtr x_equals_zero = SpatialFilter::matchingX(0.0);
-
-  FunctionPtr zero = Function::zero();
-  FunctionPtr x = Function::xn(1);
-  FunctionPtr y = Function::yn(1);
-  bc->addDirichlet(t_n, y_equals_zero, -2 * (1-x));
-  bc->addDirichlet(t_n, x_equals_zero, -1 * (1-y));
-  bc->addDirichlet(u_hat, y_equals_one, zero);
-  bc->addDirichlet(u_hat, x_equals_one, zero);
-\end{lstlisting}
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.9\textwidth]{figs/LightCamelliaDriver2}
-% \end{figure}
-\end{column}
-\begin{column}{.34\textwidth}
-\small
-Create a square mesh $[0,1]\times[0,1]$ with boundary conditions
-\begin{itemize}
-  \item $\hat t_n=2x-2$ on $y=0$
-  \item $\hat t_n=x-1$ on $x=0$
-  \item $\hat u=0$ on $y=1$
-  \item $\hat u=0$ on $x=1$
-\end{itemize}
-Note
-\begin{itemize}
-  % \item Spatial Filters only act on boundary element edges
-  \item Can subclass SpatialFilter to match any geometry
-  \item Adding new mesh readers is straightforward
-\end{itemize}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Convection-Diffusion in Three Slides}
-\framesubtitle{Test Norm, Solving, and Adaptivity}  %% needed for proper positioning of the logo ...
-\begin{columns}
-\begin{column}{.7\textwidth}
-\lstset{language=C++,
-                basicstyle=\ttfamily\footnotesize,
-                keywordstyle=\color{blue}\ttfamily,
-                stringstyle=\color{red}\ttfamily,
-                commentstyle=\color{green}\ttfamily,
-                morecomment=[l][\color{magenta}]{\#}
-}
-\begin{lstlisting}
-  IPPtr ip = bf->graphNorm();
-
-  SolutionPtr soln = Solution::solution(mesh, bc, rhs, ip);
-
-  double threshold = 0.20;
-  RefinementStrategy refStrategy(soln, threshold);
-
-  int numRefs = 10;
-
-  ostringstream refName;
-  refName << "ConvectionDiffusion";
-  HDF5Exporter exporter(mesh,refName.str());
-
-  for (int refIndex=0; refIndex < numRefs; refIndex++) {
-    soln->solve();
-
-    double energyError = soln->energyErrorTotal();
-    cout << "After " << refIndex << " refinements, energy error is " << energyError << endl;
-
-    exporter.exportSolution(soln, vf, refIndex);
-
-    if (refIndex != numRefs)
-      refStrategy.refine();
-  }
-\end{lstlisting}
-\end{column}
-\begin{column}{.35\textwidth}
-\small
-\end{column}
-\end{columns}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Convection-Diffusion in Three Slides}
-\framesubtitle{Computed Solution}  %% needed for proper positioning of the logo ...
-\begin{columns}[t]
-\begin{column}{.5\textwidth}
-\includegraphics[height=0.55\textheight]{Confusion/Tutorial/u_ref9.png}
-\end{column}
-\begin{column}{.5\textwidth}
-\includegraphics[height=0.55\textheight]{Confusion/Tutorial/uhat_ref9.png}
-\end{column}
-\end{columns}
-\end{frame}
 
 
 \end{document}
