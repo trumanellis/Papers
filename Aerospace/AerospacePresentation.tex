@@ -122,12 +122,14 @@
 % \pgfdeclareimage[height=1.5cm]{iceslogo}{logos/ICES-wordmark-teal.png}
 % \pgfdeclareimage[height=1.0cm]{scsmall}{logos/SC12}
 
-\title[Automated Scientific Computing with DPG]{Automating Scientific Computing with Discontinuous Petrov-Galerkin Finite Elements}
+\title[Automating Fluid Simulations with DPG]{Automating Fluid Simulations with Discontinuous Petrov-Galerkin Finite Elements}
 % \subtitle{If you have one}
-\author[Truman Everett Ellis]{ \underline{Truman~Everett~Ellis} \\[8pt]
-{\oldfootnotesize \smallskip Advisors: Leszek Demkowicz, Robert Moser\\[8pt]
+\author[T. Everett Ellis]{ \underline{Truman~Everett~Ellis, PhD} \\[0pt]
+{\oldfootnotesize
+Computational Science, Engineering, and Mathematics\\[8pt]
+\smallskip {Advisors:} \emph{Leszek Demkowicz, Robert Moser}\\[8pt]
 % Committee: Thomas Hughes, Clint Dawson, Tan Bui-Thanh\\[8pt]
-Collaborators: Nathan Roberts (Sandia), Jesse Chan (Rice)}
+{Collaborators:} \emph{Nathan Roberts (Sandia), Jesse Chan (Rice)}}
 }
 
 
@@ -137,7 +139,7 @@ Collaborators: Nathan Roberts (Sandia), Jesse Chan (Rice)}
 \\ \vspace{2ex}
 \includegraphics[trim=3.0in 7.2in 1.5in 4.0in,width=0.3\linewidth]{logos/ICES-wordmark-teal.pdf}
 }
-\date[April 20, 2016]%{\pgfuseimage{iceslogo} }
+\date[September 25, 2017]%{\pgfuseimage{iceslogo} }
 
 \begin{document}
 \def\thefootnote{\arabic{footnote}}
@@ -863,31 +865,54 @@ After 5 refinements\\
 
 
 
+\section{Conclusions}
 
 \begin{frame}
-\frametitle{Future Directions}
+\frametitle{Conclusions and Epilogue}
 \framesubtitle{~}
-% \vspace{-3ex}
-\begin{columns}
-\begin{column}{0.5\textwidth}
+{\textbf{Research is fun:}} But my passion lies in solving real world engineering problems.
+\vspace{3ex}
+
+{\textbf{Current Work:}}
 \begin{itemize}
-\item \textbf{Improve performance:} line smoothing for multigrid
-\item \textbf{Shock capturing:} DPG makes no promises when it comes to Gibbs phenomenon
-\item \textbf{Non-Hilbert DPG:} $L^1$ is known to limit oscillations
-\item \textbf{Anisotropic refinements:} necessary for time slabs
-\item \textbf{More extensive 2D results:} shedding vortex problems, 2D shock problems
-\item \textbf{3D results:} will not be cheap
+\item \textcolor{utorange}{{Plasma Physics:}} Contributing to a highly scalable, production plasma physics code.
+Uses the Kokkos library to leverage parallelism of next generation HPC architectures.
+\item \textcolor{utorange}{{Electromagnetics Simulations:}} Running radar cross-section simulations using commercial and research codes
+as part of a verification study.
+\item \textcolor{utorange}{{Stochastic Richardson Extrapolation:}} Parallelized a Python code to do QOI prediction of stochastic simulations.
+\item \textcolor{utorange}{{Particle Accelerator:}} Jumped in on work with the HERMES III particle accelerator to study EMP effects on electrical components.
+\item \textcolor{utorange}{{Project Management:}} Learning agile development practices and taking responsibility for project management tasks within our group.
 \end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Dissertation/Cylinder/Mesh_uMag4.png}
-\\Incompressible Flow Over a Cylinder
-\end{figure}
-\end{column}
-\end{columns}
 \end{frame}
+
+
+
+% \section{Future Directions}
+%
+% \begin{frame}
+% \frametitle{Future Directions}
+% \framesubtitle{~}
+% % \vspace{-3ex}
+% \begin{columns}
+% \begin{column}{0.5\textwidth}
+% \begin{itemize}
+% \item \textbf{Improve performance:} line smoothing for multigrid
+% \item \textbf{Shock capturing:} DPG makes no promises when it comes to Gibbs phenomenon
+% \item \textbf{Non-Hilbert DPG:} $L^1$ is known to limit oscillations
+% \item \textbf{Anisotropic refinements:} necessary for time slabs
+% \item \textbf{More extensive 2D results:} shedding vortex problems, 2D shock problems
+% \item \textbf{3D results:} will not be cheap
+% \end{itemize}
+% \end{column}
+% \begin{column}{0.5\textwidth}
+% \begin{figure}
+% \centering
+% \includegraphics[width=\textwidth]{Dissertation/Cylinder/Mesh_uMag4.png}
+% \\Incompressible Flow Over a Cylinder
+% \end{figure}
+% \end{column}
+% \end{columns}
+% \end{frame}
 
 
 
