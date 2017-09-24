@@ -1,10 +1,10 @@
 ## Title Slide
-Good morning, everyone. Thank you for coming to my presentation.
-This is a brief overview of some work I did for my dissertation developing a space-time discontinuous Petrov-Galerkin finite element for applications to transient fluid mechanics.
-But I'll try to not to get into the weeds with the technical stuff.
+Good morning, everyone. Thank you for coming to my presentation. My name is Truman Everett Ellis, but you can call me Everett. I got my PhD in computational science engineering and mathematics from UT Austin early 2016 and I'm currently working on computational plasma physics at Sandia National Lab. But in this talk I wanted to briefly summarize my PhD work on Automating Fluid Simulations with Discontinuous Petrov-Galerkin Finite Elements.
 
 ## Table of Contents
-I'll begin by explaining our motivation of in some sense automating scientific computing with DPG. Then we'll look at what discontinuous Petrov-Galerkin finite elements are. Next I'll develop a theory for space-time DPG as applied to transient convection-diffusion and apply this by extension to the compressible Navier-Stokes equations.
+I'll begin by motivating some current bottlenecks with computational fluid dynamics then look at what the DPG method is and how it might address those.
+From there I'll illustrate a simple DPG formulation for the convection-diffusion equation and then extrapolate to the compressible Navier-Stokes equations with a few example problems.
+Then we'll close with some conclusions.
 
 ## Navier-Stokes Equations
 Basically what I want to say on this slide is that Navier-Stokes is hard. Despite the decades of research that have been invested in simulating fluid flows, robust simulation is still a challenge.
